@@ -19,9 +19,11 @@ namespace DeliveryBro.Models
         public string Note { get; set; }
         public int DriverId { get; set; }
         public int CustomerId { get; set; }
+        public int RestaurantId { get; set; }
 
         public virtual CustomersTable Customer { get; set; }
         public virtual DriverTable Driver { get; set; }
+        public virtual RestaurantTable Restaurant { get; set; }
         public virtual OrderDetailsTable OrderDetailsTable { get; set; }
     }
 }

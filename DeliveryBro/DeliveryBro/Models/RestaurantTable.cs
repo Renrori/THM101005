@@ -9,6 +9,7 @@ namespace DeliveryBro.Models
     {
         public RestaurantTable()
         {
+            CustomerOrderTable = new HashSet<CustomerOrderTable>();
             MenuTable = new HashSet<MenuTable>();
         }
 
@@ -23,6 +24,7 @@ namespace DeliveryBro.Models
         public string RestauranDescription { get; set; }
         public byte[] RestaurantPicture { get; set; }
 
+        public virtual ICollection<CustomerOrderTable> CustomerOrderTable { get; set; }
         public virtual ICollection<MenuTable> MenuTable { get; set; }
     }
 }
