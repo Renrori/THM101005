@@ -1,0 +1,34 @@
+﻿<div class="container">
+    <div class="row no-gutters slider-text align-items-center justify-content-center">
+        <div class="col-md-9 text-center">
+            <h1 class="mb-0">交易結果</h1>
+        </div>
+    </div>
+</div>
+
+
+<div class="my-5 row justify-content-center">
+    <form class="col-md-6">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <th width="100"><br />交易結果</th>
+                    <td>{{ order.status }}</td>
+                </tr>
+                <tr>
+                    <th><br />訂單編號</th>
+                    <td>{{ order.ID }}</td>
+                </tr>
+                <tr>
+                    <th><br />訂單狀態</th>
+                    <td>{{ order.status }}</td>
+                </tr>
+                <tr>
+                    <th><br />訂單總金額</th>
+                    <td>{{ order.AmountAfterDiscount }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+</div>
+
