@@ -1,0 +1,190 @@
+﻿<main id="main" class="main">
+    <div class="pagetitle">
+        <h1>New Orders</h1>
+        <nav>
+            <ol class="breadcrumb">
+                <a class="breadcrumb-item" asp-area="store" asp-controller="Home" asp-action="Index">Home</a>
+                <li class="breadcrumb-item active">New Orders</li>
+            </ol>
+        </nav>
+    </div>
+    <section class="section neworders">
+        <div class="row">
+            <div class="col">
+
+                <div class="card">
+                    <div class="card-body pt-3">
+                        <!-- Bordered Tabs -->
+                        <ul class="nav nav-tabs nav-tabs-bordered">
+
+                            <li class="nav-item">
+                                <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#order-waiting">Waiting</button>
+                            </li>
+
+                            <li class="nav-item">
+                                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#order-accpted">Accepting</button>
+                            </li>
+                        </ul>
+                        <div class="tab-content pt-2">
+
+                            <div class="tab-pane fade show active profile-overview" id="order-waiting">
+
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Order Id: 20</h5>
+                                        <div class="row">
+                                            <div class="col-10">
+                                                <div class="row">
+                                                    <div class="col-lg-3 col-md-4 label">Item Name 1</div>
+                                                    <div class="col-lg-5 col-md-5">Sugar, ice or ...</div>
+                                                    <div class="col-lg-2 col-md-3">Number</div>
+                                                    <div class="col-lg-2 col-md-2">Price$</div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-lg-3 col-md-4 label">Item Name 2</div>
+                                                    <div class="col-lg-5 col-md-5">Sugar, ice or ...</div>
+                                                    <div class="col-lg-2 col-md-3">Number</div>
+                                                    <div class="col-lg-2 col-md-2">Price$</div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-lg-3 col-md-4 label"></div>
+                                                    <div class="col-lg-5 col-md-5"></div>
+                                                    <div class="col-lg-2 col-md-3"></div>
+                                                    <div class="col-lg-2 col-md-2">Total: $</div>
+                                                </div>
+                                            </div>
+                                            <div class="col-2">
+                                                <button class="btn btn-success rounded-circle">O</button>
+                                                <button class="btn btn-danger rounded-circle">X</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Order Id: 21</h5>
+                                        <div class="row">
+                                            <div class="col-10">
+                                                <div class="row">
+                                                    <div class="col-lg-3 col-md-4 label">Item Name 1</div>
+                                                    <div class="col-lg-5 col-md-5">Sugar, ice or ...</div>
+                                                    <div class="col-lg-2 col-md-3">Number</div>
+                                                    <div class="col-lg-2 col-md-2">Price$</div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-lg-3 col-md-4 label">Item Name 2</div>
+                                                    <div class="col-lg-5 col-md-5">Sugar, ice or ...</div>
+                                                    <div class="col-lg-2 col-md-3">Number</div>
+                                                    <div class="col-lg-2 col-md-2">Price$</div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-lg-3 col-md-4 label"></div>
+                                                    <div class="col-lg-5 col-md-5"></div>
+                                                    <div class="col-lg-2 col-md-3"></div>
+                                                    <div class="col-lg-2 col-md-2">Total: $</div>
+                                                </div>
+                                            </div>
+                                            <div class="col-2">
+                                                <button class="btn btn-success rounded-circle">O</button>
+                                                <button class="btn btn-danger rounded-circle">X</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="tab-pane fade profile-edit" id="order-accpted">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Order Id: 18</h5>
+                                        <h5 class="card-title">Delivery num: 29</h5>
+                                        <h5>Accetped time: 2023-5-14 11:00:00</h5>
+                                        <h5>Expected completion time: 11:20:00</h5>
+                                        <h5>Customer Name</h5>
+                                        <hr />
+                                        <div class="row">
+                                            <div class="col-10">
+                                                <div class="row">
+                                                    <div class="col-lg-3 col-md-4 label">Item Name 1</div>
+                                                    <div class="col-lg-5 col-md-5">Sugar, ice or ...</div>
+                                                    <div class="col-lg-2 col-md-3">Number</div>
+                                                    <div class="col-lg-2 col-md-2">Price$</div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-lg-3 col-md-4 label">Item Name 2</div>
+                                                    <div class="col-lg-5 col-md-5">Sugar, ice or ...</div>
+                                                    <div class="col-lg-2 col-md-3">Number</div>
+                                                    <div class="col-lg-2 col-md-2">Price$</div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-lg-3 col-md-4 label"></div>
+                                                    <div class="col-lg-5 col-md-5"></div>
+                                                    <div class="col-lg-2 col-md-3"></div>
+                                                    <div class="col-lg-2 col-md-2">Total: $</div>
+                                                </div>
+                                            </div>
+                                            <div class="col-2">
+                                                <button class="btn btn-primary"><i class="fa-solid fa-check"></i></button>
+                                                <a class=" btn btn-warning" asp-area="" asp-controller="Home" asp-action="HelpCenter"><i class="fa-solid fa-info"></i></a>
+                                            </div>
+                                        </div>
+                                        <hr />
+                                        <div>
+                                            <h5>Memo</h5>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Order Id: 19</h5>
+                                        <h5 class="card-title">Delivery num: 30</h5>
+                                        <h5>Accetped time: 2023-5-14 12:00:00</h5>
+                                        <h5>Expected completion time: 12:20:00</h5>
+                                        <h5>Customer Name</h5>
+                                        <hr />
+                                        <div class="row">
+                                            <div class="col-10">
+                                                <div class="row">
+                                                    <div class="col-lg-3 col-md-4 label">Item Name 1</div>
+                                                    <div class="col-lg-5 col-md-5">Sugar, ice or ...</div>
+                                                    <div class="col-lg-2 col-md-3">Number</div>
+                                                    <div class="col-lg-2 col-md-2">Price$</div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-lg-3 col-md-4 label">Item Name 2</div>
+                                                    <div class="col-lg-5 col-md-5">Sugar, ice or ...</div>
+                                                    <div class="col-lg-2 col-md-3">Number</div>
+                                                    <div class="col-lg-2 col-md-2">Price$</div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-lg-3 col-md-4 label"></div>
+                                                    <div class="col-lg-5 col-md-5"></div>
+                                                    <div class="col-lg-2 col-md-3"></div>
+                                                    <div class="col-lg-2 col-md-2">Total: $</div>
+                                                </div>
+                                            </div>
+                                            <div class="col-2">
+                                                <button class="btn btn-primary"><i class="fa-solid fa-check"></i></button>
+                                                <a class=" btn btn-warning" asp-area="" asp-controller="Home" asp-action="HelpCenter"><i class="fa-solid fa-info"></i></a>
+                                            </div>
+                                        </div>
+                                        <hr />
+                                        <div>
+                                            <h5>Memo</h5>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                        </div><!-- End Bordered Tabs -->
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+</main>
