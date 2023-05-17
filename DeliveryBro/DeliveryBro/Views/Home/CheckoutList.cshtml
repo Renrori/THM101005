@@ -7,6 +7,7 @@
         </div>
     </div>
 
+
     <section class="ftco-section">
         <div class="container">
             <div class="row justify-content-center">
@@ -35,27 +36,27 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label for="streetaddress">外送地址</label>
-                                    <input type="text" class="form-control" placeholder="請填寫詳細地址">
+                                    <input type="text" class="form-control" placeholder="請填寫詳細地址" v-model="CustomerAddress">
                                 </div>
                             </div>
                             <div class="w-100"></div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="phone">電話</label>
-                                    <input type="text" class="form-control" placeholder="">
+                                    <input type="text" class="form-control" placeholder="" v-model="CustomerPhone" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="emailaddress">Email</label>
-                                    <input type="text" class="form-control" placeholder="">
+                                    <input type="text" class="form-control" placeholder="" v-model="CustomerEmail" required>
                                 </div>
                             </div>
                             <div class="w-100"></div>
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label for="CouponID">套用優惠券</label>
-                                    <input type="text" class="form-control" placeholder="優惠券序號">
+                                    <input type="text" class="form-control" placeholder="優惠券序號" v-model="CouponID">
                                 </div>
                             </div>
                             <div class="w-100"></div>
@@ -68,6 +69,14 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="w-100"></div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <textarea name="" id="" cols="30" rows="7" class="form-control" placeholder="Message" v-model="note"></textarea>
+                                    <p>{{note}}</p>
+                                </div>
+                            </div>
+
                         </div>
                     </form><!-- END -->
                 </div>
@@ -82,16 +91,16 @@
                                 </p>
                                 <p class="d-flex">
                                     <span>運費</span>
-                                    <span>$0.00</span>
+                                    <span>{{ShippingFee}}</span>
                                 </p>
                                 <p class="d-flex">
                                     <span>折價</span>
-                                    <span>$3.00</span>
+                                    <span>{{Discount}}</span>
                                 </p>
                                 <hr>
                                 <p class="d-flex total-price">
                                     <span>總金額</span>
-                                    <span>$17.60</span>
+                                    <span>{{calculateAmount()}}</span>
                                 </p>
                             </div>
                         </div>
@@ -171,7 +180,16 @@
             data() {
                 return {
                     cartItems: [],
-                    totalAmount: '0'
+                    totalAmount: 0,
+                    CustomerAddress: "",
+                    CustomerPhone: "",
+                    CustomerEmail: "",
+                    CouponID: "",
+                    note: "",
+                    ShippingFee: 0,
+                    Discount: 0,
+                    AmountAfterDiscount: '0'
+                    //需要討論哪些次從後端傳來資料，哪些是從頁面生出
                 };
             },
             mounted() {
@@ -180,6 +198,14 @@
                 const checkoutdata = JSON.parse(decodeURIComponent(Jsondata));
                 this.cartItems = checkoutdata.items;
                 this.totalAmount = checkoutdata.totalAmount;
+            },
+            methods: {
+                calculateAmount() {
+                    let total = 0;
+                    total = this.totalAmount + this.ShippingFee + this.Discount;
+                    this.AmountAfterDiscount = total;
+                    return total;
+                }
             },
             computed: {
 
