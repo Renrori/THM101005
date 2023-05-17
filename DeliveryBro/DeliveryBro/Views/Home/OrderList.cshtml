@@ -25,9 +25,9 @@
                         </thead>
 
                         <tbody>
-                            <tr v-for="item in cartItems" :key="item.id">
+                            <tr v-for="item in cartItems" :key="item.DishID">
                                 <td class="product-remove">
-                                    <button  @@click="removeFromCart(item)">
+                                    <button @@click="removeFromCart(item)">
                                         <span class="ion-ios-close" @@click="removeFromCart(item)"></span>
                                     </button>
                                 </td>
@@ -47,11 +47,10 @@
                     </table>
                 </div>
             </div>
-
-            <br />
             <div class="container">
                 <div class="row justify-content-end">
-                    <a class="nav-link col-2 btn btn-info" asp-area="" asp-controller="Home" asp-action="CheckoutList">確認明細</a>
+                    @*<a class="nav-link col-2 btn btn-info" asp-area="" asp-controller="Home" asp-action="CheckoutList">確認明細</a>*@
+                    <a class="btn btn-info col-2 text-light" :href="CheckoutListUrl">確認明細</a>
                 </div>
             </div>
 
@@ -76,7 +75,8 @@
             data() {
                 return {
                     cartItems: data,
-                    DishCount: '1'
+                    DishCount: '1',
+                    totalAmount: '0'
                 };
             },
             methods: {
@@ -85,7 +85,14 @@
                     for (let i = 0; i < this.cartItems.length; i++) {
                         total += this.cartItems[i].DishPrice * this.cartItems[i].DishCount;
                     }
+                    this.totalAmount = total;
                     return total;
+
+                    //this.totalAmount = this.cartItems.reduce(
+                    //    (total, item) => total + item.DishPrice * item.DishCount,
+                    //    0
+                    //);
+
                 },
                 calculateSubtotal(item) {
                     return item.DishPrice * item.DishCount;
@@ -98,14 +105,30 @@
                         this.cartItems.splice(index, 1);
                     }
                 },
+                ToCheckout() {
+                    //const checkoutData = {
+                    //    items: this.cartItems,
+                    //    totalAmount: this.totalAmount,
+                    //};
+                    //const jsonData = JSON.stringify(checkoutData);
+                    ////確認console在f12
+                    //console.log(jsonData);
+                    ////window.location.href = "CheckoutList?data=" + encodeURIComponent(jsonData);
+
+                }
 
             },
             computed: {
-                CheckListUrl() {
-                    const data = JSON.stringify(this.cartItems);
-                    return `CheckList?data=${encodeURIComponent(data)}`;
+                CheckoutListUrl() {
+                    const checkoutData = {
+                        items: this.cartItems,
+                        totalAmount: this.totalAmount,
+                    };
+                    const Jsondata = JSON.stringify(checkoutData);
+                    //確認console在f12
+                    console.log(Jsondata);
+                    return `CheckoutList?data=${encodeURIComponent(Jsondata)}`;
                 }
-            }
             }
         };
         var app = Vue.createApp(vueApp).mount("#app");
