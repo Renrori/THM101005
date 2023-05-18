@@ -47,7 +47,7 @@ namespace DeliveryBro.Controllers
 
         public async Task<IActionResult> GetProduct(int id)
         {
-            var product = _context.MenuTable.Include(m => m.Restaurant)
+            var product = await _context.MenuTable.Include(m => m.Restaurant)
                .Where(m => m.Restaurant.RestaurantId == id && m.DishStatus == "ongoing" )
                .Select(p => new MenuViewModel 
                {
@@ -60,6 +60,20 @@ namespace DeliveryBro.Controllers
                })
                .ToArrayAsync();
             return Ok(product);
+        }
+        //叫用圖片方法，傳入StoreId回傳圖片
+        public async Task<FileResult> GetPicture(int storeId)
+        {
+            RestaurantTable c = await _context.RestaurantTable.FirstOrDefaultAsync(x=>x.RestaurantId== storeId);
+            byte[] imgUrl = c?.RestaurantPicture;
+            return File(imgUrl, "img/jpeg");
+        }
+        //叫用圖片方法，傳入StoreId和DishId回傳圖
+        public async Task<FileResult> GetPicture(int storeId,int dishId)
+        {
+            MenuTable c = await _context.MenuTable.FirstOrDefaultAsync(x => x.RestaurantId == storeId && x.DishId == dishId);
+            byte[] imgUrl = c?.DishPicture;
+            return File(imgUrl, "img/jpeg");
         }
 
         public IActionResult RestaurantMenu()
