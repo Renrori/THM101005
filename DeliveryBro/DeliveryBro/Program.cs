@@ -49,10 +49,10 @@ namespace DeliveryBro
             app.UseAuthorization();
 
             app.MapControllerRoute(name: "admin",
-                pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+                pattern: "{area:exists}/{controller=Restaurant}/{action=Login}/{id?}");
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+                pattern: "{controller=Restaurant}/{action=Login}/{id?}");
             app.MapRazorPages();
 
             app.Run();

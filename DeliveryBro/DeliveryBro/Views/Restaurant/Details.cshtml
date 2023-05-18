@@ -1,0 +1,72 @@
+﻿@model DeliveryBro.Models.RestaurantTable
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>RestaurantTable</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.RestaurantAccount)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.RestaurantAccount)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.RestaurantPassword)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.RestaurantPassword)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.RestauranName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.RestauranName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.RestaurantAddress)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.RestaurantAddress)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.RestaurantPhone)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.RestaurantPhone)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.RestauranEmail)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.RestauranEmail)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.OpeningHours)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.OpeningHours)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.RestauranDescription)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.RestauranDescription)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.RestaurantPicture)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.RestaurantPicture)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.RestaurantId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
