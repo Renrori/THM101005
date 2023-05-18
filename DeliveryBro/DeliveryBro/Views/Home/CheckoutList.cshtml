@@ -73,7 +73,6 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <textarea name="" id="" cols="30" rows="7" class="form-control" placeholder="Message" v-model="note"></textarea>
-                                    <p>{{note}}</p>
                                 </div>
                             </div>
 
@@ -104,20 +103,21 @@
                                 </p>
                             </div>
                         </div>
+
                         <div class="col-md-12">
                             <div class="cart-detail p-3 p-md-4">
                                 <h3 class="billing-heading mb-4">付款方式</h3>
                                 <div class="form-group">
                                     <div class="col-md-12">
                                         <div class="radio">
-                                            <label><input type="radio" name="optradio" class="mr-2"> 信用卡付款</label>
+                                            <input type="radio" name="optradio" class="mr-2" value="PaybyCreditCard" v-model="selectedPage"> 信用卡付款
                                         </div>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <div class="col-md-12">
                                         <div class="radio">
-                                            <label><input type="radio" name="optradio" class="mr-2"> 現場付款</label>
+                                            <input type="radio" name="optradio" class="mr-2" value="FinalOrderList" v-model="selectedPage"> 現場付款
                                         </div>
                                     </div>
                                 </div>
@@ -128,42 +128,18 @@
                                         </div>
                                     </div>
                                 </div>
-                                @*                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                <label for="cc-name">Name on card</label>
-                                <input type="text" class="form-control" id="cc-name" placeholder="" required>
-                                <small class="text-muted">Full name as displayed on card</small>
-                                <div class="invalid-feedback">
-                                Name on card is required
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <div class="gotoPage">
+                                            <button class="btn btn-primary" @@click="gotoPayPage">前往付款</button>
+                                        </div>
+                                    </div>
                                 </div>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                <label for="cc-number">Credit card number</label>
-                                <input type="text" class="form-control" id="cc-number" placeholder="" required>
-                                <div class="invalid-feedback">
-                                Credit card number is required
-                                </div>
-                                </div>
-                                </div>
-                                <div class="row">
-                                <div class="col-md-6 mb-3">
-                                <label for="cc-expiration">Expiration</label>
-                                <input type="text" class="form-control" id="cc-expiration" placeholder="" required>
-                                <div class="invalid-feedback">
-                                Expiration date required
-                                </div>
-                                </div>
-                                <div class="col-md-3 mb-3">
-                                <label for="cc-cvv">CVV</label>
-                                <input type="text" class="form-control" id="cc-cvv" placeholder="" required>
-                                <div class="invalid-feedback">
-                                Security code required
-                                </div>
-                                </div>
-                                </div>*@
-                                <p><a class="btn btn-primary py-3 px-4" asp-area="" asp-controller="Home" asp-action="PaybyCreditCard">前往付款</a></p>
                             </div>
                         </div>
+                        @*測試*@
+
+                        @*測試結束*@
                     </div>
                 </div> <!-- .col-md-8 -->
             </div>
@@ -188,8 +164,9 @@
                     note: "",
                     ShippingFee: 0,
                     Discount: 0,
-                    AmountAfterDiscount: '0'
+                    AmountAfterDiscount: 0
                     //需要討論哪些次從後端傳來資料，哪些是從頁面生出
+                    //內用、外帶，需不需要資料庫有地方儲存
                 };
             },
             mounted() {
@@ -205,6 +182,26 @@
                     total = this.totalAmount + this.ShippingFee + this.Discount;
                     this.AmountAfterDiscount = total;
                     return total;
+                },
+                gotoPayPage() {
+                    if (this.selectedPage) {
+                        const PayCreditCardData = {
+                            items: this.cartItems,
+                            totalAmount: this.totalAmount,
+                            CustomerAddres: this.CustomerAddres,
+                            CustomerPhone: this.CustomerPhone,
+                            CustomerEmail: this.CustomerEmai,
+                            CouponID: this.CouponID,
+                            note: this.note,
+                            ShippingFee: this.ShippingFee,
+                            Discount: this.Discount,
+                            AmountAfterDiscount: this.AmountAfterDiscount
+                        };
+                        const Jsondata = JSON.stringify(PayCreditCardData);
+                        //確認console在f12
+                        //console.log(Jsondata);
+                        window.location.href = `${this.selectedPage}?data=${Jsondata}`;
+                    }
                 }
             },
             computed: {

@@ -1,34 +1,68 @@
-﻿<div class="container">
-    <div class="row no-gutters slider-text align-items-center justify-content-center">
-        <div class="col-md-9 text-center">
-            <h1 class="mb-0">交易結果</h1>
+﻿<div id="app">
+    <div class="container">
+        <div class="row no-gutters slider-text align-items-center justify-content-center">
+            <div class="col-md-9 text-center">
+                <h1 class="mb-0">交易結果</h1>
+            </div>
         </div>
+    </div>
+
+
+    <div class="my-5 row justify-content-center">
+        <form class="col-md-6">
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <th width="100"><br />交易結果</th>
+                        <td>測試</td>
+                    </tr>
+                    <tr>
+                        <th><br />訂單編號</th>
+                        <td>測試</td>
+                    </tr>
+                    <tr>
+                        <th><br />訂單狀態</th>
+                        <td>測試</td>
+                    </tr>
+                    <tr>
+                        <th><br />訂單總金額</th>
+                        <td>{{ AmountAfterDiscount }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
     </div>
 </div>
 
-
-<div class="my-5 row justify-content-center">
-    <form class="col-md-6">
-        <table class="table">
-            <tbody>
-                <tr>
-                    <th width="100"><br />交易結果</th>
-                    <td>{{ order.status }}</td>
-                </tr>
-                <tr>
-                    <th><br />訂單編號</th>
-                    <td>{{ order.ID }}</td>
-                </tr>
-                <tr>
-                    <th><br />訂單狀態</th>
-                    <td>{{ order.status }}</td>
-                </tr>
-                <tr>
-                    <th><br />訂單總金額</th>
-                    <td>{{ order.AmountAfterDiscount }}</td>
-                </tr>
-            </tbody>
-        </table>
-    </form>
-</div>
-
+@section Scripts
+    {
+    @*<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>*@
+    <script src="https://unpkg.com/vue@3.2.36/dist/vue.global.prod.js"></script>
+    <script src="~/axios/axios.min.js"></script>
+    <script>
+        var vueApp = {
+            data() {
+                return {
+                    cartItems: [],
+                    totalAmount: 0,
+                    CustomerAddress: "",
+                    CustomerPhone: "",
+                    CustomerEmail: "",
+                    CouponID: "",
+                    note: "",
+                    ShippingFee: 0,
+                    Discount: 0,
+                    AmountAfterDiscount: 0
+                };
+            },
+            mounted() {
+                const urlParams = new URLSearchParams(window.location.search);
+                const Jsondata = urlParams.get("data");
+                const finalorderdata = JSON.parse(decodeURIComponent(Jsondata));
+                this.cartItems = finalorderdata.items;
+                this.AmountAfterDiscount = finalorderdata.AmountAfterDiscount;
+            }
+        };
+        var app = Vue.createApp(vueApp).mount("#app");
+    </script>
+    }
