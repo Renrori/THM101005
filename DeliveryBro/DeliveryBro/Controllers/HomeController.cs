@@ -62,6 +62,30 @@ namespace DeliveryBro.Controllers
             return Ok(product);
         }
 
+        public IActionResult RestaurantMenu()
+        {
+            return View();
+        }
+
+        public IActionResult OrderList()
+        {
+            return View();
+        }
+
+        public IActionResult CheckoutList()
+        {
+            return View();
+        }
+        public IActionResult PaybyCreditCard()
+        {
+            return View();
+        }
+
+        public IActionResult FinalOrderList()
+        {
+            return View();
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

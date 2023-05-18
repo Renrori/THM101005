@@ -1,0 +1,18 @@
+{
+  "version": "1.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "library": "vue@3.3.2",
+      "destination": "wwwroot/vue/"
+    },
+    {
+      "library": "axios@1.4.0",
+      "destination": "wwwroot/axios/"
+    },
+    {
+      "library": "vue-form@4.10.1",
+      "destination": "wwwroot/vue-form/"
+    }
+  ]
+}
