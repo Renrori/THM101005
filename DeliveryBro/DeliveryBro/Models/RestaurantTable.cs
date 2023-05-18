@@ -16,12 +16,12 @@ namespace DeliveryBro.Models
         public int RestaurantId { get; set; }
         public string RestaurantAccount { get; set; }
         public string RestaurantPassword { get; set; }
-        public string RestauranName { get; set; }
+        public string RestaurantName { get; set; }
         public string RestaurantAddress { get; set; }
         public string RestaurantPhone { get; set; }
-        public string RestauranEmail { get; set; }
+        public string RestaurantEmail { get; set; }
         public TimeSpan? OpeningHours { get; set; }
-        public string RestauranDescription { get; set; }
+        public string RestaurantDescription { get; set; }
         public byte[] RestaurantPicture { get; set; }
 
         public virtual ICollection<CustomerOrderTable> CustomerOrderTable { get; set; }

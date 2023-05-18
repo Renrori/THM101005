@@ -17,7 +17,7 @@ namespace DeliveryBro.Models
         public float Discount { get; set; }
         public int AmountAfterDiscount { get; set; }
         public string Note { get; set; }
-        public int DriverId { get; set; }
+        public int? DriverId { get; set; }
         public int CustomerId { get; set; }
         public int RestaurantId { get; set; }
 

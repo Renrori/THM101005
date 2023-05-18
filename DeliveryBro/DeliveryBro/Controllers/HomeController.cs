@@ -37,9 +37,9 @@ namespace DeliveryBro.Controllers
                 .Select(s => new StoreViewModel
                 {
                     StoreId = s.RestaurantId,
-                    StoreName = s.RestauranName,
+                    StoreName = s.RestaurantName,
                     StoreAddress = s.RestaurantAddress,
-                    StoreDescription = s.RestauranDescription
+                    StoreDescription = s.RestaurantDescription
                 })
                 .ToListAsync();
             return Ok(sm);
@@ -62,9 +62,9 @@ namespace DeliveryBro.Controllers
             return Ok(product);
         }
         //叫用圖片方法，傳入StoreId回傳圖片
-        public async Task<FileResult> GetPictureStore(int storeId)
+        public async Task<FileResult> GetPictureStore(int id)
         {
-            RestaurantTable c = await _context.RestaurantTable.FirstOrDefaultAsync(x=>x.RestaurantId== storeId);
+            RestaurantTable c = await _context.RestaurantTable.FindAsync(id);
             byte[] imgUrl = c?.RestaurantPicture;
             return File(imgUrl, "img/jpeg");
         }
