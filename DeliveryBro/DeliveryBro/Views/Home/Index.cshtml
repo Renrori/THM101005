@@ -99,9 +99,6 @@
                         <div class="text py-3 pb-4 px-3 text-center">
                             <h2><a href="#">測試商店</a></h2>
                             <div class="d-flex">
-                                <div class="pricing">
-                                    @*<p class="price"><span>$120.00</span></p>*@
-                                </div>
                             </div>
                             <div class="bottom-area d-flex px-3">
                                 <div class="m-auto d-flex">
@@ -119,7 +116,8 @@
                 <div class="col-md-6 col-lg-4 ftco-animate">
                     <div class="product">
                         <a href="#" class="img-prod">
-                            <img class="img-fluid" src="~/Image/麥味登logo.jpg" alt="Colorlib Template">
+                            @* <img class="img-fluid" src="~/Image/麥味登logo.jpg" alt="Colorlib Template">*@
+                            <img class="img-fluid" :src="storeImageUrl" alt="store img" />
                             <div class="overlay"></div>
                         </a>
                         <div class="text py-3 pb-4 px-3 text-center">
@@ -171,10 +169,44 @@
             </div>
         </div>
     </section>
+    <section class="ftco-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 col-lg-4 ftco-animate" v-for="store in storeInfo" :key="storeId">
+                    <div class="product">
+                        <a href="#" class="img-prod">
+                            <img class="img-fluid" src="~/Image/甲上寶img2.jpg" alt="Colorlib Template">
+                            <div class="overlay"></div>
+                        </a>
+                        <div class="text py-3 pb-4 px-3 text-center">
+                            <h2><a href="#">{{ store.storeName }}</a></h2>
+                            <div class="d-flex">
+                                <div class="pricing">
+                                    @*<p class="price"><span>$120.00</span></p>*@
+                                </div>
+                            </div>
+                            <div class="bottom-area d-flex px-3">
+                                <div class="m-auto d-flex">
+                                    <a href="#" class="add-to-cart d-flex justify-content-center align-items-center text-center">
+                                        <span><i class="ion-ios-menu"></i></span>
+                                    </a>
+                                    <a href="#" class="heart d-flex justify-content-center align-items-center ">
+                                        <span><i class="ion-ios-heart"></i></span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
     @*測試*@
-    <h3>商店圖片</h3>
-    <img :src="storeImageUrl" alt="store img" />
+    <div v-for="store in storeInfo" :key="storeId">
+        <p>ID：{{ store.storeId }}</p>
+        <p>商店名:{{ store.storeName }}</p>
+    </div>
     @*測試結束*@
 </div>
 @section Scripts
@@ -187,25 +219,38 @@
             data() {
                 return {
                     id: 1,//暫時資料
-                    storeImageUrl: ''
+                    storeInfo: [],
+                    storeImageUrl: '',
                 }
             },
             mounted() {
                 this.GetstorePicture();
+                this.GetStoreInfo();
             },
             methods: {
                 async GetstorePicture() {
                     try {
                         const response = await axios.get(`/Home/GetPictureStore?id=${this.id}`,
-                            { responseType: 'blob'});
+                            { responseType: 'blob' });
                         const imageUrl = URL.createObjectURL(response.data);
                         this.storeImageUrl = imageUrl;
                     } catch {
                         console.log("error");
                     }
-                    //const response = await fetch(`/Home/GetPictureStore?storeId=${this.storeId}`);
-                    //const blob = await response.blob(); binary large object
-                    //this.storeImageUrl = URL.createObjectURL(blob);
+                },
+                async GetStoreInfo() {
+                    try {
+                        //axios.get(`Home/GetStore`).then(response => {
+                        //    this.StoreId = response.data.StoreId;
+                        //    this.StoreName = response.data.StoreName;
+                        //})
+                        const response = await axios.get(`Home/GetStore`);
+                        const data = response.data;
+                        this.storeInfo = data;
+
+                    } catch {
+                        console.log("error");
+                    }
 
                 }
             }
