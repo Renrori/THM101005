@@ -133,7 +133,6 @@ namespace DeliveryBro.Models
                 entity.HasOne(d => d.Driver)
                     .WithMany(p => p.CustomerOrderTable)
                     .HasForeignKey(d => d.DriverId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_CustomerOrder_Table_Driver_Table");
 
                 entity.HasOne(d => d.Restaurant)
@@ -277,11 +276,7 @@ namespace DeliveryBro.Models
 
                 entity.Property(e => e.RestaurantId).HasColumnName("RestaurantID");
 
-                entity.Property(e => e.RestauranDescription).HasMaxLength(50);
-
                 entity.Property(e => e.RestauranEmail).HasMaxLength(50);
-
-                entity.Property(e => e.RestauranName).HasMaxLength(20);
 
                 entity.Property(e => e.RestaurantAccount)
                     .IsRequired()
@@ -289,6 +284,10 @@ namespace DeliveryBro.Models
                     .IsUnicode(false);
 
                 entity.Property(e => e.RestaurantAddress).HasMaxLength(50);
+
+                entity.Property(e => e.RestaurantDescription).HasMaxLength(50);
+
+                entity.Property(e => e.RestaurantName).HasMaxLength(20);
 
                 entity.Property(e => e.RestaurantPassword)
                     .IsRequired()
