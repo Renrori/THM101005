@@ -17,11 +17,13 @@ namespace DeliveryBro.Controllers
             _context = context;
         }
 
+        //預設回傳View
         public IActionResult Index()
         {
             return View();
         }
-
+        
+        //抓取有商品的店家回傳店家資訊模型(Id,Name)
         public async Task<IActionResult> GetStore()
         {
             var groupMenu = await _context.MenuTable
@@ -36,7 +38,8 @@ namespace DeliveryBro.Controllers
                 {
                     StoreId = s.RestaurantId,
                     StoreName = s.RestauranName,
-                    StorePicture = s.RestaurantPicture
+                    StoreAddress = s.RestaurantAddress,
+                    StoreDescription = s.RestauranDescription
                 })
                 .ToListAsync();
             return Ok(sm);
@@ -45,7 +48,17 @@ namespace DeliveryBro.Controllers
         public async Task<IActionResult> GetProduct(int id)
         {
             var product = _context.MenuTable.Include(m => m.Restaurant)
-               .Where(m => m.Restaurant.RestaurantId == id);
+               .Where(m => m.Restaurant.RestaurantId == id && m.DishStatus == "ongoing" )
+               .Select(p => new MenuViewModel 
+               {
+                   DishId = p.DishId,
+                   RestaurantId = p.RestaurantId,
+                   DishName = p.DishName,
+                   DishPrice = p.DishPrice,
+                   DishDescription = p.DishDescription,
+                   DishCategory = p.DishCategory
+               })
+               .ToArrayAsync();
             return Ok(product);
         }
 
