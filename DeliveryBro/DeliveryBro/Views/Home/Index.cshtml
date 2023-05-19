@@ -173,8 +173,14 @@
     </section>
 
     @*測試*@
+
     <h3>商店圖片</h3>
-    <img :src="storeImageUrl" alt="store img" />
+    <div v-for="store in StoreInfo" :key="storeId">
+        <p>ID：{{ store.storeId }}</p>
+        <p>商店名:{{ store.storeName }}</p>
+        <img :src="GetPictureStore(store.storeId)" alt="商家圖片" />
+    </div>
+        <img :src="storeImageUrl" alt="store img" />
     @*測試結束*@
 </div>
 @section Scripts
@@ -186,28 +192,39 @@
         var vueApp = {
             data() {
                 return {
-                    id: 1,//暫時資料
+                    StoreInfo:[],
+                    //暫時資料
                     storeImageUrl: ''
                 }
             },
             mounted() {
-                this.GetstorePicture();
+                let _this =this;
+                _this.GetStoreInfo();
+               
             },
             methods: {
-                async GetstorePicture() {
-                    try {
-                        const response = await axios.get(`/Home/GetPictureStore?id=${this.id}`,
-                            { responseType: 'blob'});
-                        const imageUrl = URL.createObjectURL(response.data);
-                        this.storeImageUrl = imageUrl;
-                    } catch {
-                        console.log("error");
-                    }
-                    //const response = await fetch(`/Home/GetPictureStore?storeId=${this.storeId}`);
-                    //const blob = await response.blob(); binary large object
-                    //this.storeImageUrl = URL.createObjectURL(blob);
+                GetStoreInfo: function () {
+                    //alert("應該會跳出來 filterEmployeeDTOes");
+                    let _this = this;
+                    var request = {};
 
-                }
+                    axios.get(`Home/GetStore`).then(response => {
+                        //alert(response.data);
+                        alert(JSON.stringify(response.data));
+                        _this.StoreInfo = response.data;
+                        var storeList = [];
+                        for (var i = 0; i < _this.StoreInfo.length; i++) {
+                            var item = _this.StoreInfo[i];
+                            item.Edit = false;
+                            storeList.push(item);
+                        }
+                        _this.StoreInfo = storeList;
+                    });
+                },
+                GetPictureStore(storeId) {
+                    return `Home/GetPictureStore?storeId=${storeId}`;
+                 },
+
             }
         };
         var app = Vue.createApp(vueApp).mount("#app");

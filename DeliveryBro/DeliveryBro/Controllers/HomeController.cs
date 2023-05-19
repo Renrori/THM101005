@@ -61,12 +61,17 @@ namespace DeliveryBro.Controllers
                .ToArrayAsync();
             return Ok(product);
         }
+
+ 
         //叫用圖片方法，傳入StoreId回傳圖片
-        public async Task<FileResult> GetPictureStore(int id)
+        public async Task<IActionResult> GetPictureStore(int storeId)
         {
-            RestaurantTable c = await _context.RestaurantTable.FindAsync(id);
+            if(storeId != null) { 
+            RestaurantTable c = await _context.RestaurantTable.FindAsync(storeId);
             byte[] imgUrl = c?.RestaurantPicture;
             return File(imgUrl, "img/jpeg");
+            }
+            return BadRequest();
         }
         //叫用圖片方法，傳入storeId和dishId回傳圖
         public async Task<FileResult> GetPicture(int storeId,int dishId)

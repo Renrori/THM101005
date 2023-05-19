@@ -13,6 +13,10 @@
     {
       "library": "vue-form@4.10.1",
       "destination": "wwwroot/vue-form/"
+    },
+    {
+      "library": "signalr.js@2.4.3",
+      "destination": "wwwroot/lib/signalr.js/"
     }
   ]
 }
