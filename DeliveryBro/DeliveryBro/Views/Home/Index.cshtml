@@ -116,8 +116,8 @@
                 <div class="col-md-6 col-lg-4 ftco-animate">
                     <div class="product">
                         <a href="#" class="img-prod">
-                            @* <img class="img-fluid" src="~/Image/麥味登logo.jpg" alt="Colorlib Template">*@
-                            <img class="img-fluid" :src="storeImageUrl" alt="store img" />
+                            <img class="img-fluid" src="~/Image/麥味登logo.jpg" alt="Colorlib Template">
+                            @*<img class="img-fluid" :src="storeImageUrl" alt="store img" />*@
                             <div class="overlay"></div>
                         </a>
                         <div class="text py-3 pb-4 px-3 text-center">
@@ -206,6 +206,8 @@
     <div v-for="store in storeInfo" :key="storeId">
         <p>ID：{{ store.storeId }}</p>
         <p>商店名:{{ store.storeName }}</p>
+        <img :src="GetstorePicture(store.storeId)" alt="商家圖片" />
+
     </div>
     @*測試結束*@
 </div>
@@ -218,26 +220,53 @@
         var vueApp = {
             data() {
                 return {
-                    id: 1,//暫時資料
+                    /*storeId: 1,*///暫時資料
                     storeInfo: [],
                     storeImageUrl: '',
                 }
             },
             mounted() {
-                this.GetstorePicture();
                 this.GetStoreInfo();
+                this.GetstorePicture();
             },
             methods: {
+                //async GetstorePicture() {
+                //    try {
+                //        const response = await axios.get(`/Home/GetPictureStore?storeId=${this.storeId}`,
+                //            { responseType: 'blob' });
+                //        const imageUrl = URL.createObjectURL(response.data);
+                //        this.storeImageUrl = imageUrl;
+                //    } catch {
+                //        console.log("error");
+                //    }
+                //},
                 async GetstorePicture() {
-                    try {
-                        const response = await axios.get(`/Home/GetPictureStore?id=${this.id}`,
-                            { responseType: 'blob' });
-                        const imageUrl = URL.createObjectURL(response.data);
-                        this.storeImageUrl = imageUrl;
-                    } catch {
-                        console.log("error");
+                    //try {
+                    //    const response = axios.get(`/Home/GetPictureStore?storeId=1`,
+                    //        { responseType: 'blob' }) ;
+                    //    var file = response.then((result)=>result.data);
+                    //    var url=file.then(filename=>filename);
+                    //    const imageUrl = URL.createObjectURL(new Blob(url));
+                    //    return imageUrl;
+                    //} catch {
+                    //    console.log("error");
+                    //}
+                    for (let store of this.storeInfo) {
+                        try {
+                            const response = await fetch(`/Home/GetPictureStore?storeId=${store.storeId}`);
+                            if (response.ok) {
+                                const imageBlob = await response.blob();
+                                store.image = URL.createObjectURL(imageBlob);
+                            }
+                            else {
+                                console.log('Failed to fetch image for store:');
+                            }
+                        } catch (error) {
+                            console.error('Error fetching image for store:', store.storeId, error);
+                        }
                     }
                 },
+
                 async GetStoreInfo() {
                     try {
                         //axios.get(`Home/GetStore`).then(response => {
@@ -247,6 +276,7 @@
                         const response = await axios.get(`Home/GetStore`);
                         const data = response.data;
                         this.storeInfo = data;
+
 
                     } catch {
                         console.log("error");
