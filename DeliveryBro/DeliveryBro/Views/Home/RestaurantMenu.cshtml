@@ -12,7 +12,7 @@
             </div>
         </div>
 
-        <div class="row justify-content-center">
+        <div class="row">
             <div class="col-md-6 col-lg-3" v-for="product in currentPageProducts" :key="product.DishID">
                 <div class="product">
                     <a href="#" class="img-prod">
@@ -125,21 +125,6 @@
                     </div>
                 </div>
             </div>
-            <div class="block-50 text-center">
-                <div class="block-50">
-                    <ul class="pagination">
-                        <li class="page-item" :class="{ 'disabled': currentPage === 1 }"><a class="page-link" href="#" @@click="goToPage(currentPage - 1)"><</a></li>
-                        <li class="page-item "
-                            v-for="page in totalPages"
-                            :key="page"
-                            :class="{ 'active': currentPage === page }"><a class="page-link" href="#" @@click="goToPage(page)">{{page}}</a></li>
-                        <li class="page-item"
-                            :class="{'disabled': currentPage === totalPages}">
-                            <a class="page-link" href="#" @@click="goToPage(currentPage + 1)">></a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
         </div>
 
         @* <div class="container mt-4">
@@ -169,12 +154,25 @@
         </tfoot>
         </table>
         </div>*@
+        <div class="container">
+            <ul class="pagination justify-content-center">
+                <li class="page-item" :class="{ 'disabled': currentPage === 1 }"><a class="page-link" href="#" @@click="goToPage(currentPage - 1)"><</a></li>
+                <li class="page-item "
+                    v-for="page in totalPages"
+                    :key="page"
+                    :class="{ 'active': currentPage === page }"><a class="page-link" href="#" @@click="goToPage(page)">{{page}}</a></li>
+                <li class="page-item"
+                    :class="{'disabled': currentPage === totalPages}">
+                    <a class="page-link" href="#" @@click="goToPage(currentPage + 1)">></a>
+                </li>
+            </ul>
+        </div>
 
         <div class="container mt-4">
             <div class="row justify-content-end">
                 <a class="btn btn-info col-2" :href="OrderListUrl">結帳</a>
             </div>
-        </div>       
+        </div>
     </div>
 </div>
 
@@ -276,38 +274,6 @@
 
                 };
             },
-            //methods: {
-            //    viewProduct(product) {
-            //        this.selectedProduct = product;
-            //    },
-            //    addToCart(selectedProduct) {
-            //        const item = {
-            //            DishID: selectedProduct.DishID,
-            //            DishName: selectedProduct.DishName,
-            //            DishPrice: selectedProduct.DishPrice,
-            //            DishDescription: selectedProduct.DishDescription,
-            //            DishCount: selectedProduct.DishCount
-            //        };
-            //        this.cartItems.push(item);
-            //        selectedProduct.DishCount = 1;
-            //    },
-            //    calculateSubtotal(item) {
-            //        return item.DishPrice * item.DishCount;
-            //    },
-            //    calculateTotal() {
-            //        let total = 0;
-            //        for (let i = 0; i < this.cartItems.length; i++) {
-            //            total += this.calculateSubtotal(this.cartItems[i]);
-            //        }
-            //        return total;
-            //    },
-            //    goToPage(page) {
-            //        // 前往指定分頁
-            //        if (page >= 1 && page <= this.totalPages) {
-            //            this.currentPage = page;
-            //        }
-            //    },
-            //},
             computed: {
                 OrderListUrl() {
                     const data = JSON.stringify(this.cartItems);
