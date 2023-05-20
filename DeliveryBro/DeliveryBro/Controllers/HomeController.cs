@@ -1,5 +1,5 @@
 ﻿using DeliveryBro.Models;
-using DeliveryBro.ViewModels;
+using DeliveryBro.ViewModels.Home;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
@@ -74,9 +74,9 @@ namespace DeliveryBro.Controllers
             return BadRequest();
         }
         //叫用圖片方法，傳入storeId和dishId回傳圖
-        public async Task<FileResult> GetPicture(int storeId,int dishId)
+        public async Task<FileResult> GetPicture(CallViewModel call)
         {
-            MenuTable c = await _context.MenuTable.FindAsync(storeId,dishId);
+            MenuTable c = await _context.MenuTable.FindAsync(call.storeId,call.dishId);
             byte[] imgUrl = c?.DishPicture;
             return File(imgUrl, "img/jpeg");
         }

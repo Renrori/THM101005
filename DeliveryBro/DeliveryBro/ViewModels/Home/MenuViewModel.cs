@@ -1,4 +1,4 @@
-﻿namespace DeliveryBro.ViewModels
+﻿namespace DeliveryBro.ViewModels.Home
 {
     public class MenuViewModel
     {
@@ -8,6 +8,6 @@
         public int DishPrice { get; set; }
         public string DishDescription { get; set; }
         public string DishCategory { get; set; }
-       
+
     }
 }
