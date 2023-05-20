@@ -87,7 +87,6 @@
 
 <div id="app">
     <section class="ftco-section">
-
         <div class="container">
             <div class="row">
                 <div class="col-md-6 col-lg-4 ftco-animate">
@@ -97,7 +96,7 @@
                             <div class="overlay"></div>
                         </a>
                         <div class="text py-3 pb-4 px-3 text-center">
-                            <h2><a href="#">測試商店</a></h2>
+                            <h2><a href="#">測試商店預設</a></h2>
                             <div class="d-flex">
                             </div>
                             <div class="bottom-area d-flex px-3">
@@ -113,88 +112,24 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6 col-lg-4 ftco-animate">
-                    <div class="product">
-                        <a href="#" class="img-prod">
-                            <img class="img-fluid" src="~/Image/麥味登logo.jpg" alt="Colorlib Template">
-                            @*<img class="img-fluid" :src="storeImageUrl" alt="store img" />*@
-                            <div class="overlay"></div>
-                        </a>
-                        <div class="text py-3 pb-4 px-3 text-center">
-                            <h2><a href="#">測試商店</a></h2>
-                            <div class="d-flex">
-                                <div class="pricing">
-                                    @*<p class="price"><span>$120.00</span></p>*@
-                                </div>
-                            </div>
-                            <div class="bottom-area d-flex px-3">
-                                <div class="m-auto d-flex">
-                                    <a href="#" class="add-to-cart d-flex justify-content-center align-items-center text-center">
-                                        <span><i class="ion-ios-menu"></i></span>
-                                    </a>
-                                    <a href="#" class="heart d-flex justify-content-center align-items-center ">
-                                        <span><i class="ion-ios-heart"></i></span>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-4 ftco-animate">
-                    <div class="product">
-                        <a href="#" class="img-prod">
-                            <img class="img-fluid" src="~/Image/甲上寶img2.jpg" alt="Colorlib Template">
-                            <div class="overlay"></div>
-                        </a>
-                        <div class="text py-3 pb-4 px-3 text-center">
-                            <h2><a href="#">測試商店</a></h2>
-                            <div class="d-flex">
-                                <div class="pricing">
-                                    @*<p class="price"><span>$120.00</span></p>*@
-                                </div>
-                            </div>
-                            <div class="bottom-area d-flex px-3">
-                                <div class="m-auto d-flex">
-                                    <a href="#" class="add-to-cart d-flex justify-content-center align-items-center text-center">
-                                        <span><i class="ion-ios-menu"></i></span>
-                                    </a>
-                                    <a href="#" class="heart d-flex justify-content-center align-items-center ">
-                                        <span><i class="ion-ios-heart"></i></span>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <section class="ftco-section">
-        <div class="container">
-            <div class="row">
+
                 <div class="col-md-6 col-lg-4 ftco-animate" v-for="store in storeInfo" :key="storeId">
                     <div class="product">
-                        <a href="#" class="img-prod">
-                            <img class="img-fluid" src="~/Image/甲上寶img2.jpg" alt="Colorlib Template">
-                            <div class="overlay"></div>
-                        </a>
+                        <div class="img-prod">
+                            <img class="img-fluid" :src="GetPictureStore(store.storeId)" alt="商家圖片" />
+                        </div>
                         <div class="text py-3 pb-4 px-3 text-center">
-                            <h2><a href="#">{{ store.storeName }}</a></h2>
-                            <div class="d-flex">
-                                <div class="pricing">
-                                    @*<p class="price"><span>$120.00</span></p>*@
-                                </div>
+                            <h2>{{ store.storeName }}</h2>
+                            @*                           
+                            <div class="m-auto d-flex">
+                            <a href="#" class="add-to-cart d-flex justify-content-center align-items-center text-center">
+                            <span><i class="ion-ios-menu"></i></span>
+                            </a>
+                            <a href="#" class="heart d-flex justify-content-center align-items-center ">
+                            <span><i class="ion-ios-heart"></i></span>
+                            </a>
                             </div>
-                            <div class="bottom-area d-flex px-3">
-                                <div class="m-auto d-flex">
-                                    <a href="#" class="add-to-cart d-flex justify-content-center align-items-center text-center">
-                                        <span><i class="ion-ios-menu"></i></span>
-                                    </a>
-                                    <a href="#" class="heart d-flex justify-content-center align-items-center ">
-                                        <span><i class="ion-ios-heart"></i></span>
-                                    </a>
-                                </div>
-                            </div>
+                            *@
                         </div>
                     </div>
                 </div>
@@ -203,13 +138,12 @@
     </section>
 
     @*測試*@
-    <div v-for="store in storeInfo" :key="storeId">
-        <p>ID：{{ store.storeId }}</p>
-        <p>商店名:{{ store.storeName }}</p>
-        <img :src="GetstorePicture(store.storeId)" alt="商家圖片" />
-
-    </div>
+@*    <div v-for="store in storeInfo" :key="storeId">
+        <img class="img-fluid" :src="GetPictureStore(store.storeId)" alt="商家圖片" />
+        <h2>{{ store.storeName }}</h2>
+    </div>*@
     @*測試結束*@
+
 </div>
 @section Scripts
     {
@@ -225,9 +159,14 @@
                     storeImageUrl: '',
                 }
             },
+            computed: {
+                //RestaurantMenuUrl() {
+                //    const data = JSON.stringify(this.cartItems);
+                //    return `RestaurantMenu?data=${encodeURIComponent(data)}`;
+                //},
+            },
             mounted() {
                 this.GetStoreInfo();
-                this.GetstorePicture();
             },
             methods: {
                 //async GetstorePicture() {
@@ -240,31 +179,8 @@
                 //        console.log("error");
                 //    }
                 //},
-                async GetstorePicture() {
-                    //try {
-                    //    const response = axios.get(`/Home/GetPictureStore?storeId=1`,
-                    //        { responseType: 'blob' }) ;
-                    //    var file = response.then((result)=>result.data);
-                    //    var url=file.then(filename=>filename);
-                    //    const imageUrl = URL.createObjectURL(new Blob(url));
-                    //    return imageUrl;
-                    //} catch {
-                    //    console.log("error");
-                    //}
-                    for (let store of this.storeInfo) {
-                        try {
-                            const response = await fetch(`/Home/GetPictureStore?storeId=${store.storeId}`);
-                            if (response.ok) {
-                                const imageBlob = await response.blob();
-                                store.image = URL.createObjectURL(imageBlob);
-                            }
-                            else {
-                                console.log('Failed to fetch image for store:');
-                            }
-                        } catch (error) {
-                            console.error('Error fetching image for store:', store.storeId, error);
-                        }
-                    }
+                GetPictureStore(storeId) {
+                    return `Home/GetPictureStore?storeId=${storeId}`;
                 },
 
                 async GetStoreInfo() {
