@@ -90,34 +90,29 @@
 
         <div class="container">
             <div class="row">
-                <div v-for="store in StoreInfo" :key="storeId">
-                    <div class="col-md-6 col-lg-4 ftco-animate">
-                        <div class="product">
-                            <a class="img-prod" asp-area="" asp-controller="Home" asp-action="RestaurantMenu">
-                                <img class="img-fluid" :src="GetPictureStore(store.storeId)" alt="{{ store.storeId }}">
-                                <div class="overlay"></div>
-                            </a>
-                            <div class="text py-3 pb-4 px-3 text-center">
-                                <h2><a href="#">{{ store.storeName }}</a></h2>
-                                <div class="d-flex">
-                                    <div class="pricing">
-                                    </div>
-                                </div>
-                                <div class="bottom-area d-flex px-3">
-                                    <div class="m-auto d-flex">
-                                        <a href="#" class="add-to-cart d-flex justify-content-center align-items-center text-center">
-                                            <span><i class="ion-ios-menu"></i></span>
-                                        </a>
-                                        <a href="#" class="heart d-flex justify-content-center align-items-center ">
-                                            <span><i class="ion-ios-heart"></i></span>
-                                        </a>
-                                    </div>
+                <div class="col-md-6 col-lg-4" v-for="store in StoreInfo" :key="storeId">
+                    <div class="product">
+                        <a class="img-prod" asp-area="" asp-controller="Home" asp-action="RestaurantMenu">
+                            <img class="img-fluid" :src="GetPictureStore(store.storeId)" alt="{{ store.storeId }}">
+                            <div class="overlay"></div>
+                        </a>
+                        <div class="text py-3 pb-4 px-3 text-center">
+                            <h2><a href="#">商店:{{ store.storeName }}</a></h2>
+                            <div class="d-flex"> 
+                            </div>
+                            <div class="bottom-area d-flex px-3">
+                                <div class="m-auto d-flex">
+                                    <a href="#" class="add-to-cart d-flex justify-content-center align-items-center text-center">
+                                        <span><i class="ion-ios-menu"></i></span>
+                                    </a>
+                                    <a href="#" class="heart d-flex justify-content-center align-items-center ">
+                                        <span><i class="ion-ios-heart"></i></span>
+                                    </a>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                
             </div>
         </div>
     </section>
@@ -129,6 +124,7 @@
         <p>ID：{{ store.storeId }}</p>
         <p>商店名:{{ store.storeName }}</p>
         <img :src="GetPictureStore(store.storeId)" alt="商家圖片" />
+
     </div>
      
     @*測試結束*@
@@ -149,18 +145,18 @@
             },
             mounted() {
                 let _this =this;
-                _this.GetStoreInfo();
+                this.GetStoreInfo();
                
             },
             methods: {
-                GetStoreInfo: function () {
+                 GetStoreInfo: function () {
                     //alert("應該會跳出來 filterEmployeeDTOes");
                     let _this = this;
                     var request = {};
 
                     axios.get(`Home/GetStore`).then(response => {
                         //alert(response.data);
-                        alert(JSON.stringify(response.data));
+                        //alert(JSON.stringify(response.data));
                         _this.StoreInfo = response.data;
                         var storeList = [];
                         for (var i = 0; i < _this.StoreInfo.length; i++) {
