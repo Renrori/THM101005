@@ -12,6 +12,7 @@
             </div>
         </div>
 
+
         <div class="row">
             <div class="col-md-6 col-lg-3" v-for="product in currentPageProducts" :key="product.DishID">
                 <div class="product">
@@ -127,33 +128,6 @@
             </div>
         </div>
 
-        @* <div class="container mt-4">
-        <h2>購物車</h2>
-        <table class="table">
-        <thead>
-        <tr>
-        <th>商品名稱</th>
-        <th>數量</th>
-        <th>價錢</th>
-        <th>單項總金額</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr v-for="item in cartItems" :key="item.DishID">
-        <td>{{ item.DishName }}</td>
-        <td>{{ item.DishCount }}</td>
-        <td>{{ item.DishPrice }}</td>
-        <td>{{ calculateSubtotal(item) }}</td>
-        </tr>
-        </tbody>
-        <tfoot>
-        <tr>
-        <td colspan="4">總金額：</td>
-        <td>{{ calculateTotal() }}</td>
-        </tr>
-        </tfoot>
-        </table>
-        </div>*@
         <div class="container">
             <ul class="pagination justify-content-center">
                 <li class="page-item" :class="{ 'disabled': currentPage === 1 }"><a class="page-link" href="#" @@click="goToPage(currentPage - 1)"><</a></li>
@@ -173,7 +147,15 @@
                 <a class="btn btn-info col-2" :href="OrderListUrl">結帳</a>
             </div>
         </div>
+
+        @*測試*@
+        <div>
+            <h2>{{ storeInfo.storeName}}</h2>
+        </div>
+        @*測試結束*@
     </div>
+
+
 </div>
 
 
@@ -266,13 +248,19 @@
                             DishDescription: '超級營養漢堡'
                         },
                     ],
+                    storeInfo: {},
                     DishCount: 1,
                     cartItems: [],
                     selectedProduct: null,
-                    currentPage: 1, // 當前分頁
+                    currentPage: 1, // 當前分頁 
                     pageSize: 8 // 每頁顯示的商品數量
 
                 };
+            },
+            mounted() {
+                const urlParams = new URLSearchParams(window.location.search);
+                const data = urlParams.get('data');
+                this.storeInfo = JSON.parse(decodeURIComponent(data));
             },
             computed: {
                 OrderListUrl() {
@@ -291,6 +279,10 @@
                 },
             },
             methods: {
+                getStoreById(storeId) {
+                    // 根据 storeId 从 storeInfo 数组中获取对应的商店信息
+                    //return this.$root.storeInfo.find(store => store.storeId.toString() === storeId);
+                },
                 viewProduct(product) {
                     this.selectedProduct = product;
                 },
@@ -320,7 +312,7 @@
                     if (page >= 1 && page <= this.totalPages) {
                         this.currentPage = page;
                     }
-                },
+                }
             }
         };
         var app = Vue.createApp(vueApp).mount("#app");

@@ -89,7 +89,7 @@
     <section class="ftco-section">
         <div class="container">
             <div class="row">
-                <div class="col-md-6 col-lg-4 ftco-animate">
+@*                <div class="col-md-6 col-lg-4 ftco-animate">
                     <div class="product">
                         <a class="img-prod" asp-area="" asp-controller="Home" asp-action="RestaurantMenu">
                             <img class="img-fluid" src="~/Image/漢堡王logo.jpg" alt="Colorlib Template">
@@ -111,25 +111,17 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div>*@
 
-                <div class="col-md-6 col-lg-4 ftco-animate" v-for="store in storeInfo" :key="storeId">
+                <div class="col-md-6 col-lg-4 " v-for="store in storeInfo" :key="storeId">
                     <div class="product">
                         <div class="img-prod">
                             <img class="img-fluid" :src="GetPictureStore(store.storeId)" alt="商家圖片" />
                         </div>
                         <div class="text py-3 pb-4 px-3 text-center">
                             <h2>{{ store.storeName }}</h2>
-                            @*                           
-                            <div class="m-auto d-flex">
-                            <a href="#" class="add-to-cart d-flex justify-content-center align-items-center text-center">
-                            <span><i class="ion-ios-menu"></i></span>
-                            </a>
-                            <a href="#" class="heart d-flex justify-content-center align-items-center ">
-                            <span><i class="ion-ios-heart"></i></span>
-                            </a>
-                            </div>
-                            *@
+                            <button class="btn btn-outline-info" @@click="RestaurantMenuUrl(store)"><i class="ion-ios-menu"></i></button>
+                            <button class="btn btn-outline-info"><i class="ion-ios-heart"></i></button>
                         </div>
                     </div>
                 </div>
@@ -159,29 +151,16 @@
                     storeImageUrl: '',
                 }
             },
-            computed: {
-                //RestaurantMenuUrl() {
-                //    const data = JSON.stringify(this.cartItems);
-                //    return `RestaurantMenu?data=${encodeURIComponent(data)}`;
-                //},
-            },
             mounted() {
                 this.GetStoreInfo();
             },
+            computed: {
+            },
             methods: {
-                //async GetstorePicture() {
-                //    try {
-                //        const response = await axios.get(`/Home/GetPictureStore?storeId=${this.storeId}`,
-                //            { responseType: 'blob' });
-                //        const imageUrl = URL.createObjectURL(response.data);
-                //        this.storeImageUrl = imageUrl;
-                //    } catch {
-                //        console.log("error");
-                //    }
-                //},
                 GetPictureStore(storeId) {
                     return `Home/GetPictureStore?storeId=${storeId}`;
                 },
+
 
                 async GetStoreInfo() {
                     try {
@@ -192,12 +171,15 @@
                         const response = await axios.get(`Home/GetStore`);
                         const data = response.data;
                         this.storeInfo = data;
-
-
                     } catch {
                         console.log("error");
                     }
 
+                },
+                RestaurantMenuUrl(store) {
+                    const data = JSON.stringify(store);
+                    const url = `/Home/RestaurantMenu?data=${encodeURIComponent(data)}`;
+                    window.location.href = url;
                 }
             }
         };
