@@ -64,10 +64,10 @@ namespace DeliveryBro.Controllers
 
  
         //叫用圖片方法，傳入StoreId回傳圖片
-        public async Task<IActionResult> GetPictureStore(int storeId)
+        public async Task<IActionResult> GetPictureStore(CallViewModel call)
         {
-            if(storeId != null) { 
-            RestaurantTable c = await _context.RestaurantTable.FindAsync(storeId);
+            if(call != null) { 
+            RestaurantTable c = await _context.RestaurantTable.FindAsync(call.storeId);
             byte[] imgUrl = c?.RestaurantPicture;
             return File(imgUrl, "img/jpeg");
             }
@@ -76,6 +76,7 @@ namespace DeliveryBro.Controllers
         //叫用圖片方法，傳入storeId和dishId回傳圖
         public async Task<FileResult> GetPicture(CallViewModel call)
         {
+            
             MenuTable c = await _context.MenuTable.FindAsync(call.storeId,call.dishId);
             byte[] imgUrl = c?.DishPicture;
             return File(imgUrl, "img/jpeg");
