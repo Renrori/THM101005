@@ -45,10 +45,10 @@ namespace DeliveryBro.Controllers
             return Ok(sm);
         }
 
-        public async Task<IActionResult> GetProduct(int id)
+        public async Task<IActionResult> GetProduct(int storeId)
         {
             var product = await _context.MenuTable.Include(m => m.Restaurant)
-               .Where(m => m.Restaurant.RestaurantId == id && m.DishStatus == "ongoing" )
+               .Where(m => m.Restaurant.RestaurantId == storeId && m.DishStatus == "ongoing" )
                .Select(p => new MenuViewModel 
                {
                    DishId = p.DishId,

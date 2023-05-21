@@ -151,7 +151,16 @@
         @*測試*@
         <div>
             <h2>{{ storeInfo.storeName}}</h2>
+            <h3>{{storeInfo.storeId}}</h3>
         </div>
+        <ul v-for="food in productMenu" :key="food.DishId">
+            <li>
+                {{food.dishName}}
+            </li>
+            <li>
+                {{food.dishPrice}}
+            </li>
+        </ul>
         @*測試結束*@
     </div>
 
@@ -197,62 +206,14 @@
                             DishPrice: '30',
                             DishDescription: '好吃飯糰，吃了包你拉肚子'
 
-                        },
-                        {
-                            DishID: '5',
-                            DishName: '超值漢堡',
-                            //DishPicture:,
-                            DishPrice: '60',
-                            DishDescription: '超級營養漢堡'
-                        },
-                        {
-                            DishID: '6',
-                            DishName: '超值漢堡',
-                            //DishPicture:,
-                            DishPrice: '60',
-                            DishDescription: '超級營養漢堡'
-                        },
-                        {
-                            DishID: '7',
-                            DishName: '超值漢堡',
-                            //DishPicture:,
-                            DishPrice: '60',
-                            DishDescription: '超級營養漢堡'
-                        },
-                        {
-                            DishID: '8',
-                            DishName: '超值漢堡',
-                            //DishPicture:,
-                            DishPrice: '60',
-                            DishDescription: '超級營養漢堡'
-                        },
-                        {
-                            DishID: '9',
-                            DishName: '超值漢堡',
-                            //DishPicture:,
-                            DishPrice: '60',
-                            DishDescription: '超級營養漢堡'
-                        },
-                        {
-                            DishID: '10',
-                            DishName: '超值漢堡',
-                            //DishPicture:,
-                            DishPrice: '60',
-                            DishDescription: '超級營養漢堡'
-                        },
-                        {
-                            DishID: '11',
-                            DishName: '超值漢堡',
-                            //DishPicture:,
-                            DishPrice: '60',
-                            DishDescription: '超級營養漢堡'
-                        },
+                        }
                     ],
-                    storeInfo: {},
+                    productMenu: [], //利用storeId叫回dish資料
+                    storeInfo: [],
                     DishCount: 1,
                     cartItems: [],
                     selectedProduct: null,
-                    currentPage: 1, // 當前分頁 
+                    currentPage: 1, // 當前分頁
                     pageSize: 8 // 每頁顯示的商品數量
 
                 };
@@ -261,6 +222,13 @@
                 const urlParams = new URLSearchParams(window.location.search);
                 const data = urlParams.get('data');
                 this.storeInfo = JSON.parse(decodeURIComponent(data));
+                this.GetRestaurantMenuInfo();
+
+                this.GetRestaurantMenuInfo(this.storeInfo.storeId).then(productMenu => {
+                    this.productMenu = productMenu;
+                }).catch(error => {
+                    console.error(error);
+                });
             },
             computed: {
                 OrderListUrl() {
@@ -279,10 +247,6 @@
                 },
             },
             methods: {
-                getStoreById(storeId) {
-                    // 根据 storeId 从 storeInfo 数组中获取对应的商店信息
-                    //return this.$root.storeInfo.find(store => store.storeId.toString() === storeId);
-                },
                 viewProduct(product) {
                     this.selectedProduct = product;
                 },
@@ -312,9 +276,19 @@
                     if (page >= 1 && page <= this.totalPages) {
                         this.currentPage = page;
                     }
+                },
+                GetRestaurantMenuInfo(storeId) {
+                    const url = `GetProduct?storeId=${storeId}`;
+                    return axios.get(url).then(response => {
+                        return response.data;
+                    }).catch(error => {
+                        throw new Error(`Failed to fetch menu items for productId:${storeId}`)
+                    })
                 }
             }
         };
+
         var app = Vue.createApp(vueApp).mount("#app");
+
     </script>
 }
