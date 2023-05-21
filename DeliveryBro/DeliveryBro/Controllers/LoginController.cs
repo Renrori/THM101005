@@ -25,7 +25,6 @@ namespace DeliveryBro.Controllers
         //{
         //    //比對是否存在此ID用戶
         //    var user = _context.CustomersTable.FirstOrDefault(x => x.CustomerId == lm.UserID && x.CustomerPassword == lm.UserPassword);
-        //    var loginTry = 0;
         //    if (user != null)
         //    {
 

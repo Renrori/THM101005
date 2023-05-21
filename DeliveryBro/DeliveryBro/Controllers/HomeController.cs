@@ -64,9 +64,9 @@ namespace DeliveryBro.Controllers
 
  
         //叫用圖片方法，傳入StoreId回傳圖片
-        public async Task<IActionResult> GetPictureStore(int id)
+        public async Task<IActionResult> GetPictureStore(int storeId)
         {
-            RestaurantTable c = await _context.RestaurantTable.FindAsync(id);
+            RestaurantTable c = await _context.RestaurantTable.FindAsync(storeId);
             byte[] imgUrl = c?.RestaurantPicture;
             return File(imgUrl, "img/jpeg");
            
