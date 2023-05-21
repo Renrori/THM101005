@@ -21,17 +21,18 @@ namespace DeliveryBro.Controllers
         {
             return View();
         }
-        public Task<IActionResult> Login(LoginViewModel lm)
-        {
-            //比對是否存在此ID用戶
-            var user = _context.CustomersTable.FirstOrDefault(x => x.CustomerId == lm.UserID);
-            if (user != null)
-            {
+        //public Task<IActionResult> Login(LoginViewModel lm)
+        //{
+        //    //比對是否存在此ID用戶
+        //    var user = _context.CustomersTable.FirstOrDefault(x => x.CustomerId == lm.UserID && x.CustomerPassword == lm.UserPassword);
+        //    var loginTry = 0;
+        //    if (user != null)
+        //    {
 
 
-            }
+        //    }
 
-            return View();
-        }
+        //    return View();
+        //}
     }
 }
