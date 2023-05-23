@@ -7,6 +7,11 @@ namespace DeliveryBro.Models
 {
     public partial class CustomerOrderTable
     {
+        public CustomerOrderTable()
+        {
+            OrderDetailsTable = new HashSet<OrderDetailsTable>();
+        }
+
         public int OrderId { get; set; }
         public string CustomerAddress { get; set; }
         public int? ShippingFee { get; set; }
@@ -24,6 +29,6 @@ namespace DeliveryBro.Models
         public virtual CustomersTable Customer { get; set; }
         public virtual DriverTable Driver { get; set; }
         public virtual RestaurantTable Restaurant { get; set; }
-        public virtual OrderDetailsTable OrderDetailsTable { get; set; }
+        public virtual ICollection<OrderDetailsTable> OrderDetailsTable { get; set; }
     }
 }

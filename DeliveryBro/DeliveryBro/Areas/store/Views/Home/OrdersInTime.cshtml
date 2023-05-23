@@ -1,176 +1,106 @@
 ﻿<main id="main" class="main">
     <div class="pagetitle">
-        <h1>New Orders</h1>
+        <h1>及時訂單</h1>
         <nav>
             <ol class="breadcrumb">
                 <a class="breadcrumb-item" asp-area="store" asp-controller="Home" asp-action="Index">Home</a>
-                <li class="breadcrumb-item active">New Orders</li>
+                <li class="breadcrumb-item active">及時訂單</li>
             </ol>
         </nav>
     </div>
-    <section class="section neworders">
-        <div class="row">
-            <div class="col">
+    <div id="app">
+        <section class="section neworders">
+            <div class="row">
+                <div class="col">
+                    <div class="card">
+                        <div class="card-body pt-3">
+                            <ul class="nav nav-tabs nav-tabs-bordered">
 
-                <div class="card">
-                    <div class="card-body pt-3">
-                        <!-- Bordered Tabs -->
-                        <ul class="nav nav-tabs nav-tabs-bordered">
+                                <li class="nav-item">
+                                    <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#order-waiting">待回應訂單</button>
+                                </li>
 
-                            <li class="nav-item">
-                                <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#order-waiting">Waiting</button>
-                            </li>
+                                <li class="nav-item">
+                                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#order-accpted">已接受訂單</button>
+                                </li>
+                            </ul>
+                            <div class="tab-content pt-2">
 
-                            <li class="nav-item">
-                                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#order-accpted">Accepting</button>
-                            </li>
-                        </ul>
-                        <div class="tab-content pt-2">
+                                <div class="tab-pane fade show active profile-overview" id="order-waiting">
 
-                            <div class="tab-pane fade show active profile-overview" id="order-waiting">
-
-                                <div class="card">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Order Id: 20</h5>
-                                        <div class="row">
-                                            <div class="col-10">
-                                                <div class="row">
-                                                    <div class="col-lg-3 col-md-4 label">Item Name 1</div>
-                                                    <div class="col-lg-5 col-md-5">Sugar, ice or ...</div>
-                                                    <div class="col-lg-2 col-md-3">Number</div>
-                                                    <div class="col-lg-2 col-md-2">Price$</div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-lg-3 col-md-4 label">Item Name 2</div>
-                                                    <div class="col-lg-5 col-md-5">Sugar, ice or ...</div>
-                                                    <div class="col-lg-2 col-md-3">Number</div>
-                                                    <div class="col-lg-2 col-md-2">Price$</div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-lg-3 col-md-4 label"></div>
-                                                    <div class="col-lg-5 col-md-5"></div>
-                                                    <div class="col-lg-2 col-md-3"></div>
-                                                    <div class="col-lg-2 col-md-2">Total: $</div>
+                                    <div class="card" v-for="wo in waitingOrder">
+                                        <div class="card-body">
+                                            <h5 class="card-title">訂單編號: {{wo.orderId}}</h5>
+                                            <div class="row">
+                                                <div class="col-10">
+                                                    <div class="row">
+                                                        <div class="col-3 label">餐點名稱</div>
+                                                        <div class="col-3">單價</div>
+                                                        <div class="col-3">數量</div>
+                                                        <div class="col-3">小計</div>
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <div class="col-2">
-                                                <button class="btn btn-success rounded-circle">O</button>
-                                                <button class="btn btn-danger rounded-circle">X</button>
+                                            <div class="row">
+                                                <div class="col-10">
+                                                    <div class="row" v-for="wod in wo.orderDetails">
+                                                        <div class="col-3 label">{{wod.dishName}}</div>
+                                                        <div class="col-3">$ {{wod.unitPrice}}</div>
+                                                        <div class="col-3">{{wod.quantity}}</div>
+                                                        <div class="col-3">$ {{wod.subtotal}}</div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-2">
+                                                    <button class="btn btn-success rounded-circle" @@click="acepted(wo)"><i class="fa-regular fa-circle"></i></button>
+                                                    &emsp;
+                                                    <button class="btn btn-danger rounded-circle" @@click="refused(wo)"><i class="fa-solid fa-xmark fa-lg"></i></button>
+                                                </div>
                                             </div>
+                                            <br />
+                                            <div>總金額: $ {{wo.total}}</div>
                                         </div>
-                                    </div>
-                                </div>
-                                <div class="card">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Order Id: 21</h5>
-                                        <div class="row">
-                                            <div class="col-10">
-                                                <div class="row">
-                                                    <div class="col-lg-3 col-md-4 label">Item Name 1</div>
-                                                    <div class="col-lg-5 col-md-5">Sugar, ice or ...</div>
-                                                    <div class="col-lg-2 col-md-3">Number</div>
-                                                    <div class="col-lg-2 col-md-2">Price$</div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-lg-3 col-md-4 label">Item Name 2</div>
-                                                    <div class="col-lg-5 col-md-5">Sugar, ice or ...</div>
-                                                    <div class="col-lg-2 col-md-3">Number</div>
-                                                    <div class="col-lg-2 col-md-2">Price$</div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-lg-3 col-md-4 label"></div>
-                                                    <div class="col-lg-5 col-md-5"></div>
-                                                    <div class="col-lg-2 col-md-3"></div>
-                                                    <div class="col-lg-2 col-md-2">Total: $</div>
-                                                </div>
-                                            </div>
-                                            <div class="col-2">
-                                                <button class="btn btn-success rounded-circle">O</button>
-                                                <button class="btn btn-danger rounded-circle">X</button>
-                                            </div>
-                                        </div>
+
                                     </div>
                                 </div>
                             </div>
 
                             <div class="tab-pane fade profile-edit" id="order-accpted">
-                                <div class="card">
+                                <div class="card" v-for="ao in aceptedOrder">
                                     <div class="card-body">
-                                        <h5 class="card-title">Order Id: 18</h5>
-                                        <h5 class="card-title">Delivery num: 29</h5>
-                                        <h5>Accetped time: 2023-5-14 11:00:00</h5>
-                                        <h5>Expected completion time: 11:20:00</h5>
-                                        <h5>Customer Name</h5>
+                                        <h5 class="card-title">訂單編號: {{ao.orderId}}</h5>
+                                        <h5>接收訂單時間: {{ao.orderDate}}</h5>
+                                        <h5>預計完成時間: 接收時間+預設被餐時間</h5>
+                                        <h5>顧客名稱: {{ao.customerName}}</h5>
                                         <hr />
                                         <div class="row">
                                             <div class="col-10">
                                                 <div class="row">
-                                                    <div class="col-lg-3 col-md-4 label">Item Name 1</div>
-                                                    <div class="col-lg-5 col-md-5">Sugar, ice or ...</div>
-                                                    <div class="col-lg-2 col-md-3">Number</div>
-                                                    <div class="col-lg-2 col-md-2">Price$</div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-lg-3 col-md-4 label">Item Name 2</div>
-                                                    <div class="col-lg-5 col-md-5">Sugar, ice or ...</div>
-                                                    <div class="col-lg-2 col-md-3">Number</div>
-                                                    <div class="col-lg-2 col-md-2">Price$</div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-lg-3 col-md-4 label"></div>
-                                                    <div class="col-lg-5 col-md-5"></div>
-                                                    <div class="col-lg-2 col-md-3"></div>
-                                                    <div class="col-lg-2 col-md-2">Total: $</div>
+                                                    <div class="col-3 label">餐點名稱</div>
+                                                    <div class="col-3">單價</div>
+                                                    <div class="col-3">數量</div>
+                                                    <div class="col-3">小計</div>
                                                 </div>
                                             </div>
-                                            <div class="col-2">
-                                                <button class="btn btn-primary"><i class="fa-solid fa-check"></i></button>
-                                                <a class=" btn btn-warning" asp-area="" asp-controller="Home" asp-action="HelpCenter"><i class="fa-solid fa-info"></i></a>
-                                            </div>
                                         </div>
-                                        <hr />
-                                        <div>
-                                            <h5>Memo</h5>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Order Id: 19</h5>
-                                        <h5 class="card-title">Delivery num: 30</h5>
-                                        <h5>Accetped time: 2023-5-14 12:00:00</h5>
-                                        <h5>Expected completion time: 12:20:00</h5>
-                                        <h5>Customer Name</h5>
-                                        <hr />
                                         <div class="row">
-                                            <div class="col-10">
+                                            <div class="col-10" v-for="aod in ao.orderDetails">
                                                 <div class="row">
-                                                    <div class="col-lg-3 col-md-4 label">Item Name 1</div>
-                                                    <div class="col-lg-5 col-md-5">Sugar, ice or ...</div>
-                                                    <div class="col-lg-2 col-md-3">Number</div>
-                                                    <div class="col-lg-2 col-md-2">Price$</div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-lg-3 col-md-4 label">Item Name 2</div>
-                                                    <div class="col-lg-5 col-md-5">Sugar, ice or ...</div>
-                                                    <div class="col-lg-2 col-md-3">Number</div>
-                                                    <div class="col-lg-2 col-md-2">Price$</div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-lg-3 col-md-4 label"></div>
-                                                    <div class="col-lg-5 col-md-5"></div>
-                                                    <div class="col-lg-2 col-md-3"></div>
-                                                    <div class="col-lg-2 col-md-2">Total: $</div>
+                                                    <div class="col-3 label">{{aod.dishName}}</div>
+                                                    <div class="col-3">$ {{aod.unitPrice}}</div>
+                                                    <div class="col-3">{{aod.quantity}}</div>
+                                                    <div class="col-3">$ {{aod.subtotal}}</div>
                                                 </div>
                                             </div>
                                             <div class="col-2">
-                                                <button class="btn btn-primary"><i class="fa-solid fa-check"></i></button>
-                                                <a class=" btn btn-warning" asp-area="" asp-controller="Home" asp-action="HelpCenter"><i class="fa-solid fa-info"></i></a>
+                                                <button class="btn btn-primary" @@click="completed(ao)"><i class="fa-solid fa-check"></i></button>
+                                                <a class=" btn btn-warning" asp-area="store" asp-controller="Home" asp-action="HelpCenter"><i class="fa-solid fa-info"></i></a>
                                             </div>
                                         </div>
-                                        <hr />
+                                        <br />
+                                        <hr /><div>總金額: $ {{ao.total}}</div> <br />
                                         <div>
-                                            <h5>Memo</h5>
+                                            <h5>備註: </h5>
+                                            <div>{{ao.note}}</div>
                                         </div>
                                     </div>
                                 </div>
@@ -178,13 +108,76 @@
                             </div>
 
 
-                        </div><!-- End Bordered Tabs -->
+                        </div>
 
                     </div>
                 </div>
 
             </div>
-        </div>
-    </section>
 
+        </section>
+    </div>
 </main>
+
+@section Scripts
+    {
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+	<script src="~/axios/axios.min.js"></script>
+    <script>
+        var veuHisOrder = {
+            data() {
+                return {
+                    waitingOrder: [],
+                    aceptedOrder: []
+                };
+            },
+            mounted: function () {
+                let _this = this;
+                _this.getOrders();
+            },
+            methods: {
+                getOrders: function () {
+                    let _this = this;
+                    axios.get(`/api/Orders/wait`).then(response => {
+                        _this.waitingOrder = response.data.map(x => ({ ...x }));
+                    });
+                    axios.get(`/api/Orders/acepted`).then(response => {
+                        _this.aceptedOrder = response.data.map(x => ({ ...x }));
+                    });
+                },
+                acepted: function (order) {
+                    let _this = this;
+                    var request = {
+                        OrderId: order.orderId,
+                        OrderStatus: "acepted"
+                    }
+                    axios.put(`/api/Orders/${order.orderId}`, request).then(response => {
+                        _this.getOrders();
+                    })
+                },
+                refused: function (order) {
+                    let _this = this;
+                    var request = {
+                        OrderId: order.orderId,
+                        OrderStatus: "refused"
+                    };
+                    axios.put(`/api/Orders/${order.orderId}`, request).then(response => {
+                        _this.getOrders();
+                    })
+                },
+                completed: function (order) {
+                    let _this = this;
+                    var request = {
+                        OrderId: order.orderId,
+                        OrderStatus: "completed"
+                    };
+                    axios.put(`/api/Orders/${order.orderId}`, request).then(response => {
+                        _this.getOrders();
+                    })
+                }
+            }
+
+        }
+        var app = Vue.createApp(veuHisOrder).mount("#app");
+    </script>
+}

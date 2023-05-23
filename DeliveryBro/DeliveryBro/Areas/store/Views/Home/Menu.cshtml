@@ -190,7 +190,6 @@
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 	<script src="~/axios/axios.min.js"></script>
 	<script>
-		var baseAddress = "https://localhost:7166";
 		var vueMenu={
 			data() {
 				return{
@@ -214,7 +213,6 @@
 			mounted: function () {
 				let _this = this;
 				_this.getMenuDTOes();
-				//alert(JSON.stringify(response.data))
 			},
 			computed:{
 				btndisable: function () {
@@ -229,7 +227,6 @@
 					axios.get(`/api/MenuTables`).then(
 						response => {
 							_this.MenuDTOes = response.data.map(x => ({ ...x }));
-							//_this.dishPicData=_this.dishPicture;
 						}
 					)
 				},

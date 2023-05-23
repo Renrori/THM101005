@@ -19,7 +19,7 @@ namespace DeliveryBro.Models
         public string RestaurantName { get; set; }
         public string RestaurantAddress { get; set; }
         public string RestaurantPhone { get; set; }
-        public string RestauranEmail { get; set; }
+        public string RestaurantEmail { get; set; }
         public TimeSpan? OpeningHours { get; set; }
         public string RestaurantDescription { get; set; }
         public byte[] RestaurantPicture { get; set; }

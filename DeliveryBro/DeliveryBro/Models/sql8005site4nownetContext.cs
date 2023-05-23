@@ -112,11 +112,11 @@ namespace DeliveryBro.Models
                     .HasMaxLength(50)
                     .HasColumnName("note");
 
-                entity.Property(e => e.OrderDate).HasColumnType("date");
+                entity.Property(e => e.OrderDate).HasColumnType("datetime");
 
                 entity.Property(e => e.OrderStatus)
                     .IsRequired()
-                    .HasMaxLength(6);
+                    .HasMaxLength(10);
 
                 entity.Property(e => e.Payment)
                     .IsRequired()
@@ -243,13 +243,11 @@ namespace DeliveryBro.Models
 
             modelBuilder.Entity<OrderDetailsTable>(entity =>
             {
-                entity.HasKey(e => e.OrderId);
+                entity.HasKey(e => new { e.OrderId, e.DishId });
 
                 entity.ToTable("OrderDetails_Table");
 
-                entity.Property(e => e.OrderId)
-                    .ValueGeneratedNever()
-                    .HasColumnName("OrderID");
+                entity.Property(e => e.OrderId).HasColumnName("OrderID");
 
                 entity.Property(e => e.DishId).HasColumnName("DishID");
 
@@ -262,8 +260,8 @@ namespace DeliveryBro.Models
                     .HasConstraintName("FK_OrderDetails_Table_Menu_Table");
 
                 entity.HasOne(d => d.Order)
-                    .WithOne(p => p.OrderDetailsTable)
-                    .HasForeignKey<OrderDetailsTable>(d => d.OrderId)
+                    .WithMany(p => p.OrderDetailsTable)
+                    .HasForeignKey(d => d.OrderId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_OrderDetails_Table_CustomerOrder_Table");
             });
@@ -276,8 +274,6 @@ namespace DeliveryBro.Models
 
                 entity.Property(e => e.RestaurantId).HasColumnName("RestaurantID");
 
-                entity.Property(e => e.RestauranEmail).HasMaxLength(50);
-
                 entity.Property(e => e.RestaurantAccount)
                     .IsRequired()
                     .HasMaxLength(15)
@@ -286,6 +282,8 @@ namespace DeliveryBro.Models
                 entity.Property(e => e.RestaurantAddress).HasMaxLength(50);
 
                 entity.Property(e => e.RestaurantDescription).HasMaxLength(50);
+
+                entity.Property(e => e.RestaurantEmail).HasMaxLength(50);
 
                 entity.Property(e => e.RestaurantName).HasMaxLength(20);
 
