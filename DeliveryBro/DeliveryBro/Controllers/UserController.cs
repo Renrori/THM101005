@@ -5,11 +5,11 @@ using Microsoft.AspNetCore.Mvc;
 namespace DeliveryBro.Controllers
 {   
     
-    public class LoginController : Controller
+    public class UserController : Controller
     {
         private readonly sql8005site4nownetContext _context;
 
-        public LoginController(sql8005site4nownetContext context) 
+        public UserController(sql8005site4nownetContext context) 
         {
             _context = context;
         }
@@ -33,5 +33,6 @@ namespace DeliveryBro.Controllers
 
         //    return View();
         //}
+
     }
 }

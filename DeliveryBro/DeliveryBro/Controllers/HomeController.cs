@@ -104,6 +104,53 @@ namespace DeliveryBro.Controllers
             return View();
         }
 
+        [HttpPost]
+        public async Task<bool> GetOrder([FromBody] OrderViewModel order)
+        {
+            try
+            {
+                CustomerOrderTable cot = new CustomerOrderTable
+                {
+                    OrderId = order.OrderId,
+                    CustomerAddress = order.CustomerAddress,
+                    ShippingFee = order.ShippingFee,
+                    OrderDate = order.OrderDate,
+                    OrderStatus = order.OrderStatus,
+                    Note = order.Note,
+                    CustomerId = order.CustomerId,
+                    RestaurantId = order.RestaurantId,
+                };
+                _context.CustomerOrderTable.Add(cot);
+                await _context.SaveChangesAsync();
+
+                int orderId = cot.OrderId;
+
+                foreach (var od in order.OrderDetailViewModels)
+                {
+                    OrderDetailsTable odt = new OrderDetailsTable
+                    {
+                        OrderId = orderId,
+                        DishId = od.DishId,
+                        UnitPrice = od.UnitPrice,
+                        Quantity = od.Quantity,
+                        Subtotal = od.Subtotal,
+                        Total = od.Total,
+                    };
+                    _context.OrderDetailsTable.Add(odt);
+                }
+                await _context.SaveChangesAsync();
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
+
+        }
+
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
