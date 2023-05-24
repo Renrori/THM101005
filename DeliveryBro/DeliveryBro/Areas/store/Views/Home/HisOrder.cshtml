@@ -1,0 +1,129 @@
+﻿<main id="main" class="main">
+    <div class="pagetitle">
+        <h1>歷史訂單</h1>
+        <nav>
+            <ol class="breadcrumb">
+                <a class="breadcrumb-item" asp-area="store" asp-controller="Home" asp-action="Index">Home</a>
+                <li class="breadcrumb-item active">歷史訂單</li>
+            </ol>
+        </nav>
+    </div>
+    <div id="app">
+        <section class="section historyorder">
+            <div class="row">
+                <div class="col">
+                    <div class="card">
+                        <div class="card-body pt-3">
+                            <!-- Bordered Tabs -->
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-4 ">
+                                        <label>訂單編號&emsp;</label>
+                                        <input type="text" class="--bs-dark-border-subtle --bs-dark-text-emphasis" v-model="orderId" />
+                                    </div>
+                                    <div class="col-3 ">
+                                        <label style="text-align:right">訂單完成日期&emsp;</label>
+                                        <input type="date" v-model="startdate" />
+                                    </div>
+                                    <div class="col-2 ">
+                                        <input type="date" v-model="enddate" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-content pt-2">
+                                <div class="card" v-for="order in orderdetails">
+                                    <div class="card-body">
+                                        <h5 class="card-title">訂單編號:  {{order.orderId}}</h5>
+                                        <h5>完成時間:  {{order.orderDate}}</h5>
+                                        <h5>顧客名稱:  {{order.customerName}}</h5>
+                                        <hr />
+                                        <div class="row">
+                                            <div class="col-10" style="padding-bottom:10px">
+                                                <div class="row" v-for="detail in order.orderDetails">
+                                                    <div class="col-lg-3 col-md-4 label">{{detail.dishName}}</div>
+                                                    <div class="col-lg-2 col-md-2">$ {{detail.unitPrice}}</div>
+                                                    <div class="col-lg-2 col-md-3">{{detail.quantity}}</div>
+                                                    <div class="col-lg-2 col-md-2">$ {{detail.subtotal}}</div>
+                                                </div>
+                                            </div>
+                                            <div class="col-2">
+                                                <div>Total: ${{order.total}}</div>
+                                            </div>
+                                            <hr />
+                                            <div>
+                                                <h5>備註:</h5>
+                                                <div>{{order.note}}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+    </div>
+</main>
+
+@section Scripts{
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="~/axios/axios.min.js"></script>
+    <script>
+        var veuHisOrder = {
+            data() {
+                return {
+                    orderdetails: [],
+                    startdate: "",
+                    enddate: "",
+                    orderId: ""
+                };
+            },
+            mounted: function () {
+                let _this = this;
+                _this.getHisOrder();
+            },
+            watch: {
+                startdate() {
+                    let _this = this;
+                    _this.filterOrder();
+                },
+                enddate() {
+                    let _this = this;
+                    _this.filterOrder();
+                },
+                orderId() {
+                    let _this = this;
+                    _this.filterOrder();
+                }
+            },
+            methods: {
+                getHisOrder: function () {
+                    let _this = this;
+                    axios.get(`/api/Orders`).then(response => {
+                        _this.orderdetails = response.data.map(x => ({ ...x }));
+                    })
+                },
+                filterOrder: function () {
+                    let _this = this;
+                    var request = { startdate: _this.startdate, enddate: _this.enddate }
+                    axios.get(`/api/Orders/time`, {
+                        params:
+                        {
+                            startdate: _this.startdate,
+                            enddate: _this.enddate,
+                            id: _this.orderId
+                        }
+                    }).then(response => {
+                        _this.orderdetails = response.data.map(x => ({ ...x }));
+                    })
+                }
+            }
+
+        }
+        var app = Vue.createApp(veuHisOrder).mount("#app");
+    </script>
+}

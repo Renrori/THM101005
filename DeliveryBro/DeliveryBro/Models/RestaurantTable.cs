@@ -23,6 +23,7 @@ namespace DeliveryBro.Models
         public TimeSpan? OpeningHours { get; set; }
         public string RestaurantDescription { get; set; }
         public byte[] RestaurantPicture { get; set; }
+        public string RestaurantStatus { get; set; }
 
         public virtual ICollection<CustomerOrderTable> CustomerOrderTable { get; set; }
         public virtual ICollection<MenuTable> MenuTable { get; set; }
