@@ -231,6 +231,13 @@
 					)
 				},
 				createImgUrl: function (pic) {
+					//var binaryString=window.atob(pic);
+					//var bytes=new Uint8Array(binaryString.length);
+					//for(let i=0;i<binaryString.length;i++)
+					//	bytes[i]=binaryString.charCodeAt(i)
+					//var blob=new Blob([bytes],{type:"image/jpeg"});
+					//return URL.createObjectURL(blob);
+					//URL.revokeObjectURL(imageUrl);
 					return `data:image/jpeg;base64,${pic}`;
 				},
 				edit: function (item) {
