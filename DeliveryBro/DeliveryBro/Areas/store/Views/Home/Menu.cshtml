@@ -1,0 +1,391 @@
+﻿@section Styles
+	{
+	<style>
+		.img {
+			position: relative;
+			width: 100%;
+			height: 100%;
+		}
+
+		.outcardpic {
+			width: 100%;
+			height: 100%;
+			/*object-fit: cover;*/
+		}
+
+		.menucard {
+			height: 100%;
+			display: flex;
+		}
+
+		.outcardbody {
+			padding-left: 10px;
+			padding-right: 10px;
+		}
+
+		.outcartitle {
+			height: 30px;
+			margin: 10px;
+		}
+
+		.outcardcategory {
+			height: 10px;
+		}
+
+		.outcarddes {
+			height: 80px;
+		}
+
+	</style>
+}
+<main id="main" class="main">
+	<div class="pagetitle">
+		<h1>菜單管理</h1>
+		<nav>
+			<ol class="breadcrumb">
+				<a class="breadcrumb-item" asp-area="store" asp-controller="Home" asp-action="Index">Home</a>
+				<li class="breadcrumb-item active"><i class="fa-solid fa-receipt"></i>菜單管理</li>
+			</ol>
+		</nav>
+	</div>
+	<div id="app">
+		<section class="section menu">
+			<div class="row">
+				<div class="col">
+					<div class="card cardscreen">
+						<div class="card-body pt-3">
+							<button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#insertnew">新增品項  <i class="fa-solid fa-plus"></i></button>
+							<div class="row row-cols-1 row-cols-sm-2 row-cols-md-5 g-4 pt-3">
+								<div class="col" v-for="(item,index) in MenuDTOes" :key="index">
+									<div class="card menucard">
+										<img v-if="item.dishPicture!=null" :src="createImgUrl(item.dishPicture)" class="card-img-top outcardpic" />
+										<img v-else src="~/store/images/no image.jpg" class="card-img-top outcardpic" />
+										<div class="card-body outcardbody">
+											<p class="card-text outcardcategory">{{item.dishCategory}}</p>
+											<h5 class="card-title outcardtitle" style="display: inline;">{{item.dishName}}</h5>
+											<span>   ${{item.dishPrice}}</span>
+											<br /><br />
+											<p class="card-text outcarddes">{{item.dishDescription}}</p>
+											<button class="btn btn-success" data-bs-toggle="modal" :data-bs-target="'#editthis'+index" @@click="edit(item)">編輯</button>
+											<button class="btn btn-danger" @@click="deletedish(item)">刪除</button>
+											<button v-if="item.dishStatus=='ongoing'" class="btn btn-warning" @@click="statuschange(item)">上架中</button>
+											<button v-else class="btn btn-outline-warning" @@click="statuschange(item)">未上架</button>
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="modal fade" :id="'editthis'+index" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+											<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm" role="document">
+												<div class="modal-content">
+													<div class="modal-header">
+														<h5 class="modal-title" id="modalTitleId">{{item.dishId}}</h5>
+														<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @@click="cancel(item)"></button>
+													</div>
+													<div class="modal-body">
+														<div class="form-group">
+															<img v-if="item.dishPicture!=null&&preview==null" :src="createImgUrl(item.dishPicture)" class="card-img-top img-thumbnail img" />
+															<img v-else-if="preview!=null" :src="preview" class="img-thumbnail img" />
+															<img v-else src="~/store/images/no image.jpg" class="img-thumbnail img" />
+															<br /><br />
+															<div class="mb-3">
+																<input class="form-control" type="file" id="formFile" @@change="previewImage" />
+															</div>
+														</div>
+														<div class="form-group">
+															<label class="form-label">餐點名稱: </label>
+															<input class="form-control" v-model="item.dishName" />
+														</div>
+														<div class="form-group">
+															<label class="form-label">價錢: </label>
+															<input class="form-control" v-model="item.dishPrice" />
+														</div>
+														<div class="form-group">
+															<label class="form-label">分類: </label>
+															<input class="form-control" v-model="item.dishCategory" />
+														</div>
+														<div class="form-group">
+															<label class="form-label">餐點描述: </label>
+															<textarea class="form-control" aria-label="With textarea" v-model="item.dishDescription"></textarea>
+														</div>
+													</div>
+
+
+
+													<div class="modal-footer">
+														<button type="button" data-bs-dismiss="modal" @@click="update(item)" class="btn btn-primary">修改</button>
+														<button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @@click="cancel(item)">取消</button>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</section>
+
+		<div class="form-group ">
+			<div class="modal fade" id="insertnew" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+				<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="modalTitleId">Modal title</h5>
+							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @@click="close"></button>
+						</div>
+							<div class="modal-body">
+								<div class="form-group">
+									<template v-if="preview">
+										<img :src="preview" class="img-thumbnail img" />
+										<br /><br />
+									</template>
+									<div class="mb-3">
+										<input class="form-control" type="file" id="formFile" accept="image/*" @@change="previewImage">
+										
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="dn" class="form-label">餐點名稱: </label>
+									<input type="text" class="form-control" id="dn" v-model="dishName" />
+									<div class="invalid-feedback">餐點名稱不可為空</div>
+								</div>
+								<div class="form-group">
+									<label for="dp" class="form-label">價錢: </label>
+									<input class="form-control" id="dp" v-model="dishPrice" />
+									<div class="invalid-feedback">價錢不可為空</div>
+								</div>
+								<div class="form-group">
+									<label class="form-label">分類: </label>
+									<input class="form-control" v-model="dishCategory" />
+								</div>
+								<div class="form-group">
+									<label class="form-label">餐點描述: </label>
+									<textarea class="form-control" aria-label="With textarea" v-model="dishDescription"></textarea>
+								</div>
+							</div>
+							<div class="modal-footer">
+								<button type="button" :disabled="btndisable" class="btn btn-primary" data-bs-dismiss="modal" @@click="insert">新增</button>
+								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @@click="close">關閉</button>
+							</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+
+	</div>
+
+
+
+</main>
+
+
+
+@section Scripts
+	{
+	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+	<script src="~/axios/axios.min.js"></script>
+	<script>
+		var vueMenu={
+			data() {
+				return{
+					MenuDTOes: [],
+					dishName: "",
+					dishPrice: "",
+					dishDescription: "",
+					dishPicture: "",
+					dishCategory: "",
+					dishStatus: "",
+					oldname: "",
+					oldprice: "",
+					oldcategory: "",
+					olddescription: "",
+					oldpic: "",
+					oldstatus: "",
+					toastHintShow: { fadeIn: false },
+					preview: null
+				};
+			},
+			mounted: function () {
+				let _this = this;
+				_this.getMenuDTOes();
+			},
+			computed:{
+				btndisable: function () {
+					let _this=this;
+					if(_this.dishName==""||_this.dishPrice=="") return true;
+					else return false;
+				}
+			},
+			methods: {
+				getMenuDTOes: function () {
+					let _this = this;
+					axios.get(`/api/MenuTables`).then(
+						response => {
+							_this.MenuDTOes = response.data.map(x => ({ ...x }));
+						}
+					)
+				},
+				createImgUrl: function (pic) {
+					return `data:image/jpeg;base64,${pic}`;
+				},
+				edit: function (item) {
+					let _this = this;
+					_this.oldname = item.dishName;
+					_this.oldprice = item.dishPrice;
+					_this.oldcategory = item.dishCategory;
+					_this.olddescription = item.dishDescription;
+					_this.oldpic = item.dishPicture;
+					_this.oldstatus = item.dishStatus;
+				},
+				cancel: function (item) {
+					let _this = this;
+					item.dishName = _this.oldname;
+					item.dishPrice = _this.oldprice;
+					item.dishCategory = _this.oldcategory;
+					item.dishDescription = _this.olddescription;
+					item.dishPicture = _this.oldpic;
+					item.dishStatus = _this.oldstatus;
+					_this.preview = null;
+				},
+				update: function (item) {
+					let _this = this;
+					let formData = new FormData();
+					formData.append("DishId", item.dishId);
+					formData.append("DishName", item.dishName);
+					formData.append("DishPrice", item.dishPrice);
+					formData.append("DishCategory", item.dishCategory);
+					formData.append("DishDescription", item.dishDescription);
+					formData.append("DishStatus", item.dishStatus);
+					if (_this.preview != null && _this.dishPicture != null) {
+						formData.append("DishPicture", _this.dishPicture);
+						_this.preview = null;
+					}
+					else {
+						formData.append("DishPicture", item.dishPicture);
+					}
+					axios.put(`/api/MenuTables/${item.dishId}`, formData,
+						{
+							headers: {
+								'Content-Type': 'multipart/form-data'
+							}
+						}).then(response => {
+							Swal.fire(
+								'修改成功!'
+							)
+							_this.getMenuDTOes();
+
+						}).catch(
+							function (error) {
+								Swal.fire({
+									icon: 'error',
+									title: 'Oops...',
+									text: '新增失敗!',
+									footer: '請重新確認輸入欄位'
+								})
+							}
+						);
+
+				},
+				previewImage: function (event) {
+					let _this = this;
+					var input = event.target;
+					if (input.files) {
+						var reader = new FileReader();
+						reader.onload = (e) => {
+							_this.preview = e.target.result;
+						}
+						_this.dishPicture = input.files[0];
+						reader.readAsDataURL(input.files[0]);
+					}
+					else {
+						_this.dishPicture = null;
+						_this.preview = null;
+					}
+				},
+				deletedish: function (item) {
+					let _this = this;
+					Swal.fire({
+						icon: 'warning',
+						title: 'Are you sure?',
+						showCancelButton: true,
+						confirmButtonColor: '#3085d6',
+						cancelButtonColor: '#d33',
+						confirmButtonText: '確定刪除',
+						cancelButtonText: '取消'
+					}).then((result) => {
+						if (result.isConfirmed) {
+							Swal.fire(
+								'刪除成功!',
+								'item.dishId 已被刪除!',
+								'success'
+							)
+							axios.delete(`/api/MenuTables/${item.dishId}`).then(response => {
+								_this.getMenuDTOes();
+							});
+						}
+					})
+				},
+				insert: function () {
+					let _this = this;
+					let formData = new FormData();
+					formData.append("DishId", `${0}`);
+					formData.append("DishName", _this.dishName);
+					formData.append("DishPrice", _this.dishPrice);
+					formData.append("DishCategory", _this.dishCategory);
+					formData.append("DishDescription", _this.dishDescription);
+					formData.append("DishPicture", _this.dishPicture);
+					formData.append("DishStatus", "ongoing");
+					axios.post(`/api/MenuTables`, formData,
+						{
+							headers: {
+								'Content-Type': 'multipart/form-data'
+							}
+						}).then(response => {
+							Swal.fire(
+								'新增成功!'
+							)
+							_this.getMenuDTOes();
+							_this.close();
+						}).catch(
+							function (error) {
+								Swal.fire({
+									icon: 'error',
+									title: 'Oops...',
+									text: '新增失敗!',
+									footer: '請重新確認輸入欄位'
+								})
+							}
+						)
+				},
+				close: function () {
+					let _this = this;
+					_this.dishName = _this.dishPrice = _this.dishCategory = _this.dishDescription = _this.dishPicture = "";
+					_this.preview = null;
+				},
+				statuschange: function (item) {
+					let _this = this;
+					if (item.dishStatus == "ongoing")
+						item.dishStatus = "close";
+					else
+						item.dishStatus = "ongoing";
+
+					var request = {
+						DishId: item.dishId,
+						DishStatus: item.dishStatus
+					};
+					axios.put(`/api/MenuTables/status/${item.dishId}`, request).then(response => {
+						Swal.fire(
+							'上架狀態修改成功!'
+						)
+					})
+				}
+			}
+		}
+		var app=Vue.createApp(vueMenu).mount("#app");
+	</script>
+}
