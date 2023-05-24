@@ -3,7 +3,7 @@
   "defaultProvider": "cdnjs",
   "libraries": [
     {
-      "library": "vue@3.3.2",
+      "library": "vue@3.3.4",
       "destination": "wwwroot/vue/"
     },
     {

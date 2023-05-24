@@ -8,7 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="ViewModels\Home\CallViewModel.cs" />
     <Compile Remove="ViewModels\Home\MenuViewModel.cs" />
     <Compile Remove="ViewModels\Home\OrderViewModel.cs" />
     <Compile Remove="ViewModels\Home\StoreViewModel.cs" />
@@ -26,7 +25,6 @@
   <ItemGroup>
     <Folder Include="Areas\admin\Data\" />
     <Folder Include="Areas\admin\Models\" />
-    <Folder Include="ViewModels\Home\" />
   </ItemGroup>
 
 </Project>

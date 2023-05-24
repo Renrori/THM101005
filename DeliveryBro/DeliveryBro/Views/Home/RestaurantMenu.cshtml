@@ -13,19 +13,93 @@
         </div>
 
 
+        @*        <div class="row">
+        <div class="col-md-6 col-lg-3" v-for="product in currentPageProducts" :key="product.DishID">
+        <div class="product">
+        <a href="#" class="img-prod">
+        <img class="img-fluid" src="~/vegefoods-master/images/product-1.jpg" alt="Colorlib Template">
+        <div class="overlay"></div>
+        </a>
+        <div class="text py-3 pb-4 px-3 text-center">
+        <h3>{{product.DishName}}</h3>
+        <div class="d-flex">
+        <div class="pricing">
+        <p class="price"><span class="price-sale">$</span><span>{{product.DishPrice}}</span></p>
+        </div>
+        </div>*@
+
+
+        <!-- Button trigger modal -->
+        @*                        <button type="button" class="btn btn-primary"
+        tabindex="-1"
+        data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+        aria-labelledby="card1ModalLabel" @@click="viewProduct(product)">
+        <span><i class="ion-ios-cart"></i>  購買</span>
+        </button>*@
+
+        <!-- Modal -->
+        @*                        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+        <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">選擇餐點</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+        <div v-if="selectedProduct">
         <div class="row">
-            <div class="col-md-6 col-lg-3" v-for="product in currentPageProducts" :key="product.DishID">
+        <div class="col-sm-4">
+        <img :src="product.imageUrl"
+        alt=""
+        class="img-fluid"
+        width="200"
+        height="200" />
+        </div>
+        <div class="col-sm-8">
+        <div class="mb-3">
+        <h2 for="title" class="form-label">{{ selectedProduct.DishName }}</h2>
+        </div>
+        <hr />
+        <p>{{ selectedProduct.DishDescription }}</p>
+        <hr />
+        <div class="d-flex justify-content-end">
+        <div>價格：{{ selectedProduct.DishPrice }}</div>
+
+
+        <div class="col-sm-3 px-1 py-1">
+        <input type="number" v-model="selectedProduct.DishCount" min="1" max="10" />
+        </div>
+        </div>
+        </div>
+        </div>
+        </div>
+        </div>
+        <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @@click="addToCart(selectedProduct)">加入購物車</button>
+        </div>
+        </div>
+        </div>
+        </div>
+        </div>
+        </div>
+        </div>
+        </div>*@
+
+        <div class="row">
+            <div class="col-md-6 col-lg-3" v-for="food in currentPageProducts" :key="food.dishId">
+                @*<div v-for="foodpage in currentPageProducts" :key="foodpage.dishId">*@
                 <div class="product">
                     <a href="#" class="img-prod">
-                        <img class="img-fluid" src="~/vegefoods-master/images/product-1.jpg" alt="Colorlib Template">
+                        <img class="img-fluid" :src="GetProductPic(food.dishPicture)"  alt="Colorlib Template">
                         <div class="overlay"></div>
                     </a>
                     <div class="text py-3 pb-4 px-3 text-center">
-                        <h3>{{product.DishName}}</h3>
+                        <h3>{{food.dishName}}</h3>
                         <div class="d-flex">
                             <div class="pricing">
                                 @*<p class="price"><span class="mr-2 price-dc">$120.00</span><span class="`price-sale">$60.00</span></p>*@
-                                <p class="price"><span class="price-sale">$</span><span>{{product.DishPrice}}</span></p>
+                                <p class="price"><span class="price-sale">$</span><span>{{food.dishPrice}}</span></p>
                             </div>
                         </div>
 
@@ -34,7 +108,7 @@
                         <button type="button" class="btn btn-primary"
                                 tabindex="-1"
                                 data-bs-toggle="modal" data-bs-target="#staticBackdrop"
-                                aria-labelledby="card1ModalLabel" @@click="viewProduct(product)">
+                                aria-labelledby="card1ModalLabel" @@click="viewProduct(food)">
                             <span><i class="ion-ios-cart"></i>  購買</span>
                         </button>
 
@@ -49,8 +123,8 @@
                                     <div class="modal-body">
                                         <div v-if="selectedProduct">
                                             <div class="row">
-                                                <div class="col-sm-4">
-                                                    <img :src="product.imageUrl"
+                                                <div class="col-sm-4" >
+                                                    <img :src="GetProductPic(food.dishPicture)"
                                                          alt=""
                                                          class="img-fluid"
                                                          width="200"
@@ -58,17 +132,17 @@
                                                 </div>
                                                 <div class="col-sm-8">
                                                     <div class="mb-3">
-                                                        <h2 for="title" class="form-label">{{ selectedProduct.DishName }}</h2>
+                                                        <h2 for="title" class="form-label">{{ selectedProduct.dishName }}</h2>
                                                     </div>
                                                     <hr />
-                                                    <p>{{ selectedProduct.DishDescription }}</p>
+                                                    <p>{{ selectedProduct.dishDescription }}</p>
                                                     <hr />
                                                     <div class="d-flex justify-content-end">
-                                                        <div>價格：{{ selectedProduct.DishPrice }}</div>
+                                                        <div>價格：{{ selectedProduct.dishPrice }}</div>
 
 
                                                         <div class="col-sm-3 px-1 py-1">
-                                                            <input type="number" v-model="selectedProduct.DishCount" min="1" max="10" />
+                                                            <input type="number" v-model="selectedProduct.dishCount" min="1" max="10" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -82,47 +156,6 @@
                                 </div>
                             </div>
                         </div>
-
-                        <!-- Modal -->
-                        @*                     <div class="modal fade" :id="'cardModal' + index" tabindex="-1" role="dialog" aria-labelledby="'cardModalLabel' + index" aria-hidden="true">
-                        <div class="modal-dialog modal-lg" role="document">
-                        <div class="modal-content">
-                        <div class="modal-header">
-                        <h5 class="modal-title" :id="'cardModal' + index">{{product.DishName}}</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                        <div class="row">
-
-                        <div class="col-sm-4">
-                        <img :src="product.imageUrl"
-                        alt=""
-                        class="img-fluid"
-                        width="200"
-                        height="200" />
-                        </div>
-
-                        <div class="col-sm-8">
-                        <div class="mb-3" v-for="product in productList" :key="product.DishID">
-                        <label for="title" class="form-label" id="card1ModalLabel">{{product.DishName}}</label>
-                        </div>
-                        <hr />
-                        <div v-for="product in productList" :key="product.DishID">{{ product.DishDescription}}</div>
-                        <hr />
-                        <div class="d-flex justify-content-end">
-
-                        <div for="awesomeness" class="col-sm-4 col-form-label" v-for="product in productList" :key="product.DishID">
-                        <span>$</span>{{product.DishPrice}}
-                        </div>
-                        <div class="col-sm-3 px-1 py-1" v-for="product in productList" :key="product.DishID">
-                        <div class="btn btn-primary" type="button" @@click="minusOne(product)">-</div>
-                        <span>{{ product.DishCount }}</span>
-                        <div class="btn btn-primary" type="button" @@click="addOne(product)">+</div>
-                        <input type="number" v-model="product.DishCount" min="1" max="10" />
-                        </div>
-                        </div>
-                        </div>
-                        </div>*@
                     </div>
                 </div>
             </div>
@@ -149,11 +182,12 @@
         </div>
 
         @*測試*@
-        <div>
+@*        <div>
             <h2>{{ storeInfo.storeName}}</h2>
             <h3>{{storeInfo.storeId}}</h3>
         </div>
-        <ul v-for="food in productMenu" :key="food.DishId">
+
+        <ul v-for="food in storeInfo" :key="food.dishId">
             <li>
                 {{food.dishName}}
             </li>
@@ -161,11 +195,40 @@
                 {{food.dishPrice}}
             </li>
         </ul>
-        @*測試結束*@
+
+        <ul v-for="food in productMenu" :key="food.dishId">
+            <li>
+                {{food.dishName}}
+            </li>
+            <img :src="GetProductPic(food.dishPicture)" />
+            <li>
+                {{food.dishPrice}}
+            </li>
+        </ul>
+
+        <div v-if="productMenuPic">
+            <img :src="productMenuPic()" alt="product Menu Pic">
+        </div>
+        <div v-else>
+            Loading...
+        </div>*@
     </div>
 
 
+    @*<li>{{storeInfo.productMenu.dishName}}</li>*@
+    @*            <li>
+    <img :src="PostMenuPicture(food.storeId)" alt="Menu Image">
+    </li>*@
+
+
+    @*        <div v-for="(dishpic,index)in productMenuPic" :key="index">
+    <img :src="PostMenuPicture(dishpic.index)" alt="Menu Image" />
+    </div>*@
+    @*測試結束*@
 </div>
+
+
+
 
 
 @section Scripts
@@ -177,45 +240,47 @@
         var vueApp = {
             data() {
                 return {
-                    productList: [
-                        {
-                            DishID: '1',
-                            DishName: '超值漢堡',
-                            //DishPicture:,
-                            DishPrice: '60',
-                            DishDescription: '超級營養漢堡'
-                        },
-                        {
-                            DishID: '2',
-                            DishName: '超值三明治',
-                            //DishPicture:,
-                            DishPrice: '70',
-                            DishDescription: '超級營養三明治，吃了包你拉肚子'
-                        },
-                        {
-                            DishID: '3',
-                            DishName: '超香蛋餅',
-                            //DishPicture:,
-                            DishPrice: '50',
-                            DishDescription: '超香蛋餅，吃了包你拉肚子'
-                        },
-                        {
-                            DishID: '4',
-                            DishName: '好吃飯糰',
-                            //DishPicture:,
-                            DishPrice: '30',
-                            DishDescription: '好吃飯糰，吃了包你拉肚子'
+                    //productList: [
+                    //    {
+                    //        DishID: '1',
+                    //        DishName: '超值漢堡',
+                    //        //DishPicture:,
+                    //        DishPrice: '60',
+                    //        DishDescription: '超級營養漢堡'
+                    //    },
+                    //    {
+                    //        DishID: '2',
+                    //        DishName: '超值三明治',
+                    //        //DishPicture:,
+                    //        DishPrice: '70',
+                    //        DishDescription: '超級營養三明治，吃了包你拉肚子'
+                    //    },
+                    //    {
+                    //        DishID: '3',
+                    //        DishName: '超香蛋餅',
+                    //        //DishPicture:,
+                    //        DishPrice: '50',
+                    //        DishDescription: '超香蛋餅，吃了包你拉肚子'
+                    //    },
+                    //    {
+                    //        DishID: '4',
+                    //        DishName: '好吃飯糰',
+                    //        //DishPicture:,
+                    //        DishPrice: '30',
+                    //        DishDescription: '好吃飯糰，吃了包你拉肚子'
 
-                        }
-                    ],
-                    productMenu: [], //利用storeId叫回dish資料
+                    //    }
+                    //],
                     storeInfo: [],
-                    DishCount: 1,
+                    productMenu: [], //利用storeId叫回dish資料
+                    productMenuPic: null,
+                    dishCount: 1,
                     cartItems: [],
                     selectedProduct: null,
                     currentPage: 1, // 當前分頁
-                    pageSize: 8 // 每頁顯示的商品數量
-
+                    pageSize: 8, // 每頁顯示的商品數量
+                    testid: 1,
+                    productpic: { storeId: 1, dishId: 1 }
                 };
             },
             mounted() {
@@ -229,6 +294,19 @@
                 }).catch(error => {
                     console.error(error);
                 });
+
+                //this.PostMenuPictureUrl(this.storeInfo.storeId).then(productMenuPic => {
+                //    this.productMenuPic = productMenuPic;
+                //}).catch(error => {
+                //    console.error(error);
+                //});
+
+                //this.PostMenuPicture(this.storeInfo.storeId, this.productMenu.dishId).then(imgUrl => {
+                //    this.productMenuPic = imgUrl;
+                //}).catch(error => {
+                //    console.error(error);
+                //});
+                //this.PostMenuPicture(this.storeInfo.storeId, this.productMenu.dishId);
             },
             computed: {
                 OrderListUrl() {
@@ -237,13 +315,13 @@
                 },
                 totalPages() {
                     // 計算總分頁數
-                    return Math.ceil(this.productList.length / this.pageSize);
+                    return Math.ceil(this.productMenu.length / this.pageSize);
                 },
                 currentPageProducts() {
                     // 計算當前分頁的商品
                     const startIndex = (this.currentPage - 1) * this.pageSize;
                     const endIndex = startIndex + this.pageSize;
-                    return this.productList.slice(startIndex, endIndex);
+                    return this.productMenu.slice(startIndex, endIndex);
                 },
             },
             methods: {
@@ -252,17 +330,17 @@
                 },
                 addToCart(selectedProduct) {
                     const item = {
-                        DishID: selectedProduct.DishID,
-                        DishName: selectedProduct.DishName,
-                        DishPrice: selectedProduct.DishPrice,
-                        DishDescription: selectedProduct.DishDescription,
-                        DishCount: selectedProduct.DishCount
+                        DishID: selectedProduct.dishID,
+                        DishName: selectedProduct.dishName,
+                        DishPrice: selectedProduct.dishPrice,
+                        DishDescription: selectedProduct.dishDescription,
+                        DishCount: selectedProduct.dishCount
                     };
                     this.cartItems.push(item);
-                    selectedProduct.DishCount = 1;
+                    selectedProduct.dishCount = 1;
                 },
                 calculateSubtotal(item) {
-                    return item.DishPrice * item.DishCount;
+                    return item.dishPrice * item.dishCount;
                 },
                 calculateTotal() {
                     let total = 0;
@@ -284,7 +362,31 @@
                     }).catch(error => {
                         throw new Error(`Failed to fetch menu items for productId:${storeId}`)
                     })
+                },
+                //用storeId與dishId叫商品圖
+                //PostMenuPictureUrl(storeId) {
+                //    const imgUrl = `GetPicture?storeId=${storeId}`;
+                //    return axios.get(imgUrl).then(response => {
+                //        return response.imgUrl;
+                //    }).catch(error => {
+                //        throw new Error(`Failed to fetch menu items for productId:${storeId}`)
+                //    })
+
+                //},
+
+                //PostMenuPicture(productpic) {
+                //    try {
+                //        const response = axios.post(`GetPicture`, { storeId, dishId });
+                //        this.productMenuPic = response.data.imgUrl
+                //    } catch {
+                //        console.log("fail");
+                //    }
+
+                //},
+                GetProductPic(pic) {
+                    return `data:image/jpeg;base64,${pic}`
                 }
+
             }
         };
 
