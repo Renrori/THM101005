@@ -63,7 +63,7 @@ namespace DeliveryBro.Controllers
         }
 
  
-        //叫用圖片方法，傳入StoreId回傳圖片
+        //叫用商店圖片方法，傳入StoreId回傳圖片
         public async Task<IActionResult> GetPictureStore(int storeId)
         {
             RestaurantTable c = await _context.RestaurantTable.FindAsync(storeId);
@@ -71,14 +71,33 @@ namespace DeliveryBro.Controllers
             return File(imgUrl, "img/jpeg");
            
         }
-        //叫用圖片方法，傳入storeId和dishId回傳圖
+        //叫用商品圖片方法，傳入storeId和dishId回傳圖
         public async Task<FileResult> GetPicture(CallViewModel call)
         {
-            
-            MenuTable c = await _context.MenuTable.FindAsync(call.storeId,call.dishId);
+
+            MenuTable c = await _context.MenuTable.Include(m => m.Restaurant)
+                .FirstOrDefaultAsync(m => m.RestaurantId == call.storeId && m.DishId == call.dishId);
+
             byte[] imgUrl = c?.DishPicture;
             return File(imgUrl, "img/jpeg");
         }
+
+        //嘗試傳商店id回傳所有對應圖片
+        //public async Task<IActionResult> GetPictures(int id)
+        //{
+        //    List<FileResult> imageList = new List<FileResult>();
+
+        //    IEnumerable<MenuTable> menuPic = await _context.MenuTable.Where(m => m.RestaurantId == id).ToListAsync();
+
+        //    foreach (var p in menuPic)
+        //    {
+        //        var imgUrl = File(p.DishPicture, "image/jpeg");
+        //        imgUrl.FileDownloadName = Url.Action("GetPictures", "Home", new { storeId = id });
+        //        imageList.Add(imgUrl);
+        //    }
+
+        //    return new JsonResult(imageList);
+        //}
 
         public IActionResult RestaurantMenu()
         {
