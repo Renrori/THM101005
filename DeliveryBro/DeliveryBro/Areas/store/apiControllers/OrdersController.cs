@@ -27,7 +27,7 @@ namespace DeliveryBro.Areas.store.apiControllers
 					Note = x.Note,
 					OrderDetails = x.OrderDetailsTable.Select(d => new OrderDetailsDTO
 					{
-						DishName = d.Dish.DishName,
+						DishName = d.DishName,
 						UnitPrice = d.UnitPrice,
 						Quantity = d.Quantity,
 						Discount = d.Discount,
@@ -53,7 +53,7 @@ namespace DeliveryBro.Areas.store.apiControllers
 				Note = x.Note,
 				OrderDetails = x.OrderDetailsTable.Select(d => new OrderDetailsDTO
 				{
-					DishName = d.Dish.DishName,
+					DishName = d.DishName,
 					UnitPrice = d.UnitPrice,
 					Quantity = d.Quantity,
 					Discount = d.Discount,
@@ -75,7 +75,7 @@ namespace DeliveryBro.Areas.store.apiControllers
 					Note = x.Note,
 					OrderDetails = x.OrderDetailsTable.Select(d => new OrderDetailsDTO
 					{
-						DishName = d.Dish.DishName,
+						DishName = d.DishName,
 						UnitPrice = d.UnitPrice,
 						Quantity = d.Quantity,
 						Discount = d.Discount,
@@ -96,7 +96,7 @@ namespace DeliveryBro.Areas.store.apiControllers
 					Note = x.Note,
 					OrderDetails = x.OrderDetailsTable.Select(d => new OrderDetailsDTO
 					{
-						DishName = d.Dish.DishName,
+						DishName = d.DishName,
 						UnitPrice = d.UnitPrice,
 						Quantity = d.Quantity,
 						Discount = d.Discount,

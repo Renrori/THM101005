@@ -226,8 +226,6 @@ namespace DeliveryBro.Models
                     .IsRequired()
                     .HasMaxLength(20);
 
-                entity.Property(e => e.DishPicture).HasColumnType("image");
-
                 entity.Property(e => e.DishStatus)
                     .IsRequired()
                     .HasMaxLength(30);
@@ -251,13 +249,9 @@ namespace DeliveryBro.Models
 
                 entity.Property(e => e.DishId).HasColumnName("DishID");
 
-                entity.Property(e => e.OrderDate).HasColumnType("date");
+                entity.Property(e => e.DishName).IsRequired();
 
-                entity.HasOne(d => d.Dish)
-                    .WithMany(p => p.OrderDetailsTable)
-                    .HasForeignKey(d => d.DishId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_OrderDetails_Table_Menu_Table");
+                entity.Property(e => e.OrderDate).HasColumnType("date");
 
                 entity.HasOne(d => d.Order)
                     .WithMany(p => p.OrderDetailsTable)
@@ -295,6 +289,8 @@ namespace DeliveryBro.Models
                 entity.Property(e => e.RestaurantPhone).HasMaxLength(12);
 
                 entity.Property(e => e.RestaurantPicture).HasColumnType("image");
+
+                entity.Property(e => e.RestaurantStatus).HasMaxLength(10);
             });
 
             OnModelCreatingPartial(modelBuilder);
