@@ -44,7 +44,8 @@ namespace DeliveryBro.ApiController
 
         [HttpGet("{id}")]
         // Get:/api/HomeApi/1
-        public async Task<IActionResult> GetProduct(int id)
+        //之後改成傳物件呼叫形式
+        public async Task<IEnumerable<MenuViewModel>> GetProduct(int id)
         {
             var product = await _context.MenuTable.Include(m => m.Restaurant)
                .Where(m => m.Restaurant.RestaurantId == id && m.DishStatus == "ongoing")
@@ -59,7 +60,7 @@ namespace DeliveryBro.ApiController
                    DishCategory = p.DishCategory
                })
                .ToArrayAsync();
-            return Ok(product);
+            return product;
         }
 
         [HttpGet("getpic/{storeId}")]
@@ -75,9 +76,13 @@ namespace DeliveryBro.ApiController
 
         [HttpPost]
         //Post:/api/HomeApi/
-        public async Task<bool> GetOrder([FromBody] OrderViewModel order)
+        public async Task<string> GetOrder([FromBody] OrderViewModel order)
         {
             
+            if(order == null)
+            {
+                return "沒有傳入內容";
+            }
             try
             {
                 CustomerOrderTable cot = new CustomerOrderTable
@@ -115,12 +120,14 @@ namespace DeliveryBro.ApiController
                 }
                 await _context.SaveChangesAsync();
 
-                return true;
+                
             }
             catch (Exception ex)
             {
-                return false;
+                Console.WriteLine(ex.ToString());
+                return "訂單上傳失敗";
             }
+            return "訂單上傳成功";
         }
     }
 }
