@@ -1,5 +1,5 @@
 ﻿using DeliveryBro.Models;
-using DeliveryBro.ViewModels.Home;
+using DeliveryBro.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
@@ -22,8 +22,10 @@ namespace DeliveryBro.Controllers
         {
             return View();
         }
+
         public IActionResult RestaurantMenu()
         {
+
             return View();
         }
 

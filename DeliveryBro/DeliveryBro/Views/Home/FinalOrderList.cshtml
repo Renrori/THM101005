@@ -10,10 +10,33 @@
 
     <div class="my-5 row justify-content-center">
         <form class="col-md-6">
+            <div class="my-5 row justify-content-center">
+                <table class="table">
+                    <thead class="thead-primary">
+                        <tr class="text-center">
+                            <th>商品名稱</th>
+                            <th>&nbsp;</th>
+                            <th>價格</th>
+                            <th>數量</th>
+                            <th>總金額</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr v-for="item in cartItems" :key="item.dishId">
+                            <td>{{ item.dishName }}</td>
+                            <td>&nbsp;</td>
+                            <td>{{ item.dishPrice }}</td>
+                            <td>{{ item.dishCount }}</td>
+                            <td>{{ calculateSubtotal(item) }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
             <table class="table">
                 <tbody>
                     <tr>
-                        <th width="100"><br />交易結果</th>
+                        <th width="120"><br />交易結果</th>
                         <td>測試</td>
                     </tr>
                     <tr>
@@ -23,6 +46,10 @@
                     <tr>
                         <th><br />訂單狀態</th>
                         <td>測試</td>
+                    </tr>
+                    <tr>
+                        <th><br />訂單成立時間</th>
+                        <td>{{ orderDate }}</td>
                     </tr>
                     <tr>
                         <th><br />訂單總金額</th>
@@ -40,6 +67,7 @@
     <script src="https://unpkg.com/vue@3.2.36/dist/vue.global.prod.js"></script>
     <script src="~/axios/axios.min.js"></script>
     <script>
+
         var vueApp = {
             data() {
                 return {
@@ -52,7 +80,8 @@
                     note: "",
                     ShippingFee: 0,
                     Discount: 0,
-                    AmountAfterDiscount: 0
+                    AmountAfterDiscount: 0,
+                    orderDate: ""
                 };
             },
             mounted() {
@@ -61,6 +90,16 @@
                 const finalorderdata = JSON.parse(decodeURIComponent(Jsondata));
                 this.cartItems = finalorderdata.items;
                 this.AmountAfterDiscount = finalorderdata.AmountAfterDiscount;
+
+                //擷取目前時間
+                const currentDate = new Date();
+                const formattedDate = currentDate.toLocaleDateString();
+                this.orderDate = formattedDate;
+            },
+            methods: {
+                calculateSubtotal(item) {
+                    return item.dishPrice * item.dishCount;
+                }
             }
         };
         var app = Vue.createApp(vueApp).mount("#app");
