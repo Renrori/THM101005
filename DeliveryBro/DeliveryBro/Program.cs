@@ -24,6 +24,9 @@ namespace DeliveryBro
                 options.UseSqlServer(DeliveryBroconnectionString));
 
             builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie("admin",opt =>{
+                    opt.LoginPath = new PathString("/admin/Account/login");
+                })
                 .AddCookie(opt =>
                 {
                     opt.LoginPath = "/user/Login";
