@@ -41,6 +41,7 @@ namespace DeliveryBro.ApiController
             return sm;
         }
         //Post:/api/HomeApi/Filter
+        //此功能未成功請勿使用
         [HttpPost("Filter")]
         public async Task<IQueryable<StoreViewModel>> FilterStore(
             [FromBody]StoreViewModel svm) 
@@ -77,6 +78,7 @@ namespace DeliveryBro.ApiController
         //之後改成傳物件呼叫形式
         public async Task<IEnumerable<MenuViewModel>> GetProduct(int id)
         {
+            
             var product = await _context.MenuTable.Include(m => m.Restaurant)
                .Where(m => m.Restaurant.RestaurantId == id && m.DishStatus == "ongoing")
                .Select(p => new MenuViewModel
@@ -91,6 +93,30 @@ namespace DeliveryBro.ApiController
                })
                .ToArrayAsync();
             return product;
+        }
+
+        [HttpPost("{restaurantId}/Filter")]
+        public async Task<IQueryable<MenuViewModel>> FilterStore(
+            [FromBody]MenuViewModel mvm) 
+        {
+            var product = await _context.MenuTable.Include(m => m.RestaurantId)
+                .Where(m => m.Restaurant.RestaurantId == mvm.RestaurantId && m.DishStatus == "ongoing")
+                .ToArrayAsync();
+
+            var pd = product.Where(p =>
+            p.DishName.Contains(mvm.DishName) ||
+            p.DishPrice.ToString().Contains(mvm.DishPrice.ToString()))
+                .Select(p => new MenuViewModel
+                {
+                    DishId = p.DishId,
+                    RestaurantId = p.RestaurantId,
+                    DishName = p.DishName,
+                    DishPrice = p.DishPrice,
+                    DishPicture = p.DishPicture,
+                    DishDescription = p.DishDescription,
+                    DishCategory = p.DishCategory
+                }) ;
+            return pd.AsQueryable();
         }
 
         [HttpGet("getpic/{storeId}")]
