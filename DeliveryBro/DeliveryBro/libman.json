@@ -6,8 +6,6 @@
     {
       "library": "font-awesome@6.4.0",
       "destination": "wwwroot/font-awesome/"
-      "library": "axios@1.4.0",
-      "destination": "wwwroot/axios/"
     },
     {
       "library": "vue-form@4.10.1",
@@ -16,12 +14,16 @@
     {
       "library": "axios@1.4.0",
       "destination": "wwwroot/axios/"
-      "library": "signalr.js@2.4.3",
-      "destination": "wwwroot/lib/signalr.js/"
     },
     {
       "provider": "cdnjs",
       "library": "vue@3.3.4",
+      "destination": "wwwroot/lib/vue/"
+    },
+    {
+      "provider": "cdnjs",
+      "library": "signalr.js@2.4.3",
+      "destination": "wwwroot/lib/signalr.js/"
     }
   ]
 }
