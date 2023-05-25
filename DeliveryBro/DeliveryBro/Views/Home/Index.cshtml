@@ -92,7 +92,9 @@
                 <div class="col-md-6 col-lg-4 " v-for="store in storeInfo" :key="storeId">
                     <div class="product">
                         <div class="img-prod">
-                            <img class="img-fluid" :src="GetPictureStore(store.storeId)" alt="商家圖片" />
+                            <div class="row justify-content-center">
+                                <img @*class="img-fluid"*@ :src="GetPictureStore(store.storeId)" width="340" height="340" alt="商家暫無圖片" />
+                            </div>
                         </div>
                         <div class="text py-3 pb-4 px-3 text-center">
                             <h2>{{ store.storeName }}</h2>
@@ -106,9 +108,9 @@
     </section>
 
     @*測試*@
-@*    <div v-for="store in storeInfo" :key="storeId">
-        <img class="img-fluid" :src="GetPictureStore(store.storeId)" alt="商家圖片" />
-        <h2>{{ store.storeName }}</h2>
+    @*    <div v-for="store in storeInfo" :key="storeId">
+    <img class="img-fluid" :src="GetPictureStore(store.storeId)" alt="商家圖片" />
+    <h2>{{ store.storeName }}</h2>
     </div>*@
     @*測試結束*@
 

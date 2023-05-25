@@ -25,16 +25,16 @@
                         </thead>
 
                         <tbody>
-                            <tr v-for="item in cartItems" :key="item.DishID">
+                            <tr v-for="item in cartItems" :key="item.dishID">
                                 <td class="product-remove">
                                     <button @@click="removeFromCart(item)">
                                         <span class="ion-ios-close" @@click="removeFromCart(item)"></span>
                                     </button>
                                 </td>
-                                <td>{{ item.DishName }}</td>
+                                <td>{{ item.dishName }}</td>
                                 <td>&nbsp;</td>
-                                <td>{{ item.DishPrice }}</td>
-                                <td>{{ item.DishCount }}</td>
+                                <td>{{ item.dishPrice }}</td>
+                                <td>{{ item.dishCount }}</td>
                                 <td>{{ calculateSubtotal(item) }}</td>
                             </tr>
                         </tbody>
@@ -75,7 +75,7 @@
             data() {
                 return {
                     cartItems: data,
-                    DishCount: 1,
+                    dishCount: 1,
                     totalAmount: 0
                 };
             },
@@ -83,7 +83,7 @@
                 calculateTotal() {
                     let total = 0;
                     for (let i = 0; i < this.cartItems.length; i++) {
-                        total += this.cartItems[i].DishPrice * this.cartItems[i].DishCount;
+                        total += this.cartItems[i].dishPrice * this.cartItems[i].dishCount;
                     }
                     this.totalAmount = total;
                     return total;
@@ -95,11 +95,11 @@
 
                 },
                 calculateSubtotal(item) {
-                    return item.DishPrice * item.DishCount;
+                    return item.dishPrice * item.dishCount;
                 },
                 removeFromCart(item) {
                     const index = this.cartItems.findIndex(
-                        (cartItem) => cartItem.id === item.id
+                        (cartItem) => cartItem.dishId === item.dishId
                     );
                     if (index !== -1) {
                         this.cartItems.splice(index, 1);
