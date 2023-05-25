@@ -1,7 +1,10 @@
 using DeliveryBro.Data;
 using DeliveryBro.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using DeliveryBro.Services;
 
 namespace DeliveryBro
 {
@@ -19,6 +22,15 @@ namespace DeliveryBro
             var DeliveryBroconnectionString = builder.Configuration.GetConnectionString("DeliveryBro") ?? throw new InvalidOperationException("Connection string 'DeliveryBro' not found.");
             builder.Services.AddDbContext<sql8005site4nownetContext>(options =>
                 options.UseSqlServer(DeliveryBroconnectionString));
+
+            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(opt =>
+                {
+                    opt.LoginPath = "/user/Login";
+                    opt.ExpireTimeSpan = TimeSpan.FromMinutes(10);
+                });
+
+            builder.Services.AddTransient<EncryptService>();
 
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
@@ -48,11 +60,14 @@ namespace DeliveryBro
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.MapControllerRoute(name: "admin",
-                pattern: "{area:exists}/{controller=Restaurant}/{action=Login}/{id?}");
+            //app.MapControllerRoute(
+            //    name: "store",
+            //    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+            //app.MapControllerRoute(name: "admin",
+            //    pattern: "{area:exists}/{controller=Restaurant}/{action=Login}/{id?}");
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Restaurant}/{action=Login}/{id?}");
+                pattern: "{controller=Home}/{action=Index}/{id?}");
             app.MapRazorPages();
 
             app.Run();

@@ -8,6 +8,25 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Models\NewFolder\**" />
+    <Compile Remove="NewFolder1\**" />
+    <Compile Remove="NewFolder2\**" />
+    <Compile Remove="NewFolder\**" />
+    <Content Remove="Models\NewFolder\**" />
+    <Content Remove="NewFolder1\**" />
+    <Content Remove="NewFolder2\**" />
+    <Content Remove="NewFolder\**" />
+    <EmbeddedResource Remove="Models\NewFolder\**" />
+    <EmbeddedResource Remove="NewFolder1\**" />
+    <EmbeddedResource Remove="NewFolder2\**" />
+    <EmbeddedResource Remove="NewFolder\**" />
+    <None Remove="Models\NewFolder\**" />
+    <None Remove="NewFolder1\**" />
+    <None Remove="NewFolder2\**" />
+    <None Remove="NewFolder\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.15" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.15" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.15" />
