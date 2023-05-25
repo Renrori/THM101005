@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using DeliveryBro.Services;
+using DeliveryBro.Areas.store.Services;
 
 namespace DeliveryBro
 {
