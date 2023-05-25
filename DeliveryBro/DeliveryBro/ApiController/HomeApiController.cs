@@ -24,7 +24,7 @@ namespace DeliveryBro.ApiController
         {
             var groupMenu = await _context.MenuTable
                //.Where(m => !string.IsNullOrEmpty(m.DishName))
-               .GroupBy(m => m.DishId)
+               .GroupBy(m => m.RestaurantId)
                .Select(g => g.Key)
                .ToListAsync();
 
@@ -47,7 +47,7 @@ namespace DeliveryBro.ApiController
         {
             
             var groupMenu = await _context.MenuTable
-               .GroupBy(m => m.DishId)
+               .GroupBy(m => m.RestaurantId)
                .Select(g => g.Key)
                .ToListAsync();
             
