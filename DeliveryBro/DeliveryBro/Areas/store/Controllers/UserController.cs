@@ -14,6 +14,7 @@ using System.Text.Json;
 
 namespace DeliveryBro.Areas.store.Controllers
 {
+    [Area("store")]
 	public class UserController : Controller
     {
         private readonly sql8005site4nownetContext _db;
@@ -24,7 +25,8 @@ namespace DeliveryBro.Areas.store.Controllers
             _db = context;
             this.encrypt = encrypt;
         }
-        public IActionResult Login()
+        
+        public IActionResult StoreLogin()
         {
             return View();
         }
@@ -98,7 +100,7 @@ namespace DeliveryBro.Areas.store.Controllers
             if (user == null)
             {
                 ViewBag.Error = "帳號密碼錯誤";
-                return View("Login");
+                return View();
             }
             //通行證
             //可以放List?
