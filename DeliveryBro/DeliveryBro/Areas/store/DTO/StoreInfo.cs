@@ -10,5 +10,6 @@
         public TimeSpan? OpeningHours { get; set; }
         public string? RestaurantDescription { get; set; }
         public byte[]? RestaurantPicture { get; set; }
+        public string? RestaurantStatus { get; set; }
     }
 }

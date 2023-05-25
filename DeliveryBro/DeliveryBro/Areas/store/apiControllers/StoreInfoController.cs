@@ -31,7 +31,8 @@ namespace DeliveryBro.Areas.store.apiControllers
                 RestaurantAddress = x.RestaurantAddress,
                 RestaurantPhone = x.RestaurantPhone,
                 RestaurantPicture = x.RestaurantPicture,
-                OpeningHours = x.OpeningHours
+                OpeningHours = x.OpeningHours,
+                RestaurantStatus=x.RestaurantStatus
             });
         }
 
@@ -85,7 +86,29 @@ namespace DeliveryBro.Areas.store.apiControllers
             return "更改成功";
         }
 
-
+        [HttpPut("status/{id}")]
+        public async Task<string> StoreStatusChange(int id,StoreStatusDTO statusDTO)
+        {
+            if(id!=statusDTO.RestaurantId) 
+            {
+                return "無法更改營業狀態";
+            }
+            RestaurantTable store = await _context.RestaurantTable.FindAsync(id);
+            store.RestaurantStatus = statusDTO.RestaurantStatus;
+            _context.Entry(store).State = EntityState.Modified;
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException) 
+            {
+                if (!RestaurantTableExists(id))
+                    return "無法更改營業狀態";
+                else
+                    throw;
+            }
+            return "營業狀態修改成功";
+        }
 
         private bool RestaurantTableExists(int id)
         {
