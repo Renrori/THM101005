@@ -1,0 +1,262 @@
+﻿<div id="app">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-10 mb-5 text-center">
+                <ul class="product-category">
+                    <li><a href="#" class="active">All</a></li>
+                    <li><a href="#">Vegetables</a></li>
+                    <li><a href="#">Fruits</a></li>
+                    <li><a href="#">Juice</a></li>
+                    <li><a href="#">Dried</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="row">
+
+            <div class="col-md-6 col-lg-3" v-for="product in productList" :key="product.DishID">
+                <div class="product">
+                    <a href="#" class="img-prod">
+                        <img class="img-fluid" src="~/vegefoods-master/images/product-1.jpg" alt="Colorlib Template">
+                        <div class="overlay"></div>
+                    </a>
+                    <div class="text py-3 pb-4 px-3 text-center">
+                        <h3>{{product.DishName}}</h3>
+                        <div class="d-flex">
+                            <div class="pricing">
+                                @*<p class="price"><span class="mr-2 price-dc">$120.00</span><span class="`price-sale">$60.00</span></p>*@
+                                <p class="price"><span class="price-sale">$</span><span>{{product.DishPrice}}</span></p>
+                            </div>
+                        </div>
+
+
+                        <!-- Button trigger modal -->
+                        <button type="button" class="btn btn-primary"
+                                tabindex="-1"
+                                data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+                                aria-labelledby="card1ModalLabel" @@click="viewProduct(product)">
+                            <span><i class="ion-ios-cart"></i>  購買</span>
+                        </button>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="staticBackdropLabel">選擇餐點</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div v-if="selectedProduct">
+                                            <div class="row">
+                                                <div class="col-sm-4">
+                                                    <img :src="product.imageUrl"
+                                                         alt=""
+                                                         class="img-fluid"
+                                                         width="200"
+                                                         height="200" />
+                                                </div>
+                                                <div class="col-sm-8">
+                                                    <div class="mb-3">
+                                                        <h2 for="title" class="form-label">{{ selectedProduct.DishName }}</h2>
+                                                    </div>
+                                                    <hr />
+                                                    <p>{{ selectedProduct.DishDescription }}</p>
+                                                    <hr />
+                                                    <div class="d-flex justify-content-end">
+                                                        <div>價格：{{ selectedProduct.DishPrice }}</div>
+
+
+                                                        <div class="col-sm-3 px-1 py-1">
+                                                            <input type="number" v-model="selectedProduct.DishCount" min="1" max="10" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
+                                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @@click="addToCart(selectedProduct)">加入購物車</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Modal -->
+                        @*                     <div class="modal fade" :id="'cardModal' + index" tabindex="-1" role="dialog" aria-labelledby="'cardModalLabel' + index" aria-hidden="true">
+                        <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content">
+                        <div class="modal-header">
+                        <h5 class="modal-title" :id="'cardModal' + index">{{product.DishName}}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                        <div class="row">
+
+                        <div class="col-sm-4">
+                        <img :src="product.imageUrl"
+                        alt=""
+                        class="img-fluid"
+                        width="200"
+                        height="200" />
+                        </div>
+
+                        <div class="col-sm-8">
+                        <div class="mb-3" v-for="product in productList" :key="product.DishID">
+                        <label for="title" class="form-label" id="card1ModalLabel">{{product.DishName}}</label>
+                        </div>
+                        <hr />
+                        <div v-for="product in productList" :key="product.DishID">{{ product.DishDescription}}</div>
+                        <hr />
+                        <div class="d-flex justify-content-end">
+
+                        <div for="awesomeness" class="col-sm-4 col-form-label" v-for="product in productList" :key="product.DishID">
+                        <span>$</span>{{product.DishPrice}}
+                        </div>
+                        <div class="col-sm-3 px-1 py-1" v-for="product in productList" :key="product.DishID">
+                        <div class="btn btn-primary" type="button" @@click="minusOne(product)">-</div>
+                        <span>{{ product.DishCount }}</span>
+                        <div class="btn btn-primary" type="button" @@click="addOne(product)">+</div>
+                        <input type="number" v-model="product.DishCount" min="1" max="10" />
+                        </div>
+                        </div>
+                        </div>
+                        </div>*@
+                    </div>
+                </div>
+            </div>
+
+            @* <div class="container mt-4">
+            <h2>購物車</h2>
+            <table class="table">
+            <thead>
+            <tr>
+            <th>商品名稱</th>
+            <th>數量</th>
+            <th>價錢</th>
+            <th>單項總金額</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="item in cartItems" :key="item.DishID">
+            <td>{{ item.DishName }}</td>
+            <td>{{ item.DishCount }}</td>
+            <td>{{ item.DishPrice }}</td>
+            <td>{{ calculateSubtotal(item) }}</td>
+            </tr>
+            </tbody>
+            <tfoot>
+            <tr>
+            <td colspan="4">總金額：</td>
+            <td>{{ calculateTotal() }}</td>
+            </tr>
+            </tfoot>
+            </table>
+            </div>*@
+
+            <div class="container mt-4">
+                <div class="row justify-content-end">
+                    <a class="btn btn-info col-2" :href="OrderListUrl">結帳</a>
+                </div>
+            </div>
+
+
+            <div class="col text-center">
+                <div class="block-27">
+                    <ul>
+                        <li><a href="#">&lt;</a></li>
+                        <li class="active"><span>1</span></li>
+                        <li><a href="#">2</a></li>
+                        <li><a href="#">3</a> </li>
+                        <li><a href="#">4</a></li>
+                        <li><a href="#">5</a></li>
+                        <li><a href="#">&gt;</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+    {
+    @*<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>*@
+    <script src="https://unpkg.com/vue@3.2.36/dist/vue.global.prod.js"></script>
+    <script src="~/axios/axios.min.js"></script>
+    <script>
+        var vueApp = {
+            data() {
+                return {
+                    productList: [
+                        {
+                            DishID: '1',
+                            DishName: '超值漢堡',
+                            //DishPicture:,
+                            DishPrice: '60',
+                            DishDescription: '超級營養漢堡'
+                        },
+                        {
+                            DishID: '2',
+                            DishName: '超值三明治',
+                            //DishPicture:,
+                            DishPrice: '70',
+                            DishDescription: '超級營養三明治，吃了包你拉肚子'
+                        },
+                        {
+                            DishID: '3',
+                            DishName: '超香蛋餅',
+                            //DishPicture:,
+                            DishPrice: '50',
+                            DishDescription: '超香蛋餅，吃了包你拉肚子'
+                        },
+                        {
+                            DishID: '4',
+                            DishName: '好吃飯糰',
+                            //DishPicture:,
+                            DishPrice: '30',
+                            DishDescription: '好吃飯糰，吃了包你拉肚子'
+
+                        }
+                    ],
+                    DishCount: 1,
+                    cartItems: [],
+                    selectedProduct: null
+                };
+            },
+            methods: {
+                viewProduct(product) {
+                    this.selectedProduct = product;
+                },
+                addToCart(selectedProduct) {
+                    const item = {
+                        DishID: selectedProduct.DishID,
+                        DishName: selectedProduct.DishName,
+                        DishPrice: selectedProduct.DishPrice,
+                        DishDescription: selectedProduct.DishDescription,
+                        DishCount: selectedProduct.DishCount
+                    };
+                    this.cartItems.push(item);
+                    selectedProduct.DishCount = 1;
+                },
+                calculateSubtotal(item) {
+                    return item.DishPrice * item.DishCount;
+                },
+                calculateTotal() {
+                    let total = 0;
+                    for (let i = 0; i < this.cartItems.length; i++) {
+                        total += this.calculateSubtotal(this.cartItems[i]);
+                    }
+                    return total;
+                }
+            },
+            computed: {
+                OrderListUrl() {
+                    const data = JSON.stringify(this.cartItems);
+                    return `OrderList?data=${encodeURIComponent(data)}`;
+                }
+            }
+        };
+        var app = Vue.createApp(vueApp).mount("#app");
+    </script>
+}
