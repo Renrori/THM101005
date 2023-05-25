@@ -224,7 +224,7 @@ namespace DeliveryBro.Models
 
                 entity.Property(e => e.DishName)
                     .IsRequired()
-                    .HasMaxLength(20);
+                    .HasMaxLength(50);
 
                 entity.Property(e => e.DishStatus)
                     .IsRequired()
@@ -249,7 +249,9 @@ namespace DeliveryBro.Models
 
                 entity.Property(e => e.DishId).HasColumnName("DishID");
 
-                entity.Property(e => e.DishName).IsRequired();
+                entity.Property(e => e.DishName)
+                    .IsRequired()
+                    .HasMaxLength(50);
 
                 entity.Property(e => e.OrderDate).HasColumnType("date");
 

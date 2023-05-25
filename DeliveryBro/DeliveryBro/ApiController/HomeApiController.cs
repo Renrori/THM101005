@@ -17,8 +17,6 @@ namespace DeliveryBro.ApiController
             _context = context;
         }
 
-
-
         //抓取有商品的店家回傳
         [HttpGet]
         // Get:/api/HomeApi/
@@ -74,38 +72,12 @@ namespace DeliveryBro.ApiController
             return File(imgUrl, "img/jpeg");
 
         }
-        //叫用商品圖片方法，傳入storeId和dishId回傳圖
-        //public async Task<FileResult> GetPicture([FromBody] CallViewModel call)
-        //{
-
-        //    MenuTable c = await _context.MenuTable.Include(m => m.Restaurant)
-        //        .FirstOrDefaultAsync(m => m.RestaurantId == call.storeId && m.DishId == call.dishId);
-
-        //    byte[] imgUrl = c?.DishPicture;
-        //    return File(imgUrl, "img/jpeg");
-        //}
-
-        //嘗試傳商店id回傳所有對應圖片
-        //public async Task<IActionResult> GetPictures(int id)
-        //{
-        //    List<FileResult> imageList = new List<FileResult>();
-
-        //    IEnumerable<MenuTable> menuPic = await _context.MenuTable.Where(m => m.RestaurantId == id).ToListAsync();
-
-        //    foreach (var p in menuPic)
-        //    {
-        //        var imgUrl = File(p.DishPicture, "image/jpeg");
-        //        imgUrl.FileDownloadName = Url.Action("GetPictures", "Home", new { storeId = id });
-        //        imageList.Add(imgUrl);
-        //    }
-
-        //    return new JsonResult(imageList);
-        //}
 
         [HttpPost]
+        //Post:/api/HomeApi/
         public async Task<bool> GetOrder([FromBody] OrderViewModel order)
         {
-
+            
             try
             {
                 CustomerOrderTable cot = new CustomerOrderTable
@@ -113,7 +85,8 @@ namespace DeliveryBro.ApiController
                     OrderId = order.OrderId,
                     CustomerAddress = order.CustomerAddress,
                     ShippingFee = order.ShippingFee,
-                    OrderDate = order.OrderDate,
+                    Payment = order.Payment,
+                    OrderDate =DateTime.UtcNow,
                     OrderStatus = order.OrderStatus,
                     Note = order.Note,
                     CustomerId = order.CustomerId,
@@ -123,21 +96,24 @@ namespace DeliveryBro.ApiController
                 await _context.SaveChangesAsync();
 
                 int orderId = cot.OrderId;
-
-                //foreach (var od in order.OrderDetailViewModels)
-                //{
-                //    OrderDetailsTable odt = new OrderDetailsTable
-                //    {
-                //        OrderId = orderId,
-                //        DishId = od.DishId,
-                //        UnitPrice = od.UnitPrice,
-                //        Quantity = od.Quantity,
-                //        Subtotal = od.Subtotal,
-                //        Total = od.Total,
-                //    };
-                //    _context.OrderDetailsTable.Add(odt);
-                //}
-                //await _context.SaveChangesAsync();
+                
+                foreach (var od in order.OrderDetailViewModels)
+                {
+                    od.OrderId = orderId;
+                    OrderDetailsTable odt = new OrderDetailsTable
+                    {
+                        OrderId = od.OrderId,
+                        DishId = od.DishId,
+                        OrderDate= DateTime.Today,
+                        UnitPrice = od.UnitPrice,
+                        Quantity = od.Quantity,
+                        Subtotal = od.Subtotal,
+                        Total = od.Total,
+                        DishName = od.DishName,
+                    };
+                    _context.OrderDetailsTable.Add(odt);
+                }
+                await _context.SaveChangesAsync();
 
                 return true;
             }
@@ -145,8 +121,6 @@ namespace DeliveryBro.ApiController
             {
                 return false;
             }
-
-
         }
     }
 }
