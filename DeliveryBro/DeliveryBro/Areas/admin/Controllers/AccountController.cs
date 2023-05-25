@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace DeliveryBro.Areas.admin.Controllers
 {
     [Area("admin")]
-    public class AccountControllers : Controller
+    public class AccountController : Controller
     {
         // DB連線CONTEXT
         private readonly sql8005site4nownetContext _db;
@@ -19,13 +19,15 @@ namespace DeliveryBro.Areas.admin.Controllers
         /// 建構式
         /// </summary>
         /// <param name="context"></param>
-        public AccountControllers(sql8005site4nownetContext context) { 
+        public AccountController(sql8005site4nownetContext context)
+        {
             this._db = context;
         }
 
-        // 燈入頁面      
-        [HttpGet]        
-        public ActionResult Login() { 
+        // 登入頁面      
+        //[HttpGet]
+        public ActionResult Login()
+        {
             return View();
         }
 
@@ -39,7 +41,7 @@ namespace DeliveryBro.Areas.admin.Controllers
 
             // 檢查資料庫確認帳號密碼
             var user = _db.AdministerTable.FirstOrDefault(x =>
-            x.AdministerAccount == acc && 
+            x.AdministerAccount == acc &&
             x.AdministerPassword == pwd);
 
             // 如果登入失敗
@@ -51,9 +53,10 @@ namespace DeliveryBro.Areas.admin.Controllers
             }
 
             // 使用者參數，權限
-            var claims = new List<Claim>() {
-                 //new Claim(ClaimTypes.Name, user.Name),
-                 //new Claim(ClaimTypes.Role, user.Role),
+            var claims = new List<Claim>()
+            {
+                //new Claim(ClaimTypes.Name, user.Name),
+                //new Claim(ClaimTypes.Role, user.Role),
             };
 
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);

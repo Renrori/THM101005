@@ -44,7 +44,7 @@
                                 <p class="text-muted mb-4">Enter your email address and password to access admin panel.</p>
                             </div>
 
-                            <form method="post" action="/admin/AccountControllers/Login">
+                            <form method="post" asp-action="Login" asp-controller="Account" asp-area="admin">
                                 <div class="mb-3">
                                     <label for="帳號" class="form-label">帳號</label>
                                     <input class="form-control" type="text" name="AdministerAccount" id="AdministerAccount" required="" placeholder="請輸入帳號">
@@ -67,7 +67,7 @@
                                     </div>
                                 </div>*@
                                 <div class="mb-3 mb-0 text-center">
-                                    <button class="btn btn-primary" type="submit">登入</button>
+                                    <button class="btn btn-primary" type="submit" action="~/Area//Home/index">登入</button>
                                 </div>
                             </form>
                         </div> <!-- end card-body -->

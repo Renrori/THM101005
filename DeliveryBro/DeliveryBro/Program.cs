@@ -47,14 +47,21 @@ namespace DeliveryBro
 
             app.UseAuthentication();
             app.UseAuthorization();
-            app.MapControllerRoute(
-				name: "store",
-				pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
-            app.MapControllerRoute(name: "admin",
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute(
+                name: "store",
                 pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
-            app.MapControllerRoute(
-                name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+
+                endpoints.MapControllerRoute(
+                    name: "admin",
+                    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
+            });
+            
 			
 			app.MapRazorPages();
 
