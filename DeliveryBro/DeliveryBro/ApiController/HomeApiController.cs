@@ -56,6 +56,7 @@ namespace DeliveryBro.ApiController
                    RestaurantId = p.RestaurantId,
                    DishName = p.DishName,
                    DishPrice = p.DishPrice,
+                   DishPicture = p.DishPicture,
                    DishDescription = p.DishDescription,
                    DishCategory = p.DishCategory
                })
