@@ -25,7 +25,7 @@ namespace DeliveryBro.ApiController
             var groupMenu = await _context.MenuTable
                //.Where(m => !string.IsNullOrEmpty(m.DishName))
                .GroupBy(m => m.DishId)
-            .Select(g => g.Key)
+               .Select(g => g.Key)
                .ToListAsync();
 
             var sm = await _context.RestaurantTable
@@ -40,6 +40,36 @@ namespace DeliveryBro.ApiController
                 .ToListAsync();
             return sm;
         }
+        //Post:/api/HomeApi/Filter
+        [HttpPost("Filter")]
+        public async Task<IQueryable<StoreViewModel>> FilterStore(
+            [FromBody]StoreViewModel svm) 
+        {
+            
+            var groupMenu = await _context.MenuTable
+               .GroupBy(m => m.DishId)
+               .Select(g => g.Key)
+               .ToListAsync();
+            
+            var sm = _context.RestaurantTable
+                .Where(s => groupMenu.Contains(s.RestaurantId));
+
+                
+            if(svm.StoreName != null) 
+            {
+                sm = sm.Where(s => s.RestaurantName.Contains(svm.StoreName));
+                    
+            }
+            return sm.Select(s => new StoreViewModel
+            {
+                StoreId = s.RestaurantId,
+                StoreName = s.RestaurantName,
+                StoreAddress = s.RestaurantAddress,
+                StoreDescription = s.RestaurantDescription
+            });     
+     }
+
+
 
 
         [HttpGet("{id}")]
