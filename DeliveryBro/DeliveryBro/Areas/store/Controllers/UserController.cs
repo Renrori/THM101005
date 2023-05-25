@@ -2,7 +2,7 @@
 using DeliveryBro.Areas.store.Services;
 using DeliveryBro.Areas.store.ViewModels;
 using DeliveryBro.Models;
-using DeliveryBro.ViewModels.Restaurant;
+using DeliveryBro.ViewModels;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
@@ -14,7 +14,7 @@ using System.Text.Json;
 
 namespace DeliveryBro.Areas.store.Controllers
 {
-    public class UserController : Controller
+	public class UserController : Controller
     {
         private readonly sql8005site4nownetContext _db;
         private readonly EncryptService encrypt;
