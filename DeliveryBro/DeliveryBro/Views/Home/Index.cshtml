@@ -100,6 +100,7 @@
                             <h2>{{ store.storeName }}</h2>
                             <button class="btn btn-outline-info" @@click="RestaurantMenuUrl(store)"><i class="ion-ios-menu"></i></button>
                             <button class="btn btn-outline-info"><i class="ion-ios-heart"></i></button>
+
                         </div>
                     </div>
                 </div>
@@ -108,25 +109,33 @@
     </section>
 
     @*測試*@
-    @*    <div v-for="store in storeInfo" :key="storeId">
-    <img class="img-fluid" :src="GetPictureStore(store.storeId)" alt="商家圖片" />
-    <h2>{{ store.storeName }}</h2>
-    </div>*@
+@*
+
+    <h3>商店圖片</h3>
+    <div v-for="store in StoreInfo" >
+        <p>ID：{{ store.storeId }}</p>
+        <p>商店名:{{ store.storeName }}</p>
+        <img :src="GetPictureStore(store.storeId)" alt="商家圖片" />
+
+    </div>
+     
+*@
     @*測試結束*@
 
 </div>
 @section Scripts
     {
-    @*<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>*@
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://unpkg.com/vue@3.2.36/dist/vue.global.prod.js"></script>
     <script src="~/axios/axios.min.js"></script>
     <script>
+        var baseAddress = "https://localhost:7163/api/HomeApi";
         var vueApp = {
             data() {
                 return {
                     /*storeId: 1,*///暫時資料
                     storeInfo: [],
-                    storeImageUrl: '',
+                    storeImageUrl: ''
                 }
             },
             mounted() {
@@ -136,7 +145,7 @@
             },
             methods: {
                 GetPictureStore(storeId) {
-                    return `Home/GetPictureStore?storeId=${storeId}`;
+                    return `${baseAddress}/getpic/${storeId}`;
                 },
                 async GetStoreInfo() {
                     try {
@@ -144,7 +153,7 @@
                         //    this.StoreId = response.data.StoreId;
                         //    this.StoreName = response.data.StoreName;
                         //})
-                        const response = await axios.get(`Home/GetStore`);
+                        const response = await axios.get(`api/HomeApi`);
                         const data = response.data;
                         this.storeInfo = data;
                     } catch {
@@ -157,6 +166,7 @@
                     const url = `/Home/RestaurantMenu?data=${encodeURIComponent(data)}`;
                     window.location.href = url;
                 }
+
             }
         };
         var app = Vue.createApp(vueApp).mount("#app");

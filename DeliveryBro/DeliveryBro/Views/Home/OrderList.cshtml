@@ -13,7 +13,7 @@
             <div class="row justify-content-center col-md-12">
                 <div class="cart-list">
                     <table class="table">
-                        <thead>
+                        <thead class="thead-primary">
                             <tr class="text-center">
                                 <th>刪除</th>
                                 <th>商品名稱</th>
@@ -25,7 +25,7 @@
                         </thead>
 
                         <tbody>
-                            <tr v-for="item in cartItems" :key="item.dishID">
+                            <tr v-for="item in cartItems" :key="item.dishId">
                                 <td class="product-remove">
                                     <button @@click="removeFromCart(item)">
                                         <span class="ion-ios-close" @@click="removeFromCart(item)"></span>

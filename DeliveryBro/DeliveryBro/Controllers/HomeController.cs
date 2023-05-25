@@ -1,6 +1,5 @@
 ﻿using DeliveryBro.Models;
 using DeliveryBro.ViewModels;
-using DeliveryBro.ViewModels.Home;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
@@ -23,85 +22,6 @@ namespace DeliveryBro.Controllers
         {
             return View();
         }
-        
-        //抓取有商品的店家回傳店家資訊模型(Id,Name)
-        public async Task<IActionResult> GetStore()
-        {
-            var groupMenu = await _context.MenuTable
-               //.Where(m => !string.IsNullOrEmpty(m.DishName))
-               .GroupBy(m => m.DishId)
-               .Select(g => g.Key)
-               .ToListAsync();
-
-            var sm = await _context.RestaurantTable
-                .Where(s => groupMenu.Contains(s.RestaurantId))
-                .Select(s => new StoreViewModel
-                {
-                    StoreId = s.RestaurantId,
-                    StoreName = s.RestaurantName,
-                    StoreAddress = s.RestaurantAddress,
-                    StoreDescription = s.RestaurantDescription
-                })
-                .ToListAsync();
-            return Ok(sm);
-        }
-
-        public async Task<IActionResult> GetProduct(int storeId)
-        {
-            var product = await _context.MenuTable.Include(m => m.Restaurant)
-               .Where(m => m.Restaurant.RestaurantId == storeId && m.DishStatus == "ongoing" )
-               .Select(p => new MenuViewModel 
-               {
-                   DishId = p.DishId,
-                   RestaurantId = p.RestaurantId,
-                   DishName = p.DishName,
-                   DishPrice = p.DishPrice,
-                   DishPicture= p.DishPicture,
-                   DishDescription = p.DishDescription,
-                   DishCategory = p.DishCategory
-               })
-               .ToArrayAsync();
-            return Ok(product);
-        }
-        //叫用圖片方法，傳入StoreId回傳圖片
-        public async Task<IActionResult> GetPictureStore(int storeId)
-        {
-            if (storeId != null)
-            {
-                RestaurantTable c = await _context.RestaurantTable.FindAsync(storeId);
-                byte[] imgUrl = c?.RestaurantPicture;
-                return File(imgUrl, "img/jpeg");
-            }
-            return BadRequest();
-        }
-        //叫用圖片方法，傳入storeid和dishid回傳圖
-        //public async Task<FileResult> GetPicture(CallViewModel call)
-        //{
-        //    MenuTable c = await _context.MenuTable.FindAsync(call.storeId, call.dishId);
-        //    byte[] imgurl = c?.DishPicture;
-        //    return File(imgurl, "img/jpeg");
-        //}
-
-        public async Task<FileResult> GetPicture([FromBody]CallViewModel call)
-        {
-
-            MenuTable c = await _context.MenuTable.Include(m => m.Restaurant)
-                .FirstOrDefaultAsync(m => m.RestaurantId == call.storeId && m.DishId == call.dishId);
-
-            byte[] imgUrl = c?.DishPicture;
-            return File(imgUrl, "img/jpeg");
-        }
-
-        //public async Task<IActionResult> GetPicture(int storeId)
-        //{
-        //    if (storeId != null)
-        //    {
-        //        MenuTable c = await _context.MenuTable.FindAsync(storeId);
-        //        byte[] imgUrl = c?.DishPicture;
-        //        return File(imgUrl, "img/jpeg");
-        //    }
-        //    return BadRequest();
-        //}
 
         public IActionResult RestaurantMenu()
         {
@@ -127,6 +47,9 @@ namespace DeliveryBro.Controllers
         {
             return View();
         }
+
+        
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

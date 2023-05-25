@@ -108,6 +108,8 @@
             </div>
         </div>
 
+        @*測試*@
+        @*測試結束*@
     </div>
 </div>
 
@@ -117,18 +119,19 @@
     <script src="https://unpkg.com/vue@3.2.36/dist/vue.global.prod.js"></script>
     <script src="~/axios/axios.min.js"></script>
     <script>
+        var baseAddress = "https://localhost:7163/api/HomeApi";
         var vueApp = {
             data() {
                 return {
                     storeInfo: [],
                     productMenu: [], //利用storeId叫回dish資料
-                    productMenuPic: null,
+                    //productMenuPic: null,
                     dishCount: 1,
                     cartItems: [],
                     selectedProduct: null,
                     currentPage: 1, // 當前分頁
                     pageSize: 8, // 每頁顯示的商品數量
-                    testid: 1,
+                    //testid: 1,
                     //productpic: { storeId: 1, dishId: 1 }
                 };
             },
@@ -140,9 +143,9 @@
 
                 this.GetRestaurantMenuInfo(this.storeInfo.storeId).then(productMenu => {
                     this.productMenu = productMenu;
-                }).catch(error => {
-                    console.error(error);
-                });
+                }).catch(
+                   console.log("fail")
+                );
             },
             computed: {
                 OrderListUrl() {
@@ -194,12 +197,13 @@
                     }
                 },
                 GetRestaurantMenuInfo(storeId) {
-                    const url = `GetProduct?storeId=${storeId}`;
+                    const url = `${baseAddress}/${storeId}`;
                     return axios.get(url).then(response => {
                         return response.data;
-                    }).catch(error => {
-                        throw new Error(`Failed to fetch menu items for productId:${storeId}`)
                     })
+                    //.catch(
+                    //    console.log("fail")
+                    //})
                 },
                 GetProductPic(pic) {
                     return `data:image/jpeg;base64,${pic}`

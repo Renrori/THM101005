@@ -15,8 +15,8 @@ namespace DeliveryBro.Models
         public int Subtotal { get; set; }
         public int? Discount { get; set; }
         public int Total { get; set; }
+        public string DishName { get; set; }
 
-        public virtual MenuTable Dish { get; set; }
         public virtual CustomerOrderTable Order { get; set; }
     }
 }

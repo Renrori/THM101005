@@ -116,7 +116,7 @@ namespace DeliveryBro.Models
 
                 entity.Property(e => e.OrderStatus)
                     .IsRequired()
-                    .HasMaxLength(6);
+                    .HasMaxLength(10);
 
                 entity.Property(e => e.Payment)
                     .IsRequired()
@@ -226,8 +226,6 @@ namespace DeliveryBro.Models
                     .IsRequired()
                     .HasMaxLength(20);
 
-                entity.Property(e => e.DishPicture).HasColumnType("image");
-
                 entity.Property(e => e.DishStatus)
                     .IsRequired()
                     .HasMaxLength(30);
@@ -243,27 +241,21 @@ namespace DeliveryBro.Models
 
             modelBuilder.Entity<OrderDetailsTable>(entity =>
             {
-                entity.HasKey(e => e.OrderId);
+                entity.HasKey(e => new { e.OrderId, e.DishId });
 
                 entity.ToTable("OrderDetails_Table");
 
-                entity.Property(e => e.OrderId)
-                    .ValueGeneratedNever()
-                    .HasColumnName("OrderID");
+                entity.Property(e => e.OrderId).HasColumnName("OrderID");
 
                 entity.Property(e => e.DishId).HasColumnName("DishID");
 
+                entity.Property(e => e.DishName).IsRequired();
+
                 entity.Property(e => e.OrderDate).HasColumnType("date");
 
-                entity.HasOne(d => d.Dish)
-                    .WithMany(p => p.OrderDetailsTable)
-                    .HasForeignKey(d => d.DishId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_OrderDetails_Table_Menu_Table");
-
                 entity.HasOne(d => d.Order)
-                    .WithOne(p => p.OrderDetailsTable)
-                    .HasForeignKey<OrderDetailsTable>(d => d.OrderId)
+                    .WithMany(p => p.OrderDetailsTable)
+                    .HasForeignKey(d => d.OrderId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_OrderDetails_Table_CustomerOrder_Table");
             });
@@ -297,6 +289,8 @@ namespace DeliveryBro.Models
                 entity.Property(e => e.RestaurantPhone).HasMaxLength(12);
 
                 entity.Property(e => e.RestaurantPicture).HasColumnType("image");
+
+                entity.Property(e => e.RestaurantStatus).HasMaxLength(10);
             });
 
             OnModelCreatingPartial(modelBuilder);
