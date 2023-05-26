@@ -1,7 +1,10 @@
 ﻿using DeliveryBro.Models;
 using DeliveryBro.ViewModels.Login;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Security.Claims;
 
 namespace DeliveryBro.Controllers
 {
@@ -21,7 +24,7 @@ namespace DeliveryBro.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Index([Bind("UserAccount, UserPassword")]LoginViewModel login)
+        public IActionResult Index([Bind("UserAccount, UserPassword")] LoginViewModel login)
         {
             if (ModelState.IsValid)
             {
@@ -32,6 +35,16 @@ namespace DeliveryBro.Controllers
                     ViewBag.ErrorMessage = "找不到此帳號!";
                     return View(login);
                 }
+                
+                var claims = new List<Claim>() {
+                     new Claim(ClaimTypes.Name, user.CustomerName),
+                     new Claim (ClaimTypes.Role,"User"),
+                     new Claim("CustomerId",user.CustomerId.ToString())
+                };
+
+                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
+                HttpContext.SignInAsync(claimsPrincipal);
 
             }
             return RedirectToAction("Index", "Home");

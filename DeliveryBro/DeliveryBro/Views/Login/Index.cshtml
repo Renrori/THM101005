@@ -13,7 +13,7 @@
         </div>
         <div>
             <label class="form-label">@Html.DisplayNameFor(model=>model.UserPassword)</label>
-            <input type="text" asp-for="UserPassword" class="form-control" />
+            <input type="Password" asp-for="UserPassword" class="form-control" />
             <span asp-validation-for="UserPassword" class="text-danger"></span>
         </div>
         @if (ViewBag.ErrorMessage != null)
@@ -22,6 +22,7 @@
         }
         <div class="form-group">
             <button type="submit"><i class="fa-solid fa-square-arrow-up-right"></i>送出</button>
+            <span><p>沒有帳號?</p><a herf="">點擊註冊</a></span>
         </div>
 
     </div>
