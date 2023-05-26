@@ -29,7 +29,7 @@
                             <td>{{ item.dishPrice }}</td>
                             <td>{{ item.dishCount }}</td>
                             <td>{{ calculateSubtotal(item) }}</td>
-                            @*<td>{{item}}</td>*@
+                            @*<td>測試用:{{item}}</td>*@
                         </tr>
                     </tbody>
                 </table>
@@ -58,10 +58,13 @@
         </form>
         <div class="container">
             <div class="row justify-content-center">
-                <button class="btn btn-info col-2 text-light" @@click="submitOrder">送出訂單</button>
+                <a class="btn btn-info col-2 text-light" v-if="OrderResult" href="https://localhost:7163/">回到首頁</a>
+                <button class="btn btn-info col-2 text-light" v-else @@click="submitOrder">送出訂單</button>
             </div>
         </div>
     </div>
+
+    @*測試*@
 </div>
 
 
@@ -79,6 +82,8 @@
                 return {
                     cartItems: [],
                     totalAmount: 0,
+                    RestaurantId: "",
+                    CustomerId: 1,
                     CustomerAddress: "",
                     CustomerPhone: "",
                     CustomerEmail: "",
@@ -111,6 +116,8 @@
                 this.cartItems.forEach(item => {
                     this.subtotal += this.calculateSubtotal(item);
                 });
+
+                this.updateRestaurantId()
             },
             methods: {
                 calculateSubtotal(item) {
@@ -119,10 +126,11 @@
                 submitOrder() {
                     this.OrderDetailViewModels = this.cartItems.map(item => {
                         return {
+                            //RestaurantId: item.storeId,
                             DishId: item.dishId,
                             DishName: item.dishName,
-                            UnitPrice: item.UnitPrice,
-                            Quantity: item.Quantity,
+                            UnitPrice: item.dishPrice,
+                            Quantity: item.dishCount,
                             Subtotal: this.subtotal,
                             Total: this.AmountAfterDiscount
                         }
@@ -133,7 +141,9 @@
                         Note: this.note,
                         OrderStatus: this.orderStatus,
                         Payment: this.Payment,
-                        OrderDetailViewModels: this.OrderDetailViewModels
+                        CustomerId: this.CustomerId,
+                        OrderDetailViewModels: this.OrderDetailViewModels,
+                        RestaurantId: this.RestaurantId
                     };
                     axios.post(`${baseAddress}`, submitOrder)
                         .then(response => {
@@ -143,7 +153,21 @@
                         }).catch(error => {
                             console.error(error);
                         });
+                },
+                updateRestaurantId() {
+                    // 將找到的相同 RestaurantId 賦值給外部的 restaurantId 變數
+                    this.RestaurantId = this.duplicateRestaurantId;
                 }
+            },
+            computed: {
+                duplicateRestaurantId() {
+                    const duplicate = this.cartItems.find((item, index, array) => {
+                        return array.findIndex((otherItem) => otherItem.storeId === item.storeId) === index;
+                    });
+
+                    return duplicate ? duplicate.storeId : '';
+                }
+
             }
         };
         var app = Vue.createApp(vueApp).mount("#app");
