@@ -68,7 +68,6 @@ namespace DeliveryBro.Areas.store.apiControllers
 				}).ToList(),
 				Total = x.OrderDetailsTable.Sum(x => x.Subtotal)
 			});
-			//return Ok(orders);
 		}
 		[HttpGet("wait")]
 		public IQueryable<HisOrderDTO> WaitingOrder()

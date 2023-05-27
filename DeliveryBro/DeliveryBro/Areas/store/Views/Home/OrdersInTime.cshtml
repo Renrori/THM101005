@@ -201,7 +201,7 @@
                     let _this=this;
                     if(_this.hubConnection)
                     {
-                        _this.hubConnection.close().then(()=>{
+                        _this.hubConnection.stop().then(()=>{
                             console.log("close");
                             _this.hubConneciton=null;
                         }).catch((err)=>{
@@ -210,8 +210,8 @@
                     }
                 }
             }
-
         }
+        
         var app = Vue.createApp(veuHisOrder).mount("#app");
     </script>
 }
