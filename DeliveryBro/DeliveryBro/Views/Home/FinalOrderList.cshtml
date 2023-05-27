@@ -2,7 +2,7 @@
     <div class="container">
         <div class="row no-gutters slider-text align-items-center justify-content-center">
             <div class="col-md-9 text-center">
-                <h1 class="mb-0">交易結果</h1>
+                <h1 class="mb-0">交易確認</h1>
             </div>
         </div>
     </div>
@@ -29,6 +29,7 @@
                             <td>{{ item.dishPrice }}</td>
                             <td>{{ item.dishCount }}</td>
                             <td>{{ calculateSubtotal(item) }}</td>
+                            @*<td>測試用:{{item}}</td>*@
                         </tr>
                     </tbody>
                 </table>
@@ -36,30 +37,38 @@
             <table class="table">
                 <tbody>
                     <tr>
-                        <th width="120"><br />交易結果</th>
-                        <td>測試</td>
-                    </tr>
-                    <tr>
-                        <th><br />訂單編號</th>
-                        <td>測試</td>
-                    </tr>
-                    <tr>
-                        <th><br />訂單狀態</th>
-                        <td>測試</td>
-                    </tr>
-                    <tr>
-                        <th><br />訂單成立時間</th>
-                        <td>{{ orderDate }}</td>
+                        <th width="120"><br />訂單狀態</th>
+                        <td>{{ orderStatus}}</td>
                     </tr>
                     <tr>
                         <th><br />訂單總金額</th>
                         <td>{{ AmountAfterDiscount }}</td>
                     </tr>
+                    <tr>
+                        <th><br />交易結果</th>
+                        <td v-if="OrderResult"><strong class="text-danger">請前往結帳</strong></td>
+                        <td v-else>尚未送出訂單</td>
+                    </tr>
+                    @*                    <tr>
+                    <th><br />地址</th>
+                    <td> {{ CustomerAddress }}</td>
+                    </tr>*@
                 </tbody>
             </table>
         </form>
+        <div class="container">
+            <div class="row justify-content-center">
+                <a class="btn btn-info col-2 text-light" v-if="OrderResult" href="https://localhost:7163/">回到首頁</a>
+                <button class="btn btn-info col-2 text-light" v-else @@click="submitOrder">送出訂單</button>
+            </div>
+        </div>
     </div>
+
+    @*測試*@
 </div>
+
+
+
 
 @section Scripts
     {
@@ -67,21 +76,28 @@
     <script src="https://unpkg.com/vue@3.2.36/dist/vue.global.prod.js"></script>
     <script src="~/axios/axios.min.js"></script>
     <script>
-
+        var baseAddress = "https://localhost:7163/api/HomeApi";
         var vueApp = {
             data() {
                 return {
                     cartItems: [],
                     totalAmount: 0,
+                    RestaurantId: "",
+                    CustomerId: 1,
                     CustomerAddress: "",
                     CustomerPhone: "",
                     CustomerEmail: "",
                     CouponID: "",
                     note: "",
                     ShippingFee: 0,
-                    Discount: 0,
+                    Discount: 0, //未回傳
+                    subtotal: 0,
                     AmountAfterDiscount: 0,
-                    orderDate: ""
+                    orderStatus: "waiting",
+                    Payment: "未付款", //暫時寫死
+                    OrderResult: false,
+                    OrderDetailViewModels: []
+                    //orderDate: ""
                 };
             },
             mounted() {
@@ -90,16 +106,74 @@
                 const finalorderdata = JSON.parse(decodeURIComponent(Jsondata));
                 this.cartItems = finalorderdata.items;
                 this.AmountAfterDiscount = finalorderdata.AmountAfterDiscount;
+                this.CustomerAddress = finalorderdata.CustomerAddress;
+                this.note = finalorderdata.note;
+                this.ShippingFee = finalorderdata.ShippingFee;
+                this.Discount = finalorderdata.Discount;
+                //this.subtotal = finalorderdata.subtotal;
 
                 //擷取目前時間
                 const currentDate = new Date();
                 const formattedDate = currentDate.toLocaleDateString();
                 this.orderDate = formattedDate;
+
+                //將Subtotal從方法存入該參數
+                this.cartItems.forEach(item => {
+                    this.subtotal += this.calculateSubtotal(item);
+                });
+
+                this.updateRestaurantId()
             },
             methods: {
                 calculateSubtotal(item) {
                     return item.dishPrice * item.dishCount;
+                },
+                submitOrder() {
+                    this.OrderDetailViewModels = this.cartItems.map(item => {
+                        return {
+                            //RestaurantId: item.storeId,
+                            DishId: item.dishId,
+                            DishName: item.dishName,
+                            UnitPrice: item.dishPrice,
+                            Quantity: item.dishCount,
+                            Subtotal: this.subtotal,
+                            Total: this.AmountAfterDiscount
+                        }
+                    });
+                    const submitOrder = {
+                        CustomerAddress: this.CustomerAddress,
+                        ShippingFee: this.ShippingFee,
+                        Payment: this.Payment,
+                        OrderStatus: this.orderStatus,
+                        Note: this.note,
+                        CustomerId: this.CustomerId,
+                        RestaurantId: this.RestaurantId,
+                        OrderDetailViewModels: this.OrderDetailViewModels
+
+                    };
+                    axios.post(`${baseAddress}`, submitOrder)
+                        .then(response => {
+                            console.log("成功respone");
+                            console.log(response.submitOrder);
+                            this.OrderResult = true;
+                        }).catch(error => {
+                            console.error(error);
+                        });
+                },
+                updateRestaurantId() {
+                    // 將找到的相同 RestaurantId 賦值給外部的 restaurantId 變數
+                    this.RestaurantId = this.duplicateRestaurantId;
                 }
+            },
+            computed: {
+                duplicateRestaurantId() {
+                    const duplicate = this.cartItems.find((item, index, array) => {
+                        return array.findIndex((otherItem) => otherItem.storeId === item.storeId) === index;
+                    });
+
+                    return duplicate ? duplicate.storeId : '';
+                }
+
             }
         };
         var app = Vue.createApp(vueApp).mount("#app");

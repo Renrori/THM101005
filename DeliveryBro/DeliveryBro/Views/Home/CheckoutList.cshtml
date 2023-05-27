@@ -36,20 +36,20 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label for="streetaddress">外送地址</label>
-                                    <input type="text" class="form-control" placeholder="請填寫詳細地址" v-model="CustomerAddress">
+                                    <input type="text" class="form-control" placeholder="請填寫詳細地址" v-model="CustomerAddress" required>
                                 </div>
                             </div>
                             <div class="w-100"></div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="phone">電話</label>
-                                    <input type="text" class="form-control" placeholder="" v-model="CustomerPhone" required>
+                                    <input type="text" class="form-control" placeholder="電話填寫" v-model="CustomerPhone" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="emailaddress">Email</label>
-                                    <input type="text" class="form-control" placeholder="" v-model="CustomerEmail" required>
+                                    <input type="text" class="form-control" placeholder="請用Email格式填寫" v-model="CustomerEmail" required>
                                 </div>
                             </div>
                             <div class="w-100"></div>
@@ -63,9 +63,9 @@
                             <div class="col-md-12">
                                 <div class="form-group mt-4">
                                     <div class="radio">
-                                        <label class="mr-3"><input type="radio" name="optradio"> 內用 </label>
-                                        <label class="mr-3"><input type="radio" name="optradio"> 外帶 </label>
-                                        <label class="mr-3"><input type="radio" name="optradio"> 外送 </label>
+                                        <label class="mr-3"><input type="radio" name="Takeradio"> 內用 </label>
+                                        <label class="mr-3"><input type="radio" name="Takeradio"> 外帶 </label>
+                                        <label class="mr-3"><input type="radio" name="Takeradio"> 外送 </label>
                                     </div>
                                 </div>
                             </div>
@@ -131,15 +131,12 @@
                                 <div class="form-group">
                                     <div class="col-md-12">
                                         <div class="gotoPage">
-                                            <button class="btn btn-primary" @@click="gotoPayPage">前往付款</button>
+                                            <button class="btn btn-primary" :disabled="!isValid" @@click="gotoPayPage">前往付款</button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        @*測試*@
-
-                        @*測試結束*@
                     </div>
                 </div> <!-- .col-md-8 -->
             </div>
@@ -164,9 +161,9 @@
                     note: "",
                     ShippingFee: 0,
                     Discount: 0,
-                    AmountAfterDiscount: 0
-                    //需要討論哪些次從後端傳來資料，哪些是從頁面生出
-                    //內用、外帶，需不需要資料庫有地方儲存
+                    Takeout: null,
+                    AmountAfterDiscount: 0,
+                    selectedPage: null
                 };
             },
             mounted() {
@@ -190,7 +187,7 @@
                             totalAmount: this.totalAmount,
                             CustomerAddress: this.CustomerAddress,
                             CustomerPhone: this.CustomerPhone,
-                            CustomerEmail: this.CustomerEmai,
+                            CustomerEmail: this.CustomerEmail,
                             CouponID: this.CouponID,
                             note: this.note,
                             ShippingFee: this.ShippingFee,
@@ -205,12 +202,12 @@
                 }
             },
             computed: {
-
+                isValid() {
+                    return this.CustomerAddress && this.CustomerPhone && this.CustomerEmail;
+                }
             }
+
         };
         var app = Vue.createApp(vueApp).mount("#app");
-
-
-
     </script>
     }
