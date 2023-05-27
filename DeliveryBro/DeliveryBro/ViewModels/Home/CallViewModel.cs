@@ -4,6 +4,5 @@
     {
         public int storeId { get; set; }
         public int dishId { get; set; }
-
     }
 }

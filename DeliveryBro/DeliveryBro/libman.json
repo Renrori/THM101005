@@ -18,11 +18,18 @@
         "dist/browser/signalr.js",
         "dist/browser/signalr.min.js"
       ]
+      "library": "axios@1.4.0",
+      "destination": "wwwroot/axios/"
     },
     {
       "provider": "cdnjs",
-      "library": "axios@1.4.0",
-      "destination": "wwwroot/axios/"
+      "library": "vue@3.3.4",
+      "destination": "wwwroot/lib/vue/"
+    },
+    {
+      "provider": "cdnjs",
+      "library": "signalr.js@2.4.3",
+      "destination": "wwwroot/lib/signalr.js/"
     }
   ]
 }
