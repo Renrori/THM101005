@@ -34,5 +34,10 @@ namespace DeliveryBro.Controllers
         //    return View();
         //}
 
+        public IActionResult UserHome()
+        {
+            return View();
+        }
+
     }
 }
