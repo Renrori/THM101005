@@ -9,143 +9,138 @@
 
 
     <section class="ftco-section">
-        <form>
-            <div class="container">
-                <div class="row justify-content-center">
-                    <div class="col-xl-7">
-                        <div class="billing-form">
-                            <h3 class="mb-4 billing-heading">取餐人明細</h3>
-                            <div class="row align-items-end">
-                                @*						<div class="w-100"></div>
-                                <div class="col-md-12">
-                                <div class="form-group">
-                                <label for="country">State / Country</label>
-                                <div class="select-wrap">
-                                <div class="icon"><span class="ion-ios-arrow-down"></span></div>
-                                <select name="" id="" class="form-control">
-                                <option value="">France</option>
-                                <option value="">Italy</option>
-                                <option value="">Philippines</option>
-                                <option value="">South Korea</option>
-                                <option value="">Hongkong</option>
-                                <option value="">Japan</option>
-                                </select>
-                                </div>
-                                </div>
-                                </div>*@
-                                <div class="w-100"></div>
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label for="streetaddress">外送地址</label>
-                                        <input type="text" class="form-control" placeholder="請填寫詳細地址" v-model="CustomerAddress">
-                                    </div>
-                                </div>
-                                <div class="w-100"></div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="phone">電話</label>
-                                        <input type="text" class="form-control" placeholder="" v-model="CustomerPhone" required>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="emailaddress">Email</label>
-                                        <input type="text" class="form-control" placeholder="" v-model="CustomerEmail" required>
-                                    </div>
-                                </div>
-                                <div class="w-100"></div>
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label for="CouponID">套用優惠券</label>
-                                        <input type="text" class="form-control" placeholder="優惠券序號" v-model="CouponID">
-                                    </div>
-                                </div>
-                                <div class="w-100"></div>
-                                <div class="col-md-12">
-                                    <div class="form-group mt-4">
-                                        <div class="radio">
-                                            <label class="mr-3"><input type="radio" name="optradio"> 內用 </label>
-                                            <label class="mr-3"><input type="radio" name="optradio"> 外帶 </label>
-                                            <label class="mr-3"><input type="radio" name="optradio"> 外送 </label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="w-100"></div>
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <textarea name="" id="" cols="30" rows="7" class="form-control" placeholder="Message" v-model="note"></textarea>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div><!-- END -->
-                    </div>
-                    <div class="col-xl-5">
-                        <div class="row mt-5 pt-3">
-                            <div class="col-md-12 d-flex mb-5">
-                                <div class="cart-detail cart-total p-3 p-md-4">
-                                    <h2 class="billing-heading mb-4">購物車總金額</h2>
-                                    <p class="d-flex">
-                                        <span>折扣前總金額</span>
-                                        <span>{{totalAmount}}</span>
-                                    </p>
-                                    <p class="d-flex">
-                                        <span>運費</span>
-                                        <span>{{ShippingFee}}</span>
-                                    </p>
-                                    <p class="d-flex">
-                                        <span>折價</span>
-                                        <span>{{Discount}}</span>
-                                    </p>
-                                    <hr>
-                                    <p class="d-flex total-price">
-                                        <span>總金額</span>
-                                        <span>{{calculateAmount()}}</span>
-                                    </p>
-                                </div>
-                            </div>
-
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-xl-7">
+                    <form action="#" class="billing-form">
+                        <h3 class="mb-4 billing-heading">取餐人明細</h3>
+                        <div class="row align-items-end">
+                            @*						<div class="w-100"></div>
                             <div class="col-md-12">
-                                <div class="cart-detail p-3 p-md-4">
-                                    <h3 class="billing-heading mb-4">付款方式</h3>
-                                    <div class="form-group">
-                                        <div class="col-md-12">
-                                            <div class="radio">
-                                                <input type="radio" name="optradio" class="mr-2" value="PaybyCreditCard" v-model="selectedPage"> 信用卡付款
-                                            </div>
+                            <div class="form-group">
+                            <label for="country">State / Country</label>
+                            <div class="select-wrap">
+                            <div class="icon"><span class="ion-ios-arrow-down"></span></div>
+                            <select name="" id="" class="form-control">
+                            <option value="">France</option>
+                            <option value="">Italy</option>
+                            <option value="">Philippines</option>
+                            <option value="">South Korea</option>
+                            <option value="">Hongkong</option>
+                            <option value="">Japan</option>
+                            </select>
+                            </div>
+                            </div>
+                            </div>*@
+                            <div class="w-100"></div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="streetaddress">外送地址</label>
+                                    <input type="text" class="form-control" placeholder="請填寫詳細地址" v-model="CustomerAddress" required>
+                                </div>
+                            </div>
+                            <div class="w-100"></div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="phone">電話</label>
+                                    <input type="text" class="form-control" placeholder="" v-model="CustomerPhone" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="emailaddress">Email</label>
+                                    <input type="text" class="form-control" placeholder="" v-model="CustomerEmail" required>
+                                </div>
+                            </div>
+                            <div class="w-100"></div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="CouponID">套用優惠券</label>
+                                    <input type="text" class="form-control" placeholder="優惠券序號" v-model="CouponID">
+                                </div>
+                            </div>
+                            <div class="w-100"></div>
+                            <div class="col-md-12">
+                                <div class="form-group mt-4">
+                                    <div class="radio">
+                                        <label class="mr-3"><input type="radio" name="Takeradio"> 內用 </label>
+                                        <label class="mr-3"><input type="radio" name="Takeradio"> 外帶 </label>
+                                        <label class="mr-3"><input type="radio" name="Takeradio"> 外送 </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="w-100"></div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <textarea name="" id="" cols="30" rows="7" class="form-control" placeholder="Message" v-model="note"></textarea>
+                                </div>
+                            </div>
+
+                        </div>
+                    </form><!-- END -->
+                </div>
+                <div class="col-xl-5">
+                    <div class="row mt-5 pt-3">
+                        <div class="col-md-12 d-flex mb-5">
+                            <div class="cart-detail cart-total p-3 p-md-4">
+                                <h2 class="billing-heading mb-4">購物車總金額</h2>
+                                <p class="d-flex">
+                                    <span>折扣前總金額</span>
+                                    <span>{{totalAmount}}</span>
+                                </p>
+                                <p class="d-flex">
+                                    <span>運費</span>
+                                    <span>{{ShippingFee}}</span>
+                                </p>
+                                <p class="d-flex">
+                                    <span>折價</span>
+                                    <span>{{Discount}}</span>
+                                </p>
+                                <hr>
+                                <p class="d-flex total-price">
+                                    <span>總金額</span>
+                                    <span>{{calculateAmount()}}</span>
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="cart-detail p-3 p-md-4">
+                                <h3 class="billing-heading mb-4">付款方式</h3>
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <div class="radio">
+                                            <input type="radio" name="optradio" class="mr-2" value="PaybyCreditCard" v-model="selectedPage"> 信用卡付款
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <div class="col-md-12">
-                                            <div class="radio">
-                                                <input type="radio" name="optradio" class="mr-2" value="FinalOrderList" v-model="selectedPage"> 現場付款
-                                            </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <div class="radio">
+                                            <input type="radio" name="optradio" class="mr-2" value="FinalOrderList" v-model="selectedPage"> 現場付款
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <div class="col-md-12">
-                                            <div class="checkbox">
-                                                <label><input type="checkbox" value="" class="mr-2"> 我已確認服務條款</label>
-                                            </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <div class="checkbox">
+                                            <label><input type="checkbox" value="" class="mr-2"> 我已確認服務條款</label>
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <div class="col-md-12">
-                                            <div class="gotoPage">
-                                                <button class="btn btn-primary" @@click="gotoPayPage">前往付款</button>
-                                            </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <div class="gotoPage">
+                                            <button class="btn btn-primary" @@click="gotoPayPage">前往付款</button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            @*測試*@
-
-                            @*測試結束*@
                         </div>
-                    </div> <!-- .col-md-8 -->
-                </div>
+                    </div>
+                </div> <!-- .col-md-8 -->
             </div>
-        </form>
+        </div>
     </section> <!-- .section -->
 </div>
 @section Scripts
@@ -166,10 +161,9 @@
                     note: "",
                     ShippingFee: 0,
                     Discount: 0,
-                    AmountAfterDiscount: 0
-
-                    //需要討論哪些次從後端傳來資料，哪些是從頁面生出
-                    //內用、外帶，需不需要資料庫有地方儲存
+                    Takeout: null,
+                    AmountAfterDiscount: 0,
+                    selectedPage: null
                 };
             },
             mounted() {
@@ -193,7 +187,7 @@
                             totalAmount: this.totalAmount,
                             CustomerAddress: this.CustomerAddress,
                             CustomerPhone: this.CustomerPhone,
-                            CustomerEmail: this.CustomerEmai,
+                            CustomerEmail: this.CustomerEmail,
                             CouponID: this.CouponID,
                             note: this.note,
                             ShippingFee: this.ShippingFee,
@@ -205,11 +199,6 @@
                         //console.log(Jsondata);
                         window.location.href = `${this.selectedPage}?data=${Jsondata}`;
                     }
-                }
-            },
-            computed: {
-                isVaild() {
-                    return this.CustomerAddress && this.CustomerPhone && this.CustomerEmail;
                 }
             }
         };

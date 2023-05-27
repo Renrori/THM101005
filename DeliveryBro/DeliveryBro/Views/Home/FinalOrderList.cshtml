@@ -40,10 +40,6 @@
                         <th width="120"><br />訂單狀態</th>
                         <td>{{ orderStatus}}</td>
                     </tr>
-                    @*                    <tr>
-                    <th><br />訂單成立時間</th>
-                    <td>{{ orderDate }}</td>
-                    </tr>*@
                     <tr>
                         <th><br />訂單總金額</th>
                         <td>{{ AmountAfterDiscount }}</td>
@@ -53,6 +49,10 @@
                         <td v-if="OrderResult"><strong class="text-danger">請前往結帳</strong></td>
                         <td v-else>尚未送出訂單</td>
                     </tr>
+                    @*                    <tr>
+                    <th><br />地址</th>
+                    <td> {{ CustomerAddress }}</td>
+                    </tr>*@
                 </tbody>
             </table>
         </form>
@@ -106,6 +106,11 @@
                 const finalorderdata = JSON.parse(decodeURIComponent(Jsondata));
                 this.cartItems = finalorderdata.items;
                 this.AmountAfterDiscount = finalorderdata.AmountAfterDiscount;
+                this.CustomerAddress = finalorderdata.CustomerAddress;
+                this.note = finalorderdata.note;
+                this.ShippingFee = finalorderdata.ShippingFee;
+                this.Discount = finalorderdata.Discount;
+                //this.subtotal = finalorderdata.subtotal;
 
                 //擷取目前時間
                 const currentDate = new Date();
@@ -138,12 +143,13 @@
                     const submitOrder = {
                         CustomerAddress: this.CustomerAddress,
                         ShippingFee: this.ShippingFee,
-                        Note: this.note,
-                        OrderStatus: this.orderStatus,
                         Payment: this.Payment,
+                        OrderStatus: this.orderStatus,
+                        Note: this.note,
                         CustomerId: this.CustomerId,
-                        OrderDetailViewModels: this.OrderDetailViewModels,
-                        RestaurantId: this.RestaurantId
+                        RestaurantId: this.RestaurantId,
+                        OrderDetailViewModels: this.OrderDetailViewModels
+
                     };
                     axios.post(`${baseAddress}`, submitOrder)
                         .then(response => {
