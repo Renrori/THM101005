@@ -131,7 +131,7 @@
                                 <div class="form-group">
                                     <div class="col-md-12">
                                         <div class="gotoPage">
-                                            <button class="btn btn-primary" @@click="gotoPayPage">前往付款</button>
+                                            <button class="btn btn-primary" :disabled="!isValid" @@click="gotoPayPage">前往付款</button>
                                         </div>
                                     </div>
                                 </div>
@@ -200,11 +200,14 @@
                         window.location.href = `${this.selectedPage}?data=${Jsondata}`;
                     }
                 }
+            },
+            computed: {
+                isValid() {
+                    return this.CustomerAddress && this.CustomerPhone && this.CustomerEmail;
+                }
             }
+
         };
         var app = Vue.createApp(vueApp).mount("#app");
-
-
-
     </script>
     }
