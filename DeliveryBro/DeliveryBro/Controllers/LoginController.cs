@@ -24,7 +24,7 @@ namespace DeliveryBro.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Index([Bind("UserAccount, UserPassword")] LoginViewModel login)
+        public async Task<IActionResult> Index([Bind("UserAccount, UserPassword")] LoginViewModel login)
         {
             if (ModelState.IsValid)
             {
@@ -32,7 +32,7 @@ namespace DeliveryBro.Controllers
                 var user = _context.CustomersTable.FirstOrDefault(x => x.CustomerAccount == login.UserAccount && x.CustomerPassword == login.UserPassword);
                 if (user == null)
                 {
-                    ViewBag.ErrorMessage = "找不到此帳號!";
+                    ViewBag.ErrorMessage = "找不到此帳號";
                     return View(login);
                 }
                 
@@ -44,10 +44,12 @@ namespace DeliveryBro.Controllers
 
                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                 var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
-                HttpContext.SignInAsync(claimsPrincipal);
-
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
+                
+                return RedirectToAction("Index", "Home");
             }
-            return RedirectToAction("Index", "Home");
+            ViewBag.ErrorMessage = "輸入的內容有誤";
+            return View(login);
         }
         public IActionResult SignUp()
         {

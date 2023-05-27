@@ -1,7 +1,9 @@
 ﻿using DeliveryBro.Models;
 using DeliveryBro.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 using System.Diagnostics;
 
 namespace DeliveryBro.Controllers
@@ -23,6 +25,7 @@ namespace DeliveryBro.Controllers
             return View();
         }
 
+        
         public IActionResult RestaurantMenu()
         {
 
@@ -33,16 +36,17 @@ namespace DeliveryBro.Controllers
         {
             return View();
         }
-
+        //[Authorize]
         public IActionResult CheckoutList()
         {
             return View();
         }
+        //[Authorize]
         public IActionResult PaybyCreditCard()
         {
             return View();
         }
-
+        //[Authorize]
         public IActionResult FinalOrderList()
         {
             return View();

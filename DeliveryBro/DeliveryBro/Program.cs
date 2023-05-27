@@ -24,8 +24,8 @@ namespace DeliveryBro
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
             builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
-           
+               .AddEntityFrameworkStores<ApplicationDbContext>();
+
             builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                .AddCookie(opt =>
                {
@@ -33,6 +33,9 @@ namespace DeliveryBro
                    opt.AccessDeniedPath = "/Home/Index";
                    opt.ExpireTimeSpan = TimeSpan.FromMinutes(10);
                });
+           
+
+            
             builder.Services.AddControllersWithViews();
 
             var app = builder.Build();
