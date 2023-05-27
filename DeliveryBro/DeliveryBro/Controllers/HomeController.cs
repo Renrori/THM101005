@@ -31,22 +31,22 @@ namespace DeliveryBro.Controllers
 
             return View();
         }
-
+        
         public IActionResult OrderList()
         {
             return View();
         }
-        //[Authorize]
+        [Authorize]
         public IActionResult CheckoutList()
         {
             return View();
         }
-        //[Authorize]
+        [Authorize]
         public IActionResult PaybyCreditCard()
         {
             return View();
         }
-        //[Authorize]
+        [Authorize]
         public IActionResult FinalOrderList()
         {
             return View();
