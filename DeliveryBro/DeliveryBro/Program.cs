@@ -1,5 +1,6 @@
 using DeliveryBro.Data;
 using DeliveryBro.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,7 +24,18 @@ namespace DeliveryBro
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
             builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+               .AddEntityFrameworkStores<ApplicationDbContext>();
+
+            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+               .AddCookie(opt =>
+               {
+                   opt.LoginPath = "/Login/Index";
+                   opt.AccessDeniedPath = "/Home/Index";
+                   opt.ExpireTimeSpan = TimeSpan.FromMinutes(10);
+               });
+           
+
+            
             builder.Services.AddControllersWithViews();
 
             var app = builder.Build();
@@ -47,6 +59,7 @@ namespace DeliveryBro
 
             app.UseAuthentication();
             app.UseAuthorization();
+
             app.MapControllerRoute(
 				name: "store",
 				pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
