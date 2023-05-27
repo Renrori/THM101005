@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using DeliveryBro.Areas.store.Services;
+using DeliveryBro.Areas.store.Hubs;
+using DeliveryBro.Areas.store.SubscribeTableDependency;
 
 namespace DeliveryBro
 {
@@ -22,6 +24,10 @@ namespace DeliveryBro
             var DeliveryBroconnectionString = builder.Configuration.GetConnectionString("DeliveryBro") ?? throw new InvalidOperationException("Connection string 'DeliveryBro' not found.");
             builder.Services.AddDbContext<sql8005site4nownetContext>(options =>
                 options.UseSqlServer(DeliveryBroconnectionString));
+
+            builder.Services.AddSingleton<subscribeOrder>();
+
+            builder.Services.AddSignalR();
 
             builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(opt =>
@@ -69,6 +75,7 @@ namespace DeliveryBro
                 pattern: "{controller=Home}/{action=Index}/{id?}");
 			
 			app.MapRazorPages();
+            app.MapHub<OrderHub>("/orderHub");
 
             app.Run();
         }

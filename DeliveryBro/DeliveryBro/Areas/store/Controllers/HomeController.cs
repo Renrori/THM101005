@@ -1,4 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using DeliveryBro.Areas.store.Hubs;
+using DeliveryBro.Areas.store.SubscribeTableDependency;
+using DeliveryBro.Models;
+using Microsoft.AspNetCore.Mvc;
+using TableDependency.SqlClient;
 
 namespace DeliveryBro.Areas.store.Controllers
 {
@@ -7,8 +11,9 @@ namespace DeliveryBro.Areas.store.Controllers
 	{
 		
         private readonly ILogger<HomeController> _logger;
+		
 
-        public HomeController(ILogger<HomeController> logger)
+		public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
         }
@@ -22,6 +27,7 @@ namespace DeliveryBro.Areas.store.Controllers
 		}
 		public IActionResult OrdersInTime()
 		{
+			
 			return View();
 		}
 		public IActionResult HisOrder()

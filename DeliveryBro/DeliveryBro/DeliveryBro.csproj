@@ -12,22 +12,18 @@
     <Compile Remove="Models\NewFolder\**" />
     <Compile Remove="NewFolder1\**" />
     <Compile Remove="NewFolder2\**" />
-    <Compile Remove="NewFolder\**" />
     <Content Remove="Areas\store\Views\User\**" />
     <Content Remove="Models\NewFolder\**" />
     <Content Remove="NewFolder1\**" />
     <Content Remove="NewFolder2\**" />
-    <Content Remove="NewFolder\**" />
     <EmbeddedResource Remove="Areas\store\Views\User\**" />
     <EmbeddedResource Remove="Models\NewFolder\**" />
     <EmbeddedResource Remove="NewFolder1\**" />
     <EmbeddedResource Remove="NewFolder2\**" />
-    <EmbeddedResource Remove="NewFolder\**" />
     <None Remove="Areas\store\Views\User\**" />
     <None Remove="Models\NewFolder\**" />
     <None Remove="NewFolder1\**" />
     <None Remove="NewFolder2\**" />
-    <None Remove="NewFolder\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -40,6 +36,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.13" />
+    <PackageReference Include="SqlTableDependency" Version="8.5.8" />
   </ItemGroup>
 
   <ItemGroup>
