@@ -169,7 +169,6 @@ namespace DeliveryBro.ApiController
                         UnitPrice = od.UnitPrice,
                         Quantity = od.Quantity,
                         Subtotal = od.Subtotal,
-                        Total = od.Total,
                         DishName = od.DishName,
                     };
                     _context.OrderDetailsTable.Add(odt);
