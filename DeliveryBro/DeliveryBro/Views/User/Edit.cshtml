@@ -1,0 +1,85 @@
+﻿<main class="form-signin w-100 m-auto text-center">
+	@{
+		if (ViewBag.Error != "")
+		{
+			<h1>@ViewBag.Error</h1>
+		}
+
+	}
+
+	<form action="/user/Edit" method="post">
+		@*<img class="mb-4" src="/docs/5.3/assets/brand/bootstrap-logo.svg" alt="" width="72" height="57">*@
+		<h1 class="h3 mb-3 fw-normal">商家資料維護</h1>
+
+		@*<div class="form-floating">
+			<input type="text" name="RestaurantName" class="form-control" id="RestaurantName" placeholder="name@example.com">
+			<label for="floatingInput">店家名稱</label>
+		</div>
+		<div class="form-floating">
+			<input type="email" name="RestaurantAccount" class="form-control" id="RestaurantAccount" placeholder="name@example.com">
+			<label for="floatingInput">餐廳帳號</label>
+		</div>*@
+		<div class="form-floating">
+			<input type="password" name="RestaurantPassword" class="form-control" id="RestaurantPassword" placeholder="Password">
+			<label for="floatingPassword">餐廳密碼</label>
+		</div>
+		@*<div class="form-floating">
+			<input type="text" name="RestaurantAddress" class="form-control" id="RestaurantAddress" placeholder="Password">
+			<label for="floatingPassword">餐廳地址</label>
+		</div>*@
+		<div class="form-floating">
+			<input type="tel" name="RestaurantPhone" class="form-control" id="RestaurantPhone" placeholder="Password">
+			<label for="floatingPassword">餐廳電話</label>
+		</div>
+		@*<div class="form-floating">
+			<input type="email" name="RestaurantEmail" class="form-control" id="RestaurantEmail" placeholder="Password">
+			<label for="floatingPassword">餐廳信箱</label>
+		</div>*@
+		<div class="form-floating">
+			<input type="time" name="OpeningHours" class="form-control" id="OpeningHours" placeholder="Password">
+			<label for="floatingPassword">營業時間</label>
+		</div>
+		<div class="form-floating">
+			<input type="text" name="RestaurantDescription" class="form-control" id="RestaurantDescription" placeholder="Password">
+			<label for="floatingPassword">餐廳描述</label>
+		</div>
+		<div class="form-floating">
+			<input type="file" name="RestaurantPicture" class="form-control" id="RestaurantPicture" placeholder="Password">
+			<label for="floatingPassword">餐廳照片</label>
+		</div>
+		<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+			確認
+		</button>
+
+		<!-- Modal -->
+		<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body">
+						您是否確認修改資料?
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+						<button type="submit" class="btn btn-primary">確認</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		@*<div class="checkbox mb-3">
+		<label>
+		<input type="checkbox" value="remember-me"> 記住我
+		</label>
+		</div>*@
+		@*<div class="modal-dialog modal-dialog-centered">
+			<button type="submit" class="btn btn-primary">確認</button>
+		</div>*@
+
+		@*<button type="reset" class="btn btn-primary">清除</button>*@
+		@*<button class="w-100 btn btn-lg btn-primary" type="submit">清除</>*@
+		<p class="mt-5 mb-3 text-body-secondary">© 2017–2023</p>
+	</form>
+</main>
