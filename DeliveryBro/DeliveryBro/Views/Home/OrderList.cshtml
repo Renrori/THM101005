@@ -106,6 +106,7 @@
                     );
                     if (index !== -1) {
                         this.cartItems.splice(index, 1);
+                        this.saveCartItemsToCookie();
                     }
                 },
                 ToCheckout() {
@@ -119,9 +120,10 @@
                     ////window.location.href = "CheckoutList?data=" + encodeURIComponent(jsonData);
 
                 },
-                //SavecartItemToCookie() {
-                //    document.cookie = `cartItems=${JSON.stringify(this.cartItems)}; max-age=300`;
-                //}
+                saveCartItemsToCookie() {
+                    const cartItemsJSON = JSON.stringify(this.cartItems);
+                    document.cookie = `cartItems=${cartItemsJSON};`;
+                },
 
             },
             computed: {
