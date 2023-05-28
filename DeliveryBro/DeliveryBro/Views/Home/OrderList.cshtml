@@ -79,6 +79,9 @@
                     totalAmount: 0
                 };
             },
+            mounted() {
+                
+            },
             methods: {
                 calculateTotal() {
                     let total = 0;
@@ -115,7 +118,10 @@
                     //console.log(jsonData);
                     ////window.location.href = "CheckoutList?data=" + encodeURIComponent(jsonData);
 
-                }
+                },
+                //SavecartItemToCookie() {
+                //    document.cookie = `cartItems=${JSON.stringify(this.cartItems)}; max-age=300`;
+                //}
 
             },
             computed: {

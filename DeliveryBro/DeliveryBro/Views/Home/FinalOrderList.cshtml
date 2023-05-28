@@ -75,6 +75,8 @@
     @*<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>*@
     <script src="https://unpkg.com/vue@3.2.36/dist/vue.global.prod.js"></script>
     <script src="~/axios/axios.min.js"></script>
+    <script src="~/js/site.js"></script>
+
     <script>
         var baseAddress = "https://localhost:7163/api/HomeApi";
         var vueApp = {
@@ -156,6 +158,7 @@
                             console.log("成功respone");
                             console.log(response.submitOrder);
                             this.OrderResult = true;
+                            this.clearcartItems();
                         }).catch(error => {
                             console.error(error);
                         });
@@ -163,6 +166,10 @@
                 updateRestaurantId() {
                     // 將找到的相同 RestaurantId 賦值給外部的 restaurantId 變數
                     this.RestaurantId = this.duplicateRestaurantId;
+                },
+                clearcartItems() {
+                    this.cartItems = [];
+                    document.cookie = 'cartItems=;';
                 }
             },
             computed: {
