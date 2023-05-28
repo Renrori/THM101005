@@ -37,13 +37,28 @@ namespace DeliveryBro
             builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                .AddCookie(opt =>
                {
-                   opt.LoginPath = "/Login/Index";
-                   opt.AccessDeniedPath = "/Home/Index";
+                   opt.LoginPath = "/Login/Index"; //登入路徑
+                   opt.AccessDeniedPath = "/Home/Index"; //取消登入路徑
                    opt.ExpireTimeSpan = TimeSpan.FromMinutes(10);
+               })
+               .AddFacebook(facebookOptions =>
+               {
+                   //取用金鑰字串
+                   facebookOptions.AppId = builder.Configuration["Authentication:Facebook:AppId"];
+                   facebookOptions.AppSecret = builder.Configuration["Authentication:Facebook:AppSecret"];
+                   //facebookOptions.Events.TicketReceived
+                   facebookOptions.Events.OnCreatingTicket = (x) =>
+                   {
+                       return Task.CompletedTask;
+                   };
                });
-           
 
-            
+
+
+
+
+
+
             builder.Services.AddControllersWithViews();
 
             var app = builder.Build();

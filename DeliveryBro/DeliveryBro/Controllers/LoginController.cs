@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication.Facebook;
 
 namespace DeliveryBro.Controllers
 {
@@ -43,6 +44,8 @@ namespace DeliveryBro.Controllers
                 };
 
                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+                //ClaimsPrincipal也可以List
                 var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
                 
@@ -50,6 +53,37 @@ namespace DeliveryBro.Controllers
             }
             ViewBag.ErrorMessage = "輸入的內容有誤";
             return View(login);
+        }
+
+        public IActionResult FacebookLogin()
+        {
+            //prop
+
+            var prop = new AuthenticationProperties
+            {
+                RedirectUri =Url.Action("FacebookRes")
+
+            };
+            //發請求內容並傳入
+            return Challenge(prop,FacebookDefaults.AuthenticationScheme);
+        }
+
+        public async Task<IActionResult> FacebookRes()
+        {
+            //非同步去呼叫
+            var result =await HttpContext.AuthenticateAsync(FacebookDefaults.AuthenticationScheme);
+            //如果驗證成功
+            if(result.Succeeded)
+            {
+                var claims = result.Principal.Claims.Select(x => new
+                {
+                    //打印Claims物件
+                    x.Type,
+                    x.Value,
+                });
+                return Json(claims);
+            }
+            return Ok();
         }
         public IActionResult SignUp()
         {
