@@ -51,10 +51,10 @@ namespace DeliveryBro.Controllers
             ViewBag.ErrorMessage = "輸入的內容有誤";
             return View(login);
         }
-        public IActionResult SignUp()
+        public IActionResult Register()
         {
             return View();
-
         }
-    }
+
+	}
 }

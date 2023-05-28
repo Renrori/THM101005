@@ -41,7 +41,8 @@ namespace DeliveryBro
                    opt.AccessDeniedPath = "/Home/Index";
                    opt.ExpireTimeSpan = TimeSpan.FromMinutes(10);
                });
-           
+
+           builder.Services.AddTransient<EncryptService>();
 
             
             builder.Services.AddControllersWithViews();
