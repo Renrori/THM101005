@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Security.Claims;
+using DeliveryBro.Services;
 
 namespace DeliveryBro.Controllers
 {
@@ -12,10 +13,12 @@ namespace DeliveryBro.Controllers
     public class LoginController : Controller
     {
         private readonly sql8005site4nownetContext _context;
+        private readonly PasswordEncyptService _passwordEncyptService;
 
-        public LoginController(sql8005site4nownetContext context)
+        public LoginController(sql8005site4nownetContext context,PasswordEncyptService passwordEncyptService)
         {
             _context = context;
+            _passwordEncyptService= passwordEncyptService;
         }
         public IActionResult Index()
         {
@@ -28,8 +31,9 @@ namespace DeliveryBro.Controllers
         {
             if (ModelState.IsValid)
             {
+                var encyptpassword = _passwordEncyptService.PasswordEncrypt(login.UserPassword);
                 //比對是否存在此ID用戶
-                var user = _context.CustomersTable.FirstOrDefault(x => x.CustomerAccount == login.UserAccount && x.CustomerPassword == login.UserPassword);
+                var user = _context.CustomersTable.FirstOrDefault(x => x.CustomerAccount == login.UserAccount && x.CustomerPassword == encyptpassword);
                 if (user == null)
                 {
                     ViewBag.ErrorMessage = "找不到此帳號";

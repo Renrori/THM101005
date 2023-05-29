@@ -8,7 +8,9 @@ using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Text.Json;
-using DeliveryBro.Areas.store.Services;
+using DeliveryBro.Services;
+using System.Security.Cryptography;
+using NuGet.Packaging;
 
 namespace DeliveryBro.ApiController
 {
@@ -18,11 +20,13 @@ namespace DeliveryBro.ApiController
 	{
 		private readonly sql8005site4nownetContext _context;
 		private readonly EncryptService _encrypt;
+		private readonly PasswordEncyptService _passwordEncyptService;
 
-		public RegisterApiController(sql8005site4nownetContext context,EncryptService encrypt)
+		public RegisterApiController(sql8005site4nownetContext context,EncryptService encrypt, PasswordEncyptService passwordEncyptService)
 		{
 			_context = context;
 			_encrypt = encrypt;
+			_passwordEncyptService = passwordEncyptService;
 		}
 
 		[HttpPost]
@@ -49,10 +53,11 @@ namespace DeliveryBro.ApiController
 						CustomerEmail = register.Email,
 						CustomerPhone = register.Phone,
 						DateOfBirth = DateTime.Parse(register.Birthday),
-						CustomerPassword = register.Password
+						CustomerPassword = _passwordEncyptService.PasswordEncrypt(register.Password)
 					};
 					_context.CustomersTable.Add(customer);
 					await _context.SaveChangesAsync();
+
 					return "註冊成功!";
 					//寄信
 					//		var obj = new AesValidationDto(register.Account, DateTime.Now.AddDays(1));
@@ -87,6 +92,7 @@ namespace DeliveryBro.ApiController
 			}
 			return "請重新確認欄位";
 		}
+
 		public async Task<IActionResult> registermail(string code)
 		{
 			var str = _encrypt.AesDecryptToString(code);

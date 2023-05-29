@@ -4,84 +4,86 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using DeliveryBro.Areas.store.Services;
+using DeliveryBro.Services;
 using DeliveryBro.Areas.store.Hubs;
 using DeliveryBro.Areas.store.SubscribeTableDependency;
+using DeliveryBro.Services;
 
 namespace DeliveryBro
 {
-    public class Program
-    {
-        public static void Main(string[] args)
-        {
-            var builder = WebApplication.CreateBuilder(args);
+	public class Program
+	{
+		public static void Main(string[] args)
+		{
+			var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
-            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-            builder.Services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(connectionString));
+			// Add services to the container.
+			var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+			builder.Services.AddDbContext<ApplicationDbContext>(options =>
+				options.UseSqlServer(connectionString));
 
-            var DeliveryBroconnectionString = builder.Configuration.GetConnectionString("DeliveryBro") ?? throw new InvalidOperationException("Connection string 'DeliveryBro' not found.");
-            builder.Services.AddDbContext<sql8005site4nownetContext>(options =>
-                options.UseSqlServer(DeliveryBroconnectionString));
+			var DeliveryBroconnectionString = builder.Configuration.GetConnectionString("DeliveryBro") ?? throw new InvalidOperationException("Connection string 'DeliveryBro' not found.");
+			builder.Services.AddDbContext<sql8005site4nownetContext>(options =>
+				options.UseSqlServer(DeliveryBroconnectionString));
 
-            builder.Services.AddSingleton<subscribeOrder>();
+			builder.Services.AddSingleton<subscribeOrder>();
 
-            builder.Services.AddSignalR();
+			builder.Services.AddSignalR();
 
-            builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+			builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-            builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-               .AddEntityFrameworkStores<ApplicationDbContext>();
+			builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+			   .AddEntityFrameworkStores<ApplicationDbContext>();
 
-            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-               .AddCookie(opt =>
-               {
-                   opt.LoginPath = "/Login/Index";
-                   opt.AccessDeniedPath = "/Home/Index";
-                   opt.ExpireTimeSpan = TimeSpan.FromMinutes(10);
-               });
+			builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+			   .AddCookie(opt =>
+			   {
+				   opt.LoginPath = "/Login/Index";
+				   opt.AccessDeniedPath = "/Home/Index";
+				   opt.ExpireTimeSpan = TimeSpan.FromMinutes(10);
+			   });
 
-           builder.Services.AddTransient<EncryptService>();
+			builder.Services.AddTransient<EncryptService>();
+			builder.Services.AddTransient<PasswordEncyptService>();
 
-            
-            builder.Services.AddControllersWithViews();
 
-            var app = builder.Build();
+			builder.Services.AddControllersWithViews();
 
-            // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
-            {
-                app.UseMigrationsEndPoint();
-            }
-            else
-            {
-                app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
+			var app = builder.Build();
 
-            app.UseHttpsRedirection();
-            app.UseStaticFiles();
+			// Configure the HTTP request pipeline.
+			if (app.Environment.IsDevelopment())
+			{
+				app.UseMigrationsEndPoint();
+			}
+			else
+			{
+				app.UseExceptionHandler("/Home/Error");
+				// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+				app.UseHsts();
+			}
 
-            app.UseRouting();
+			app.UseHttpsRedirection();
+			app.UseStaticFiles();
 
-            app.UseAuthentication();
-            app.UseAuthorization();
+			app.UseRouting();
 
-            app.MapControllerRoute(
+			app.UseAuthentication();
+			app.UseAuthorization();
+
+			app.MapControllerRoute(
 				name: "store",
 				pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
-            app.MapControllerRoute(name: "admin",
-                pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
-            app.MapControllerRoute(
-                name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
-			
-			app.MapRazorPages();
-            app.MapHub<OrderHub>("/orderHub");
+			app.MapControllerRoute(name: "admin",
+				pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+			app.MapControllerRoute(
+				name: "default",
+				pattern: "{controller=Home}/{action=Index}/{id?}");
 
-            app.Run();
-        }
-    }
+			app.MapRazorPages();
+			app.MapHub<OrderHub>("/orderHub");
+
+			app.Run();
+		}
+	}
 }
