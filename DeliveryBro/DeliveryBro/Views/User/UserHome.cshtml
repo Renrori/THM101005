@@ -22,76 +22,108 @@
 
 </aside><!-- End Sidebar-->
 
+<div id="app">
+    <div b-y5hjwqsk06>
+        <div class="container">
+            <div class="row justify-content-end">
+                <div class="col-xl-6">
+                    <form action="#" class="Personal-form">
+                        <div class="pagetitle">
+                            <h1>我的資料</h1>
+                            <p>登入使用者的ID：@User.Claims.FirstOrDefault(c => c.Type == "CustomerId")?.Value</p>
+                        </div>
+                        <button class="btn btn-outline-info col-3">修改資料</button>
+                        <div class="row align-items-end">
+                            <div class="w-100"></div>
+                            <div class="col-md-10">
+                                <div class="form-group">
+                                    <label for="CustomerName">姓名</label>
+                                    <div class="d-flex">
+                                        <input type="text" class="form-control" placeholder="" v-model="" required>
+                                    </div>
+                                </div>
+                            </div>
 
-<div b-y5hjwqsk06>
-    <div class="container">
-        <div class="row justify-content-end">
-            <div class="col-xl-6">
-                <form action="#" class="Personal-form">
-                    <div class="pagetitle">
-                        <h1>我的資料</h1>
+                            <div class="w-100"></div>
+                            <div class="col-md-10">
+                                <div class="form-group">
+                                    <label for="CustomerEmail">Email</label>
+                                    <div class="d-flex">
+                                        <input type="text" class="form-control" placeholder="" v-model="" required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-10">
+                                <div class="form-group">
+                                    <label for="DateOfBirth">生日</label>
+                                    <div class="d-flex">
+                                        <input type="text" class="form-control" placeholder="" v-model="" required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-10">
+                                <div class="form-group">
+                                    <label for="CustomerPhone">電話</label>
+                                    <div class="d-flex">
+                                        <input type="text" class="form-control" placeholder="" v-model="" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>      
+                    </form>
+                </div>
+                <div class="col-xl-3">
+                    <h2 class="mb-5"></h2>
+                    <div class="col-sm-4">
+                        <img :src=""
+                             class="border border-dark d-block"
+                             alt="暫無圖片"
+                             width="250"
+                             height="250" />
+
                     </div>
-                    <div class="row align-items-end">
-                        <div class="w-100"></div>
-                        <div class="col-md-10">
-                            <div class="form-group">
-                                <label for="CustomerName">姓名</label>
-                                <div class="d-flex">
-                                    <input type="text" class="form-control" placeholder="" v-model="" required>
-                                    <button class="btn btn-outline-info col-2">修改</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="w-100"></div>
-                        <div class="col-md-10">
-                            <div class="form-group">
-                                <label for="CustomerEmail">Email</label>
-                                <div class="d-flex">
-                                    <input type="text" class="form-control" placeholder="" v-model="" required>
-                                    <button class="btn btn-outline-info col-2">修改</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-10">
-                            <div class="form-group">
-                                <label for="DateOfBirth">生日</label>
-                                <div class="d-flex">
-                                    <input type="text" class="form-control" placeholder="" v-model="" required>
-                                    <button class="btn btn-outline-info col-2">修改</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-10">
-                            <div class="form-group">
-                                <label for="CustomerPhone">電話</label>
-                                <div class="d-flex">
-                                    <input type="text" class="form-control" placeholder="" v-model="" required>
-                                    <button class="btn btn-outline-info col-2">修改</button>
-                                </div>
-                            </div>
-                        </div>
+                    <br />
+                    <div class="row justify-content-end">
+                        <button class="btn btn-outline-info col-5"><i class="fa-solid fa-image"></i>圖片修改</button>
                     </div>
-                </form>
-            </div>
-            <div class="col-xl-3">
-                <h2 class="mb-5"></h2>
-                <div class="col-sm-4">
-                    <img :src=""
-                         class="border border-dark d-block"
-                         alt="暫無圖片"
-                         width="250"
-                         height="250" />
 
                 </div>
-                <br />
-                <div class="row justify-content-end">
-                    <button class="btn btn-outline-info col-5"><i class="fa-solid fa-image"></i>圖片修改</button>
-                </div>
-
             </div>
         </div>
     </div>
 </div>
+
+
+@section Scripts
+    {
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/vue@3.2.36/dist/vue.global.prod.js"></script>
+    <script src="~/axios/axios.min.js"></script>
+    <script>
+        var baseAddress = "https://localhost:7163/api/UserApi";
+        var vueApp = {
+            data() {
+                return {
+                    CustomerInfo: []
+                }
+            },
+            mounted() {
+                this.getCustomerInfo();
+            },
+            methods: {
+                async getCustomerInfo() {
+                    //拿出對應cusId
+                    try {
+                        const CustomerId = @User.Claims.FirstOrDefault(c => c.Type == "CustomerId")?.Value;
+                        const response = await axios.put(`${baseAddress}/${CustomerId}`).then(Response => { this.CustomerInfo})
+                    } catch (error) {
+                        console.error(error);
+                    }
+                }
+            }
+        };
+        var app = Vue.createApp(vueApp).mount("#app");
+    </script>
+         }

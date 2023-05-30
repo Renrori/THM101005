@@ -255,7 +255,7 @@
                 <a class="nav-link" asp-area="store" asp-controller="Home" asp-action="Index"><i class="bi bi-grid"></i>Home</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link collapsed" asp-area="store" asp-controller="Home" asp-action="StoreInfo"><i class="fa-solid fa-store"></i>StoreInformation</a>
+                <a class="nav-link collapsed" asp-area="store" asp-controller="Home" asp-action="StoreInfo"><i class="fa-solid fa-store"></i>商店資訊</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link collapsed" asp-area="store" asp-controller="Home" asp-action="OrdersInTime"><i class="fa-solid fa-file-pen"></i>及時訂單</a>
@@ -272,8 +272,17 @@
             <li class="nav-item">
                 <a class="nav-link collapsed" asp-area="store" asp-controller="Home" asp-action="Privacy"><i class="fa-solid fa-lock"></i>Privacy</a>
             </li>
+             <li class="nav-item">
+                <a class="nav-link collapsed" asp-area="store" asp-controller="User" asp-action="Register"><i class="fa-solid fa-lock"></i>註冊</a>
+            </li>
+             <li class="nav-item">
+                <a class="nav-link collapsed" asp-area="store" asp-controller="User" asp-action="StoreLogin"><i class="fa-solid fa-lock"></i>登入</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" asp-area="store" asp-controller="User" asp-action="Logout"><i class="fa-solid fa-lock"></i>登出</a>
+            </li>
 
-            <partial name="_LoginPartialStore" />
+            @*<partial name="_LoginPartialStore" />*@
         </ul>
 
     </aside><!-- End Sidebar-->

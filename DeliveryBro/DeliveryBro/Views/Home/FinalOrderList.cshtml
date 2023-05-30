@@ -124,6 +124,8 @@
                     this.subtotal += this.calculateSubtotal(item);
                 });
                 this.updateRestaurantId()
+
+                this.CustomerId = @User.Claims.FirstOrDefault(c => c.Type == "CustomerId")?.Value;
             },
             methods: {
                 calculateSubtotal(item) {

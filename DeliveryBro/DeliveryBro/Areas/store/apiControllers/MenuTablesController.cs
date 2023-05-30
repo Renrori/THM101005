@@ -24,7 +24,7 @@ namespace DeliveryBro.Areas.store.apiControllers
         [HttpGet]
         public async Task<IQueryable<MenuDTO>> GetMenuTables()
         {
-            return _context.MenuTable.Where(x=>x.RestaurantId==3).Select(menu => new MenuDTO
+            return _context.MenuTable.AsNoTracking().Where(x=>x.RestaurantId==3).Select(menu => new MenuDTO
             {
                 DishId = menu.DishId,
                 DishCategory = menu.DishCategory,
