@@ -1,4 +1,5 @@
 ﻿using DeliveryBro.Areas.store.DTO;
+using DeliveryBro.Areas.store.SubscribeTableDependency;
 using DeliveryBro.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -13,10 +14,12 @@ namespace DeliveryBro.Areas.store.apiControllers
     public class StoreInfoController : ControllerBase
     {
         private readonly sql8005site4nownetContext _context;
+        private readonly subscribeOrder _subscribeOrder;
 
-        public StoreInfoController(sql8005site4nownetContext context)
+        public StoreInfoController(sql8005site4nownetContext context,subscribeOrder subscribeOrder)
         {
             _context = context;
+            _subscribeOrder = subscribeOrder;
         }
 
         // GET: api/RestaurantTables
@@ -131,24 +134,64 @@ namespace DeliveryBro.Areas.store.apiControllers
         [HttpGet("topselling")]
         public Object GetTopSelling()
         {
-            var query = _context.CustomerOrderTable.Where(x => x.RestaurantId == 3).GroupBy(x => x.OrderDate.Month).Select(q => new
+            List<DishDTO> list = new List<DishDTO>();
+            Dictionary<int,int> IdLocation=new Dictionary<int,int>();
+            var menuName = _context.MenuTable.Where(x => x.RestaurantId == 3).Select(x => x.DishName).ToList();
+			var menuId = _context.MenuTable.Where(x => x.RestaurantId == 3).Select(x => x.DishId).ToList();
+			for (var i=0; i < menuId.Count; i++)
             {
+                DishDTO dish = new DishDTO();
+                dish.name= menuName[i];
+                dish.Id= menuId[i];
+                dish.quantity = 0;
+                dish.subtotal = 0;
+                list.Add(dish);
+            }
+            for(var i = 0; i < menuId.Count(); i++)
+            {
+				IdLocation.Add(menuId[i], i);
+            }
+            var itemcount = _context.CustomerOrderTable.Where(x => x.RestaurantId == 3).Select(x => new
+            {
+                itemdetail = x.OrderDetailsTable.Select(i => new
+                {
+                    Id = i.DishId,
+                    name = i.DishName,
+                    quantity = i.Quantity,
+                    subtotal = i.Subtotal
+                }).ToList()
+            }).ToList() ;
+            
+            foreach( var ic in itemcount)
+            {
+                foreach( var i in ic.itemdetail)
+                {
+                    if(IdLocation.ContainsKey(i.Id)) 
+                    {
+                        int value = IdLocation[i.Id];
+                        list[value].subtotal += i.subtotal;
+						list[value].quantity += i.quantity;
+					}
+                }
+            }
 
-            });
-
-            return Ok(query);
+            return Ok(list.OrderByDescending(x=>x.quantity));
         }
         [HttpGet("orderscount")]
         public Object GetMointhliyOrders()
         {
-            var query = _context.CustomerOrderTable.Where(x => x.RestaurantId == 3).GroupBy(x=>x.OrderDate.Date)
-                .Select(q => new 
+            _subscribeOrder.Subscribe();
+			var query = _context.CustomerOrderTable
+                .Where(x => x.RestaurantId == 3 && x.OrderDate.Date.ToString() == DateTime.Today.Date.ToString())
+                .GroupBy(x=>x.OrderDate.Date.ToString())
+                .Select(q => new
                 {
-                    Date=q.Key.ToString(),
-                    OrderCount=q.Count(),
-                    Revenu=q.SelectMany(od=>od.OrderDetailsTable).Sum(t=>t.Subtotal)
-                });
-
+                    Date = q.Key,
+                    Orders = _context.CustomerOrderTable.Where(x => x.RestaurantId == 3  )
+                            .Count(x=>x.OrderDate.Date.ToString() == DateTime.Today.Date.ToString()),
+                    Revenu =q.SelectMany(o=>o.OrderDetailsTable).Sum(o=>o.Subtotal)
+                }) ;
+            
             return Ok(query);
         }
 

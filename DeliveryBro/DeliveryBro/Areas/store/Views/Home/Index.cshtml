@@ -1,199 +1,297 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+	ViewData["Title"] = "Home Page";
 }
 
 <main id="main" class="main">
 
-    <div class="pagetitle">
-        <h1>首頁</h1>
-        <nav>
-            <ol class="breadcrumb">
-                <a class="breadcrumb-item" asp-area="store" asp-controller="Home" asp-action="Index">首頁</a>
-                <li class="breadcrumb-item active">Dashboard</li>
-            </ol>
-        </nav>
-    </div><!-- End Page Title -->
+	<div class="pagetitle">
+		<h1>首頁</h1>
+		<nav>
+			<ol class="breadcrumb">
+				<a class="breadcrumb-item" asp-area="store" asp-controller="Home" asp-action="Index">首頁</a>
+				<li class="breadcrumb-item active">Dashboard</li>
+			</ol>
+		</nav>
+	</div><!-- End Page Title -->
 
-    <section class="section dashboard" id="app">
-        <div class="row" v-for="store in storeInfo">
-            <!-- Left side columns -->
-            <div class="col-lg-8">
-                <div class="row">
-                    <div class="col-md-5">
-                        <div class="card info-card sales-card">
-                            <div class="card-body">
-                                <h5 class="card-title" >{{currentTime}} <span>| {{weekday}}</span></h5>
-                                <div class="d-flex align-items-center">
-                                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                        <i class="bi bi-cart"></i>
-                                    </div>
-                                    <div class="ps-3">
-                                        <h6>{{store.restaurantName}}</h6>
-                                        <button v-if="store.restaurantStatus=='open'" type="button" class="btn btn-success" @@click="statuschange(store)">營業中</button>
-                                        <button v-if="store.restaurantStatus=='close'" type="button" class="btn btn-outline-success" @@click="statuschange(store)">休息中</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-				
-            </div>
-			
-            <div class="col-12" >
-				<div class="card">
-                    <v-chart :option="option" id="dishmothchart" @@change="MonthlyDishPie" style="width:100%; height:500%" autoresize />
+	<section class="section dashboard" id="app">
+		<div class="row" v-for="store in storeInfo">
+			<!-- Left side columns -->
+			<div class="col-lg-8">
+				<div class="row">
+					<div class="col-md-4">
+						<div class="card info-card sales-card">
+							<div class="card-body">
+								<h5 class="card-title">{{currentTime}} <span>| {{weekday}}</span></h5>
+								<div class="d-flex align-items-center">
+									<div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+										<i class="bi bi-cart"></i>
+									</div>
+									<div class="ps-3">
+										<h6>{{store.restaurantName}}</h6>
+										<button v-if="store.restaurantStatus=='open'" type="button" class="btn btn-success" @@click="statuschange(store)">營業中</button>
+										<button v-if="store.restaurantStatus=='close'" type="button" class="btn btn-outline-success" @@click="statuschange(store)">休息中</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="card info-card revenue-card">
+							<div class="card-body">
+								<h5 class="card-title">營收 <span>| 本日</span></h5>
+								<div class="d-flex align-items-center">
+									<div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+										<i class="bi bi-currency-dollar"></i>
+									</div>
+									<div class="ps-3">
+										<h6>${{ordertoday.revenu}}</h6>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="card info-card customers-card">
+							<div class="card-body">
+								<h5 class="card-title">訂單數量 <span>| 本日</span></h5>
+								<div class="d-flex align-items-center">
+									<div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+										<i class="bi bi-people"></i>
+									</div>
+									<div class="ps-3">
+										<h6>{{ordertoday.orders}}</h6>
+									</div>
+								</div>
+
+							</div>
+						</div>
+					</div>
+
 				</div>
-            </div>
-            
-        </div>
-    </section>
+
+				<div class="col-12">
+					<div class="card">
+						<v-chart :option="option" id="dishmothchart" @@change="MonthlyDishPie" style="width:100%; height:500%" autoresize />
+					</div>
+				</div>
+
+			</div>
+			<div class="col-lg-4">
+				<div class="card p-4">
+					<table class="table table-hover .database">
+						<thead>
+							<tr>
+								<th scope="col">#</th>
+								<th scope="col">品項名稱</th>
+								<th scope="col">累積數量</th>
+								<th scope="col">累積金額</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr v-for="(t,idx) in topselling">
+								<th scope="row">{{idx+1}}</th>
+								<td>{{t.name}}</td>
+								<td>{{t.quantity}}</td>
+								<td>{{t.subtotal}}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</section>
 
 </main><!-- End #main -->
-
 @section Scripts
-{
-    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vue-echarts@latest"></script>
-    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.1"></script>
-    <script src="~/axios/axios.min.js"></script>
-        
-    <script>
-        var vueIndex={
-            data(){
-                return{
-                    currentTime:"",
-                    weekday:"",
-                    storeInfo:[],
-                    option: {
-                    legend: {},
-                    tooltip: {
-                      trigger: 'axis',
-                      showContent: false
-                    },
-                    dataset: {
-                      source: [
-                        ['product', '2012', '2013', '2014', '2015', '2016', '2017'],
-                        ['Milk Tea', 56.5, 82.1, 88.7, 70.1, 53.4, 85.1],
-                        ['Matcha Latte', 51.1, 51.4, 55.1, 53.3, 73.8, 68.7],
-                        ['Cheese Cocoa', 40.1, 62.2, 69.5, 36.4, 45.2, 32.5],
-                        ['Walnut Brownie', 25.2, 37.1, 41.2, 18, 33.9, 49.1]
-                      ]
-                    },
-                    xAxis: { type: 'category' },
-                    yAxis: { gridIndex: 0 },
-                    grid: { top: '55%' },
-                    series: [
-                      {
-                        type: 'line',
-                        smooth: true,
-                        seriesLayoutBy: 'row',
-                        emphasis: { focus: 'series' }
-                      },
-                      {
-                        type: 'line',
-                        smooth: true,
-                        seriesLayoutBy: 'row',
-                        emphasis: { focus: 'series' }
-                      },
-                      {
-                        type: 'line',
-                        smooth: true,
-                        seriesLayoutBy: 'row',
-                        emphasis: { focus: 'series' }
-                      },
-                      {
-                        type: 'line',
-                        smooth: true,
-                        seriesLayoutBy: 'row',
-                        emphasis: { focus: 'series' }
-                      },
-                      {
-                        type: 'pie',
-                        id: 'pie',
-                        radius: '30%',
-                        center: ['50%', '25%'],
-                        emphasis: {
-                          focus: 'self'
-                        },
-                        label: {
-                          formatter: '{b}: {@@2012} ({d}%)'
-                        },
-                        encode: {
-                          itemName: 'product',
-                          value: '2012',
-                          tooltip: '2012'
-                        }
-                      }
-                    ]
-                  }
-    
-                };
-                
-            },
-            mounted:function(){
-                let _this=this;
-                setInterval(()=>{_this.currentTime=new Date().toLocaleString()}, 1000);
-                _this.weekday = _this.getDayOfWeek();
-                _this.getStoreInfo();
-                //_this.MonthlyDishPie()
-            },
-            methods:{
-                getDayOfWeek:function(){
-                    var weekdays=["星期日","星期一","星期二","星期三","星期四","星期五","星期六",]
-                    return weekdays[new Date().getDay()]
-                },
-                getStoreInfo:function(){
-                    let _this=this;
-                    axios.get(`/api/StoreInfo/`).then(response=>{
-                        _this.storeInfo=response.data;
-                    })
-                },
-                statuschange:function(store){
-                    let _this=this;
-                    if(store.restaurantStatus=='open')
-                        store.restaurantStatus="close";
-                    else
-                        store.restaurantStatus="open";
+	{
+	
+	<script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" type="text/javascript"></script>
+	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+	<script src="https://cdn.jsdelivr.net/npm/vue-echarts@latest"></script>
+	<script src="https://cdn.jsdelivr.net/npm/echarts@5.4.1"></script>
+	<script src="~/lib\microsoft/signalr/dist/browser/signalr.js"></script>
+	<script src="~/axios/axios.min.js"></script>
 
-                    var request={
-                        RestaurantId:store.restaurantId,
-                        RestaurantStatus:store.restaurantStatus
-                    };
-                    axios.put(`/api/StoreInfo/status/${store.restaurantId}`,request).then(response=>{
-                        Swal.fire(
-                            '營業狀態修改成功!'
-                        )
-                    })
-                },
-                MonthlyDishPie:function(){
-                    let _this=this;
-                    //var echarts = require('echarts');
-                    var chartDom = document.getElementById("dishmothchart");
-                    var dmchart=echarts.init(chartDom);
-                    dmchart.on('updateAxisPointer', function (event) {
-                        const xAxisInfo = event.axesInfo[0]
-                        if (xAxiisfo) {
-                            const dimenstion = xAxisInfo.value + 1;
-                            dmchart.setOption({
-                                series: {
-                                    id: 'pie',
-                                    label: {
-                                        formatter: '{b}:{@@[' + dimension + ']}({d}%)'
-                                    },
-                                    encode: {
-                                        value: dimension,
-                                        tooltip: dimension
-                                    }
-                                }
-                            });
-                        }
-                        dmchart.setOption(_this.option)
-                    });
-                }
-            }
-        };
-        var app = Vue.createApp(vueIndex).component('v-chart', VueECharts).mount('#app');
-    </script>
+	<script>
+		var vueIndex = {
+			data() {
+				return {
+					currentTime: "",
+					weekday: "",
+					storeInfo: [],
+					option: {
+						legend: {},
+						tooltip: {
+							trigger: 'axis',
+							showContent: false
+						},
+						dataset: {
+							source: [
+								['product', '2012', '2013', '2014', '2015', '2016', '2017'],
+								['Milk Tea', 56.5, 82.1, 88.7, 70.1, 53.4, 85.1],
+								['Matcha Latte', 51.1, 51.4, 55.1, 53.3, 73.8, 68.7],
+								['Cheese Cocoa', 40.1, 62.2, 69.5, 36.4, 45.2, 32.5],
+								['Walnut Brownie', 25.2, 37.1, 41.2, 18, 33.9, 49.1]
+							]
+						},
+						xAxis: { type: 'category' },
+						yAxis: { gridIndex: 0 },
+						grid: { top: '55%' },
+						series: [
+							{
+								type: 'line',
+								smooth: true,
+								seriesLayoutBy: 'row',
+								emphasis: { focus: 'series' }
+							},
+							{
+								type: 'line',
+								smooth: true,
+								seriesLayoutBy: 'row',
+								emphasis: { focus: 'series' }
+							},
+							{
+								type: 'line',
+								smooth: true,
+								seriesLayoutBy: 'row',
+								emphasis: { focus: 'series' }
+							},
+							{
+								type: 'line',
+								smooth: true,
+								seriesLayoutBy: 'row',
+								emphasis: { focus: 'series' }
+							},
+							{
+								type: 'pie',
+								id: 'pie',
+								radius: '30%',
+								center: ['50%', '25%'],
+								emphasis: {
+									focus: 'self'
+								},
+								label: {
+									formatter: '{b}: {@@2012} ({d}%)'
+								},
+								encode: {
+									itemName: 'product',
+									value: '2012',
+									tooltip: '2012'
+								}
+							}
+						]
+					},
+					ordertoday: [],
+					topselling:[]
+				};
+
+			},
+			mounted: function () {
+				let _this = this;
+				setInterval(() => { _this.currentTime = new Date().toLocaleString() }, 1000);
+				_this.weekday = _this.getDayOfWeek();
+				_this.getStoreInfo();
+				//_this.MonthlyDishPie()
+				_this.createHubConnection();
+				_this.getOrdersToday();
+				_this.getDishTopSelling();
+			},
+			beforeUnmount: function () {
+				let _this = this;
+				_this.closeHubConnection();
+			},
+			methods: {
+				getDayOfWeek: function () {
+					var weekdays = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六",]
+					return weekdays[new Date().getDay()]
+				},
+				getStoreInfo: function () {
+					let _this = this;
+					axios.get(`/api/StoreInfo/`).then(response => {
+						_this.storeInfo = response.data;
+					})
+				},
+				statuschange: function (store) {
+					let _this = this;
+					if (store.restaurantStatus == 'open')
+						store.restaurantStatus = "close";
+					else
+						store.restaurantStatus = "open";
+
+					var request = {
+						RestaurantId: store.restaurantId,
+						RestaurantStatus: store.restaurantStatus
+					};
+					axios.put(`/api/StoreInfo/status/${store.restaurantId}`, request).then(response => {
+						Swal.fire(
+							'營業狀態修改成功!'
+						)
+					})
+				},
+				MonthlyDishPie: function () {
+					let _this = this;
+					//var echarts = require('echarts');
+					var chartDom = document.getElementById("dishmothchart");
+					var dmchart = echarts.init(chartDom);
+					dmchart.on('updateAxisPointer', function (event) {
+						const xAxisInfo = event.axesInfo[0]
+						if (xAxiisfo) {
+							const dimenstion = xAxisInfo.value + 1;
+							dmchart.setOption({
+								series: {
+									id: 'pie',
+									label: {
+										formatter: '{b}:{@@[' + dimension + ']}({d}%)'
+									},
+									encode: {
+										value: dimension,
+										tooltip: dimension
+									}
+								}
+							});
+						}
+						dmchart.setOption(_this.option)
+					});
+				},
+				getOrdersToday:function(){
+					let _this=this;
+					axios.get(`/api/StoreInfo/orderscount`).then(response => {
+						_this.ordertoday = response.data[0]
+					})
+				},
+				getDishTopSelling:function(){
+					let _this=this;
+					axios.get(`/api/StoreInfo/topselling`).then(response=>{
+						_this.topselling=response.data;
+					})
+				},
+				createHubConnection: function () {
+					let _this = this;
+					_this.hubConnection = new signalR.HubConnectionBuilder().withUrl(`/orderHub`).build();
+					_this.hubConnection.on("NewOrder", () => {
+							_this.getOrdersToday();
+					});
+					_this.hubConnection.start().then(() => {
+						console.log('connected');
+					}).catch((err) => {
+						console.error(err.toString());
+					});
+				},
+				closeHubConnection: function () {
+					let _this = this;
+					if (_this.hubConnection) {
+						_this.hubConnection.stop().then(() => {
+							console.log("close");
+							_this.hubConneciton = null;
+						}).catch((err) => {
+							console.error(err.toString());
+						});
+					}
+				}
+			}
+		};
+		var app = Vue.createApp(vueIndex).component('v-chart', VueECharts).mount('#app');
+	</script>
 }
