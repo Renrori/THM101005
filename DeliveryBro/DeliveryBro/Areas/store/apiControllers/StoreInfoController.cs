@@ -127,6 +127,31 @@ namespace DeliveryBro.Areas.store.apiControllers
 
             return Ok(query);
         }
+
+        [HttpGet("topselling")]
+        public Object GetTopSelling()
+        {
+            var query = _context.CustomerOrderTable.Where(x => x.RestaurantId == 3).GroupBy(x => x.OrderDate.Month).Select(q => new
+            {
+
+            });
+
+            return Ok(query);
+        }
+        [HttpGet("orderscount")]
+        public Object GetMointhliyOrders()
+        {
+            var query = _context.CustomerOrderTable.Where(x => x.RestaurantId == 3).GroupBy(x=>x.OrderDate.Date)
+                .Select(q => new 
+                {
+                    Date=q.Key.ToString(),
+                    OrderCount=q.Count(),
+                    Revenu=q.SelectMany(od=>od.OrderDetailsTable).Sum(n=>n.Subtotal)
+                });
+
+            return Ok(query);
+        }
+
         private bool RestaurantTableExists(int id)
         {
             return (_context.RestaurantTable?.Any(e => e.RestaurantId == id)).GetValueOrDefault();

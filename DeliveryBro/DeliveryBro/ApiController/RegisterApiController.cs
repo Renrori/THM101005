@@ -58,35 +58,38 @@ namespace DeliveryBro.ApiController
 					_context.CustomersTable.Add(customer);
 					await _context.SaveChangesAsync();
 
-					return "註冊成功!";
+					//return "註冊成功!";
 					//寄信
-					//		var obj = new AesValidationDto(register.Account, DateTime.Now.AddDays(1));
-					//		var jString = JsonSerializer.Serialize(obj);
-					//		var code = _encrypt.AesEncryptToBase64(jString);
-					//		var mail = new MailMessage()
-					//		{
-					//			From = new MailAddress("thm10105@gmail.com"),
-					//			Subject = "啟用網站驗證",
-					//			Body = @$"請點這<a src='https://localhost:7157/user/registermail?code={code}'>這裡</a>來啟用你的帳號",
-					//			IsBodyHtml = true,
-					//			BodyEncoding = Encoding.UTF8,
-					//		};
-					//		mail.To.Add(new MailAddress(register.Account));
-					//		try
-					//		{
-					//			using (var sm = new SmtpClient("smtp.gmail.com", 587)) //465 ssl
-					//			{
-					//				sm.EnableSsl = true;
-					//				sm.Credentials = new NetworkCredential("thm10105@gmail.com", "應用程式密碼 待填");
-					//				sm.Send(mail);
-					//			}
-					//		}
-					//		catch (Exception ex)
-					//		{
-					//			throw;
-					//		}
-					//		return "請至信箱收取驗證信";
-					//	}
+				//	var obj = new AesValidationDto(register.Account, DateTime.Now.AddDays(1));
+				//	var jString = JsonSerializer.Serialize(obj);
+				//	var code = _encrypt.AesEncryptToBase64(jString);
+				//	var mail = new MailMessage()
+				//	{
+				//		From = new MailAddress("thm10105@gmail.com"),
+				//		Subject = "啟用網站驗證",
+				//		Body = @$"<a class=""icon-link"" href=""https://localhost:7163/api/RegisterApi/registermail?code={code}"">
+				//					<svg class=""bi"" aria-hidden=""true""><use xlink:href=""#box-seam""></use></svg>
+				//					請點這裡來啟用帳號!
+				//					</a>",
+				//		IsBodyHtml = true,
+				//		BodyEncoding = Encoding.UTF8,
+				//	};
+				//	mail.To.Add(new MailAddress(register.Email));
+				//	try
+				//	{
+				//		using (var sm = new SmtpClient("smtp.gmail.com", 587)) //465 ssl
+				//		{
+				//			sm.EnableSsl = true;
+				//			sm.Credentials = new NetworkCredential("thm10105@gmail.com", "loadozkrsjiocvci");
+				//			sm.Send(mail);
+				//		}
+				//	}
+				//	catch (Exception ex)
+				//	{
+				//		throw;
+				//	}
+				//	return "請至信箱收取驗證信";
+				//}
 
 				}
 			}
