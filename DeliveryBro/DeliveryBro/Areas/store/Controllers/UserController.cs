@@ -1,5 +1,5 @@
 ﻿using DeliveryBro.Areas.store.DTO;
-using DeliveryBro.Areas.store.Services;
+using DeliveryBro.Services;
 using DeliveryBro.Areas.store.ViewModels;
 using DeliveryBro.Models;
 using DeliveryBro.ViewModels;

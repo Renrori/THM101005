@@ -1,0 +1,213 @@
+﻿<main class="form-signin w-100 m-auto text-center">
+	<form >
+		<div class="site-section" id="app">
+			<div class="container aos-init aos-animate" data-aos="fade-up">
+				<div class="row justify-content-center">
+					<div class="col-md-5 mb-5">
+						<h3 class="mb-5">註冊</h3>
+						<div class="">
+							<div class="form-group row">
+								<div class="col-md-12">
+									<label for="c_fname" class="text-black">姓名 <span class="text-danger">*</span></label>
+									<span v-if="NameisValid==false" class="text-danger">&emsp;&emsp;不可為空</span>
+									<input type="text" class="form-control" id="c_fname" name="c_fname" v-model="name">
+								</div>
+							</div>
+							<div class="form-group row">
+								<div class="col-md-12">
+									<label for="c_account" class="text-black">帳號 <span class="text-danger">*</span></label>
+									<span v-if="AccountisValid==false" class="text-danger">&emsp;&emsp;{{AccountM}}</span>
+									<input type="text" class="form-control" id="c_account" name="c_account" v-model="account">
+								</div>
+							</div>
+							<div class="form-group row">
+								<div class="col-md-12">
+									<label for="c_email" class="text-black">Email <span class="text-danger">*</span></label>
+									<span v-if="EmailisValid==false" class="text-danger">&emsp;&emsp;{{EmailM}}</span>
+									<input type="email" class="form-control" id="c_email" name="c_email" v-model="email">
+								</div>
+							</div>
+							<div class="form-group row">
+								<div class="col-md-12">
+									<label for="c_pass" class="text-black">密碼 <span class="text-danger">*</span></label>
+									<span v-if="PasswordisValid==false" class="text-danger">&emsp;&emsp;{{PasswordM}}</span>
+									<input type="password" class="form-control" id="c_pass" name="c_pass" v-model="password">
+								</div>
+							</div>
+							<div class="form-group row">
+								<div class="col-md-12">
+									<label for="c_repass" class="text-black">確認密碼 <span class="text-danger">*</span></label>
+									<span v-if="RepasswordisValid==false" class="text-danger">&emsp;&emsp;與密碼不一致</span>
+									<input type="password" class="form-control" id="c_repass" name="c_repass" v-model="repassword">
+
+								</div>
+							</div>
+							<div class="form-group row">
+								<div class="col-md-12">
+									<label for="c_birthday" class="text-black">生日 </label>
+									<input type="date" class="form-control" id="c_birthday" name="c_birthday" v-model="birthday">
+								</div>
+							</div>
+							<div class="form-group row">
+								<div class="col-md-12">
+									<label for="c_phone" class="text-black">電話 <span class="text-danger">*</span></label>
+									<span v-if="PhoneisValid==false" class="text-danger">&emsp;&emsp;{{PhoneM}}</span>
+									<input type="text" class="form-control" id="c_phone" name="c_phone" v-model="phone">
+								</div>
+							</div>
+							<div class="form-group row">
+								<div class="col-lg-12">
+									<button type="button" :disabled="checkValid" class="btn btn-primary btn-lg" @@click="register">Register</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<p class="mt-5 mb-3 text-body-secondary">© 2017–2023</p>
+	</form>
+</main>
+@section Scripts
+{
+	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="~/axios/axios.min.js"></script>
+	<script>
+		var vueRegister={
+			data(){
+				return{
+					name:"",
+					account:"",
+					password:"",
+					repassword:"",
+					email:"",
+					phone:"",
+					birthday:"",
+					NameisValid:false,
+					AccountisValid:false,
+					PhoneisValid:false,
+					EmailisValid:false,
+					PasswordisValid:false,
+					RepasswordisValid: false,
+					AccountM:"",
+					PhoneM:"",
+					EmailM:"",
+					PasswordM:""
+					
+				}
+			},
+			watch:{
+				name(){
+					let _this=this;
+					if(_this.name!="") _this.NameisValid=true;
+				},
+				password(){
+					let _this = this;
+					if (_this.password != "") _this.PasswordIsValid();
+				},
+				repassword(){
+					let _this=this;
+					if(_this.repassword==_this.password&&_this.repassword!="") _this.RepasswordisValid = true;
+				},
+				account(){
+					let _this=this;
+					if(_this.account!="") _this.AccountIsExist();
+				},
+				email(){
+					let _this=this;
+					if (_this.email != "") _this.EmailIsExist();
+				},
+				phone(){
+					let _this=this;
+					if (_this.phone != "") _this.PhoneIsExist();
+				}
+			},
+			computed:{
+				checkValid: function() {
+					let _this = this;
+					if (_this.NameisValid == false || _this.AccountisValid == false || _this.PhoneisValid == false ||
+						_this.EmailisValid == false || _this.PasswordisValid == false || _this.RepasswordisValid == false)
+						return true;
+					else return false;
+				}
+			},
+			methods:{
+				register:function(){
+					let _this=this;
+					var request={
+						Account:_this.account,
+						Name:_this.name,
+						Password:_this.password,
+						Email:_this.email,
+						Phone:_this.phone,
+						Birthday:_this.birthday
+					};
+					axios.post(`/api/RegisterApi`,request).then(response=>{
+						Swal.fire(
+							response.data
+						)
+					});
+				},
+				AccountIsExist:function(){
+					let _this = this;
+					axios.get(`/api/RegisterApi/isExist/account`, {
+						params: {
+							account: _this.account
+						}
+					}).then(response => {
+						if(response.data=="可以使用") _this.AccountisValid=true;
+						else {
+							_this.AccountisValid = false;
+							_this.AccountM=response.data;
+						}
+					})
+				},
+				EmailIsExist: function () {
+					let _this = this;
+					axios.get(`/api/RegisterApi/isExist/email`, {
+						params: {
+							email: _this.email
+						}
+					}).then(response => {
+						if (response.data == "可以使用") _this.EmailisValid = true;
+						else {
+							_this.EmailisValid = false;
+							_this.EmailM = response.data;
+						}
+					})
+				},
+				PhoneIsExist: function() {
+					let _this = this;
+					axios.get(`/api/RegisterApi/isExist/phone`, {
+						params: {
+							phone: _this.phone
+						}
+					}).then(response => {
+						if (response.data == "可以使用") _this.PhoneisValid = true;
+						else {
+							_this.PhoneisValid = false;
+							_this.PhoneM = response.data;
+						}
+					})
+				},
+				PasswordIsValid: function () {
+					let _this = this;
+					axios.get(`/api/RegisterApi/isExist/password`, {
+						params: {
+							password: _this.password
+						}
+					}).then(response => {
+						if (response.data == "可以使用") _this.PasswordisValid = true;
+						else {
+							_this.PasswordisValid = false;
+							_this.PasswordM = response.data;
+						}
+					})
+				}
+			}
+		}
+
+		var app=Vue.createApp(vueRegister).mount("#app");
+	</script>
+}
