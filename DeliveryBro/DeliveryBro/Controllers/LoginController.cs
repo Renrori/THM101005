@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using DeliveryBro.Services;
 using Microsoft.AspNetCore.Authentication.Facebook;
+using Microsoft.AspNetCore.Authentication.Google;
+using NuGet.Versioning;
 
 namespace DeliveryBro.Controllers
 {
@@ -82,17 +84,104 @@ namespace DeliveryBro.Controllers
             //如果驗證成功
             if(result.Succeeded)
             {
-                var claims = result.Principal.Claims.Select(x => new
-                {
-                    //打印Claims物件
-                    x.Type,
-                    x.Value,
-                });
-                return Json(claims);
+                var claimsId = result.Principal.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value;
+                var claimName = result.Principal.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name).Value;
+                var claimsEmail = result.Principal.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email).Value;
+
+                var claims = new List<Claim>() {
+                     new Claim(ClaimTypes.Name, claimName),
+                     new Claim (ClaimTypes.Role,"User"),
+
+
+                     //new Claim("CustomerId",user.CustomerId.ToString())
+                };
+                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+                //ClaimsPrincipal也可以List
+                var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
+
+                return RedirectToAction("Index", "Home");
             }
             return Ok();
         }
-        public IActionResult SignUp()
+
+        public IActionResult GoogleLogin()
+        {
+            //prop
+
+            var prop = new AuthenticationProperties
+            {
+                RedirectUri = Url.Action("GoogleRes")
+
+            };
+            //發請求內容並傳入
+            return Challenge(prop, GoogleDefaults.AuthenticationScheme);
+        }
+
+        public async Task<IActionResult> GoogleRes()
+        {   //非同步等待
+            var result = await HttpContext.AuthenticateAsync(GoogleDefaults.AuthenticationScheme);
+
+            //如果驗證成功
+            if (result.Succeeded)
+            {
+                var claimsId = result.Principal.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value;
+                var claimName = result.Principal.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name).Value;
+                var claimsEmail = result.Principal.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email).Value;
+
+                var claims = new List<Claim>() {
+                     new Claim(ClaimTypes.Name, claimName),
+                     new Claim (ClaimTypes.Role,"User"),
+
+
+                     //new Claim("CustomerId",user.CustomerId.ToString())
+                };
+
+                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+                //ClaimsPrincipal也可以List
+                var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
+                //var claims = result.Principal.Claims.Select(x => new
+                //{
+                //    //打印Claims物件
+                //    x.Type,
+                //    x.Value,
+                //});
+
+    
+
+                return RedirectToAction("Index", "Home");
+            }
+            return Ok();
+        }
+        [HttpPost]
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToAction("Index", "Home");
+        }
+
+        //public bool OAuthCheck()
+        //{
+        //    var claimsId = result.Principal.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value;
+        //    var claimName = result.Principal.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name).Value;
+        //    var claimsEmail = result.Principal.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email).Value;
+        //    var checkOAuth = _context.CustomersTable.Any(c => c.CustomerAccount == claimsId && c.CustomerEmail == claimsEmail);
+        //    if (!checkOAuth)
+        //    {
+        //        CustomersTable customer = new CustomersTable
+        //        {
+        //            CustomerAccount = claimsId,
+        //            CustomerPassword = "",
+        //            CustomerName = claimName,
+        //            CustomerEmail = claimsEmail,
+        //        };
+        //    }
+
+        //}
+        public IActionResult Register()
         {
             return View();
         }
