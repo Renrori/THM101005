@@ -3,6 +3,7 @@ using DeliveryBro.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Globalization;
 
 namespace DeliveryBro.Areas.store.apiControllers
@@ -32,7 +33,7 @@ namespace DeliveryBro.Areas.store.apiControllers
                 RestaurantPhone = x.RestaurantPhone,
                 RestaurantPicture = x.RestaurantPicture,
                 OpeningHours = x.OpeningHours,
-                RestaurantStatus=x.RestaurantStatus
+                RestaurantStatus = x.RestaurantStatus
             });
         }
 
@@ -87,9 +88,9 @@ namespace DeliveryBro.Areas.store.apiControllers
         }
 
         [HttpPut("status/{id}")]
-        public async Task<string> StoreStatusChange(int id,StoreStatusDTO statusDTO)
+        public async Task<string> StoreStatusChange(int id, StoreStatusDTO statusDTO)
         {
-            if(id!=statusDTO.RestaurantId) 
+            if (id != statusDTO.RestaurantId)
             {
                 return "無法更改營業狀態";
             }
@@ -100,7 +101,7 @@ namespace DeliveryBro.Areas.store.apiControllers
             {
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException) 
+            catch (DbUpdateConcurrencyException)
             {
                 if (!RestaurantTableExists(id))
                     return "無法更改營業狀態";
@@ -110,6 +111,22 @@ namespace DeliveryBro.Areas.store.apiControllers
             return "營業狀態修改成功";
         }
 
+        [HttpGet("dishcount")]
+        public Object GetDishCount()
+        {
+            var query = _context.CustomerOrderTable.Where(x => x.RestaurantId == 3).Include(x => x.OrderDetailsTable)
+                .GroupBy(x => x.OrderDate.Month).Select(q => new DishMonthlyChartDTO
+                {
+                    Month = q.Key,
+                    Dish = q.SelectMany(od => od.OrderDetailsTable).GroupBy(od => od.DishName).Select(n => new DishEChartsDTO
+                    {
+                        DishName = n.Key,
+                        Number = n.Count()
+                    }).ToList()
+                });
+
+            return Ok(query);
+        }
         private bool RestaurantTableExists(int id)
         {
             return (_context.RestaurantTable?.Any(e => e.RestaurantId == id)).GetValueOrDefault();
