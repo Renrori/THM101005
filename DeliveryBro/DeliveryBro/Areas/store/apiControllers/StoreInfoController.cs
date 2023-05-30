@@ -146,7 +146,7 @@ namespace DeliveryBro.Areas.store.apiControllers
                 {
                     Date=q.Key.ToString(),
                     OrderCount=q.Count(),
-                    Revenu=q.SelectMany(od=>od.OrderDetailsTable).Sum(n=>n.Subtotal)
+                    Revenu=q.SelectMany(od=>od.OrderDetailsTable).Sum(t=>t.Subtotal)
                 });
 
             return Ok(query);
