@@ -30,17 +30,23 @@ namespace DeliveryBro.Controllers
             if (ModelState.IsValid)
             {
                 //比對是否存在此ID用戶
-                var user = _context.CustomersTable.FirstOrDefault(x => x.CustomerAccount == login.UserAccount && x.CustomerPassword == login.UserPassword);
-                if (user == null)
+                var checkId = _context.CustomersTable.FirstOrDefault(x => x.CustomerAccount == login.UserAccount );
+                if (checkId == null)
                 {
                     ViewBag.ErrorMessage = "找不到此帳號";
+                    return View(login);                    
+                }
+                var checkPw = _context.CustomersTable.FirstOrDefault(x=>x.CustomerAccount == login.UserAccount && x.CustomerPassword ==login.UserPassword);
+                 if (checkPw == null)
+                {
+                    ViewBag.ErrorMessage = "密碼錯誤";
                     return View(login);
                 }
                 
                 var claims = new List<Claim>() {
-                     new Claim(ClaimTypes.Name, user.CustomerName),
+                     new Claim(ClaimTypes.Name, checkPw.CustomerName),
                      new Claim (ClaimTypes.Role,"User"),
-                     new Claim("CustomerId",user.CustomerId.ToString())
+                     new Claim("CustomerId",checkPw.CustomerId.ToString())
                 };
 
                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
