@@ -10,10 +10,10 @@
             <a class="nav-link" href="#"><i b-y5hjwqsk06 class="bi bi-grid"></i>Home</a>
         </li>
         <li b-y5hjwqsk06 class="nav-item">
-            <a class="nav-link collapsed" href="#"><i b-y5hjwqsk06 class="fa-solid fa-store"></i>我的資料</a>
+            <a class="nav-link collapsed" asp-controller="User" asp-action="UserHome"><i b-y5hjwqsk06 class="fa-solid fa-store"></i>我的資料</a>
         </li>
         <li b-y5hjwqsk06 class="nav-item">
-            <a class="nav-link collapsed" href="#"><i b-y5hjwqsk06 class="fa-solid fa-store"></i>我的訂單</a>
+            <a class="nav-link collapsed" asp-controller="User" asp-action="UserOrderHistory"><i b-y5hjwqsk06 class="fa-solid fa-store"></i>我的訂單</a>
         </li>
         <li b-y5hjwqsk06 class="nav-item">
             <a class="nav-link collapsed" href="#"><i b-y5hjwqsk06 class="fa-solid fa-circle-info"></i>Support</a>
@@ -22,3 +22,76 @@
 
 </aside><!-- End Sidebar-->
 
+
+<div b-y5hjwqsk06>
+    <div class="container">
+        <div class="row justify-content-end">
+            <div class="col-xl-6">
+                <form action="#" class="Personal-form">
+                    <div class="pagetitle">
+                        <h1>我的資料</h1>
+                    </div>
+                    <div class="row align-items-end">
+                        <div class="w-100"></div>
+                        <div class="col-md-10">
+                            <div class="form-group">
+                                <label for="CustomerName">姓名</label>
+                                <div class="d-flex">
+                                    <input type="text" class="form-control" placeholder="" v-model="" required>
+                                    <button class="btn btn-outline-info col-2">修改</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="w-100"></div>
+                        <div class="col-md-10">
+                            <div class="form-group">
+                                <label for="CustomerEmail">Email</label>
+                                <div class="d-flex">
+                                    <input type="text" class="form-control" placeholder="" v-model="" required>
+                                    <button class="btn btn-outline-info col-2">修改</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-10">
+                            <div class="form-group">
+                                <label for="DateOfBirth">生日</label>
+                                <div class="d-flex">
+                                    <input type="text" class="form-control" placeholder="" v-model="" required>
+                                    <button class="btn btn-outline-info col-2">修改</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-10">
+                            <div class="form-group">
+                                <label for="CustomerPhone">電話</label>
+                                <div class="d-flex">
+                                    <input type="text" class="form-control" placeholder="" v-model="" required>
+                                    <button class="btn btn-outline-info col-2">修改</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="col-xl-3">
+                <h2 class="mb-5"></h2>
+                <div class="col-sm-4">
+                    <img :src=""
+                         class="border border-dark d-block"
+                         alt="暫無圖片"
+                         width="250"
+                         height="250" />
+
+                </div>
+                <br />
+                <div class="row justify-content-end">
+                    <button class="btn btn-outline-info col-5"><i class="fa-solid fa-image"></i>圖片修改</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

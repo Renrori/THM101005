@@ -61,7 +61,7 @@
           ">
                 <div class="carousel-caption d-none d-md-block">
                     <h2 class="text-light">歡迎註冊成為商家會員</h2>
-                    <p><a class="btn btn-primary" asp-area="store" asp-controller="Home" asp-action="StoreInfo">商家儀錶板(暫時)</a></p>                  
+                    <p><a class="btn btn-primary" asp-area="store" asp-controller="Home" asp-action="StoreInfo">商家儀錶板(暫時)</a></p>
                 </div>
 
             </div>
@@ -100,7 +100,6 @@
                             <h2>{{ store.storeName }}</h2>
                             <button class="btn btn-outline-info" @@click="RestaurantMenuUrl(store)"><i class="ion-ios-menu"></i></button>
                             <button class="btn btn-outline-info"><i class="ion-ios-heart"></i></button>
-
                         </div>
                     </div>
                 </div>
@@ -109,17 +108,7 @@
     </section>
 
     @*測試*@
-    @*
 
-    <h3>商店圖片</h3>
-    <div v-for="store in StoreInfo" >
-    <p>ID：{{ store.storeId }}</p>
-    <p>商店名:{{ store.storeName }}</p>
-    <img :src="GetPictureStore(store.storeId)" alt="商家圖片" />
-
-    </div>
-
-    *@
     @*測試結束*@
 
 </div>
@@ -135,13 +124,13 @@
                 return {
                     /*storeId: 1,*///暫時資料
                     storeInfo: [],
-                    storeImageUrl: ''
+                    storeImageUrl: '',
+                    cartItems: [],
                 }
             },
             mounted() {
                 this.GetStoreInfo();
-            },
-            computed: {
+                this.getcartItemsFromCookie();
             },
             methods: {
                 GetPictureStore(storeId) {
@@ -159,14 +148,25 @@
                     } catch {
                         console.log("error");
                     }
-
                 },
                 RestaurantMenuUrl(store) {
+                    this.clearcartItems();
                     const data = JSON.stringify(store);
                     const url = `/Home/RestaurantMenu?data=${encodeURIComponent(data)}`;
                     window.location.href = url;
+                },
+                getcartItemsFromCookie() {
+                    const cartItemsCookie = document.cookie.split(';').find(cookie => cookie.trim().startsWith('cartItems ='));
+                    if (cartItemsCookie) {
+                        const cartItemsJSON = cartItemsCookie.split('=')[1];
+                        this.cartItems = JSON.parse(cartItemsJSON);
+                        this.clearcartItems()
+                    }
+                },
+                clearcartItems() {
+                    this.cartItems = [];
+                    document.cookie = 'cartItems=;';
                 }
-
             }
         };
         var app = Vue.createApp(vueApp).mount("#app");
