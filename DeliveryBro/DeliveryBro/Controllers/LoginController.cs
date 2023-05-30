@@ -92,7 +92,7 @@ namespace DeliveryBro.Controllers
             }
             return Ok();
         }
-        public IActionResult SignUp()
+        public IActionResult Register()
         {
             return View();
         }
