@@ -32,9 +32,14 @@
     <link href="~/store/css/style.css" rel="stylesheet" />
 @*    <link rel="stylesheet" href="~/THM101005_TestVR_2_.styles.css" asp-append-version="true" />*@
 </head>
+<style>
+    body {
+        padding-top: 70px; /* 設定內容頂部的補白，避免被 navbar 遮擋 */
+    }
+</style>
 <body>
     <header>
-        <nav class="navbar navbar-expand-lg ftco-navbar-dark ftco_navbar bg-light ftco-navbar-dark" id="ftco-navbar">
+        <nav class="navbar navbar-expand-lg fixed-top ftco-navbar-dark ftco_navbar bg-light ftco-navbar-dark" id="ftco-navbar">
             <div class="container">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">DeliveryBro</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">

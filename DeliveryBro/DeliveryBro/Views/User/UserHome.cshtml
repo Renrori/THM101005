@@ -32,46 +32,89 @@
                             <h1>我的資料</h1>
                             <p>登入使用者的ID：@User.Claims.FirstOrDefault(c => c.Type == "CustomerId")?.Value</p>
                         </div>
-                        <button class="btn btn-outline-info col-3">修改資料</button>
-                        <div class="row align-items-end">
-                            <div class="w-100"></div>
-                            <div class="col-md-10">
-                                <div class="form-group">
-                                    <label for="CustomerName">姓名</label>
-                                    <div class="d-flex">
-                                        <input type="text" class="form-control" placeholder="" v-model="" required>
-                                    </div>
-                                </div>
-                            </div>
+                        <button class="btn btn-primary col-3" v-if="!isEditing" @@click="toggleEdit">修改資料</button>
 
-                            <div class="w-100"></div>
-                            <div class="col-md-10">
-                                <div class="form-group">
-                                    <label for="CustomerEmail">Email</label>
-                                    <div class="d-flex">
-                                        <input type="text" class="form-control" placeholder="" v-model="" required>
+                        <div v-if="!isEditing">
+                            <div class="row align-items-end">
+                                <div class="w-100"></div>
+                                <div class="col-md-10">
+                                    <div class="form-group">
+                                        <label for="CustomerName">姓名</label>
+                                        <div class="d-flex">
+                                            <input type="text" class="form-control" placeholder="CustomerInfo.userName" v-model="CustomerInfo.userName" required>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="w-100"></div>
+                                <div class="col-md-10">
+                                    <div class="form-group">
+                                        <label for="CustomerEmail">Email</label>
+                                        <div class="d-flex">
+                                            <input type="text" class="form-control" placeholder="CustomerInfo.userEmail" v-model="CustomerInfo.userEmail" required>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-10">
+                                    <div class="form-group">
+                                        <label for="DateOfBirth">生日</label>
+                                        <div class="d-flex">
+                                            <input type="text" class="form-control" placeholder="CustomerInfo.userBirth" v-model="CustomerInfo.userBirth" required>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-10">
+                                    <div class="form-group">
+                                        <label for="CustomerPhone">電話</label>
+                                        <div class="d-flex">
+                                            <input type="text" class="form-control" placeholder="CustomerInfo.userPhone" v-model="CustomerInfo.userPhone" required>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+                        </div>
 
-                            <div class="col-md-10">
-                                <div class="form-group">
-                                    <label for="DateOfBirth">生日</label>
-                                    <div class="d-flex">
-                                        <input type="text" class="form-control" placeholder="" v-model="" required>
+                        <div v-if="isEditing">
+                            <button class="btn btn-outline-primary col-3" @@click="putCustomerInfo">確認修改</button>
+                            <div class="row align-items-end" v-if="isEditing">
+                                <div class="w-100"></div>
+                                <div class="col-md-10">
+                                    <div class="form-group">
+                                        <label for="CustomerName">姓名</label>
+                                        <div class="d-flex">
+                                            <input type="text" class="form-control" placeholder="" v-model="CustomerInfo.userName" required>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <div class="col-md-10">
-                                <div class="form-group">
-                                    <label for="CustomerPhone">電話</label>
-                                    <div class="d-flex">
-                                        <input type="text" class="form-control" placeholder="" v-model="" required>
+                                <div class="w-100"></div>
+                                <div class="col-md-10">
+                                    <div class="form-group">
+                                        <label for="CustomerEmail">Email</label>
+                                        <div class="d-flex">
+                                            <input type="text" class="form-control" placeholder="" v-model="CustomerInfo.userEmail" required>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-10">
+                                    <div class="form-group">
+                                        <label for="DateOfBirth">生日</label>
+                                        <div class="d-flex">
+                                            <input type="text" class="form-control" placeholder="" v-model="CustomerInfo.userBirth" required>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-10">
+                                    <div class="form-group">
+                                        <label for="CustomerPhone">電話</label>
+                                        <div class="d-flex">
+                                            <input type="text" class="form-control" placeholder="" v-model="CustomerInfo.userPhone" required>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>      
+                        </div>
                     </form>
                 </div>
                 <div class="col-xl-3">
@@ -86,10 +129,11 @@
                     </div>
                     <br />
                     <div class="row justify-content-end">
-                        <button class="btn btn-outline-info col-5"><i class="fa-solid fa-image"></i>圖片修改</button>
+                        <button class="btn btn-primary col-5"><i class="fa-solid fa-image"></i>上傳圖片</button>
                     </div>
 
                 </div>
+                @*測試*@
             </div>
         </div>
     </div>
@@ -103,23 +147,46 @@
     <script src="~/axios/axios.min.js"></script>
     <script>
         var baseAddress = "https://localhost:7163/api/UserApi";
+        var CustomerId = @User.Claims.FirstOrDefault(c => c.Type == "CustomerId")?.Value;
         var vueApp = {
             data() {
                 return {
-                    CustomerInfo: []
+                    isEditing: false,
+                    CustomerInfo: {}
                 }
             },
             mounted() {
                 this.getCustomerInfo();
             },
             methods: {
+                toggleEdit() {
+                    this.isEditing = !this.isEditing;
+                },
                 async getCustomerInfo() {
                     //拿出對應cusId
                     try {
-                        const CustomerId = @User.Claims.FirstOrDefault(c => c.Type == "CustomerId")?.Value;
-                        const response = await axios.put(`${baseAddress}/${CustomerId}`).then(Response => { this.CustomerInfo})
+                        const response = await axios.get(`${baseAddress}/${CustomerId}`).then(Response => {
+                            this.CustomerInfo = Response.data;
+                        })
                     } catch (error) {
                         console.error(error);
+                    }
+                },
+               async putCustomerInfo() {
+                   const data = {
+                        userName: this.CustomerInfo.userName,
+                        userEmail: this.CustomerInfo.userEmail,
+                        userBirth: this.CustomerInfo.userBirth,
+                        userPhone: this.CustomerInfo.userPhone
+                   }
+                    //拿出對應cusId
+                    try {
+                        axios.put(`${baseAddress}/${CustomerId}`,data).then(Response => {
+                            console.log("修改成功");
+                            this.isEditing = false;
+                        })
+                    } catch {
+                        console.log("修改失敗")
                     }
                 }
             }
