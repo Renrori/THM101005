@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - THM101005_DliveryBro</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/font-awesome/css/all.min.css"/>
     <link rel="stylesheet" href="~/vegefoods-master/css/open-iconic-bootstrap.min.css" />
     <link rel="stylesheet" href="~/vegefoods-master/css/animate.css" />
     <link rel="stylesheet" href="~/vegefoods-master/css/owl.carousel.min.css" />
@@ -18,11 +19,27 @@
     <link rel="stylesheet" href="~/vegefoods-master/css/icomoon.css" />
     <link rel="stylesheet" href="~/vegefoods-master/css/style.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+
+    @*套版2*@
+    <link href="~/store/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="~/store/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link href="~/store/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+    <link href="~/store/vendor/quill/quill.snow.css" rel="stylesheet">
+    <link href="~/store/vendor/quill/quill.bubble.css" rel="stylesheet">
+    <link href="~/store/vendor/remixicon/remixicon.css" rel="stylesheet">
+    <link href="~/store/vendor/simple-datatables/style.css" rel="stylesheet">
+
+    <link href="~/store/css/style.css" rel="stylesheet" />
 @*    <link rel="stylesheet" href="~/THM101005_TestVR_2_.styles.css" asp-append-version="true" />*@
 </head>
+<style>
+    body {
+        padding-top: 70px; /* 設定內容頂部的補白，避免被 navbar 遮擋 */
+    }
+</style>
 <body>
     <header>
-        <nav class="navbar navbar-expand-lg ftco-navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
+        <nav class="navbar navbar-expand-lg fixed-top ftco-navbar-dark ftco_navbar bg-light ftco-navbar-dark" id="ftco-navbar">
             <div class="container">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">DeliveryBro</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
@@ -114,7 +131,6 @@
             </div>
             <div class="row">
                 <div class="col-md-12 text-center">
-
                     <p>
                         <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
                         Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="icon-heart color-danger" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
@@ -127,6 +143,7 @@
     @*Vue*@
 @*    <script src="https://unpkg.com/vue@3.2.36/dist/vue.global.prod.js"></script>
     <script src="~/axios/axios.min.js"></script>*@
+    <script src="~/orderlist/orderlist.js"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

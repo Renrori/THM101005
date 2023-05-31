@@ -80,7 +80,7 @@ namespace DeliveryBro.ApiController
         {
             
             var product = await _context.MenuTable.Include(m => m.Restaurant)
-               .Where(m => m.Restaurant.RestaurantId == id && m.DishStatus == "ongoings")
+               .Where(m => m.Restaurant.RestaurantId == id && m.DishStatus == "ongoing")
                .Select(p => new MenuViewModel
                {
                    DishId = p.DishId,

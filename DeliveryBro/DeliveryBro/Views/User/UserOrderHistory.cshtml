@@ -1,0 +1,111 @@
+﻿<aside b-y5hjwqsk06 id="sidebar" class="sidebar">
+
+    <ul b-y5hjwqsk06 class="sidebar-nav" id="sidebar-nav">
+
+        <li b-y5hjwqsk06 class="nav-item">
+            <a class="nav-link" href="#"><i b-y5hjwqsk06 class="bi bi-grid"></i>Home</a>
+        </li>
+        <li b-y5hjwqsk06 class="nav-item">
+            <a class="nav-link collapsed" asp-controller="User" asp-action="UserHome"><i b-y5hjwqsk06 class="fa-solid fa-store"></i>我的資料</a>
+        </li>
+        <li b-y5hjwqsk06 class="nav-item">
+            <a class="nav-link collapsed" asp-controller="User" asp-action="UserOrderHistory"><i b-y5hjwqsk06 class="fa-solid fa-store"></i>我的訂單</a>
+        </li>
+        <li b-y5hjwqsk06 class="nav-item">
+            <a class="nav-link collapsed" href="#"><i b-y5hjwqsk06 class="fa-solid fa-circle-info"></i>Support</a>
+        </li>
+    </ul>
+
+</aside><!-- End Sidebar-->
+
+<div b-y5hjwqsk06>
+    <div class="container">
+        <div class="row justify-content-end">
+            <div class="col-xl-9">
+                <div class="pagetitle">
+                    <h1>我的訂單</h1>
+                </div>
+                <div id="app">
+                    <section class="section neworders">
+                        <div class="row">
+                            <div class="col">
+                                <div class="card">
+                                    <div class="card-body pt-3">
+                                        <div class="tab-content pt-2">
+                                            <div class="tab-pane fade show active profile-overview" id="order-waiting">
+                                                <div class="card" v-for="wo in waitingOrder">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title">訂單編號: {{wo.orderId}}</h5>
+                                                        <div class="row">
+                                                            <div class="col-10">
+                                                                <div class="row">
+                                                                    <div class="col-3 label">餐點名稱</div>
+                                                                    <div class="col-3">單價</div>
+                                                                    <div class="col-3">數量</div>
+                                                                    <div class="col-3">小計</div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-10">
+                                                                <div class="row" v-for="wod in wo.orderDetails">
+                                                                    <div class="col-3 label">{{wod.dishName}}</div>
+                                                                    <div class="col-3">$ {{wod.unitPrice}}</div>
+                                                                    <div class="col-3">{{wod.quantity}}</div>
+                                                                    <div class="col-3">$ {{wod.subtotal}}</div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <br />
+                                                        <div>總金額: $ {{wo.total}}</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane fade profile-edit" id="order-accpted">
+                                            <div class="card" v-for="ao in aceptedOrder">
+                                                <div class="card-body">
+                                                    <h5 class="card-title">訂單編號: {{ao.orderId}}</h5>
+                                                    <h5>接收訂單時間: {{ao.orderDate}}</h5>
+                                                    <h5>預計完成時間: 接收時間+預設被餐時間</h5>
+                                                    <h5>顧客名稱: {{ao.customerName}}</h5>
+                                                    <hr />
+                                                    <div class="row">
+                                                        <div class="col-10">
+                                                            <div class="row">
+                                                                <div class="col-3 label">餐點名稱</div>
+                                                                <div class="col-3">單價</div>
+                                                                <div class="col-3">數量</div>
+                                                                <div class="col-3">小計</div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-10" v-for="aod in ao.orderDetails">
+                                                            <div class="row">
+                                                                <div class="col-3 label">{{aod.dishName}}</div>
+                                                                <div class="col-3">$ {{aod.unitPrice}}</div>
+                                                                <div class="col-3">{{aod.quantity}}</div>
+                                                                <div class="col-3">$ {{aod.subtotal}}</div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <br />
+                                                    <hr /><div>總金額: $ {{ao.total}}</div> <br />
+                                                    <div>
+                                                        <h5>備註: </h5>
+                                                        <div>{{ao.note}}</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

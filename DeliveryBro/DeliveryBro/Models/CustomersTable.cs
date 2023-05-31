@@ -22,6 +22,7 @@ namespace DeliveryBro.Models
         public string CustomerPhone { get; set; }
         public byte[] CustomerPhoto { get; set; }
         public int? CouponId { get; set; }
+        public string CustomerOauth { get; set; }
 
         public virtual ICollection<CustomerAddressTable> CustomerAddressTable { get; set; }
         public virtual ICollection<CustomerOrderTable> CustomerOrderTable { get; set; }
