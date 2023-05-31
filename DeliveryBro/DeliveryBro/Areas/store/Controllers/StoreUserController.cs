@@ -21,12 +21,14 @@ namespace DeliveryBro.Areas.store.Controllers
 	public class StoreUserController : Controller
 	{
 		private readonly sql8005site4nownetContext _db;
-		private readonly EncryptService encrypt;
+		private readonly EncryptService _encrypt;
+		private readonly PasswordEncyptService _passwordEncyptService;
 
-		public StoreUserController(sql8005site4nownetContext context, EncryptService encrypt)
+		public StoreUserController(sql8005site4nownetContext context, EncryptService encrypt, PasswordEncyptService passwordEncyptService)
 		{
 			_db = context;
-			this.encrypt = encrypt;
+			_encrypt = encrypt;//email加密
+			_passwordEncyptService = passwordEncyptService;//密碼加密
 		}
 
 		public IActionResult Login()
@@ -60,7 +62,7 @@ namespace DeliveryBro.Areas.store.Controllers
 			}
 			AesValidationDto obj = new AesValidationDto(RestaurantEmail, DateTime.Now.AddDays(3));//現在時間往後加三天
 			string jString = JsonSerializer.Serialize(obj);//Obj轉成Json格式(出來是string)
-			var code = encrypt.AesEncryptToBase64(jString);//加密
+			var code = _encrypt.AesEncryptToBase64(jString);//加密
 
 			var mail = new MailMessage()
 			{
@@ -93,7 +95,7 @@ namespace DeliveryBro.Areas.store.Controllers
 
 		public async Task<IActionResult> Enable(string code)
 		{
-			var str = encrypt.AesDecryptToString(code);
+			var str = _encrypt.AesDecryptToString(code);
 			var obj = JsonSerializer.Deserialize<AesValidationDto>(str);
 			if (DateTime.Now > obj.ExpiredDate)
 			{
@@ -198,7 +200,7 @@ namespace DeliveryBro.Areas.store.Controllers
 			_db.RestaurantTable.Add(new RestaurantTable()
 			{
 				RestaurantAccount = model.RestaurantAccount,
-				RestaurantPassword = model.RestaurantPassword,
+				RestaurantPassword = _passwordEncyptService.PasswordEncrypt(model.RestaurantPassword),//用類別裡面的PasswordEncrypt方法加密
 				RestaurantName = model.RestaurantName,
 				RestaurantAddress = model.RestaurantAddress,
 				RestaurantPhone = model.RestaurantPhone,
@@ -233,7 +235,7 @@ namespace DeliveryBro.Areas.store.Controllers
 			//FirstOrDefault找尋資料表中的第一筆資料 有資料回傳第一筆或是沒資料回傳null
 			//找RestaurantTable資料表篩選符合RestaurantAccount及RestaurantPassword的條件
 			var user = _db.RestaurantTable.FirstOrDefault(x => x.RestaurantAccount == model.Account &&
-						x.RestaurantPassword == model.Password);
+						x.RestaurantPassword == _passwordEncyptService.PasswordEncrypt(model.Password));
 
 			if (user == null)
 			{
