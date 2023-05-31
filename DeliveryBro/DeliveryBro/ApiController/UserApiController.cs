@@ -1,4 +1,5 @@
-﻿using DeliveryBro.Models;
+﻿using DeliveryBro.Areas.store.DTO;
+using DeliveryBro.Models;
 using DeliveryBro.ViewModels.Home;
 using DeliveryBro.ViewModels.User;
 using Microsoft.AspNetCore.Authentication;
@@ -90,7 +91,7 @@ namespace DeliveryBro.ApiController
         [HttpPut("{customerId}")]
         public async Task<string> EditUserInfo(int customerId, EditUserInfoViewModel eui)
         {
-            
+
 
             //Httpcontext
             CustomersTable userInfo = await _context.CustomersTable.FindAsync(customerId);
@@ -122,6 +123,30 @@ namespace DeliveryBro.ApiController
 
             return "成功";
 
+        }
+
+        [HttpGet("{customerId}/orderdetails")]
+        public async Task<IEnumerable<UserOrderViewModel>> GetUserOrder(int customerId)
+        {
+            var orderDetails = _context.CustomerOrderTable
+            .Where(o => o.CustomerId == customerId).Select(o => new UserOrderViewModel
+            {
+                OrderId = o.OrderId,
+                OrderDate = o.OrderDate,
+                CustomerName = o.Customer.CustomerName,
+                Note = o.Note,
+                OrderDetails = o.OrderDetailsTable.Select(d => new UserOrderDetailsViewModel
+                {
+                    DishName = d.DishName,
+                    UnitPrice = d.UnitPrice,
+                    Quantity = d.Quantity,
+                    Discount = d.Discount,
+                    Subtotal = d.Subtotal
+                }).ToList(),
+                Total = o.OrderDetailsTable.Sum(o => o.Subtotal)
+            });
+
+            return orderDetails;
         }
 
         private bool CustomerExists(int customerId)
