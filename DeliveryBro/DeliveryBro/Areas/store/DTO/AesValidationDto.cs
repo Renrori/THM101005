@@ -2,13 +2,13 @@
 {
     public class AesValidationDto
     {
-        public AesValidationDto(string Account, DateTime ExpiredDate)
+        public AesValidationDto(string RestaurantEmail, DateTime ExpiredDate)
         {
-            this.Account = Account;
+            this.RestaurantEmail = RestaurantEmail;
             this.ExpiredDate = ExpiredDate;
         }
-        public string Account { get; set; }
-        public DateTime ExpiredDate { get; set; }
+        public string RestaurantEmail { get; set; }
+        public DateTime ExpiredDate { get; set; }//結束日期
     }
 
 }

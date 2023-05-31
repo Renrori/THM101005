@@ -153,7 +153,6 @@ namespace DeliveryBro.Controllers
                         UnitPrice = od.UnitPrice,
                         Quantity = od.Quantity,
                         Subtotal = od.Subtotal,
-                        Total = od.Total,
                     };
                     _context.OrderDetailsTable.Add(odt);
                 }

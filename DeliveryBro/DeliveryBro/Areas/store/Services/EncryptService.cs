@@ -11,8 +11,13 @@ namespace DeliveryBro.Areas.store.Services
 
         public EncryptService(IConfiguration configuration)
         {
-            key = configuration.GetSection("AesKey").Value;
+            this.key = configuration.GetSection("AesKey").Value;
         }
+        /// <summary>
+        /// 加密
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
         public string AesEncryptToBase64(string str)
         {
             using Aes aes = Aes.Create();
@@ -32,6 +37,11 @@ namespace DeliveryBro.Areas.store.Services
                 return Convert.ToBase64String(memoryStream.ToArray());
             }
         }
+        /// <summary>
+        /// 解密
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
         public string AesDecryptToString(string str)
         {
             using Aes aes = Aes.Create();
