@@ -18,8 +18,6 @@
         "dist/browser/signalr.js",
         "dist/browser/signalr.min.js"
       ]
-      "library": "axios@1.4.0",
-      "destination": "wwwroot/axios/"
     },
     {
       "provider": "cdnjs",
@@ -30,6 +28,23 @@
       "provider": "cdnjs",
       "library": "signalr.js@2.4.3",
       "destination": "wwwroot/lib/signalr.js/"
+    },
+    {
+      "provider": "cdnjs",
+      "library": "axios@1.4.0",
+      "destination": "wwwroot/lib/axios/",
+      "files": [
+        "browser/axios.cjs.map",
+        "esm/axios.js",
+        "esm/axios.js.map",
+        "esm/axios.min.js",
+        "esm/axios.min.js.map",
+        "node/axios.cjs.map",
+        "axios.js",
+        "axios.js.map",
+        "axios.min.js",
+        "axios.min.js.map"
+      ]
     }
   ]
 }

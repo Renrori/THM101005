@@ -25,39 +25,6 @@ namespace DeliveryBro.ApiController
             _context = context;
         }
 
-        //[Authorize]
-        ////GET:api/UserApi/2
-        //[HttpGet]
-        ////[Authorize(Role="User")] 限制登入者?
-        //public async Task<UserInfoViewModel> GetUserInfo()
-        //{
-        //    var login = await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-        //    if (login.Succeeded)
-        //    {
-        //        var userIdClaim = login.Principal.Claims.FirstOrDefault(c => c.ValueType == "customerId");
-        //        var userId = userIdClaim?.Value;
-        //        var user = await _context.CustomersTable.Include(c => c.CustomerAddressTable)
-        //        .FirstOrDefaultAsync(c => c.CustomerId == userId);
-        //    }
-
-
-        //    var userAddress = await _context.CustomerAddressTable.Where(c => c.CustomerId == customerId).Select(c => c.CustomerAddress).ToListAsync();
-
-        //    var userInfo = new UserInfoViewModel
-        //    {
-
-        //UserId = user.CustomerId,
-        //        UserName = user.CustomerName,
-        //        UserEmail = user.CustomerEmail,
-        //        UserAddress = userAddress,
-        //        UserBirth = user.DateOfBirth,
-        //        UserPhone = user.CustomerPhone,
-        //        UserPicture = user.CustomerPhoto
-
-        //    };
-        //    return userInfo;
-        //}
-
         //GET: api/UserApi/23
         [HttpGet("{customerId}")]
         public async Task<IActionResult> GetUserInfo(int customerId)
@@ -153,5 +120,40 @@ namespace DeliveryBro.ApiController
         {
             return (_context.CustomersTable?.Any(e => e.CustomerId == customerId)).GetValueOrDefault();
         }
+
+        //-----------原本的方法-----------
+        //[Authorize]
+        //GET:api/UserApi/2
+        //[HttpGet("{customerId}")]
+        //[Authorize(Role = "User")] 限制登入者?
+        //public async Task<UserInfoViewModel> GetUserInfo(int customerId)
+        //{
+        //var login = await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+        //if (login.Succeeded)
+        //{
+        //    var userIdClaim = login.Principal.Claims.FirstOrDefault(c => c.ValueType == "customerId");
+        //    var userId = userIdClaim?.Value;
+        //    var user = await _context.CustomersTable.Include(c => c.CustomerAddressTable)
+        //    .FirstOrDefaultAsync(c => c.CustomerId == userId);
+        //}
+
+        //    var userAddress = await _context.CustomerAddressTable.Where(c => c.CustomerId == customerId).Select(c => c.CustomerAddress).ToListAsync();
+        //    var user = await _context.CustomersTable.FindAsync(customerId);
+
+        //    UserInfoViewModel userInfo = new UserInfoViewModel
+        //    {
+
+        //        UserId = user.CustomerId,
+        //        UserName = user.CustomerName,
+        //        UserEmail = user.CustomerEmail,
+        //        UserAddress = userAddress,
+        //        UserBirth = user.DateOfBirth,
+        //        UserPhone = user.CustomerPhone,
+        //        UserPicture = user.CustomerPhoto
+
+        //    };
+        //    return userInfo;
+        //}
+        //-------------------------------
     }
 }
