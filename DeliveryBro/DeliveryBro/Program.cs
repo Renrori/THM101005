@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using DeliveryBro.Areas.store.Services;
 using Microsoft.AspNetCore.Authentication.Facebook;
 
 namespace DeliveryBro
@@ -41,7 +40,7 @@ namespace DeliveryBro
 
 			});
 
-			builder.Services.AddTransient<EncryptService>();
+
 
 			builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
