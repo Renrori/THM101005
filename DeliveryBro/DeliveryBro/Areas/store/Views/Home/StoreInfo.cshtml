@@ -45,10 +45,6 @@
                                 </li>
 
                                 <li class="nav-item">
-                                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-settings">Settings</button>
-                                </li>
-
-                                <li class="nav-item">
                                     <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-change-password">Change Password</button>
                                 </li>
 
@@ -77,8 +73,14 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-lg-3 col-md-4 label">營業時間</div>
-                                        <div class="col-lg-9 col-md-8">{{store.openingHours}}</div>
+                                        <div class="col-lg-9 col-md-8">{{store.openingHours}} ~ {{store.endHours}}</div>
                                     </div>
+
+                                    <div class="row">
+                                        <div class="col-lg-3 col-md-4 label">備餐時間</div>
+                                        <div class="col-lg-9 col-md-8">{{store.prepareTime}} 分鐘</div>
+                                    </div>
+
                                     <div class="row">
                                         <div class="col-lg-3 col-md-4 label">Email</div>
                                         <div class="col-lg-9 col-md-8">{{store.restaurantEmail}}</div>
@@ -128,15 +130,30 @@
                                         <div class="row mb-3">
                                             <label for="Phone" class="col-md-4 col-lg-3 col-form-label">商家電話</label>
                                             <div class="col-md-8 col-lg-9">
-                                                <input type="text" class="form-control" id="Phone" v-model="store.resturantPhone" disabled>
+                                                <input type="text" class="form-control" id="Phone" v-model="store.restaurantPhone" disabled>
                                             </div>
                                         </div>
 
                                         <div class="row mb-3">
-                                            <label for="openingtime" class="col-md-4 col-lg-3 col-form-label">營業時間</label>
+                                            <label for="openingtime" class="col-md-4 col-lg-3 col-form-label">開始營業時間</label>
                                             <div class="col-md-8 col-lg-9">
                                                 <input type="time" class="form-control" id="openingtime" v-model="store.openingHours">
                                             </div>
+                                        </div>
+
+                                        <div class="row mb-3">
+                                            <label for="closingtime" class="col-md-4 col-lg-3 col-form-label">結束營業時間</label>
+                                            <div class="col-md-8 col-lg-9">
+                                                <input type="time" class="form-control" id="closeingtime" v-model="store.endHours">
+                                            </div>
+                                        </div>
+
+                                        <div class="row mb-3">
+                                            <label for="openingtime" class="col-md-4 col-lg-3 col-form-label">備餐時間</label>
+                                            <div class="col-md-7 col-lg-8">
+                                                <input type="text" class="form-control" id="preparetimetime" v-model="store.prepareTime">
+                                            </div>
+                                            <div class="col-md-1 col-lg-1 col-form-label">分鐘</div>
                                         </div>
 
                                         <div class="row mb-3">
@@ -179,48 +196,6 @@
                                             <button type="button" class="btn btn-danger" @@click="cancel(store)">取消</button>
                                         </div>
                                     </form><!-- End Profile Edit Form -->
-
-                                </div>
-
-                                <div class="tab-pane fade pt-3" id="profile-settings">
-
-                                    <!-- Settings Form -->
-                                    <form>
-
-                                        <div class="row mb-3">
-                                            <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Email Notifications</label>
-                                            <div class="col-md-8 col-lg-9">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="changesMade" checked>
-                                                    <label class="form-check-label" for="changesMade">
-                                                        Changes made to your account
-                                                    </label>
-                                                </div>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="newProducts" checked>
-                                                    <label class="form-check-label" for="newProducts">
-                                                        Information on new products and services
-                                                    </label>
-                                                </div>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="proOffers">
-                                                    <label class="form-check-label" for="proOffers">
-                                                        Marketing and promo offers
-                                                    </label>
-                                                </div>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="securityNotify" checked disabled>
-                                                    <label class="form-check-label" for="securityNotify">
-                                                        Security alerts
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="text-center">
-                                            <button type="submit" class="btn btn-primary">Save Changes</button>
-                                        </div>
-                                    </form><!-- End settings Form -->
 
                                 </div>
 
@@ -281,6 +256,8 @@
                     preview: null,
                     oldDescription: "",
                     oldopeningtime: "",
+                    oldendtime:"",
+                    preparetime:"",
                     storePic: ""
                 }
             },
@@ -292,7 +269,11 @@
                 getStoreInfo: function () {
                     let _this = this;
                     axios.get(`/api/StoreInfo`).then(response => {
-                        _this.storeInfo = response.data.map(x => ({ ...x, openingHours: x.openingHours.substring(0, 5) }));
+                        _this.storeInfo = response.data.map(x => ({ 
+                            ...x, 
+                            openingHours: x.openingHours.substring(0, 5) ,
+                            endHours: x.endHours.substring(0, 5)
+                        }));
                     })
                 },
                 createImgUrl: function (pic) {
@@ -319,6 +300,8 @@
                     let form = new FormData();
                     form.append("RestaurantDescription", store.restaurantDescription);
                     form.append("OpeningHours", store.openingHours);
+                    form.append("EndHours", store.endHours);
+                    form.append("PrepareTime", store.prepareTime);
                     if (_this.preview != null)
                         form.append("RestaurantPicture", _this.storePic);
                     else
@@ -349,12 +332,16 @@
                     let _this = this;
                     _this.oldDescription = store.restaurantDescription;
                     _this.oldopeningtime = store.openingHours;
-                    _this.storePic = store.restaurantPicture
+                    _this.oldendtime = store.endHours;
+                    _this.oldpreparetime = store.prepareTime;
+                    _this.storePic = store.restaurantPicture;
                 },
                 cancel: function (store) {
                     let _this = this;
                     store.restaurantDescription = _this.oldDescription;
                     store.openingHours = _this.oldopeningtime;
+                    store.endHours = _this.oldendtime;
+                    store.prepareTime = _this.oldpreparetime;
                     store.restaurantPicture = _this.storePic;
                     _this.preview = null;
                 }

@@ -36,6 +36,8 @@ namespace DeliveryBro.Areas.store.apiControllers
                 RestaurantPhone = x.RestaurantPhone,
                 RestaurantPicture = x.RestaurantPicture,
                 OpeningHours = x.OpeningHours,
+                EndHours= x.EndHours,
+                PrepareTime=x.PrepareTime,
                 RestaurantStatus = x.RestaurantStatus
             });
         }
@@ -64,9 +66,12 @@ namespace DeliveryBro.Areas.store.apiControllers
 
             RestaurantTable store = await _context.RestaurantTable.FindAsync(id);
             store.RestaurantDescription = form["RestaurantDescription"];
-            DateTime dateTime = DateTime.ParseExact(form["openingHours"], "HH:mm", CultureInfo.InvariantCulture);
-            store.OpeningHours = dateTime.TimeOfDay;
-            IFormFile picfile = form.Files.GetFile("RestaurantPicture");
+            DateTime dateTimeOpen = DateTime.ParseExact(form["OpeningHours"], "HH:mm", CultureInfo.InvariantCulture);
+            store.OpeningHours = dateTimeOpen.TimeOfDay;
+			DateTime dateTimeEnd = DateTime.ParseExact(form["EndHours"], "HH:mm", CultureInfo.InvariantCulture);
+			store.EndHours = dateTimeEnd.TimeOfDay;
+            store.PrepareTime = int.Parse(form["PrepareTime"]);
+			IFormFile picfile = form.Files.GetFile("RestaurantPicture");
             if (picfile != null)
                 await SetPic(store, picfile);
             _context.Entry(store).State = EntityState.Modified;

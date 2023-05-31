@@ -163,10 +163,14 @@ namespace DeliveryBro.Models
                     .IsRequired()
                     .HasMaxLength(16);
 
+                entity.Property(e => e.CustomerOauth)
+                    .HasMaxLength(10)
+                    .HasColumnName("CustomerOAuth")
+                    .IsFixedLength();
+
                 entity.Property(e => e.CustomerPassword)
                     .IsRequired()
-                    .HasMaxLength(15)
-                    .IsUnicode(false);
+                    .HasMaxLength(128);
 
                 entity.Property(e => e.CustomerPhone).HasMaxLength(12);
 
@@ -269,6 +273,10 @@ namespace DeliveryBro.Models
                 entity.ToTable("Restaurant_Table");
 
                 entity.Property(e => e.RestaurantId).HasColumnName("RestaurantID");
+
+                entity.Property(e => e.EndHours).HasColumnType("time(0)");
+
+                entity.Property(e => e.OpeningHours).HasColumnType("time(0)");
 
                 entity.Property(e => e.RestaurantAccount)
                     .IsRequired()

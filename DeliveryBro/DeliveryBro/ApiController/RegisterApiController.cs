@@ -1,5 +1,4 @@
-﻿using DeliveryBro.Areas.store.DTO;
-using DeliveryBro.Models;
+﻿using DeliveryBro.Models;
 using DeliveryBro.ViewModels.Login;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -11,6 +10,7 @@ using System.Text.Json;
 using DeliveryBro.Services;
 using System.Security.Cryptography;
 using NuGet.Packaging;
+using DeliveryBro.ViewModels;
 
 namespace DeliveryBro.ApiController
 {
@@ -58,48 +58,48 @@ namespace DeliveryBro.ApiController
 					_context.CustomersTable.Add(customer);
 					await _context.SaveChangesAsync();
 
-					//return "註冊成功!";
-					//寄信
-				//	var obj = new AesValidationDto(register.Account, DateTime.Now.AddDays(1));
-				//	var jString = JsonSerializer.Serialize(obj);
-				//	var code = _encrypt.AesEncryptToBase64(jString);
-				//	var mail = new MailMessage()
-				//	{
-				//		From = new MailAddress("thm10105@gmail.com"),
-				//		Subject = "啟用網站驗證",
-				//		Body = @$"<a class=""icon-link"" href=""https://localhost:7163/api/RegisterApi/registermail?code={code}"">
-				//					<svg class=""bi"" aria-hidden=""true""><use xlink:href=""#box-seam""></use></svg>
-				//					請點這裡來啟用帳號!
-				//					</a>",
-				//		IsBodyHtml = true,
-				//		BodyEncoding = Encoding.UTF8,
-				//	};
-				//	mail.To.Add(new MailAddress(register.Email));
-				//	try
-				//	{
-				//		using (var sm = new SmtpClient("smtp.gmail.com", 587)) //465 ssl
-				//		{
-				//			sm.EnableSsl = true;
-				//			sm.Credentials = new NetworkCredential("thm10105@gmail.com", "loadozkrsjiocvci");
-				//			sm.Send(mail);
-				//		}
-				//	}
-				//	catch (Exception ex)
-				//	{
-				//		throw;
-				//	}
-				//	return "請至信箱收取驗證信";
-				//}
+                    //return "註冊成功!";
+                    //寄信
+                    //	var obj = new AesValidationViewModel(register.Account, DateTime.Now.AddDays(1));
+                    //	var jString = JsonSerializer.Serialize(obj);
+                    //	var code = _encrypt.AesEncryptToBase64(jString);
+                    //	var mail = new MailMessage()
+                    //	{
+                    //		From = new MailAddress("thm10105@gmail.com"),
+                    //		Subject = "啟用網站驗證",
+                    //		Body = @$"<a class=""icon-link"" href=""https://localhost:7163/api/RegisterApi/registermail?code={code}"">
+                    //					<svg class=""bi"" aria-hidden=""true""><use xlink:href=""#box-seam""></use></svg>
+                    //					請點這裡來啟用帳號!
+                    //					</a>",
+                    //		IsBodyHtml = true,
+                    //		BodyEncoding = Encoding.UTF8,
+                    //	};
+                    //	mail.To.Add(new MailAddress(register.Email));
+                    //	try
+                    //	{
+                    //		using (var sm = new SmtpClient("smtp.gmail.com", 587)) //465 ssl
+                    //		{
+                    //			sm.EnableSsl = true;
+                    //			sm.Credentials = new NetworkCredential("thm10105@gmail.com", "loadozkrsjiocvci");
+                    //			sm.Send(mail);
+                    //		}
+                    //	}
+                    //	catch (Exception ex)
+                    //	{
+                    //		throw;
+                    //	}
+                    //	return "請至信箱收取驗證信";
+                    //}
 
-				}
-			}
+                }
+            }
 			return "請重新確認欄位";
 		}
 
 		public async Task<IActionResult> registermail(string code)
 		{
 			var str = _encrypt.AesDecryptToString(code);
-			var obj = JsonSerializer.Deserialize<AesValidationDto>(str);
+			var obj = JsonSerializer.Deserialize<AesValidationViewModel>(str);
 			var user = _context.CustomersTable.FirstOrDefault(x => x.CustomerAccount == obj.Account);
 			if (user!=null&&DateTime.Now > obj.ExpiredDate)
 			{
