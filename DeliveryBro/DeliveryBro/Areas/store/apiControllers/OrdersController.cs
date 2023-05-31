@@ -29,7 +29,7 @@ namespace DeliveryBro.Areas.store.apiControllers
 				.Where(x => x.RestaurantId == 3 && x.OrderStatus == "completed").OrderByDescending(x => x).Select(x => new HisOrderDTO
 				{
 					OrderId = x.OrderId,
-					OrderDate = x.OrderDate,
+					OrderDate = x.OrderDate.ToUniversalTime().ToLocalTime().ToString(),
 					CustomerName = x.Customer.CustomerName,
 					Note = x.Note,
 					OrderDetails = x.OrderDetailsTable.Select(d => new OrderDetailsDTO
@@ -55,7 +55,7 @@ namespace DeliveryBro.Areas.store.apiControllers
 			return query.OrderByDescending(x => x).Select(x => new HisOrderDTO
 			{
 				OrderId = x.OrderId,
-				OrderDate = x.OrderDate,
+				OrderDate = x.OrderDate.ToUniversalTime().ToLocalTime().ToString(),
 				CustomerName = x.Customer.CustomerName,
 				Note = x.Note,
 				OrderDetails = x.OrderDetailsTable.Select(d => new OrderDetailsDTO
@@ -77,7 +77,7 @@ namespace DeliveryBro.Areas.store.apiControllers
 				.Where(x => x.RestaurantId == 3 && x.OrderStatus == "waiting").Select(x => new HisOrderDTO
 				{
 					OrderId = x.OrderId,
-					OrderDate = x.OrderDate,
+					OrderDate = x.OrderDate.ToUniversalTime().ToLocalTime().ToString(),
 					CustomerName = x.Customer.CustomerName,
 					Note = x.Note,
 					OrderDetails = x.OrderDetailsTable.Select(d => new OrderDetailsDTO
@@ -98,7 +98,8 @@ namespace DeliveryBro.Areas.store.apiControllers
 				.Where(x => x.RestaurantId == 3 && x.OrderStatus == "acepted").Select(x => new HisOrderDTO
 				{
 					OrderId = x.OrderId,
-					OrderDate = x.OrderDate,
+					OrderDate = x.OrderDate.ToUniversalTime().ToLocalTime().ToString(),
+					CompletedTime=x.OrderDate.ToUniversalTime().ToLocalTime().AddMinutes((double)x.Restaurant.PrepareTime).ToString(),
 					CustomerName = x.Customer.CustomerName,
 					Note = x.Note,
 					OrderDetails = x.OrderDetailsTable.Select(d => new OrderDetailsDTO

@@ -8,23 +8,30 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Areas\store\Views\User\**" />
+    <Compile Remove="Areas\store\Data\**" />
+    <Compile Remove="Areas\store\Models\**" />
     <Compile Remove="Models\NewFolder\**" />
     <Compile Remove="NewFolder1\**" />
     <Compile Remove="NewFolder2\**" />
     <Compile Remove="NewFolder\**" />
+    <Content Remove="Areas\store\Data\**" />
+    <Content Remove="Areas\store\Models\**" />
     <Compile Remove="ViewModels\NewFolder\**" />
     <Content Remove="Areas\store\Views\User\**" />
     <Content Remove="Models\NewFolder\**" />
     <Content Remove="NewFolder1\**" />
     <Content Remove="NewFolder2\**" />
     <Content Remove="NewFolder\**" />
+    <EmbeddedResource Remove="Areas\store\Data\**" />
+    <EmbeddedResource Remove="Areas\store\Models\**" />
     <Content Remove="ViewModels\NewFolder\**" />
     <EmbeddedResource Remove="Areas\store\Views\User\**" />
     <EmbeddedResource Remove="Models\NewFolder\**" />
     <EmbeddedResource Remove="NewFolder1\**" />
     <EmbeddedResource Remove="NewFolder2\**" />
     <EmbeddedResource Remove="NewFolder\**" />
+    <None Remove="Areas\store\Data\**" />
+    <None Remove="Areas\store\Models\**" />
     <EmbeddedResource Remove="ViewModels\NewFolder\**" />
     <None Remove="Areas\store\Views\User\**" />
     <None Remove="Models\NewFolder\**" />
@@ -35,6 +42,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Remove="Areas\store\Views\StoreUser\SendEmail.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="6.0.16" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="6.0.16" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="6.0.16" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.15" />
@@ -52,14 +64,21 @@
   <ItemGroup>
     <Folder Include="Areas\admin\Data\" />
     <Folder Include="Areas\admin\Models\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Areas\store\Views\StoreUser\SendEmail.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Areas\store\Views\StoreUser\SendEmail.cshtml" />
     <Folder Include="Areas\store\Data\" />
     <Folder Include="Areas\store\Models\" />
     <Folder Include="Views\User\" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="Areas\store\Views\User\Register.cshtml" />
-    <None Include="Areas\store\Views\User\StoreLogin.cshtml" />
+    <None Include="Areas\store\Views\StoreUser\SendEmail.cshtml" />
   </ItemGroup>
 
 </Project>
