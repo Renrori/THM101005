@@ -24,37 +24,37 @@ namespace DeliveryBro.ApiController
         }
 
         //[Authorize]
-        ////GET:api/UserApi/2
-        //[HttpGet]
-        ////[Authorize(Role="User")] 限制登入者?
-        //public async Task<UserInfoViewModel> GetUserInfo()
-        //{
-        //    var login = await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-        //    if (login.Succeeded)
-        //    {
-        //        var userIdClaim = login.Principal.Claims.FirstOrDefault(c=>c.ValueType== "customerId");
-        //        var userId = userIdClaim?.Value;
-        //        var user = await _context.CustomersTable.Include(c => c.CustomerAddressTable)
-        //        .FirstOrDefaultAsync(c => c.CustomerId == userId);
-        //    }
-            
+        //GET:api/UserApi/2
+        [HttpGet("{customerId}")]
+        //[Authorize(Role="User")] 限制登入者?
+        public async Task<UserInfoViewModel> GetUserInfo(int customerId)
+        {
+            //var login = await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            //if (login.Succeeded)
+            //{
+            //    var userIdClaim = login.Principal.Claims.FirstOrDefault(c => c.ValueType == "customerId");
+            //    var userId = userIdClaim?.Value;
+            //    var user = await _context.CustomersTable.Include(c => c.CustomerAddressTable)
+            //    .FirstOrDefaultAsync(c => c.CustomerId == userId);
+            //}
 
-        //    var userAddress = await _context.CustomerAddressTable.Where(c => c.CustomerId == customerId).Select(c => c.CustomerAddress).ToListAsync();
+            var userAddress = await _context.CustomerAddressTable.Where(c => c.CustomerId == customerId).Select(c => c.CustomerAddress).ToListAsync();
+            var user = await _context.CustomersTable.FindAsync(customerId);
 
-        //    var userInfo = new UserInfoViewModel
-        //    {
+            UserInfoViewModel userInfo = new UserInfoViewModel
+            {
 
-        //        UserId = user.CustomerId,
-        //        UserName = user.CustomerName,
-        //        UserEmail = user.CustomerEmail,
-        //        UserAddress = userAddress,
-        //        UserBirth = user.DateOfBirth,
-        //        UserPhone = user.CustomerPhone,
-        //        UserPicture = user.CustomerPhoto
+                UserId = user.CustomerId,
+                UserName = user.CustomerName,
+                UserEmail = user.CustomerEmail,
+                UserAddress = userAddress,
+                UserBirth = user.DateOfBirth,
+                UserPhone = user.CustomerPhone,
+                UserPicture = user.CustomerPhoto
 
-        //    };
-        //    return userInfo;
-        //}
+            };
+            return userInfo;
+        }
 
         //Put:api/UserApi/4
         [HttpPut("{customerId}")]

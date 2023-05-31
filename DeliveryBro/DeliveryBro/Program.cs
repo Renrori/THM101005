@@ -58,7 +58,7 @@ namespace DeliveryBro
                    googleOptions.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
                });
 
-            ;
+            
 
 
 			builder.Services.AddTransient<EncryptService>();

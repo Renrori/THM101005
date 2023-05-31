@@ -27,6 +27,10 @@ namespace DeliveryBro.Controllers
         {
             return View();
         }
+        public IActionResult Register()
+        {
+            return View();
+        }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -51,7 +55,7 @@ namespace DeliveryBro.Controllers
                      new Claim (ClaimTypes.Role,"User"),
                      new Claim("CustomerId",user.CustomerId.ToString())
                 };
-
+                
                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
                 //ClaimsPrincipal也可以List
@@ -86,13 +90,11 @@ namespace DeliveryBro.Controllers
             {
                 var claimsId = result.Principal.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value;
                 var claimName = result.Principal.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name).Value;
-                var claimsEmail = result.Principal.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email).Value;
+                
 
                 var claims = new List<Claim>() {
                      new Claim(ClaimTypes.Name, claimName),
                      new Claim (ClaimTypes.Role,"User"),
-
-
                      //new Claim("CustomerId",user.CustomerId.ToString())
                 };
                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
@@ -128,30 +130,25 @@ namespace DeliveryBro.Controllers
             {
                 var claimsId = result.Principal.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value;
                 var claimName = result.Principal.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name).Value;
-                var claimsEmail = result.Principal.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email).Value;
+               
 
                 var claims = new List<Claim>() {
                      new Claim(ClaimTypes.Name, claimName),
                      new Claim (ClaimTypes.Role,"User"),
-
-
                      //new Claim("CustomerId",user.CustomerId.ToString())
                 };
 
                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
-                //ClaimsPrincipal也可以List
+                
                 var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
-                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
+                //await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
                 //var claims = result.Principal.Claims.Select(x => new
                 //{
                 //    //打印Claims物件
                 //    x.Type,
                 //    x.Value,
                 //});
-
-    
-
                 return RedirectToAction("Index", "Home");
             }
             return Ok();
@@ -163,7 +160,7 @@ namespace DeliveryBro.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        //public bool OAuthCheck()
+        //public  OAuthCheck()
         //{
         //    var claimsId = result.Principal.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value;
         //    var claimName = result.Principal.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name).Value;
@@ -181,10 +178,7 @@ namespace DeliveryBro.Controllers
         //    }
 
         //}
-        public IActionResult Register()
-        {
-            return View();
-        }
 
-	}
+
+    }
 }
