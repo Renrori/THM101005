@@ -7,7 +7,6 @@ using Microsoft.EntityFrameworkCore;
 using DeliveryBro.Services;
 using DeliveryBro.Areas.store.Hubs;
 using DeliveryBro.Areas.store.SubscribeTableDependency;
-using DeliveryBro.Services;
 
 namespace DeliveryBro
 {
@@ -35,19 +34,31 @@ namespace DeliveryBro
 			builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
 			   .AddEntityFrameworkStores<ApplicationDbContext>();
 
-			builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-			   .AddCookie(opt =>
-			   {
-				   opt.LoginPath = "/Login/Index";
-				   opt.AccessDeniedPath = "/Home/Index";
-				   opt.ExpireTimeSpan = TimeSpan.FromMinutes(10);
-			   });
+            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+               .AddCookie(opt =>
+               {
+                   opt.LoginPath = "/Login/Index"; //登入路徑
+                   opt.AccessDeniedPath = "/Home/Index"; //取消登入路徑
+                   opt.ExpireTimeSpan = TimeSpan.FromMinutes(10);
+               })
+               .AddFacebook(facebookOptions =>  //"Facebook"
+               {
+                   //取用金鑰字串
+                   facebookOptions.AppId = builder.Configuration["Authentication:Facebook:AppId"];
+                   facebookOptions.AppSecret = builder.Configuration["Authentication:Facebook:AppSecret"];
+                   //facebookOptions.Events.TicketReceived
+                   facebookOptions.Events.OnCreatingTicket = (x) =>
+                   {
+                       return Task.CompletedTask;
+                   };
+               });
+
 
 			builder.Services.AddTransient<EncryptService>();
 			builder.Services.AddTransient<PasswordEncyptService>();
 
-
-			builder.Services.AddControllersWithViews();
+            
+            builder.Services.AddControllersWithViews();
 
 			var app = builder.Build();
 

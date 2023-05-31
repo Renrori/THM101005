@@ -3,32 +3,37 @@
 @*網頁內容*@
 
 
-<form asp-controller="Login" asp-action="Index" method="post">
-    <div class="container">
-       
-        <div>
-            <label class="form-label">@Html.DisplayNameFor(model=>model.UserAccount)</label>
-            <input type="text" asp-for="UserAccount" class="form-control" />
-            <span asp-validation-for="UserAccount" class="text-danger"></span>
+<form asp-controller="Login" asp-action="Index" method="post" class="bg-white">
+    <div class="">
+        <div class="form-group row">
+            <div class="col-md-12">
+                <label for="c_uname" class="text-black">@Html.DisplayNameFor(model=>model.UserAccount) <span class="text-danger">*</span></label>
+                <input type="text" asp-for="UserAccount" class="form-control">
+                <span asp-validation-for="UserAccount" class="text-danger"></span>
+            </div>
         </div>
-        <div>
-            <label class="form-label">@Html.DisplayNameFor(model=>model.UserPassword)</label>
-            <input type="Password" asp-for="UserPassword" class="form-control" />
-            <span asp-validation-for="UserPassword" class="text-danger"></span>
+        <div class="form-group row">
+            <div class="col-md-12">
+                <label for="c_password" class="text-black">@Html.DisplayNameFor(model=>model.UserPassword) <span class="text-danger">*</span></label>
+                <input type="Password" asp-for="UserPassword" class="form-control" />
+                <span asp-validation-for="UserPassword" class="text-danger"></span>
+            </div>
         </div>
-        @if (ViewBag.ErrorMessage != null)
-        {
-            <div class="text-danger">@ViewBag.ErrorMessage</div>
-        }
-        <div class="form-group">
-            <button type="submit"><i class="fa-solid fa-square-arrow-up-right"></i>送出</button>
-            <span><p>沒有帳號?</p><a herf="">點擊註冊</a></span>
-        </div>
-
     </div>
-
+    @if (ViewBag.ErrorMessage != null)
+    {
+        <div class="text-danger">@ViewBag.ErrorMessage</div>
+    }
+    <div class="form-group">
+        <div class="form-group row">
+            <div class="col-lg-12">
+                <input type="submit" class="btn btn-primary btn-lg" value="登入">
+            </div>
+        </div>
+    </div>
 </form>
 
+<a href="/Login/FacebookLogin" class="btn btn-primary btn-sm">Facebook登入</a>
 
 @section Scripts {
     @{
