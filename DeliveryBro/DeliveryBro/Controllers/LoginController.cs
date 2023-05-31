@@ -88,14 +88,26 @@ namespace DeliveryBro.Controllers
             //如果驗證成功
             if(result.Succeeded)
             {
-                var claimsId = result.Principal.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value;
+                var claimId = result.Principal.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value;
                 var claimName = result.Principal.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name).Value;
-                
+                var claimsEmail = result.Principal.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email).Value;
 
+                var checkOAuth = _context.CustomersTable.Any(c => c.CustomerAccount == claimId && c.CustomerEmail == claimsEmail);
+                if (!checkOAuth)
+                {
+                    var oauthData = new CustomersTable
+                    {
+                        CustomerAccount = claimId,
+                        CustomerName = claimName,
+                        CustomerEmail = claimsEmail,
+                    };
+                    OAuthCreate(oauthData);
+                };
+                var customer = _context.CustomersTable.FirstOrDefault(c => c.CustomerAccount == claimId && c.CustomerEmail == claimsEmail);
                 var claims = new List<Claim>() {
-                     new Claim(ClaimTypes.Name, claimName),
+                     new Claim(ClaimTypes.Name,customer.CustomerName),
                      new Claim (ClaimTypes.Role,"User"),
-                     //new Claim("CustomerId",user.CustomerId.ToString())
+                     new Claim("CustomerId",customer.CustomerId.ToString())
                 };
                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
@@ -128,21 +140,34 @@ namespace DeliveryBro.Controllers
             //如果驗證成功
             if (result.Succeeded)
             {
-                var claimsId = result.Principal.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value;
+                var claimId = result.Principal.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value;
                 var claimName = result.Principal.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name).Value;
-               
+                var claimsEmail = result.Principal.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email).Value;
 
-                var claims = new List<Claim>() {
-                     new Claim(ClaimTypes.Name, claimName),
+                var checkOAuth = _context.CustomersTable.Any(c => c.CustomerAccount == claimId && c.CustomerEmail == claimsEmail);
+                if (!checkOAuth)
+                {
+                    var oauthData = new CustomersTable
+                    {
+                        CustomerAccount = claimId,
+                        CustomerName = claimName,
+                        CustomerEmail = claimsEmail,
+                    };
+                    await OAuthCreate(oauthData);
+                }
+
+                var customer=_context.CustomersTable.FirstOrDefault(c=>c.CustomerAccount == claimId && c.CustomerEmail == claimsEmail);
+                    var claims = new List<Claim>() {
+                     new Claim(ClaimTypes.Name,customer.CustomerName),
                      new Claim (ClaimTypes.Role,"User"),
-                     //new Claim("CustomerId",user.CustomerId.ToString())
+                     new Claim("CustomerId",customer.CustomerId.ToString())
                 };
 
                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
                 
                 var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
-                //await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
                 //var claims = result.Principal.Claims.Select(x => new
                 //{
                 //    //打印Claims物件
@@ -160,24 +185,18 @@ namespace DeliveryBro.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        //public  OAuthCheck()
-        //{
-        //    var claimsId = result.Principal.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value;
-        //    var claimName = result.Principal.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name).Value;
-        //    var claimsEmail = result.Principal.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email).Value;
-        //    var checkOAuth = _context.CustomersTable.Any(c => c.CustomerAccount == claimsId && c.CustomerEmail == claimsEmail);
-        //    if (!checkOAuth)
-        //    {
-        //        CustomersTable customer = new CustomersTable
-        //        {
-        //            CustomerAccount = claimsId,
-        //            CustomerPassword = "",
-        //            CustomerName = claimName,
-        //            CustomerEmail = claimsEmail,
-        //        };
-        //    }
-
-        //}
+        public async Task OAuthCreate(CustomersTable oauthData)
+        {
+            CustomersTable customer = new CustomersTable
+            {
+                CustomerAccount = oauthData.CustomerAccount,
+                CustomerPassword = "",
+                CustomerName = oauthData.CustomerName,
+                CustomerEmail = oauthData.CustomerEmail,
+            };
+            _context.CustomersTable.Add(customer);
+            await _context.SaveChangesAsync();
+        }
 
 
     }

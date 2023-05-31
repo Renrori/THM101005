@@ -154,7 +154,7 @@ namespace DeliveryBro.Models
 
                 entity.Property(e => e.CustomerAccount)
                     .IsRequired()
-                    .HasMaxLength(15)
+                    .HasMaxLength(50)
                     .IsUnicode(false);
 
                 entity.Property(e => e.CustomerEmail).HasMaxLength(50);
