@@ -5,6 +5,7 @@
         public int OrderId { get; set; }
         public string CustomerAddress { get; set; }
         public int? ShippingFee { get; set; }
+        public string Payment {get; set; }
         public DateTime OrderDate { get; set; }
         public string OrderStatus { get; set; }
 

@@ -1,4 +1,6 @@
-﻿namespace DeliveryBro.Areas.store.DTO
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace DeliveryBro.Areas.store.DTO
 {
 	public class HisOrderDTO
 	{

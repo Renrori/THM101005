@@ -1,291 +1,367 @@
 ﻿<main id="main" class="main">
 
     <div class="pagetitle">
-        <h1>Store Information</h1>
+        <h1>商店資訊</h1>
         <nav>
             <ol class="breadcrumb">
                 <a class="breadcrumb-item" asp-area="store" asp-controller="Home" asp-action="Index">Home</a>
-                <li class="breadcrumb-item">Users</li>
-                <li class="breadcrumb-item active">Profile</li>
+                <li class="breadcrumb-item active">商店資訊</li>
             </ol>
         </nav>
     </div><!-- End Page Title -->
-
-    <section class="section profile">
-        <div class="row">
-            <div class="col-xl-4">
-                <div class="card">
-                    <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
-                        <img src="~/store/images/choosing-a-cat.jpg" alt="Profile" class="rounded-circle width="100%" />
-                        <h2>Kevin Anderson</h2>
-                        <h3>Web Designer</h3>
-                        <div class="social-links mt-2">
-                            <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
-                            <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
-                            <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
-                            <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
+    <div id="app">
+        <section class="section profile" v-for="store in storeInfo">
+            <div class="row">
+                <div class="col-xl-4">
+                    <div class="card">
+                        <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
+                            <img v-if="store.restaurantPicture!=null" :src="createImgUrl(store.restaurantPicture)" style="width:100%" />
+                            <img v-else src="~/store/images/no image.jpg" style="width:100%" />
+                            <h2>{{store.restaurantName}}</h2>
+                            <div class="social-links mt-2">
+                                <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
+                                <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
+                                <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
+                                <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
+                            </div>
                         </div>
                     </div>
+
                 </div>
 
-            </div>
+                <div class="col-xl-8">
 
-            <div class="col-xl-8">
+                    <div class="card">
+                        <div class="card-body pt-3">
+                            <!-- Bordered Tabs -->
+                            <ul class="nav nav-tabs nav-tabs-bordered">
 
-                <div class="card">
-                    <div class="card-body pt-3">
-                        <!-- Bordered Tabs -->
-                        <ul class="nav nav-tabs nav-tabs-bordered">
+                                <li class="nav-item">
+                                    <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-overview">商家資料</button>
+                                </li>
 
-                            <li class="nav-item">
-                                <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-overview">Overview</button>
-                            </li>
+                                <li class="nav-item">
+                                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit" @@click="edit(store)">編輯資料</button>
+                                </li>
 
-                            <li class="nav-item">
-                                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit">Edit Profile</button>
-                            </li>
+                                <li class="nav-item">
+                                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-settings">Settings</button>
+                                </li>
 
-                            <li class="nav-item">
-                                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-settings">Settings</button>
-                            </li>
+                                <li class="nav-item">
+                                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-change-password">Change Password</button>
+                                </li>
 
-                            <li class="nav-item">
-                                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-change-password">Change Password</button>
-                            </li>
+                            </ul>
+                            <div class="tab-content pt-2">
 
-                        </ul>
-                        <div class="tab-content pt-2">
+                                <div class="tab-pane fade show active profile-overview" id="profile-overview">
+                                    <h5 class="card-title">商家介紹</h5>
+                                    <p class="small fst-italic">{{store.restaurantDescription}}</p>
 
-                            <div class="tab-pane fade show active profile-overview" id="profile-overview">
-                                <h5 class="card-title">About</h5>
-                                <p class="small fst-italic">Sunt est soluta temporibus accusantium neque nam maiores cumque temporibus. Tempora libero non est unde veniam est qui dolor. Ut sunt iure rerum quae quisquam autem eveniet perspiciatis odit. Fuga sequi sed ea saepe at unde.</p>
+                                    <h5 class="card-title">商家資訊</h5>
 
-                                <h5 class="card-title">Profile Details</h5>
+                                    <div class="row">
+                                        <div class="col-lg-3 col-md-4 label ">商家名稱</div>
+                                        <div class="col-lg-9 col-md-8">{{store.restaurantName}}</div>
+                                    </div>
 
-                                <div class="row">
-                                    <div class="col-lg-3 col-md-4 label ">Full Name</div>
-                                    <div class="col-lg-9 col-md-8">Kevin Anderson</div>
+                                    <div class="row">
+                                        <div class="col-lg-3 col-md-4 label">商家地址</div>
+                                        <div class="col-lg-9 col-md-8">{{store.restaurantAddress}}</div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-lg-3 col-md-4 label">商家電話</div>
+                                        <div class="col-lg-9 col-md-8">{{store.restaurantPhone}}</div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-3 col-md-4 label">營業時間</div>
+                                        <div class="col-lg-9 col-md-8">{{store.openingHours}}</div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-3 col-md-4 label">Email</div>
+                                        <div class="col-lg-9 col-md-8">{{store.restaurantEmail}}</div>
+                                    </div>
+
                                 </div>
 
-                                <div class="row">
-                                    <div class="col-lg-3 col-md-4 label">Company</div>
-                                    <div class="col-lg-9 col-md-8">Lueilwitz, Wisoky and Leuschke</div>
-                                </div>
+                                <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
 
-                                <div class="row">
-                                    <div class="col-lg-3 col-md-4 label">Job</div>
-                                    <div class="col-lg-9 col-md-8">Web Designer</div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-lg-3 col-md-4 label">Country</div>
-                                    <div class="col-lg-9 col-md-8">USA</div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-lg-3 col-md-4 label">Address</div>
-                                    <div class="col-lg-9 col-md-8">A108 Adam Street, New York, NY 535022</div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-lg-3 col-md-4 label">Phone</div>
-                                    <div class="col-lg-9 col-md-8">(436) 486-3538 x29071</div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-lg-3 col-md-4 label">Email</div>
-                                    <div class="col-lg-9 col-md-8">k.anderson@example.com</div>
-                                </div>
-
-                            </div>
-
-                            <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
-
-                                <!-- Profile Edit Form -->
-                                <form>
-                                    <div class="row mb-3">
-                                        <label for="profileImage" class="col-md-4 col-lg-3 col-form-label">Profile Image</label>
-                                        <div class="col-md-8 col-lg-9">
-                                            <img src="~/store/images/choosing-a-cat.jpg" alt="Profile" />
-                                            <div class="pt-2">
-                                                <a href="#" class="btn btn-primary btn-sm" title="Upload new profile image"><i class="bi bi-upload"></i></a>
-                                                <a href="#" class="btn btn-danger btn-sm" title="Remove my profile image"><i class="bi bi-trash"></i></a>
+                                    <!-- Profile Edit Form -->
+                                    <form>
+                                        <div class="row mb-3">
+                                            <label for="profileImage" class="col-md-4 col-lg-3 col-form-label">商家圖片</label>
+                                            <div class="col-md-8 col-lg-9">
+                                                <img v-if="store.restaurantPicture!=null&&preview==null" :src="createImgUrl(store.restaurantPicture)" style="width:100%" />
+                                                <img v-else-if="preview!=null" :src="preview" style="width:100%" />
+                                                <img v-else src="~/store/images/no image.jpg" style="width:100%" />
+                                                <div class="pt-2">
+                                                    <input class="form-control" type="file" id="file" @@change="previewImage" style="display:none" />
+                                                    <button type="button" class="btn btn-primary btn-sm" onclick="file.click()"><i class="bi bi-upload"></i></button>
+                                                    <button type="button" class="btn btn-danger btn-sm" title="Remove my profile image" @@click="deletepreview"><i class="bi bi-trash"></i></button>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
 
-                                    <div class="row mb-3">
-                                        <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Full Name</label>
-                                        <div class="col-md-8 col-lg-9">
-                                            <input name="fullName" type="text" class="form-control" id="fullName" value="Kevin Anderson">
-                                        </div>
-                                    </div>
-
-                                    <div class="row mb-3">
-                                        <label for="about" class="col-md-4 col-lg-3 col-form-label">About</label>
-                                        <div class="col-md-8 col-lg-9">
-                                            <textarea name="about" class="form-control" id="about" style="height: 100px">Sunt est soluta temporibus accusantium neque nam maiores cumque temporibus. Tempora libero non est unde veniam est qui dolor. Ut sunt iure rerum quae quisquam autem eveniet perspiciatis odit. Fuga sequi sed ea saepe at unde.</textarea>
-                                        </div>
-                                    </div>
-
-                                    <div class="row mb-3">
-                                        <label for="company" class="col-md-4 col-lg-3 col-form-label">Company</label>
-                                        <div class="col-md-8 col-lg-9">
-                                            <input name="company" type="text" class="form-control" id="company" value="Lueilwitz, Wisoky and Leuschke">
-                                        </div>
-                                    </div>
-
-                                    <div class="row mb-3">
-                                        <label for="Job" class="col-md-4 col-lg-3 col-form-label">Job</label>
-                                        <div class="col-md-8 col-lg-9">
-                                            <input name="job" type="text" class="form-control" id="Job" value="Web Designer">
-                                        </div>
-                                    </div>
-
-                                    <div class="row mb-3">
-                                        <label for="Country" class="col-md-4 col-lg-3 col-form-label">Country</label>
-                                        <div class="col-md-8 col-lg-9">
-                                            <input name="country" type="text" class="form-control" id="Country" value="USA">
-                                        </div>
-                                    </div>
-
-                                    <div class="row mb-3">
-                                        <label for="Address" class="col-md-4 col-lg-3 col-form-label">Address</label>
-                                        <div class="col-md-8 col-lg-9">
-                                            <input name="address" type="text" class="form-control" id="Address" value="A108 Adam Street, New York, NY 535022">
-                                        </div>
-                                    </div>
-
-                                    <div class="row mb-3">
-                                        <label for="Phone" class="col-md-4 col-lg-3 col-form-label">Phone</label>
-                                        <div class="col-md-8 col-lg-9">
-                                            <input name="phone" type="text" class="form-control" id="Phone" value="(436) 486-3538 x29071">
-                                        </div>
-                                    </div>
-
-                                    <div class="row mb-3">
-                                        <label for="Email" class="col-md-4 col-lg-3 col-form-label">Email</label>
-                                        <div class="col-md-8 col-lg-9">
-                                            <input name="email" type="email" class="form-control" id="Email" value="k.anderson@example.com">
-                                        </div>
-                                    </div>
-
-                                    <div class="row mb-3">
-                                        <label for="Twitter" class="col-md-4 col-lg-3 col-form-label">Twitter Profile</label>
-                                        <div class="col-md-8 col-lg-9">
-                                            <input name="twitter" type="text" class="form-control" id="Twitter" value="https://twitter.com/#">
-                                        </div>
-                                    </div>
-
-                                    <div class="row mb-3">
-                                        <label for="Facebook" class="col-md-4 col-lg-3 col-form-label">Facebook Profile</label>
-                                        <div class="col-md-8 col-lg-9">
-                                            <input name="facebook" type="text" class="form-control" id="Facebook" value="https://facebook.com/#">
-                                        </div>
-                                    </div>
-
-                                    <div class="row mb-3">
-                                        <label for="Instagram" class="col-md-4 col-lg-3 col-form-label">Instagram Profile</label>
-                                        <div class="col-md-8 col-lg-9">
-                                            <input name="instagram" type="text" class="form-control" id="Instagram" value="https://instagram.com/#">
-                                        </div>
-                                    </div>
-
-                                    <div class="row mb-3">
-                                        <label for="Linkedin" class="col-md-4 col-lg-3 col-form-label">Linkedin Profile</label>
-                                        <div class="col-md-8 col-lg-9">
-                                            <input name="linkedin" type="text" class="form-control" id="Linkedin" value="https://linkedin.com/#">
-                                        </div>
-                                    </div>
-
-                                    <div class="text-center">
-                                        <button type="submit" class="btn btn-primary">Save Changes</button>
-                                    </div>
-                                </form><!-- End Profile Edit Form -->
-
-                            </div>
-
-                            <div class="tab-pane fade pt-3" id="profile-settings">
-
-                                <!-- Settings Form -->
-                                <form>
-
-                                    <div class="row mb-3">
-                                        <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Email Notifications</label>
-                                        <div class="col-md-8 col-lg-9">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" id="changesMade" checked>
-                                                <label class="form-check-label" for="changesMade">
-                                                    Changes made to your account
-                                                </label>
-                                            </div>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" id="newProducts" checked>
-                                                <label class="form-check-label" for="newProducts">
-                                                    Information on new products and services
-                                                </label>
-                                            </div>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" id="proOffers">
-                                                <label class="form-check-label" for="proOffers">
-                                                    Marketing and promo offers
-                                                </label>
-                                            </div>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" id="securityNotify" checked disabled>
-                                                <label class="form-check-label" for="securityNotify">
-                                                    Security alerts
-                                                </label>
+                                        <div class="row mb-3">
+                                            <label for="fullName" class="col-md-4 col-lg-3 col-form-label">商家名稱</label>
+                                            <div class="col-md-8 col-lg-9">
+                                                <input type="text" class="form-control" id="fullName" v-model="store.restaurantName" disabled>
                                             </div>
                                         </div>
-                                    </div>
 
-                                    <div class="text-center">
-                                        <button type="submit" class="btn btn-primary">Save Changes</button>
-                                    </div>
-                                </form><!-- End settings Form -->
-
-                            </div>
-
-                            <div class="tab-pane fade pt-3" id="profile-change-password">
-                                <!-- Change Password Form -->
-                                <form>
-
-                                    <div class="row mb-3">
-                                        <label for="currentPassword" class="col-md-4 col-lg-3 col-form-label">Current Password</label>
-                                        <div class="col-md-8 col-lg-9">
-                                            <input name="password" type="password" class="form-control" id="currentPassword">
+                                        <div class="row mb-3">
+                                            <label for="about" class="col-md-4 col-lg-3 col-form-label">商家介紹</label>
+                                            <div class="col-md-8 col-lg-9">
+                                                <textarea class="form-control" id="about" style="height: 100px" v-model="store.restaurantDescription"></textarea>
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    <div class="row mb-3">
-                                        <label for="newPassword" class="col-md-4 col-lg-3 col-form-label">New Password</label>
-                                        <div class="col-md-8 col-lg-9">
-                                            <input name="newpassword" type="password" class="form-control" id="newPassword">
+                                        <div class="row mb-3">
+                                            <label for="Address" class="col-md-4 col-lg-3 col-form-label">商家地址</label>
+                                            <div class="col-md-8 col-lg-9">
+                                                <input type="text" class="form-control" id="Address" v-model="store.restaurantAddress" disabled>
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    <div class="row mb-3">
-                                        <label for="renewPassword" class="col-md-4 col-lg-3 col-form-label">Re-enter New Password</label>
-                                        <div class="col-md-8 col-lg-9">
-                                            <input name="renewpassword" type="password" class="form-control" id="renewPassword">
+                                        <div class="row mb-3">
+                                            <label for="Phone" class="col-md-4 col-lg-3 col-form-label">商家電話</label>
+                                            <div class="col-md-8 col-lg-9">
+                                                <input type="text" class="form-control" id="Phone" v-model="store.resturantPhone" disabled>
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    <div class="text-center">
-                                        <button type="submit" class="btn btn-primary">Change Password</button>
-                                    </div>
-                                </form><!-- End Change Password Form -->
+                                        <div class="row mb-3">
+                                            <label for="openingtime" class="col-md-4 col-lg-3 col-form-label">營業時間</label>
+                                            <div class="col-md-8 col-lg-9">
+                                                <input type="time" class="form-control" id="openingtime" v-model="store.openingHours">
+                                            </div>
+                                        </div>
 
-                            </div>
+                                        <div class="row mb-3">
+                                            <label for="Email" class="col-md-4 col-lg-3 col-form-label">Email</label>
+                                            <div class="col-md-8 col-lg-9">
+                                                <input name="email" type="email" class="form-control" id="Email" v-model="store.restaurantEmail" disabled>
+                                            </div>
+                                        </div>
 
-                        </div><!-- End Bordered Tabs -->
+                                        <div class="row mb-3">
+                                            <label for="Twitter" class="col-md-4 col-lg-3 col-form-label">Twitter Profile</label>
+                                            <div class="col-md-8 col-lg-9">
+                                                <input name="twitter" type="text" class="form-control" id="Twitter" value="https://twitter.com/#">
+                                            </div>
+                                        </div>
 
+                                        <div class="row mb-3">
+                                            <label for="Facebook" class="col-md-4 col-lg-3 col-form-label">Facebook Profile</label>
+                                            <div class="col-md-8 col-lg-9">
+                                                <input name="facebook" type="text" class="form-control" id="Facebook" value="https://facebook.com/#">
+                                            </div>
+                                        </div>
+
+                                        <div class="row mb-3">
+                                            <label for="Instagram" class="col-md-4 col-lg-3 col-form-label">Instagram Profile</label>
+                                            <div class="col-md-8 col-lg-9">
+                                                <input name="instagram" type="text" class="form-control" id="Instagram" value="https://instagram.com/#">
+                                            </div>
+                                        </div>
+
+                                        <div class="row mb-3">
+                                            <label for="Linkedin" class="col-md-4 col-lg-3 col-form-label">Linkedin Profile</label>
+                                            <div class="col-md-8 col-lg-9">
+                                                <input name="linkedin" type="text" class="form-control" id="Linkedin" value="https://linkedin.com/#">
+                                            </div>
+                                        </div>
+
+                                        <div class="text-center">
+                                            <button type="button" class="btn btn-primary" @@click="update(store)">修改</button>
+                                            <button type="button" class="btn btn-danger" @@click="cancel(store)">取消</button>
+                                        </div>
+                                    </form><!-- End Profile Edit Form -->
+
+                                </div>
+
+                                <div class="tab-pane fade pt-3" id="profile-settings">
+
+                                    <!-- Settings Form -->
+                                    <form>
+
+                                        <div class="row mb-3">
+                                            <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Email Notifications</label>
+                                            <div class="col-md-8 col-lg-9">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="changesMade" checked>
+                                                    <label class="form-check-label" for="changesMade">
+                                                        Changes made to your account
+                                                    </label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="newProducts" checked>
+                                                    <label class="form-check-label" for="newProducts">
+                                                        Information on new products and services
+                                                    </label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="proOffers">
+                                                    <label class="form-check-label" for="proOffers">
+                                                        Marketing and promo offers
+                                                    </label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="securityNotify" checked disabled>
+                                                    <label class="form-check-label" for="securityNotify">
+                                                        Security alerts
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="text-center">
+                                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                                        </div>
+                                    </form><!-- End settings Form -->
+
+                                </div>
+
+                                <div class="tab-pane fade pt-3" id="profile-change-password">
+                                    <!-- Change Password Form -->
+                                    <form>
+
+                                        <div class="row mb-3">
+                                            <label for="currentPassword" class="col-md-4 col-lg-3 col-form-label">Current Password</label>
+                                            <div class="col-md-8 col-lg-9">
+                                                <input name="password" type="password" class="form-control" id="currentPassword">
+                                            </div>
+                                        </div>
+
+                                        <div class="row mb-3">
+                                            <label for="newPassword" class="col-md-4 col-lg-3 col-form-label">New Password</label>
+                                            <div class="col-md-8 col-lg-9">
+                                                <input name="newpassword" type="password" class="form-control" id="newPassword">
+                                            </div>
+                                        </div>
+
+                                        <div class="row mb-3">
+                                            <label for="renewPassword" class="col-md-4 col-lg-3 col-form-label">Re-enter New Password</label>
+                                            <div class="col-md-8 col-lg-9">
+                                                <input name="renewpassword" type="password" class="form-control" id="renewPassword">
+                                            </div>
+                                        </div>
+
+                                        <div class="text-center">
+                                            <button type="submit" class="btn btn-primary">Change Password</button>
+                                        </div>
+                                    </form><!-- End Change Password Form -->
+
+                                </div>
+
+                            </div><!-- End Bordered Tabs -->
+
+                        </div>
                     </div>
+
                 </div>
-
             </div>
-        </div>
-    </section>
+        </section>
+    </div>
+</main>
 
-</main><!-- End #main -->
+@section Scripts
+    {
+
+    <script src="~/axios/axios.min.js"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        var vueStoreInfo = {
+            data() {
+                return {
+                    storeInfo: [],
+                    preview: null,
+                    oldDescription: "",
+                    oldopeningtime: "",
+                    storePic: ""
+                }
+            },
+            mounted: function () {
+                let _this = this;
+                _this.getStoreInfo();
+            },
+            methods: {
+                getStoreInfo: function () {
+                    let _this = this;
+                    axios.get(`/api/StoreInfo`).then(response => {
+                        _this.storeInfo = response.data.map(x => ({ ...x, openingHours: x.openingHours.substring(0, 5) }));
+                    })
+                },
+                createImgUrl: function (pic) {
+                    return `data:image/jpeg;base64,${pic}`
+                },
+                previewImage: function (event) {
+                    let _this = this;
+                    var input = event.target;
+                    if (input.files) {
+                        var reader = new FileReader();
+                        reader.onload = (e) => {
+                            _this.preview = e.target.result;
+                        }
+                        _this.storePic = input.files[0];
+                        reader.readAsDataURL(input.files[0]);
+                    }
+                },
+                deletepreview: function () {
+                    let _this = this;
+                    _this.preview = null;
+                },
+                update: function (store) {
+                    let _this = this;
+                    let form = new FormData();
+                    form.append("RestaurantDescription", store.restaurantDescription);
+                    form.append("OpeningHours", store.openingHours);
+                    if (_this.preview != null)
+                        form.append("RestaurantPicture", _this.storePic);
+                    else
+                        form.append("RestaurantPicture", store.restaurantPicture);
+                    axios.put(`/api/StoreInfo/${store.restaurantId}`, form,
+                        {
+                            headers: {
+                                'Content-Type': 'multipart/form-data'
+                            }
+                        }).then(response => {
+                            Swal.fire(
+                                '修改成功!'
+                            )
+                            _this.getStoreInfo();
+
+                        }).catch(
+                            function (error) {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Oops...',
+                                    text: '修改失敗!',
+                                    footer: '請重新確認輸入欄位'
+                                })
+                            }
+                        );
+                },
+                edit: function (store) {
+                    let _this = this;
+                    _this.oldDescription = store.restaurantDescription;
+                    _this.oldopeningtime = store.openingHours;
+                    _this.storePic = store.restaurantPicture
+                },
+                cancel: function (store) {
+                    let _this = this;
+                    store.restaurantDescription = _this.oldDescription;
+                    store.openingHours = _this.oldopeningtime;
+                    store.restaurantPicture = _this.storePic;
+                    _this.preview = null;
+                }
+            }
+
+        }
+        var app = Vue.createApp(vueStoreInfo).mount('#app');
+    </script>
+
+}

@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace DeliveryBro.ViewModels
+
+namespace DeliveryBro.Areas.store.ViewModels
 {
     public class RegisterViewModel
     {

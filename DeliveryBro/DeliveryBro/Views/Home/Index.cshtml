@@ -61,7 +61,7 @@
           ">
                 <div class="carousel-caption d-none d-md-block">
                     <h2 class="text-light">歡迎註冊成為商家會員</h2>
-                    <p><a href="#" class="btn btn-primary">點此進入</a></p>
+                    <p><a class="btn btn-primary" asp-area="store" asp-controller="Home" asp-action="StoreInfo">商家儀錶板(暫時)</a></p>                  
                 </div>
 
             </div>
@@ -87,30 +87,23 @@
 
 <div id="app">
     <section class="ftco-section">
-
         <div class="container">
             <div class="row">
-                <div class="col-md-6 col-lg-4" v-for="store in StoreInfo" :key="storeId">
+                <div class="col-md-6 col-lg-4 " v-for="store in storeInfo" :key="storeId">
                     <div class="product">
-                        <a class="img-prod" asp-area="" asp-controller="Home" asp-action="RestaurantMenu">
-                            <img class="img-fluid" :src="GetPictureStore(store.storeId)" alt="{{ store.storeId }}">
-                            <div class="overlay"></div>
-                        </a>
-                        <div class="text py-3 pb-4 px-3 text-center">
-                            <h2><a href="#">商店名:{{ store.storeName }}</a></h2>
-                            <div class="d-flex"> 
-                            </div>
-                            <div class="bottom-area d-flex px-3">
-                                <div class="m-auto d-flex">
-                                    <a href="#" class="add-to-cart d-flex justify-content-center align-items-center text-center">
-                                        <span><i class="ion-ios-menu"></i></span>
-                                    </a>
-                                    <a href="#" class="heart d-flex justify-content-center align-items-center ">
-                                        <span><i class="ion-ios-heart"></i></span>
-                                    </a>
-                                </div>
+                        <a href="#" class="img-prod" @@click="RestaurantMenuUrl(store)">
+                        <div class="img-prod">
+                            <div class="row justify-content-center">
+                                <img @*class="img-fluid"*@ :src="GetPictureStore(store.storeId)" width="340" height="340" alt="商家暫無圖片" />
                             </div>
                         </div>
+                        <div class="text py-3 pb-4 px-3 text-center">
+                            <h2 >{{ store.storeName }}</h2>
+                            @*<button class="btn btn-outline-info" @@click="RestaurantMenuUrl(store)"><i class="ion-ios-menu"></i></button>
+                            <button class="btn btn-outline-info"><i class="ion-ios-heart"></i></button>*@
+
+                        </div>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -118,16 +111,19 @@
     </section>
 
     @*測試*@
+    @*
 
     <h3>商店圖片</h3>
     <div v-for="store in StoreInfo" >
-        <p>ID：{{ store.storeId }}</p>
-        <p>商店名:{{ store.storeName }}</p>
-        <img :src="GetPictureStore(store.storeId)" alt="商家圖片" />
+    <p>ID：{{ store.storeId }}</p>
+    <p>商店名:{{ store.storeName }}</p>
+    <img :src="GetPictureStore(store.storeId)" alt="商家圖片" />
 
     </div>
-     
+
+    *@
     @*測試結束*@
+
 </div>
 @section Scripts
     {
@@ -135,45 +131,47 @@
     <script src="https://unpkg.com/vue@3.2.36/dist/vue.global.prod.js"></script>
     <script src="~/axios/axios.min.js"></script>
     <script>
-        var index = {
+        var baseAddress = "https://localhost:7163/api/HomeApi";
+        var vueApp = {
             data() {
                 return {
-                    StoreInfo:[],
-                    //暫時資料
+                    /*storeId: 1,*///暫時資料
+                    storeInfo: [],
                     storeImageUrl: ''
                 }
             },
             mounted() {
-                let _this =this;
                 this.GetStoreInfo();
-               
+            },
+            computed: {
             },
             methods: {
-                 GetStoreInfo: function () {
-                    //alert("應該會跳出來 filterEmployeeDTOes");
-                    let _this = this;
-                    var request = {};
-
-                    axios.get(`Home/GetStore`).then(response => {
-                        //alert(response.data);
-                        //alert(JSON.stringify(response.data));
-                        _this.StoreInfo = response.data;
-                        var storeList = [];
-                        for (var i = 0; i < _this.StoreInfo.length; i++) {
-                            var item = _this.StoreInfo[i];
-                            item.Edit = false;
-                            storeList.push(item);
-                        }
-                        _this.StoreInfo = storeList;
-                    });
-                },
                 GetPictureStore(storeId) {
-                    return `Home/GetPictureStore?storeId=${storeId}`;
-                 },
+                    return `${baseAddress}/getpic/${storeId}`;
+                },
+                async GetStoreInfo() {
+                    try {
+                        //axios.get(`Home/GetStore`).then(response => {
+                        //    this.StoreId = response.data.StoreId;
+                        //    this.StoreName = response.data.StoreName;
+                        //})
+                        const response = await axios.get(`api/HomeApi`);
+                        const data = response.data;
+                        this.storeInfo = data;
+                    } catch {
+                        console.log("error");
+                    }
+
+                },
+                RestaurantMenuUrl(store) {
+                    const data = JSON.stringify(store);
+                    const url = `/Home/RestaurantMenu?data=${encodeURIComponent(data)}`;
+                    window.location.href = url;
+                }
 
             }
         };
-        var app = Vue.createApp(index).mount("#app");
+        var app = Vue.createApp(vueApp).mount("#app");
     </script>
     }
 

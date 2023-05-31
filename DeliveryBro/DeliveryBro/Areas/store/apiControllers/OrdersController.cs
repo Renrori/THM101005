@@ -1,8 +1,11 @@
 ﻿using DeliveryBro.Areas.store.DTO;
+using DeliveryBro.Areas.store.Hubs;
+using DeliveryBro.Areas.store.SubscribeTableDependency;
 using DeliveryBro.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using TableDependency.SqlClient;
 
 namespace DeliveryBro.Areas.store.apiControllers
 {
@@ -11,10 +14,14 @@ namespace DeliveryBro.Areas.store.apiControllers
 	public class OrdersController : ControllerBase
 	{
 		private readonly sql8005site4nownetContext _context;
-		public OrdersController(sql8005site4nownetContext context)
+		private readonly subscribeOrder _subscribeOrder;
+
+		public OrdersController(sql8005site4nownetContext context, subscribeOrder subscribeOrder)
 		{
 			_context = context;
+			_subscribeOrder = subscribeOrder;
 		}
+
 		[HttpGet]
 		public IQueryable<HisOrderDTO> OrderDetail()
 		{
@@ -61,11 +68,11 @@ namespace DeliveryBro.Areas.store.apiControllers
 				}).ToList(),
 				Total = x.OrderDetailsTable.Sum(x => x.Subtotal)
 			});
-			//return Ok(orders);
 		}
 		[HttpGet("wait")]
 		public IQueryable<HisOrderDTO> WaitingOrder()
 		{
+			_subscribeOrder.Subscribe();
 			return _context.CustomerOrderTable.Include(x => x.OrderDetailsTable)
 				.Where(x => x.RestaurantId == 3 && x.OrderStatus == "waiting").Select(x => new HisOrderDTO
 				{
