@@ -6,7 +6,7 @@ namespace DeliveryBro.Areas.admin.Controllers
     [Area("admin")]
     public class HomeController : Controller
     {
-        [Authorize]
+        // [Authorize(AuthenticationSchemes = "admin")]
         public IActionResult Index()
         {
             return View();

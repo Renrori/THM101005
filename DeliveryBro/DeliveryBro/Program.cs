@@ -57,6 +57,14 @@ namespace DeliveryBro
                    googleOptions.ClientId = builder.Configuration["Authentication:Google:ClientId"];
                    googleOptions.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
                });
+                .AddCookie("admin",opt =>{
+                    opt.LoginPath = new PathString("/admin/Account/login");
+                })
+                .AddCookie(opt =>
+                {
+                    opt.LoginPath = "/user/Login";
+                    opt.ExpireTimeSpan = TimeSpan.FromMinutes(10);
+                });
 
             
 
@@ -86,6 +94,24 @@ namespace DeliveryBro
 
 			app.UseRouting();
 
+            app.UseAuthentication();
+            app.UseAuthorization();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute(
+                name: "store",
+                pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
+                endpoints.MapControllerRoute(
+                    name: "admin",
+                    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
+            });
+            
+			
 			app.UseAuthentication();
 			app.UseAuthorization();
 
