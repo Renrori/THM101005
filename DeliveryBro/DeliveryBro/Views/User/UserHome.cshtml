@@ -120,18 +120,18 @@
                 <div class="col-xl-3">
                     <h2 class="mb-5"></h2>
                     <div class="col-sm-4">
-                        <img :src=""
+                        <img src="~/Image/noimgmed.png"
                              class="border border-dark d-block"
                              alt="暫無圖片"
                              width="250"
                              height="250" />
-
                     </div>
                     <br />
-                    <div class="row justify-content-end">
-                        <button class="btn btn-primary col-5"><i class="fa-solid fa-image"></i>上傳圖片</button>
+                    <div class="row justify-content-center">
+                        <div class="col-12 col-md-5 text-start">
+                            <button class="btn btn-primary w-50"><i class="fa-solid fa-image"></i>上傳圖片</button>
+                        </div>
                     </div>
-
                 </div>
                 @*測試*@
             </div>
@@ -172,16 +172,16 @@
                         console.error(error);
                     }
                 },
-               async putCustomerInfo() {
-                   const data = {
+                async putCustomerInfo() {
+                    const data = {
                         userName: this.CustomerInfo.userName,
                         userEmail: this.CustomerInfo.userEmail,
                         userBirth: this.CustomerInfo.userBirth,
                         userPhone: this.CustomerInfo.userPhone
-                   }
+                    }
                     //拿出對應cusId
                     try {
-                        axios.put(`${baseAddress}/${CustomerId}`,data).then(Response => {
+                        axios.put(`${baseAddress}/${CustomerId}`, data).then(Response => {
                             console.log("修改成功");
                             this.isEditing = false;
                         })
