@@ -251,8 +251,7 @@ namespace DeliveryBro.Areas.store.Controllers
 				//FirstOrDefault找尋資料表中的第一筆資料 有資料回傳第一筆或是沒資料回傳null
 				//找RestaurantTable資料表篩選符合RestaurantAccount及RestaurantPassword的條件
 				RestaurantTable user = _db.RestaurantTable.FirstOrDefault(x => x.RestaurantAccount == model.Account &&
-							x.RestaurantPassword == _passwordEncyptService.PasswordEncrypt(model.Password)
-);
+							x.RestaurantPassword ==model.Password);
 				if (user == null)
 				{
 					ViewBag.Error = "帳號或密碼錯誤";
@@ -266,10 +265,10 @@ namespace DeliveryBro.Areas.store.Controllers
 				new Claim("RestaurantId",user.RestaurantId.ToString())
 				};
 				//做憑證
-				var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+				var claimsIdentity = new ClaimsIdentity(claims, "StoreAuthenticationScheme");
 				var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
-				await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
-				return RedirectToAction("Index", "Home");//RedirectToAction("Error", "StoreUser");//到另一個控制器
+				await HttpContext.SignInAsync("StoreAuthenticationScheme", claimsPrincipal);
+				return RedirectToAction("StoreInfo", "Home");//RedirectToAction("Error", "StoreUser");//到另一個控制器
 														 //return RedirectToAction("Index", "Users", new { area = "Administration" });
 			}
 			ViewBag.ErrorMessage = "輸入的內容有誤";
@@ -279,9 +278,9 @@ namespace DeliveryBro.Areas.store.Controllers
 		//登出
 		public async Task<IActionResult> Logout()
 		{
-			await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return RedirectToAction("Login", "StoreUser", new { Areas = "store" });
-        }
+			await HttpContext.SignOutAsync("StoreAuthenticationScheme");
+			return RedirectToAction("Login", "StoreUser");
+		}
 
 		public IActionResult Edit()
 		{

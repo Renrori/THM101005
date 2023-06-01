@@ -45,7 +45,7 @@
 										<i class="bi bi-currency-dollar"></i>
 									</div>
 									<div class="ps-3">
-										<h6>${{ordertoday.revenu}}</h6>
+										<h6>${{ordertoday.revenue}}</h6>
 									</div>
 								</div>
 							</div>
@@ -72,13 +72,14 @@
 
 				<div class="col-12">
 					<div class="card">
-						<v-chart :option="option" id="dishmothchart" @@change="MonthlyDishPie" style="width:100%; height:500%" autoresize />
+						<v-chart :option="option" id="dishmonthchart" @@mousemove="MonthlyDishPie" style="width:100%; height:700%" autoresize />
 					</div>
 				</div>
 
 			</div>
 			<div class="col-lg-4">
 				<div class="card p-4">
+					<h2 class="topsellingchart" style="text-align:center">銷量累積排行榜</h2>
 					<table class="table table-hover .database">
 						<thead>
 							<tr>
@@ -105,16 +106,17 @@
 </main><!-- End #main -->
 @section Scripts
 	{
-	
+
 	<script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" type="text/javascript"></script>
 	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 	<script src="https://cdn.jsdelivr.net/npm/vue-echarts@latest"></script>
-	<script src="https://cdn.jsdelivr.net/npm/echarts@5.4.1"></script>
+	<script src="https://cdn.jsdelivr.net/npm/echarts@5.4.2/dist/echarts.min.js"></script>
 	<script src="~/lib\microsoft/signalr/dist/browser/signalr.js"></script>
 	<script src="~/axios/axios.min.js"></script>
-
+	@*<script src="~/store/js/dishechart.js"></script>*@
 	<script>
+
 		var vueIndex = {
 			data() {
 				return {
@@ -128,63 +130,16 @@
 							showContent: false
 						},
 						dataset: {
-							source: [
-								['product', '2012', '2013', '2014', '2015', '2016', '2017'],
-								['Milk Tea', 56.5, 82.1, 88.7, 70.1, 53.4, 85.1],
-								['Matcha Latte', 51.1, 51.4, 55.1, 53.3, 73.8, 68.7],
-								['Cheese Cocoa', 40.1, 62.2, 69.5, 36.4, 45.2, 32.5],
-								['Walnut Brownie', 25.2, 37.1, 41.2, 18, 33.9, 49.1]
-							]
+							source: []
 						},
 						xAxis: { type: 'category' },
 						yAxis: { gridIndex: 0 },
-						grid: { top: '55%' },
-						series: [
-							{
-								type: 'line',
-								smooth: true,
-								seriesLayoutBy: 'row',
-								emphasis: { focus: 'series' }
-							},
-							{
-								type: 'line',
-								smooth: true,
-								seriesLayoutBy: 'row',
-								emphasis: { focus: 'series' }
-							},
-							{
-								type: 'line',
-								smooth: true,
-								seriesLayoutBy: 'row',
-								emphasis: { focus: 'series' }
-							},
-							{
-								type: 'line',
-								smooth: true,
-								seriesLayoutBy: 'row',
-								emphasis: { focus: 'series' }
-							},
-							{
-								type: 'pie',
-								id: 'pie',
-								radius: '30%',
-								center: ['50%', '25%'],
-								emphasis: {
-									focus: 'self'
-								},
-								label: {
-									formatter: '{b}: {@@2012} ({d}%)'
-								},
-								encode: {
-									itemName: 'product',
-									value: '2012',
-									tooltip: '2012'
-								}
-							}
-						]
+						grid: { top: '60%' },
+						series: []
 					},
 					ordertoday: [],
-					topselling:[]
+					topselling: [],
+
 				};
 
 			},
@@ -193,10 +148,10 @@
 				setInterval(() => { _this.currentTime = new Date().toLocaleString() }, 1000);
 				_this.weekday = _this.getDayOfWeek();
 				_this.getStoreInfo();
-				//_this.MonthlyDishPie()
 				_this.createHubConnection();
 				_this.getOrdersToday();
 				_this.getDishTopSelling();
+				_this.getDishCountInMonth();
 			},
 			beforeUnmount: function () {
 				let _this = this;
@@ -221,10 +176,9 @@
 						store.restaurantStatus = "open";
 
 					var request = {
-						RestaurantId: store.restaurantId,
 						RestaurantStatus: store.restaurantStatus
 					};
-					axios.put(`/api/StoreInfo/status/${store.restaurantId}`, request).then(response => {
+					axios.put(`/api/StoreInfo/status/`, request).then(response => {
 						Swal.fire(
 							'營業狀態修改成功!'
 						)
@@ -232,46 +186,88 @@
 				},
 				MonthlyDishPie: function () {
 					let _this = this;
-					//var echarts = require('echarts');
-					var chartDom = document.getElementById("dishmothchart");
+					var chartDom = document.getElementById("dishmonthchart");
 					var dmchart = echarts.init(chartDom);
-					dmchart.on('updateAxisPointer', function (event) {
-						const xAxisInfo = event.axesInfo[0]
-						if (xAxiisfo) {
-							const dimenstion = xAxisInfo.value + 1;
-							dmchart.setOption({
-								series: {
-									id: 'pie',
-									label: {
-										formatter: '{b}:{@@[' + dimension + ']}({d}%)'
-									},
-									encode: {
-										value: dimension,
-										tooltip: dimension
+					setTimeout(function () {
+						_this.option;
+						dmchart.on('updateAxisPointer', function (event) {
+							const xAxisInfo = event.axesInfo[0]
+							if (xAxisInfo) {
+								const dimension = xAxisInfo.value + 1;
+								dmchart.setOption({
+									series: {
+										id: 'pie',
+										label: {
+											formatter: '{b}:{@@[' + dimension + ']}({d}%)'
+										},
+										encode: {
+											value: dimension,
+											tooltip: dimension
+										}
 									}
-								}
-							});
-						}
+								});
+							}
+						});
 						dmchart.setOption(_this.option)
 					});
+					_this.option && dmchart.setOption(_this.option);
 				},
-				getOrdersToday:function(){
-					let _this=this;
+				getOrdersToday: function () {
+					let _this = this;
 					axios.get(`/api/StoreInfo/orderscount`).then(response => {
-						_this.ordertoday = response.data[0]
+						if (response.data[0] == null) {
+							_this.ordertoday = [{
+								orders: 0,
+								revenue: 0
+							}];
+						}
+						else _this.ordertoday = response.data[0];
 					})
 				},
-				getDishTopSelling:function(){
-					let _this=this;
-					axios.get(`/api/StoreInfo/topselling`).then(response=>{
-						_this.topselling=response.data;
+				getDishTopSelling: function () {
+					let _this = this;
+					axios.get(`/api/StoreInfo/topselling`).then(response => {
+						_this.topselling = response.data;
+					})
+				},
+				getDishCountInMonth: function () {
+					let _this = this;
+					axios.get(`/api/StoreInfo/dishcount`).then(response => {
+						_this.option.dataset.source = response.data;
+						for (let i = 0; i < response.data.length; i++) {
+							var obj = {
+								type: 'line',
+								smooth: true,
+								seriesLayoutBy: 'row',
+								emphasis: { focus: 'series' }
+							};
+							_this.option.series.push(obj);
+						}
+						var last = {
+							type: 'pie',
+							id: 'pie',
+							radius: '35%',
+							center: ['50%', '35%'],
+							emphasis: {
+								focus: 'self'
+							},
+							label: {
+								formatter: '{b}: {@@response.data[0][1]} ({d}%)'
+							},
+							encode: {
+								itemName: 'product',
+								value: 'response.data[0][1]',
+								tooltip: 'response.data[0][1]'
+							}
+						}
+						_this.option.series.push(last);
 					})
 				},
 				createHubConnection: function () {
 					let _this = this;
 					_this.hubConnection = new signalR.HubConnectionBuilder().withUrl(`/orderHub`).build();
 					_this.hubConnection.on("NewOrder", () => {
-							_this.getOrdersToday();
+						_this.getOrdersToday();
 					});
 					_this.hubConnection.start().then(() => {
 						console.log('connected');
