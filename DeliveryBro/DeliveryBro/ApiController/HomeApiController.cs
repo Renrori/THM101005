@@ -155,7 +155,7 @@ namespace DeliveryBro.ApiController
                 _context.CustomerOrderTable.Add(cot);
                 await _context.SaveChangesAsync();
 
-                int orderId = cot.OrderId; //儲存訂單的ID
+                int orderId = cot.OrderId; //儲存訂單的自動識別ID
                 
                 foreach (var od in order.OrderDetailViewModels)
                 {
