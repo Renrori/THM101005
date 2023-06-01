@@ -67,8 +67,8 @@
                                                     <p>{{ selectedProduct.dishDescription }}</p>
                                                     <hr />
                                                     <div class="d-flex justify-content-end">
-                                                        <div>價格：{{ selectedProduct.dishPrice }}</div>
-                                                        <div class="col-sm-3 px-1 py-1">
+                                                        <div class="col-6">價格：{{ selectedProduct.dishPrice }}</div>
+                                                        <div class="col-sm-3 px-1 py-1">數量:
                                                             <input type="number" v-model="selectedProduct.dishCount" min="1" max="10" />
                                                         </div>
                                                     </div>
@@ -164,6 +164,7 @@
                     const endIndex = startIndex + this.pageSize;
                     return this.productMenu.slice(startIndex, endIndex);
                 },
+             
             },
             methods: {
                 viewProduct(Product) {
@@ -209,6 +210,9 @@
                     //})
                 },
                 GetProductPic(pic) {
+                    if(pic == null){
+                        return '../image/noimgmed.png';
+                    }
                     return `data:image/jpeg;base64,${pic}`
                 },
                 SavecartItemToCookie() {
