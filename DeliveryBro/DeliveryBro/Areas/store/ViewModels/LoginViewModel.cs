@@ -4,7 +4,7 @@ namespace DeliveryBro.Areas.store.ViewModels
 {
     public class LoginViewModel 
 	{
-		//[Required(ErrorMessage ="帳號為必填欄位!")]
+		//[Required(ErrorMessage = "帳號為必填欄位!")]
 		//[StringLength(maximumLength: 15, MinimumLength = 4, ErrorMessage = "帳號最少需要4個字元")]
 		//[RegularExpression(@"^[a-zA-Z0-9]+$", ErrorMessage = "帳號只能使用英文和數字")]
 		[Display(Name ="帳號")]

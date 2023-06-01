@@ -116,6 +116,7 @@ namespace DeliveryBro.Areas.store.Controllers
 			return View();
 		}
 		[HttpPost]
+		//在密碼重設頁面，您需要輸入新的密碼兩次以確認一致性。
 		public async Task<IActionResult> ResetPwd(string ResaurantEmail)
 		{
 			//之後Email要加密 找Email有沒有存在資料庫
@@ -126,8 +127,10 @@ namespace DeliveryBro.Areas.store.Controllers
 				return View("ResetPwd");
 
 			}
+			
 			//填密碼的頁
-			return RedirectToAction("login");
+			
+			return RedirectToAction("ResetPwd");
 
 		}
 		//public IActionResult Newpwd(string pwd)
@@ -190,10 +193,13 @@ namespace DeliveryBro.Areas.store.Controllers
 		{
 			//======================================
 			//判斷輸入密碼及確認密碼欄位是否一致
-			//if (RestaurantPassword != ConfirmRestaurantPassword)
-			//{
-			//	ViewBag.Error = "密碼不確定";
-			//}
+
+
+			if (model.RestaurantPassword != model.ConfirmRestaurantPassword)
+			{
+				return Ok("密碼輸入不一致");
+			}
+
 
 			//======================================
 			var user = _db.RestaurantTable.Where(x => x.RestaurantAccount == model.RestaurantAccount).FirstOrDefault();
@@ -263,19 +269,19 @@ namespace DeliveryBro.Areas.store.Controllers
 				var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 				var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
 				await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
-				return RedirectToAction("StoreInfo", "Home");//RedirectToAction("Error", "StoreUser");//到另一個控制器
+				return RedirectToAction("Index", "Home");//RedirectToAction("Error", "StoreUser");//到另一個控制器
 														 //return RedirectToAction("Index", "Users", new { area = "Administration" });
 			}
 			ViewBag.ErrorMessage = "輸入的內容有誤";
 			return View("Login");
 		}
 
-
+		//登出
 		public async Task<IActionResult> Logout()
 		{
 			await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-			return RedirectToAction("Login", "StoreUser");
-		}
+            return RedirectToAction("Login", "StoreUser", new { Areas = "store" });
+        }
 
 		public IActionResult Edit()
 		{
