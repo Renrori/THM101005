@@ -12,38 +12,45 @@
 								@*<span class="d-none d-lg-block">NiceAdmin</span>*@
 							</a>
 						</div><!-- End Logo -->
+						@{
+							if (ViewBag.Error != "")
+							{
+								<h1>@ViewBag.Error</h1>
+							}
+						}
 
 						<div class="card mb-3">
 
 							<div class="card-body">
 
-								@{
-								if (ViewBag.Error != "")
-								{
-								<h1>@ViewBag.Error</h1>
-								}
-								}
+								@*@{
+									if (ViewBag.Error != "")
+									{
+										<h1>@ViewBag.Error</h1>
+									}
+								}*@
 								<div class="pt-4 pb-2">
 									<h5 class="card-title text-center pb-0 fs-4">商家登入</h5>
-									<p class="text-center small">登入您的帳號及密碼</p>
+									@*<p class="text-center small">登入您的帳號及密碼</p>*@
+									<hr/>
 								</div>
 
 								<form action="/store/StoreUser/Login" method="post" class="row g-3 needs-validation" novalidate>
-
+									
 									<div class="col-12">
 										<label for="yourUsername" class="form-label">商家帳號</label>
 										<div class="input-group has-validation">
 											@*<span class="input-group-text" id="inputGroupPrepend">@@</span>*@
-											<input type="text" name="Account" class="form-control">
-											@*<div v-if="u" class="invalid-feedback">Please enter your username.</div>*@
+											<input type="text" name="Account" class="form-control" required >
+											<div class="invalid-feedback">帳號為必填欄位</div>
 											@*<span asp-validation-for="account"></span>*@
 										</div>
 									</div>
 
 									<div class="col-12">
 										<label for="yourPassword" class="form-label">商家密碼</label>
-										<input type="password" name="Password" class="form-control" id="yourPassword">
-										@*<div class="invalid-feedback">Please enter your password!</div>*@
+										<input type="password" name="Password" class="form-control" id="yourPassword" required >
+										<div class="invalid-feedback">密碼為必填欄位</div>
 									</div>
 
 									<div class="col-12">
@@ -59,10 +66,10 @@
 									<div>
 										<a href="/Store/StoreUser/FacebookLogin" class="btn btn-primary">FaceBook登入</a>
 									</div>
-									<div class="col-12">
+									<div>
 										<p class="small mb-0"><a href="/store/StoreUser/Register">註冊帳號</a></p>
 									</div>
-									<div class="col-12">
+									<div>
 										<p class="small mb-0"><a href="/store/StoreUser/ForgetPwd">忘記密碼</a></p>
 									</div>
 								</form>
