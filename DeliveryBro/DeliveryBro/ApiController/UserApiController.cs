@@ -1,4 +1,5 @@
 ﻿using DeliveryBro.Areas.store.DTO;
+using DeliveryBro.Data;
 using DeliveryBro.Models;
 using DeliveryBro.ViewModels.Home;
 using DeliveryBro.ViewModels.User;
@@ -10,6 +11,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using System.IO;
 
 namespace DeliveryBro.ApiController
 {
@@ -115,6 +117,38 @@ namespace DeliveryBro.ApiController
 
             return orderDetails;
         }
+
+        [HttpPost("pic/{customerId}")]
+        public async Task<IActionResult> PostUserPic(int customerId,IFormFile file)
+        {
+            if (file == null || file.Length <= 0)
+            {
+                return BadRequest("請選擇有效的圖片檔案");
+            }
+
+            byte[] photoBytes;
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                await file.CopyToAsync(memoryStream);
+                photoBytes = memoryStream.ToArray();
+            }
+
+            CustomersTable customerPic = await _context.CustomersTable.FindAsync(customerId);
+            if (customerPic == null)
+            {
+                return NotFound("找不到指定的客戶");
+            }
+            customerPic.CustomerPhoto = photoBytes;
+
+            await _context.SaveChangesAsync();
+
+            return Ok("上傳成功");
+        }
+
+        //private async Task SetPostUserPic(CustomersTable customers, IFormFile file)
+        //{
+        //    customers.CustomerPhoto = await PostUserPic(file);
+        //}
 
         private bool CustomerExists(int customerId)
         {

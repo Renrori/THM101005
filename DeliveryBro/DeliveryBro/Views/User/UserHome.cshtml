@@ -120,7 +120,11 @@
                 <div class="col-xl-3">
                     <h2 class="mb-5"></h2>
                     <div class="col-sm-4">
-                        <img src="~/Image/noimgmed.png"
+                        <img v-if="CustomerInfo.userPicture==null" :src="getCustomerPic(CustomerInfo.userPicture)" class="border border-dark d-block"
+                             alt="暫無圖片"
+                             width="250"
+                             height="250" />
+                        <img v-else :src=""
                              class="border border-dark d-block"
                              alt="暫無圖片"
                              width="250"
@@ -129,11 +133,17 @@
                     <br />
                     <div class="row justify-content-center">
                         <div class="col-12 col-md-5 text-start">
-                            <button class="btn btn-primary w-50"><i class="fa-solid fa-image"></i>上傳圖片</button>
+                            <input ref="fileInput" type="file" style="display: none" @@change="handleFileSelect" />
+                            <button class="btn btn-primary w-100" @@click="openFilePicker"><i class="fa-solid fa-image"></i>選取圖片</button>
+                            <p>選取的檔案路徑：{{ selectedFilePath }}</p>
+                            <button class="btn btn-primary w-100" @@click="uploadFile" :disabled="!selectedFilePath">
+                                上傳
+                            </button>
                         </div>
                     </div>
                 </div>
                 @*測試*@
+                @*  <div>{{ file }}</div>*@
             </div>
         </div>
     </div>
@@ -152,7 +162,9 @@
             data() {
                 return {
                     isEditing: false,
-                    CustomerInfo: {}
+                    CustomerInfo: {},
+                    selectedFilePath: null,
+                    fileData: null
                 }
             },
             mounted() {
@@ -188,6 +200,37 @@
                     } catch {
                         console.log("修改失敗")
                     }
+                },
+                getCustomerPic(pic) {
+                    if (pic == null) {
+                        return '../image/noimgmed.png';
+                    }
+                    return `data:image/jpeg;base64,${pic}`
+                },
+                openFilePicker() {
+                    this.$refs.fileInput.click();
+                },
+                handleFileSelect(event) {
+                    const file = event.target.files[0];
+                    this.selectedFilePath = file ? file.name : null;
+                    this.fileData = file;
+                },
+                uploadFile() {
+                    if (!this.fileData || this.customerId === 0) {
+                        return;
+                    }
+
+                    const formData = new FormData();
+                    formData.append('file', this.fileData);
+                    axios.post(`${baseAddress}/pic/${CustomerId}`, formData)
+                        .then(response => {
+                            // 處理上傳成功的回應
+                            console.log('上傳成功');
+                        })
+                        .catch(error => {
+                            // 處理上傳失敗的錯誤
+                            console.error('上傳失敗', error);
+                        });
                 }
             }
         };
