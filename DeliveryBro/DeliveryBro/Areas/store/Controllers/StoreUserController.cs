@@ -14,6 +14,7 @@ using DeliveryBro.Areas.store.ViewModels;
 using System.Security.Cryptography;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.Facebook;
+using NuGet.Protocol.Plugins;
 
 namespace DeliveryBro.Areas.store.Controllers
 {
@@ -21,14 +22,15 @@ namespace DeliveryBro.Areas.store.Controllers
 	public class StoreUserController : Controller
 	{
 		private readonly sql8005site4nownetContext _db;
-		private readonly EncryptService encrypt;
+		private readonly EncryptService _encrypt;
+		private readonly PasswordEncyptService _passwordEncypt;
 
-		public StoreUserController(sql8005site4nownetContext context, EncryptService encrypt)
+		public StoreUserController(sql8005site4nownetContext context, EncryptService encrypt, PasswordEncyptService passwordEncypt)
 		{
 			_db = context;
-			this.encrypt = encrypt;
+			_encrypt = encrypt;
+			_passwordEncypt = passwordEncypt;
 		}
-
 		public IActionResult Login()
 		{
 			return View();
@@ -60,7 +62,7 @@ namespace DeliveryBro.Areas.store.Controllers
 			}
 			AesValidationDto obj = new AesValidationDto(RestaurantEmail, DateTime.Now.AddDays(3));//現在時間往後加三天
 			string jString = JsonSerializer.Serialize(obj);//Obj轉成Json格式(出來是string)
-			var code = encrypt.AesEncryptToBase64(jString);//加密
+			var code = _encrypt.AesEncryptToBase64(jString);//加密
 
 			var mail = new MailMessage()
 			{
@@ -93,7 +95,7 @@ namespace DeliveryBro.Areas.store.Controllers
 
 		public async Task<IActionResult> Enable(string code)
 		{
-			var str = encrypt.AesDecryptToString(code);
+			var str = _encrypt.AesDecryptToString(code);
 			var obj = JsonSerializer.Deserialize<AesValidationDto>(str);
 			if (DateTime.Now > obj.ExpiredDate)
 			{
@@ -186,6 +188,14 @@ namespace DeliveryBro.Areas.store.Controllers
 		[HttpPost]
 		public async Task<IActionResult> Register(RegisterViewModel model)
 		{
+			//======================================
+			//判斷輸入密碼及確認密碼欄位是否一致
+			//if (RestaurantPassword != ConfirmRestaurantPassword)
+			//{
+			//	ViewBag.Error = "密碼不確定";
+			//}
+
+			//======================================
 			var user = _db.RestaurantTable.Where(x => x.RestaurantAccount == model.RestaurantAccount).FirstOrDefault();
 
 			if (user != null)
@@ -194,18 +204,18 @@ namespace DeliveryBro.Areas.store.Controllers
 				//return View("Register");
 				return View("Login");
 			}
-
+			
 			_db.RestaurantTable.Add(new RestaurantTable()
 			{
 				RestaurantAccount = model.RestaurantAccount,
-				RestaurantPassword = model.RestaurantPassword,
+				RestaurantPassword = _passwordEncypt.PasswordEncrypt(model.RestaurantPassword),
 				RestaurantName = model.RestaurantName,
 				RestaurantAddress = model.RestaurantAddress,
 				RestaurantPhone = model.RestaurantPhone,
 				RestaurantEmail = model.RestaurantEmail,
-				OpeningHours = model.OpeningHours,
-				RestaurantDescription = model.RestaurantDescription,
-				RestaurantPicture = model.RestaurantPicture//改一個函式(要寫在外面 再回來跑這一行)
+				//OpeningHours = model.OpeningHours,
+				//RestaurantDescription = model.RestaurantDescription,
+				//RestaurantPicture = model.RestaurantPicture//改一個函式(要寫在外面 再回來跑這一行)
 
 			});
 			//存入資料庫
@@ -225,41 +235,46 @@ namespace DeliveryBro.Areas.store.Controllers
 
 		//登入
 		[HttpPost]
+		//[ValidateAntiForgeryToken]
 		public async Task<IActionResult> Login(LoginViewModel model)
 		{
 			////驗證ViewModel的欄位屬性
-			//if (ModelState.IsValid)
-
-			//FirstOrDefault找尋資料表中的第一筆資料 有資料回傳第一筆或是沒資料回傳null
-			//找RestaurantTable資料表篩選符合RestaurantAccount及RestaurantPassword的條件
-			var user = _db.RestaurantTable.FirstOrDefault(x => x.RestaurantAccount == model.Account &&
-						x.RestaurantPassword == model.Password);
-
-			if (user == null)
+			if (ModelState.IsValid)
 			{
-				ViewBag.Error = "帳號密碼錯誤";
-				return View("Login");
-			}
-			//通行證
-			//可以放List?
-			var claims = new List<Claim>(){
-					new Claim(ClaimTypes.Name, user.RestaurantName),
-				//new Claim(ClaimTypes.Role, "User"),
-				};
-			//做憑證
-			var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-			var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
-			await HttpContext.SignInAsync(claimsPrincipal);
-			return View();//RedirectToAction("Error", "StoreUser");//到另一個控制器
-						  //return RedirectToAction("Index", "Users", new { area = "Administration" });
-		}
 
+				//FirstOrDefault找尋資料表中的第一筆資料 有資料回傳第一筆或是沒資料回傳null
+				//找RestaurantTable資料表篩選符合RestaurantAccount及RestaurantPassword的條件
+				RestaurantTable user = _db.RestaurantTable.FirstOrDefault(x => x.RestaurantAccount == model.Account &&
+							x.RestaurantPassword == _passwordEncypt.PasswordEncrypt(model.Password)
+);
+				if (user == null)
+				{
+					ViewBag.Error = "帳號或密碼錯誤";
+					return View("Login");
+				}
+
+				//通行證
+				var claims = new List<Claim>(){
+				new Claim(ClaimTypes.Name, user.RestaurantName),
+				new Claim(ClaimTypes.Role, "Store"),
+				new Claim("RestaurantId",user.RestaurantId.ToString())
+				};
+				//做憑證
+				var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+				var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
+				await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
+				return RedirectToAction("StoreInfo", "Home");//RedirectToAction("Error", "StoreUser");//到另一個控制器
+														 //return RedirectToAction("Index", "Users", new { area = "Administration" });
+			}
+			ViewBag.ErrorMessage = "輸入的內容有誤";
+			return View("Login");
+		}
 
 
 		public async Task<IActionResult> Logout()
 		{
-			await HttpContext.SignOutAsync();
-			return RedirectToAction("Index", "home");
+			await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+			return RedirectToAction("Login", "StoreUser");
 		}
 
 		public IActionResult Edit()
@@ -267,39 +282,40 @@ namespace DeliveryBro.Areas.store.Controllers
 			return View();
 		}
 
-		[HttpPost]
-		public async Task<IActionResult> Edit(RegisterViewModel model)
-		{
-			RestaurantTable user = _db.RestaurantTable.Where(x => x.RestaurantAccount == model.RestaurantAccount).FirstOrDefault();
-			user.RestaurantPassword = model.RestaurantPassword;
-			//user.RestaurantAddress= model.RestaurantAddress;
-			user.RestaurantPhone = model.RestaurantPhone;
-			//user.RestaurantEmail = model.RestaurantEmail;
-			//user.OpeningHours=model.OpeningHours;
-			user.RestaurantDescription = model.RestaurantDescription;
-			user.RestaurantPicture = model.RestaurantPicture;
-			//if (user != null)
-			//{
-			//	ViewBag.Error = "帳號已經存在";
-			//	return View("Register");
-			//}
+		//[HttpPost]
+		//public async Task<IActionResult> Edit(RegisterViewModel model)
+		//{
+		//	RestaurantTable user = _db.RestaurantTable.Where(x => x.RestaurantAccount == model.RestaurantAccount).FirstOrDefault();
+		//	user.RestaurantPassword = model.RestaurantPassword;
+		//	//user.RestaurantAddress= model.RestaurantAddress;
+		//	user.RestaurantPhone = model.RestaurantPhone;
+		//	//user.RestaurantEmail = model.RestaurantEmail;
+		//	//user.OpeningHours=model.OpeningHours;
+		//	user.RestaurantDescription = model.RestaurantDescription;
+		//	user.RestaurantPicture = model.RestaurantPicture;
+		//	//if (user != null)
+		//	//{
+		//	//	ViewBag.Error = "帳號已經存在";
+		//	//	return View("Register");
+		//	//}
 
-			//_db.RestaurantTable.Add(new RestaurantTable()
-			//{
-			//	RestaurantAccount = model.RestaurantAccount,
-			//	RestaurantPassword = model.RestaurantPassword,
-			//	RestaurantName = model.RestaurantName,
-			//	RestaurantAddress = model.RestaurantAddress,
-			//	//RestaurantPhone=model.RestaurantPhone,
-			//	RestaurantEmail = model.RestaurantEmail,
-			//	//OpeningHours=model.OpeningHours
-			//	RestaurantDescription = model.RestaurantDescription,
-			//	//RestaurantPicture=model.RestaurantPicture
+		//	//_db.RestaurantTable.Add(new RestaurantTable()
+		//	//{
+		//	//	RestaurantAccount = model.RestaurantAccount,
+		//	//	RestaurantPassword = model.RestaurantPassword,
+		//	//	RestaurantName = model.RestaurantName,
+		//	//	RestaurantAddress = model.RestaurantAddress,
+		//	//	//RestaurantPhone=model.RestaurantPhone,
+		//	//	RestaurantEmail = model.RestaurantEmail,
+		//	//	//OpeningHours=model.OpeningHours
+		//	//	RestaurantDescription = model.RestaurantDescription,
+		//	//	//RestaurantPicture=model.RestaurantPicture
 
-			//});
-			_db.SaveChanges();//存入資料庫
+		//	//});
+		//	_db.SaveChanges();//存入資料庫
 
-			return View(model);
-		}
-	}	
+		//	return View(model);
+		//}
+	
+	}
 }
