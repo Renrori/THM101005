@@ -2,7 +2,7 @@
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager*@
 @{
-    var orderListUrl = Url.Action("OrderList", "Home");
+    var orderListNavUrl = Url.Action("OrderListNav", "Home");
 }
 
 <ul class="navbar-nav">
@@ -17,7 +17,7 @@
             </form>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="@orderListUrl"></a>
+            <a class="nav-link" href="@orderListNavUrl"></a>
         </li>
     }
     else
@@ -29,7 +29,7 @@
             <a class="nav-link" asp-area="" asp-controller="Login" asp-action="Index">登入</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="@orderListUrl"></a>
+            <a class="nav-link" href="@orderListNavUrl"></a>
         </li>
     }
 </ul>
@@ -37,6 +37,6 @@
 <script>
     var cartItems = localStorage.getItem('cartItems') || "";
     var encodedCartItems = encodeURIComponent(cartItems);
-    var finalOrderListUrl = "@orderListUrl" + "?data=" + encodedCartItems;
-    document.write('<a class="nav-link" href="' + finalOrderListUrl + '"><i class="fa-solid fa-cart-shopping"></i></a>');
+    var finalOrderListNavUrl = "@orderListNavUrl" + "?data=" + encodedCartItems;
+    document.write('<a class="nav-link" href="' + finalOrderListNavUrl + '"><i class="fa-solid fa-cart-shopping"></i></a>');
 </script>

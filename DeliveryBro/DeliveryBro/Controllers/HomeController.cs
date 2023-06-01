@@ -36,6 +36,12 @@ namespace DeliveryBro.Controllers
         {
             return View();
         }
+
+        public IActionResult OrderListNav()
+        {
+            return View();
+        }
+
         [Authorize]
         public IActionResult CheckoutList()
         {
