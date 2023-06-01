@@ -130,5 +130,28 @@ namespace DeliveryBro.Areas.store.apiControllers
 			}
 			return "訂單更動成功";
 		}
-	}
+        [HttpDelete("{id}")]
+        public async Task<string> DeleteOrder(int id)
+        {
+
+            var Corders = await _context.CustomerOrderTable.FindAsync(id);
+			var Odetails = await _context.OrderDetailsTable.Where(o => o.OrderId == id).ToArrayAsync();
+            if (Corders == null)
+            {
+                return "品項刪除成功";
+            }
+			_context.OrderDetailsTable.RemoveRange(Odetails);
+            _context.CustomerOrderTable.Remove(Corders);
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                return "品項刪除失敗";
+            }
+            return "品項刪除成功";
+        }
+
+    }
 }

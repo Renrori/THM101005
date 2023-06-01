@@ -119,24 +119,57 @@ namespace DeliveryBro.Areas.store.apiControllers
             return "營業狀態修改成功";
         }
 
-        [HttpGet("dishcount")]
-        public Object GetDishCount()
-        {
-            var query = _context.CustomerOrderTable.Where(x => x.RestaurantId == 3).Include(x => x.OrderDetailsTable)
-                .GroupBy(x => x.OrderDate.Month).Select(q => new DishMonthlyChartDTO
-                {
-                    Month = q.Key,
-                    Dish = q.SelectMany(od => od.OrderDetailsTable).GroupBy(od => od.DishName).Select(n => new DishEChartsDTO
-                    {
-                        DishName = n.Key,
-                        Number = n.Count()
-                    }).ToList()
-                });
+		[HttpGet("dishcount")]
+		public Object GetDishCount()
+		{
+			//var query = _context.CustomerOrderTable.Where(x => x.RestaurantId == 3 && x.OrderStatus == "completed")
+			//    .GroupBy(x => x.OrderDate.Month).Select(q => new
+			//    {
+			//        Month = q.Key
+			//    });
 
-            return Ok(query);
-        }
+			var orders = _context.CustomerOrderTable.Include(x => x.OrderDetailsTable).Where(x => x.RestaurantId == 3 && x.OrderStatus == "completed").ToList();
+			var query = orders.GroupBy(x => x.OrderDate.Month, (month, order) => new
+			{
+				Month = month.ToString(),
+				Order = order.SelectMany(i => i.OrderDetailsTable).GroupBy(n => n.DishName, (name, number) => new
+				{
+					Name = name,
+					Number = number.Count()
+				}).ToList()
 
-        [HttpGet("topselling")]
+			}).ToList();
+			var data = query.SelectMany(x => x.Order.Select(o => new
+			{
+				Month = x.Month,
+				Name = o.Name,
+				Number = o.Number
+			})).ToList();
+			var months = data.Select(m => m.Month).Distinct().OrderBy(m => m).ToList();
+			var disharr = data.Select(d => d.Name).Distinct().OrderBy(m => m).ToList();
+			var result = new List<object[]>();
+			var headerRow = new object[months.Count() + 1];
+			headerRow[0] = "product";
+			for (int i = 0; i < months.Count(); i++) headerRow[i + 1] = months[i];
+			result.Add(headerRow);
+
+			foreach (var d in disharr)
+			{
+				var dishData = new object[months.Count() + 1];
+				dishData[0] = d;
+				for (int i = 0; i < months.Count(); i++)
+				{
+					var month = months[i];
+					var num = data.Where(n => n.Month == month && n.Name == d).Sum(s => s.Number);
+					dishData[i + 1] = num;
+				}
+				result.Add(dishData);
+			}
+
+			return Ok(result);
+		}
+
+		[HttpGet("topselling")]
         public Object GetTopSelling()
         {
             List<DishDTO> list = new List<DishDTO>();
@@ -156,7 +189,7 @@ namespace DeliveryBro.Areas.store.apiControllers
             {
 				IdLocation.Add(menuId[i], i);
             }
-            var itemcount = _context.CustomerOrderTable.Where(x => x.RestaurantId == 3).Select(x => new
+            var itemcount = _context.CustomerOrderTable.Where(x => x.RestaurantId == 3&&x.OrderStatus=="completed").Select(x => new
             {
                 itemdetail = x.OrderDetailsTable.Select(i => new
                 {
@@ -194,7 +227,7 @@ namespace DeliveryBro.Areas.store.apiControllers
                     Date = q.Key,
                     Orders = _context.CustomerOrderTable.Where(x => x.RestaurantId == 3  )
                             .Count(x=>x.OrderDate.Date.ToString() == DateTime.Today.Date.ToString()),
-                    Revenu =q.SelectMany(o=>o.OrderDetailsTable).Sum(o=>o.Subtotal)
+                    Revenue =q.SelectMany(o=>o.OrderDetailsTable).Sum(o=>o.Subtotal)
                 }) ;
             
             return Ok(query);
