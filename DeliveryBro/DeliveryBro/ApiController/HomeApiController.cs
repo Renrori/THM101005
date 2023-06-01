@@ -147,7 +147,7 @@ namespace DeliveryBro.ApiController
                     CustomerAddress = order.CustomerAddress,
                     ShippingFee = order.ShippingFee,
                     Payment = order.Payment,
-                    OrderDate =DateTime.UtcNow,
+                    OrderDate = DateTime.Now,
                     OrderStatus = order.OrderStatus,
                     Note = order.Note,
                     CustomerId = order.CustomerId,
