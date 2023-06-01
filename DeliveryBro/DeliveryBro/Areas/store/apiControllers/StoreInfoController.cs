@@ -220,7 +220,7 @@ namespace DeliveryBro.Areas.store.apiControllers
         {
             _subscribeOrder.Subscribe();
 			var query = _context.CustomerOrderTable
-                .Where(x => x.RestaurantId == 3 && x.OrderDate.Date.ToString() == DateTime.Today.Date.ToString())
+                .Where(x => x.RestaurantId == 3 && x.OrderDate.Date.ToString() == DateTime.Today.Date.ToString()&&x.OrderStatus=="completed")
                 .GroupBy(x=>x.OrderDate.Date.ToString())
                 .Select(q => new
                 {

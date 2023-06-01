@@ -7,6 +7,8 @@ using Microsoft.EntityFrameworkCore;
 using DeliveryBro.Services;
 using DeliveryBro.Areas.store.Hubs;
 using DeliveryBro.Areas.store.SubscribeTableDependency;
+using DeliveryBro.Areas.store.Interface;
+using DeliveryBro.Areas.store.Service;
 
 namespace DeliveryBro
 {
@@ -26,6 +28,7 @@ namespace DeliveryBro
 				options.UseSqlServer(DeliveryBroconnectionString));
 
 			builder.Services.AddSingleton<subscribeOrder>();
+			
 
 			builder.Services.AddSignalR();
 
@@ -37,7 +40,19 @@ namespace DeliveryBro
             builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                .AddCookie(opt =>
                {
-                   opt.LoginPath = "/Login/Index"; //登入路徑
+				   opt.Events = new CookieAuthenticationEvents
+				   {
+					   OnRedirectToLogin = context =>
+					   {
+						   if (context.Request.Path.StartsWithSegments("/store"))
+						   {
+							   context.RedirectUri = "/store/StoreUser/Login";
+							   context.Response.Redirect(context.RedirectUri);
+						   }
+						   return Task.CompletedTask;
+					   }
+				   };
+				   opt.LoginPath = "/Login/Index"; //登入路徑
                    opt.AccessDeniedPath = "/Home/Index"; //取消登入路徑
                    opt.ExpireTimeSpan = TimeSpan.FromMinutes(10);
                })
@@ -57,8 +72,16 @@ namespace DeliveryBro
                    googleOptions.ClientId = builder.Configuration["Authentication:Google:ClientId"];
                    googleOptions.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
                });
+			//store
+			builder.Services.AddAuthentication("StoreAuthenticationScheme")
+			   .AddCookie("StoreAuthenticationScheme",opt =>
+			   {
+				   opt.LoginPath = "/store/StoreUser/Login"; //登入路徑
+				   opt.AccessDeniedPath = "/store/StoreUser/Logout"; //取消登入路徑
+				   opt.ExpireTimeSpan = TimeSpan.FromMinutes(10);
+			   });
 
-            
+			builder.Services.AddHttpContextAccessor();
 
 
 			builder.Services.AddTransient<EncryptService>();
