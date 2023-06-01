@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 namespace DeliveryBro.ApiController
 {
     //[EnableCors("User")]  限制跨域來源
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class UserApiController : ControllerBase

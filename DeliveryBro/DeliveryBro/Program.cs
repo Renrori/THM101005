@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using DeliveryBro.Services;
 using DeliveryBro.Areas.store.Hubs;
 using DeliveryBro.Areas.store.SubscribeTableDependency;
+using Microsoft.Extensions.Options;
 
 namespace DeliveryBro
 {
@@ -40,6 +41,17 @@ namespace DeliveryBro
                    opt.LoginPath = "/Login/Index"; //登入路徑
                    opt.AccessDeniedPath = "/Home/Index"; //取消登入路徑
                    opt.ExpireTimeSpan = TimeSpan.FromMinutes(10);
+                   opt.Events = new CookieAuthenticationEvents
+                   {
+                       OnRedirectToLogin = context =>
+                       {
+                           if (context.Request.Path.StartsWithSegments("/store"))
+                           {
+                               context.RedirectUri = "/store/Login/Index";
+                           }
+                           return Task.CompletedTask;
+                       }
+                   };
                })
                .AddFacebook(facebookOptions =>  //"Facebook"
                {

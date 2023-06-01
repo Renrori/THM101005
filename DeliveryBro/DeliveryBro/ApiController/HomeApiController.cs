@@ -1,5 +1,6 @@
 ﻿using DeliveryBro.Models;
 using DeliveryBro.ViewModels.Home;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -72,7 +73,7 @@ namespace DeliveryBro.ApiController
 
 
 
-
+        
         [HttpGet("{id}")]
         // Get:/api/HomeApi/1
         //之後改成傳物件呼叫形式
