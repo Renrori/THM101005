@@ -22,7 +22,7 @@ namespace DeliveryBro.ApiController
 		private readonly EncryptService _encrypt;
 		private readonly PasswordEncyptService _passwordEncyptService;
 
-		public RegisterApiController(sql8005site4nownetContext context,EncryptService encrypt, PasswordEncyptService passwordEncyptService)
+		public RegisterApiController(sql8005site4nownetContext context, EncryptService encrypt, PasswordEncyptService passwordEncyptService)
 		{
 			_context = context;
 			_encrypt = encrypt;
@@ -30,7 +30,7 @@ namespace DeliveryBro.ApiController
 		}
 
 		[HttpPost]
-		public async Task<string> Register (RegisterViewModel register)
+		public async Task<string> Register(RegisterViewModel register)
 		{
 			var user = _context.CustomersTable.FirstOrDefault(x => x.CustomerAccount == register.Account);
 			if (user != null)
@@ -58,41 +58,41 @@ namespace DeliveryBro.ApiController
 					_context.CustomersTable.Add(customer);
 					await _context.SaveChangesAsync();
 
-                    //return "註冊成功!";
-                    //寄信
-                    //	var obj = new AesValidationViewModel(register.Account, DateTime.Now.AddDays(1));
-                    //	var jString = JsonSerializer.Serialize(obj);
-                    //	var code = _encrypt.AesEncryptToBase64(jString);
-                    //	var mail = new MailMessage()
-                    //	{
-                    //		From = new MailAddress("thm10105@gmail.com"),
-                    //		Subject = "啟用網站驗證",
-                    //		Body = @$"<a class=""icon-link"" href=""https://localhost:7163/api/RegisterApi/registermail?code={code}"">
-                    //					<svg class=""bi"" aria-hidden=""true""><use xlink:href=""#box-seam""></use></svg>
-                    //					請點這裡來啟用帳號!
-                    //					</a>",
-                    //		IsBodyHtml = true,
-                    //		BodyEncoding = Encoding.UTF8,
-                    //	};
-                    //	mail.To.Add(new MailAddress(register.Email));
-                    //	try
-                    //	{
-                    //		using (var sm = new SmtpClient("smtp.gmail.com", 587)) //465 ssl
-                    //		{
-                    //			sm.EnableSsl = true;
-                    //			sm.Credentials = new NetworkCredential("thm10105@gmail.com", "loadozkrsjiocvci");
-                    //			sm.Send(mail);
-                    //		}
-                    //	}
-                    //	catch (Exception ex)
-                    //	{
-                    //		throw;
-                    //	}
-                    //	return "請至信箱收取驗證信";
-                    //}
+					//return "註冊成功!";
+					//寄信
+					//	var obj = new AesValidationViewModel(register.Account, DateTime.Now.AddDays(1));
+					//	var jString = JsonSerializer.Serialize(obj);
+					//	var code = _encrypt.AesEncryptToBase64(jString);
+					//	var mail = new MailMessage()
+					//	{
+					//		From = new MailAddress("thm10105@gmail.com"),
+					//		Subject = "啟用網站驗證",
+					//		Body = @$"<a class=""icon-link"" href=""https://localhost:7163/api/RegisterApi/registermail?code={code}"">
+					//					<svg class=""bi"" aria-hidden=""true""><use xlink:href=""#box-seam""></use></svg>
+					//					請點這裡來啟用帳號!
+					//					</a>",
+					//		IsBodyHtml = true,
+					//		BodyEncoding = Encoding.UTF8,
+					//	};
+					//	mail.To.Add(new MailAddress(register.Email));
+					//	try
+					//	{
+					//		using (var sm = new SmtpClient("smtp.gmail.com", 587)) //465 ssl
+					//		{
+					//			sm.EnableSsl = true;
+					//			sm.Credentials = new NetworkCredential("thm10105@gmail.com", "loadozkrsjiocvci");
+					//			sm.Send(mail);
+					//		}
+					//	}
+					//	catch (Exception ex)
+					//	{
+					//		throw;
+					//	}
+					//	return "請至信箱收取驗證信";
+					//}
 
-                }
-            }
+				}
+			}
 			return "請重新確認欄位";
 		}
 
@@ -101,7 +101,7 @@ namespace DeliveryBro.ApiController
 			var str = _encrypt.AesDecryptToString(code);
 			var obj = JsonSerializer.Deserialize<AesValidationViewModel>(str);
 			var user = _context.CustomersTable.FirstOrDefault(x => x.CustomerAccount == obj.Account);
-			if (user!=null&&DateTime.Now > obj.ExpiredDate)
+			if (user != null && DateTime.Now > obj.ExpiredDate)
 			{
 				_context.CustomersTable.Remove(user);
 				return BadRequest("驗證信已過期");
@@ -110,31 +110,30 @@ namespace DeliveryBro.ApiController
 			return Ok();
 		}
 
-
 		[HttpGet("isExist/account")]
 		public async Task<string> IfAccountIsExist(string? account)
 		{
-			var query = _context.CustomersTable.FirstOrDefault(x =>x.CustomerAccount == account ) ;
+			var query = _context.CustomersTable.FirstOrDefault(x => x.CustomerAccount == account);
 			if (query != null) return "已重複";
 			bool checkIsAlphaNumeric = IsAlphaNumeric(account);
-			if (!checkIsAlphaNumeric||account=="") return "長度要介於6-15且數字和英文字母結合";
-			 return "可以使用";
+			if (!checkIsAlphaNumeric || account == "") return "長度要介於6-15且數字和英文字母結合";
+			return "可以使用";
 		}
 		[HttpGet("isExist/password")]
 		public async Task<string> IfPasswordIsValid(string? password)
 		{
 			bool checkIsAlphaNumeric = IsAlphaNumeric(password);
-			if (!checkIsAlphaNumeric||password=="") return "長度要介於6-15且數字和英文字母結合";
+			if (!checkIsAlphaNumeric || password == "") return "長度要介於6-15且數字和英文字母結合";
 			return "可以使用";
 		}
 
 		[HttpGet("isExist/email")]
 		public async Task<string> IfEmailIsExist(string? email)
 		{
-			var query = _context.CustomersTable.FirstOrDefault(x =>x.CustomerEmail == email);
+			var query = _context.CustomersTable.FirstOrDefault(x => x.CustomerEmail == email);
 			if (query != null) return "已重複";
 			bool checkIsEmailType = IsEmailType(email);
-			if (!checkIsEmailType||email=="") return "不符合mail格式";
+			if (!checkIsEmailType || email == "") return "不符合mail格式";
 			return "可以使用";
 		}
 
@@ -144,7 +143,7 @@ namespace DeliveryBro.ApiController
 			var query = _context.CustomersTable.FirstOrDefault(x => x.CustomerPhone == phone);
 			if (query != null) return "已重複";
 			bool checkIsPhoneType = IsPhoneType(phone);
-			if (!checkIsPhoneType||phone=="") return "電話為09開頭的10個數字";
+			if (!checkIsPhoneType || phone == "") return "電話為09開頭的10個數字";
 			return "可以使用";
 		}
 
@@ -165,3 +164,4 @@ namespace DeliveryBro.ApiController
 		}
 	}
 }
+

@@ -1,4 +1,5 @@
 ﻿using DeliveryBro.Models;
+using DeliveryBro.ViewModels.Home;
 using DeliveryBro.ViewModels.User;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -23,38 +24,34 @@ namespace DeliveryBro.ApiController
             _context = context;
         }
 
-        //[Authorize]
-        ////GET:api/UserApi/2
-        //[HttpGet]
-        ////[Authorize(Role="User")] 限制登入者?
-        //public async Task<UserInfoViewModel> GetUserInfo()
-        //{
-        //    var login = await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-        //    if (login.Succeeded)
-        //    {
-        //        var userIdClaim = login.Principal.Claims.FirstOrDefault(c=>c.ValueType== "customerId");
-        //        var userId = userIdClaim?.Value;
-        //        var user = await _context.CustomersTable.Include(c => c.CustomerAddressTable)
-        //        .FirstOrDefaultAsync(c => c.CustomerId == userId);
-        //    }
-            
+        //GET: api/UserApi/23
+        [HttpGet("{customerId}")]
+        public async Task<IActionResult> GetUserInfo(int customerId)
+        {
+            // 從資料庫中查找對應的用戶記錄
+            var user = await _context.CustomersTable.FindAsync(customerId);
 
-        //    var userAddress = await _context.CustomerAddressTable.Where(c => c.CustomerId == customerId).Select(c => c.CustomerAddress).ToListAsync();
+            if (user == null)
+            {
+                return NotFound(); // 如果找不到用戶記錄，返回 NotFound 結果
+            }
 
-        //    var userInfo = new UserInfoViewModel
-        //    {
+            var userAddress = await _context.CustomerAddressTable.Where(c => c.CustomerId == customerId).Select(c => c.CustomerAddress).ToListAsync();
 
-        //        UserId = user.CustomerId,
-        //        UserName = user.CustomerName,
-        //        UserEmail = user.CustomerEmail,
-        //        UserAddress = userAddress,
-        //        UserBirth = user.DateOfBirth,
-        //        UserPhone = user.CustomerPhone,
-        //        UserPicture = user.CustomerPhoto
+            var userInfo = new UserInfoViewModel
+            {
+                UserId = user.CustomerId,
+                UserName = user.CustomerName,
+                UserEmail = user.CustomerEmail,
+                UserAddress = userAddress,
+                UserBirth = user.DateOfBirth,
+                UserPhone = user.CustomerPhone,
+                UserPicture = user.CustomerPhoto
+            };
 
-        //    };
-        //    return userInfo;
-        //}
+            return Ok(userInfo);
+        }
+
 
         //Put:api/UserApi/4
         [HttpPut("{customerId}")]
@@ -69,7 +66,7 @@ namespace DeliveryBro.ApiController
             userInfo.CustomerEmail = eui.UserEmail;
             userInfo.DateOfBirth = eui.UserBirth;
             userInfo.CustomerPhone = eui.UserPhone;
-            userInfo.CustomerPhoto = eui.UserPicture;
+            //userInfo.CustomerPhoto = eui.UserPicture;
 
             //track追蹤改變者上傳
             _context.Entry(userInfo).State = EntityState.Modified;
@@ -98,5 +95,40 @@ namespace DeliveryBro.ApiController
         {
             return (_context.CustomersTable?.Any(e => e.CustomerId == customerId)).GetValueOrDefault();
         }
+
+        //-----------原本的方法-----------
+        //[Authorize]
+        //GET:api/UserApi/2
+        //[HttpGet("{customerId}")]
+        //[Authorize(Role = "User")] 限制登入者?
+        //public async Task<UserInfoViewModel> GetUserInfo(int customerId)
+        //{
+        //var login = await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+        //if (login.Succeeded)
+        //{
+        //    var userIdClaim = login.Principal.Claims.FirstOrDefault(c => c.ValueType == "customerId");
+        //    var userId = userIdClaim?.Value;
+        //    var user = await _context.CustomersTable.Include(c => c.CustomerAddressTable)
+        //    .FirstOrDefaultAsync(c => c.CustomerId == userId);
+        //}
+
+        //    var userAddress = await _context.CustomerAddressTable.Where(c => c.CustomerId == customerId).Select(c => c.CustomerAddress).ToListAsync();
+        //    var user = await _context.CustomersTable.FindAsync(customerId);
+
+        //    UserInfoViewModel userInfo = new UserInfoViewModel
+        //    {
+
+        //        UserId = user.CustomerId,
+        //        UserName = user.CustomerName,
+        //        UserEmail = user.CustomerEmail,
+        //        UserAddress = userAddress,
+        //        UserBirth = user.DateOfBirth,
+        //        UserPhone = user.CustomerPhone,
+        //        UserPicture = user.CustomerPhoto
+
+        //    };
+        //    return userInfo;
+        //}
+        //-------------------------------
     }
 }

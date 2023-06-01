@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using DeliveryBro.Services;
 using Microsoft.AspNetCore.Authentication.Facebook;
+using Microsoft.AspNetCore.Authentication.Google;
+using NuGet.Versioning;
 
 namespace DeliveryBro.Controllers
 {
@@ -22,6 +24,10 @@ namespace DeliveryBro.Controllers
             _passwordEncyptService= passwordEncyptService;
         }
         public IActionResult Index()
+        {
+            return View();
+        }
+        public IActionResult Register()
         {
             return View();
         }
@@ -49,7 +55,7 @@ namespace DeliveryBro.Controllers
                      new Claim (ClaimTypes.Role,"User"),
                      new Claim("CustomerId",user.CustomerId.ToString())
                 };
-
+                
                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
                 //ClaimsPrincipal也可以List
@@ -82,20 +88,116 @@ namespace DeliveryBro.Controllers
             //如果驗證成功
             if(result.Succeeded)
             {
-                var claims = result.Principal.Claims.Select(x => new
+                var claimId = result.Principal.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value;
+                var claimName = result.Principal.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name).Value;
+                var claimsEmail = result.Principal.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email).Value;
+
+                var checkOAuth = _context.CustomersTable.Any(c => c.CustomerAccount == claimId && c.CustomerEmail == claimsEmail);
+                if (!checkOAuth)
                 {
-                    //打印Claims物件
-                    x.Type,
-                    x.Value,
-                });
-                return Json(claims);
+                    var oauthData = new CustomersTable
+                    {
+                        CustomerAccount = claimId,
+                        CustomerName = claimName,
+                        CustomerEmail = claimsEmail,
+                    };
+                    OAuthCreate(oauthData);
+                };
+                var customer = _context.CustomersTable.FirstOrDefault(c => c.CustomerAccount == claimId && c.CustomerEmail == claimsEmail);
+                var claims = new List<Claim>() {
+                     new Claim(ClaimTypes.Name,customer.CustomerName),
+                     new Claim (ClaimTypes.Role,"User"),
+                     new Claim("CustomerId",customer.CustomerId.ToString())
+                };
+                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+                //ClaimsPrincipal也可以List
+                var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
+
+                return RedirectToAction("Index", "Home");
             }
             return Ok();
         }
-        public IActionResult Register()
+
+        public IActionResult GoogleLogin()
         {
-            return View();
+            //prop
+
+            var prop = new AuthenticationProperties
+            {
+                RedirectUri = Url.Action("GoogleRes")
+
+            };
+            //發請求內容並傳入
+            return Challenge(prop, GoogleDefaults.AuthenticationScheme);
         }
 
-	}
+        public async Task<IActionResult> GoogleRes()
+        {   //非同步等待
+            var result = await HttpContext.AuthenticateAsync(GoogleDefaults.AuthenticationScheme);
+
+            //如果驗證成功
+            if (result.Succeeded)
+            {
+                var claimId = result.Principal.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value;
+                var claimName = result.Principal.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name).Value;
+                var claimsEmail = result.Principal.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email).Value;
+
+                var checkOAuth = _context.CustomersTable.Any(c => c.CustomerAccount == claimId && c.CustomerEmail == claimsEmail);
+                if (!checkOAuth)
+                {
+                    var oauthData = new CustomersTable
+                    {
+                        CustomerAccount = claimId,
+                        CustomerName = claimName,
+                        CustomerEmail = claimsEmail,
+                    };
+                    await OAuthCreate(oauthData);
+                }
+
+                var customer=_context.CustomersTable.FirstOrDefault(c=>c.CustomerAccount == claimId && c.CustomerEmail == claimsEmail);
+                    var claims = new List<Claim>() {
+                     new Claim(ClaimTypes.Name,customer.CustomerName),
+                     new Claim (ClaimTypes.Role,"User"),
+                     new Claim("CustomerId",customer.CustomerId.ToString())
+                };
+
+                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+                
+                var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
+                //var claims = result.Principal.Claims.Select(x => new
+                //{
+                //    //打印Claims物件
+                //    x.Type,
+                //    x.Value,
+                //});
+                return RedirectToAction("Index", "Home");
+            }
+            return Ok();
+        }
+        [HttpPost]
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToAction("Index", "Home");
+        }
+
+        public async Task OAuthCreate(CustomersTable oauthData)
+        {
+            CustomersTable customer = new CustomersTable
+            {
+                CustomerAccount = oauthData.CustomerAccount,
+                CustomerPassword = "",
+                CustomerName = oauthData.CustomerName,
+                CustomerEmail = oauthData.CustomerEmail,
+            };
+            _context.CustomersTable.Add(customer);
+            await _context.SaveChangesAsync();
+        }
+
+
+    }
 }

@@ -104,7 +104,7 @@
 
         <div class="container mt-4">
             <div class="row justify-content-end">
-                <a class="btn btn-info col-2" :href="OrderListUrl">結帳</a>
+                <a class="btn btn-primary col-2" :href="OrderListUrl">結帳</a>
             </div>
         </div>
 
@@ -144,8 +144,10 @@
                 this.GetRestaurantMenuInfo(this.storeInfo.storeId).then(productMenu => {
                     this.productMenu = productMenu;
                 }).catch(
-                   console.log("fail")
+                    console.log("fail")
                 );
+
+                this.restoreCartItemsFromCookie(); // 恢復後掛載
             },
             computed: {
                 OrderListUrl() {
@@ -179,6 +181,7 @@
                     };
                     this.cartItems.push(item);
                     selectedProduct.dishCount = 1;
+                    this.SavecartItemToCookie();
                 },
                 calculateSubtotal(item) {
                     return item.dishPrice * item.dishCount;
@@ -207,8 +210,32 @@
                 },
                 GetProductPic(pic) {
                     return `data:image/jpeg;base64,${pic}`
+                },
+                SavecartItemToCookie() {
+                    document.cookie = `cartItems=${JSON.stringify(this.cartItems)}; max-age=300`;
+                    console.log(document.cookie);
+                }, 
+                getCookie(name) {
+                    const cookieString = document.cookie;
+                    const cookies = cookieString.split(';');
+                    for (let i = 0; i < cookies.length; i++) {
+                        const cookie = cookies[i].trim();
+                        if (cookie.startsWith(name + '=')) {
+                            return cookie.substring(name.length + 1);
+                        }
+                    }
+                    return '';
+                },
+                restoreCartItemsFromCookie() {
+                    const cartItemsCookie = this.getCookie('cartItems');
+                    if (cartItemsCookie) {
+                        this.cartItems = JSON.parse(cartItemsCookie);
+                    }
                 }
 
+            },
+            create() {
+                window.addEventListener('beforeunload', this.SavecartItemToCookie); // 在页面关闭之前保存购物车数据到 Cookie
             }
         };
 
