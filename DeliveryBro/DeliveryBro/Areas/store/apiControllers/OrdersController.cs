@@ -1,7 +1,9 @@
 ﻿using DeliveryBro.Areas.store.DTO;
 using DeliveryBro.Areas.store.Hubs;
 using DeliveryBro.Areas.store.SubscribeTableDependency;
+using DeliveryBro.Extensions;
 using DeliveryBro.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +13,7 @@ namespace DeliveryBro.Areas.store.apiControllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
+	[Authorize]
 	public class OrdersController : ControllerBase
 	{
 		private readonly sql8005site4nownetContext _context;
@@ -26,8 +29,9 @@ namespace DeliveryBro.Areas.store.apiControllers
 		[HttpGet]
 		public IQueryable<HisOrderDTO> OrderDetail()
 		{
+			var id = User.GetId();
 			return _context.CustomerOrderTable.Include(x => x.OrderDetailsTable)
-				.Where(x => x.RestaurantId == 3 && x.OrderStatus == "completed").OrderByDescending(x => x).Select(x => new HisOrderDTO
+				.Where(x => x.RestaurantId == id && x.OrderStatus == "completed").OrderByDescending(x => x).Select(x => new HisOrderDTO
 				{
 					OrderId = x.OrderId,
 					OrderDate = x.OrderDate.ToUniversalTime().ToLocalTime().ToString(),
@@ -74,8 +78,9 @@ namespace DeliveryBro.Areas.store.apiControllers
 		public IQueryable<HisOrderDTO> WaitingOrder()
 		{
 			_subscribeOrder.Subscribe();
+			var id = User.GetId();
 			return _context.CustomerOrderTable.Include(x => x.OrderDetailsTable)
-				.Where(x => x.RestaurantId == 3 && x.OrderStatus == "waiting").Select(x => new HisOrderDTO
+				.Where(x => x.RestaurantId == id && x.OrderStatus == "waiting").Select(x => new HisOrderDTO
 				{
 					OrderId = x.OrderId,
 					OrderDate = x.OrderDate.ToUniversalTime().ToLocalTime().ToString(),
@@ -95,8 +100,9 @@ namespace DeliveryBro.Areas.store.apiControllers
 		[HttpGet("acepted")]
 		public IQueryable<HisOrderDTO> AceptedOrder()
 		{
+			var id = User.GetId();
 			return _context.CustomerOrderTable.Include(x => x.OrderDetailsTable)
-				.Where(x => x.RestaurantId == 3 && x.OrderStatus == "acepted").Select(x => new HisOrderDTO
+				.Where(x => x.RestaurantId == id && x.OrderStatus == "acepted").Select(x => new HisOrderDTO
 				{
 					OrderId = x.OrderId,
 					OrderDate = x.OrderDate.ToUniversalTime().ToLocalTime().ToString(),

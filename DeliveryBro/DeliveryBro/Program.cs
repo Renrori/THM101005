@@ -7,8 +7,6 @@ using Microsoft.EntityFrameworkCore;
 using DeliveryBro.Services;
 using DeliveryBro.Areas.store.Hubs;
 using DeliveryBro.Areas.store.SubscribeTableDependency;
-using DeliveryBro.Areas.store.Interface;
-using DeliveryBro.Areas.store.Service;
 
 namespace DeliveryBro
 {
@@ -40,18 +38,7 @@ namespace DeliveryBro
             builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                .AddCookie(opt =>
                {
-				   opt.Events = new CookieAuthenticationEvents
-				   {
-					   OnRedirectToLogin = context =>
-					   {
-						   if (context.Request.Path.StartsWithSegments("/store"))
-						   {
-							   context.RedirectUri = "/store/StoreUser/Login";
-							   context.Response.Redirect(context.RedirectUri);
-						   }
-						   return Task.CompletedTask;
-					   }
-				   };
+				   
 				   opt.LoginPath = "/Login/Index"; //登入路徑
                    opt.AccessDeniedPath = "/Home/Index"; //取消登入路徑
                    opt.ExpireTimeSpan = TimeSpan.FromMinutes(10);

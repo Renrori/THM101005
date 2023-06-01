@@ -8,6 +8,7 @@ using TableDependency.SqlClient;
 namespace DeliveryBro.Areas.store.Controllers
 {
 	[Area("store")]
+	[Authorize]
 	public class HomeController : Controller
 	{
 		
@@ -35,7 +36,7 @@ namespace DeliveryBro.Areas.store.Controllers
 		{
 			return View();
 		}
-		[Authorize]
+		
 		public IActionResult Menu()
 		{
 			//var claims = HttpContext.User.Claims;

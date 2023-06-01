@@ -176,10 +176,9 @@
 						store.restaurantStatus = "open";
 
 					var request = {
-						RestaurantId: store.restaurantId,
 						RestaurantStatus: store.restaurantStatus
 					};
-					axios.put(`/api/StoreInfo/status/${store.restaurantId}`, request).then(response => {
+					axios.put(`/api/StoreInfo/status/`, request).then(response => {
 						Swal.fire(
 							'營業狀態修改成功!'
 						)

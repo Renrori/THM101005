@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DeliveryBro.Models;
 using DeliveryBro.Areas.store.DTO;
-using DeliveryBro.Areas.store.Service;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using DeliveryBro.Extensions;
@@ -16,7 +15,7 @@ namespace DeliveryBro.Areas.store.apiControllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
-
+	[Authorize]
 	public class MenuTablesController : ControllerBase
 	{
 		private readonly sql8005site4nownetContext _context;
@@ -26,7 +25,7 @@ namespace DeliveryBro.Areas.store.apiControllers
 
 
 		}
-		[Authorize]
+		
 		// GET: api/MenuTables
 		[HttpGet]
 		public async Task<IQueryable<MenuDTO>> GetMenuTables()

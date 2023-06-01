@@ -11,5 +11,11 @@ namespace DeliveryBro.Extensions
 			if (temp == null) return -1;
 			return int.Parse(temp.Value);
 		}
+		public static string GetRole(this ClaimsPrincipal claimsPrincipal)
+		{
+			var role = claimsPrincipal.Claims.FirstOrDefault(c => c.Type.Contains("Store"));
+			if (role == null) return "";
+			return role.ToString();
+		}
 	}
 }

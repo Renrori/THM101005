@@ -270,9 +270,9 @@
                     let _this = this;
                     axios.get(`/api/StoreInfo`).then(response => {
                         _this.storeInfo = response.data.map(x => ({ 
-                            ...x, 
-                            openingHours: x.openingHours.substring(0, 5) ,
-                            endHours: x.endHours.substring(0, 5)
+                            ...x,
+                            openingHours: x.openingHours == null ? "" : x.openingHours.substring(0, 5),
+                            endHours: x.endHours==null?"":x.endHours.substring(0, 5)
                         }));
                     })
                 },
@@ -306,7 +306,7 @@
                         form.append("RestaurantPicture", _this.storePic);
                     else
                         form.append("RestaurantPicture", store.restaurantPicture);
-                    axios.put(`/api/StoreInfo/${store.restaurantId}`, form,
+                    axios.put(`/api/StoreInfo/`, form,
                         {
                             headers: {
                                 'Content-Type': 'multipart/form-data'
