@@ -1,6 +1,9 @@
 ﻿@*@using Microsoft.AspNetCore.Identity
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager*@
+@{
+    var orderListUrl = Url.Action("OrderList", "Home");
+}
 
 <ul class="navbar-nav">
     @if (User.Identity.IsAuthenticated)
@@ -14,7 +17,7 @@
             </form>
         </li>
         <li class="nav-item">
-            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="OrderList">購物車</a>
+            <a class="nav-link" href="@orderListUrl"></a>
         </li>
     }
     else
@@ -26,8 +29,14 @@
             <a class="nav-link" asp-area="" asp-controller="Login" asp-action="Index">登入</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="OrderList">購物車</a>
+            <a class="nav-link" href="@orderListUrl"></a>
         </li>
-
     }
 </ul>
+
+<script>
+    var cartItems = localStorage.getItem('cartItems') || "";
+    var encodedCartItems = encodeURIComponent(cartItems);
+    var finalOrderListUrl = "@orderListUrl" + "?data=" + encodedCartItems;
+    document.write('<a class="nav-link" href="' + finalOrderListUrl + '"><i class="fa-solid fa-cart-shopping"></i></a>');
+</script>

@@ -80,7 +80,7 @@
                 };
             },
             mounted() {
-                
+                this.saveCartItemsToLocalStorage();
             },
             methods: {
                 calculateTotal() {
@@ -124,6 +124,9 @@
                     const cartItemsJSON = JSON.stringify(this.cartItems);
                     document.cookie = `cartItems=${cartItemsJSON};`;
                 },
+                saveCartItemsToLocalStorage() {
+                    localStorage.setItem('cartItems', JSON.stringify(this.cartItems));
+                }
 
             },
             computed: {
