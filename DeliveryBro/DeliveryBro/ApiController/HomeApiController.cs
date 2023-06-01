@@ -133,11 +133,11 @@ namespace DeliveryBro.ApiController
 
         [HttpPost]
         //Post:/api/HomeApi/
-        public async Task<string> GetOrder([FromBody] OrderViewModel order)
+        public async Task<IActionResult> GetOrder([FromBody] OrderViewModel order)
         {
             if(order == null)
             {
-                return "沒有傳入內容";
+                return BadRequest();
             }
             try
             {
@@ -147,7 +147,7 @@ namespace DeliveryBro.ApiController
                     CustomerAddress = order.CustomerAddress,
                     ShippingFee = order.ShippingFee,
                     Payment = order.Payment,
-                    OrderDate = DateTime.Now,
+                    OrderDate = DateTime.UtcNow,
                     OrderStatus = order.OrderStatus,
                     Note = order.Note,
                     CustomerId = order.CustomerId,
@@ -167,14 +167,14 @@ namespace DeliveryBro.ApiController
 
                     if(checkOd == null) 
                     {
-                        return "訂單商品已有異動，請重新確認";
+                        return BadRequest("訂單商品已有異動，請重新確認");
                     }
 
                     OrderDetailsTable odt = new OrderDetailsTable  //打印訂單Entity
                     {
                         OrderId = od.OrderId,
                         DishId = od.DishId,
-                        OrderDate= DateTime.Today,
+                        OrderDate= DateTime.UtcNow.Date,
                         UnitPrice = checkOd.DishPrice,
                         Quantity = od.Quantity,
                         DishName = checkOd.DishName,
@@ -188,9 +188,9 @@ namespace DeliveryBro.ApiController
             catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
-                return "訂單上傳失敗";
+                return BadRequest("訂單上傳失敗");
             }
-            return "訂單上傳成功";
+            return Ok("訂單上傳成功");
         }
     }
 }

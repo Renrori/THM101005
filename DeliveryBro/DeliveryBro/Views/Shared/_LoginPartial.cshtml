@@ -3,7 +3,7 @@
 @inject UserManager<IdentityUser> UserManager*@
 
 <ul class="navbar-nav">
-    @*(User.Identity.IsAuthenticated)*@
+    
     @if (User.IsInRole("User"))
     {
         <li class="nav-item">
