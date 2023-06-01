@@ -1,12 +1,14 @@
 ﻿using DeliveryBro.Areas.store.Hubs;
 using DeliveryBro.Areas.store.SubscribeTableDependency;
 using DeliveryBro.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TableDependency.SqlClient;
 
 namespace DeliveryBro.Areas.store.Controllers
 {
 	[Area("store")]
+	[Authorize]
 	public class HomeController : Controller
 	{
 		
@@ -34,8 +36,10 @@ namespace DeliveryBro.Areas.store.Controllers
 		{
 			return View();
 		}
+		
 		public IActionResult Menu()
 		{
+			//var claims = HttpContext.User.Claims;
 			return View();
 		}
 		public IActionResult HelpCenter()

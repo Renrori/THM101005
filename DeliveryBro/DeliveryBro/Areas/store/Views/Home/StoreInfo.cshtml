@@ -45,7 +45,7 @@
                                 </li>
 
                                 <li class="nav-item">
-                                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-change-password">Change Password</button>
+                                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-change-password">變更密碼</button>
                                 </li>
 
                             </ul>
@@ -201,31 +201,31 @@
 
                                 <div class="tab-pane fade pt-3" id="profile-change-password">
                                     <!-- Change Password Form -->
-                                    <form>
+                                    <form action="/store/StoreUser/ResetInfoPwd" method="post">
 
                                         <div class="row mb-3">
-                                            <label for="currentPassword" class="col-md-4 col-lg-3 col-form-label">Current Password</label>
+                                            <label for="currentPassword" class="col-md-4 col-lg-3 col-form-label">舊密碼</label>
                                             <div class="col-md-8 col-lg-9">
-                                                <input name="password" type="password" class="form-control" id="currentPassword">
+                                                <input name="OldPassword" type="password" class="form-control" id="OldPassword">
                                             </div>
                                         </div>
 
                                         <div class="row mb-3">
-                                            <label for="newPassword" class="col-md-4 col-lg-3 col-form-label">New Password</label>
+                                            <label for="newPassword" class="col-md-4 col-lg-3 col-form-label">新密碼</label>
                                             <div class="col-md-8 col-lg-9">
-                                                <input name="newpassword" type="password" class="form-control" id="newPassword">
+                                                <input name="NewPassword" type="password" class="form-control" id="NewPassword">
                                             </div>
                                         </div>
 
                                         <div class="row mb-3">
-                                            <label for="renewPassword" class="col-md-4 col-lg-3 col-form-label">Re-enter New Password</label>
+                                            <label for="renewPassword" class="col-md-4 col-lg-3 col-form-label">確認新密碼</label>
                                             <div class="col-md-8 col-lg-9">
-                                                <input name="renewpassword" type="password" class="form-control" id="renewPassword">
+                                                <input name="NewPassword" type="password" class="form-control" id="NewPassword">
                                             </div>
                                         </div>
 
                                         <div class="text-center">
-                                            <button type="submit" class="btn btn-primary">Change Password</button>
+                                            <button type="submit" class="btn btn-primary">更新密碼</button>
                                         </div>
                                     </form><!-- End Change Password Form -->
 
@@ -270,9 +270,9 @@
                     let _this = this;
                     axios.get(`/api/StoreInfo`).then(response => {
                         _this.storeInfo = response.data.map(x => ({ 
-                            ...x, 
-                            openingHours: x.openingHours.substring(0, 5) ,
-                            endHours: x.endHours.substring(0, 5)
+                            ...x,
+                            openingHours: x.openingHours == null ? "" : x.openingHours.substring(0, 5),
+                            endHours: x.endHours==null?"":x.endHours.substring(0, 5)
                         }));
                     })
                 },
@@ -306,7 +306,7 @@
                         form.append("RestaurantPicture", _this.storePic);
                     else
                         form.append("RestaurantPicture", store.restaurantPicture);
-                    axios.put(`/api/StoreInfo/${store.restaurantId}`, form,
+                    axios.put(`/api/StoreInfo/`, form,
                         {
                             headers: {
                                 'Content-Type': 'multipart/form-data'

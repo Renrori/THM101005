@@ -1,6 +1,8 @@
 ﻿using DeliveryBro.Areas.store.DTO;
 using DeliveryBro.Areas.store.SubscribeTableDependency;
+using DeliveryBro.Extensions;
 using DeliveryBro.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +13,7 @@ namespace DeliveryBro.Areas.store.apiControllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class StoreInfoController : ControllerBase
     {
         private readonly sql8005site4nownetContext _context;
@@ -26,7 +29,8 @@ namespace DeliveryBro.Areas.store.apiControllers
         [HttpGet]
         public async Task<IQueryable<StoreInfoDTO>> GetRestaurantTable()
         {
-            return _context.RestaurantTable.Where(x => x.RestaurantId == 3).Select(x => new StoreInfoDTO
+			var id = User.GetId();
+			return _context.RestaurantTable.Where(x => x.RestaurantId == id).Select(x => new StoreInfoDTO
             {
                 RestaurantId = x.RestaurantId,
                 RestaurantDescription = x.RestaurantDescription,
@@ -60,11 +64,11 @@ namespace DeliveryBro.Areas.store.apiControllers
         }
         // PUT: api/RestaurantTables/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<string> PutRestaurantTable(int id, IFormCollection form)
+        [HttpPut]
+        public async Task<string> PutRestaurantTable(IFormCollection form)
         {
-
-            RestaurantTable store = await _context.RestaurantTable.FindAsync(id);
+			var id = User.GetId();
+			RestaurantTable store = await _context.RestaurantTable.FindAsync(id);
             store.RestaurantDescription = form["RestaurantDescription"];
             DateTime dateTimeOpen = DateTime.ParseExact(form["OpeningHours"], "HH:mm", CultureInfo.InvariantCulture);
             store.OpeningHours = dateTimeOpen.TimeOfDay;
@@ -95,10 +99,11 @@ namespace DeliveryBro.Areas.store.apiControllers
             return "更改成功";
         }
 
-        [HttpPut("status/{id}")]
-        public async Task<string> StoreStatusChange(int id, StoreStatusDTO statusDTO)
+        [HttpPut("status")]
+        public async Task<string> StoreStatusChange(StoreStatusDTO statusDTO)
         {
-            if (id != statusDTO.RestaurantId)
+			var id = User.GetId();
+			if (id != statusDTO.RestaurantId)
             {
                 return "無法更改營業狀態";
             }
@@ -119,30 +124,66 @@ namespace DeliveryBro.Areas.store.apiControllers
             return "營業狀態修改成功";
         }
 
-        [HttpGet("dishcount")]
-        public Object GetDishCount()
-        {
-            var query = _context.CustomerOrderTable.Where(x => x.RestaurantId == 3).Include(x => x.OrderDetailsTable)
-                .GroupBy(x => x.OrderDate.Month).Select(q => new DishMonthlyChartDTO
-                {
-                    Month = q.Key,
-                    Dish = q.SelectMany(od => od.OrderDetailsTable).GroupBy(od => od.DishName).Select(n => new DishEChartsDTO
-                    {
-                        DishName = n.Key,
-                        Number = n.Count()
-                    }).ToList()
-                });
+		[HttpGet("dishcount")]
+		public Object GetDishCount()
+		{
+			var id = User.GetId();
+			//var query = _context.CustomerOrderTable.Where(x => x.RestaurantId == 3 && x.OrderStatus == "completed")
+			//    .GroupBy(x => x.OrderDate.Month).Select(q => new
+			//    {
+			//        Month = q.Key
+			//    });
 
-            return Ok(query);
-        }
+			var orders = _context.CustomerOrderTable.Include(x => x.OrderDetailsTable)
+                .Where(x => x.RestaurantId == id && x.OrderStatus == "completed").ToList();
+			var query = orders.GroupBy(x => x.OrderDate.Month, (month, order) => new
+			{
+				Month = month.ToString(),
+				Order = order.SelectMany(i => i.OrderDetailsTable).GroupBy(n => n.DishName, (name, number) => new
+				{
+					Name = name,
+					Number = number.Count()
+				}).ToList()
 
-        [HttpGet("topselling")]
+			}).ToList();
+			var data = query.SelectMany(x => x.Order.Select(o => new
+			{
+				Month = x.Month,
+				Name = o.Name,
+				Number = o.Number
+			})).ToList();
+			var months = data.Select(m => m.Month).Distinct().OrderBy(m => m).ToList();
+			var disharr = data.Select(d => d.Name).Distinct().OrderBy(m => m).ToList();
+			var result = new List<object[]>();
+			var headerRow = new object[months.Count() + 1];
+			headerRow[0] = "product";
+			for (int i = 0; i < months.Count(); i++) headerRow[i + 1] = months[i];
+			result.Add(headerRow);
+
+			foreach (var d in disharr)
+			{
+				var dishData = new object[months.Count() + 1];
+				dishData[0] = d;
+				for (int i = 0; i < months.Count(); i++)
+				{
+					var month = months[i];
+					var num = data.Where(n => n.Month == month && n.Name == d).Sum(s => s.Number);
+					dishData[i + 1] = num;
+				}
+				result.Add(dishData);
+			}
+
+			return Ok(result);
+		}
+
+		[HttpGet("topselling")]
         public Object GetTopSelling()
         {
-            List<DishDTO> list = new List<DishDTO>();
+			var id = User.GetId();
+			List<DishDTO> list = new List<DishDTO>();
             Dictionary<int,int> IdLocation=new Dictionary<int,int>();
-            var menuName = _context.MenuTable.Where(x => x.RestaurantId == 3).Select(x => x.DishName).ToList();
-			var menuId = _context.MenuTable.Where(x => x.RestaurantId == 3).Select(x => x.DishId).ToList();
+            var menuName = _context.MenuTable.Where(x => x.RestaurantId == id).Select(x => x.DishName).ToList();
+			var menuId = _context.MenuTable.Where(x => x.RestaurantId == id).Select(x => x.DishId).ToList();
 			for (var i=0; i < menuId.Count; i++)
             {
                 DishDTO dish = new DishDTO();
@@ -156,7 +197,9 @@ namespace DeliveryBro.Areas.store.apiControllers
             {
 				IdLocation.Add(menuId[i], i);
             }
-            var itemcount = _context.CustomerOrderTable.Where(x => x.RestaurantId == 3).Select(x => new
+            var itemcount = _context.CustomerOrderTable
+                .Where(x => x.RestaurantId == id &&x.OrderStatus=="completed")
+                .Select(x => new
             {
                 itemdetail = x.OrderDetailsTable.Select(i => new
                 {
@@ -185,16 +228,16 @@ namespace DeliveryBro.Areas.store.apiControllers
         [HttpGet("orderscount")]
         public Object GetMointhliyOrders()
         {
-            _subscribeOrder.Subscribe();
+			var id = User.GetId();
 			var query = _context.CustomerOrderTable
-                .Where(x => x.RestaurantId == 3 && x.OrderDate.Date.ToString() == DateTime.Today.Date.ToString())
+                .Where(x => x.RestaurantId == id && x.OrderDate.Date.ToString() == DateTime.Today.Date.ToString()&&x.OrderStatus=="completed")
                 .GroupBy(x=>x.OrderDate.Date.ToString())
                 .Select(q => new
                 {
                     Date = q.Key,
-                    Orders = _context.CustomerOrderTable.Where(x => x.RestaurantId == 3  )
+                    Orders = _context.CustomerOrderTable.Where(x => x.RestaurantId == id  )
                             .Count(x=>x.OrderDate.Date.ToString() == DateTime.Today.Date.ToString()),
-                    Revenu =q.SelectMany(o=>o.OrderDetailsTable).Sum(o=>o.Subtotal)
+                    Revenue =q.SelectMany(o=>o.OrderDetailsTable).Sum(o=>o.Subtotal)
                 }) ;
             
             return Ok(query);
