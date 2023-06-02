@@ -61,12 +61,18 @@ namespace DeliveryBro
                });
 			//store
 			builder.Services.AddAuthentication("StoreAuthenticationScheme")
-			   .AddCookie("StoreAuthenticationScheme",opt =>
+			   .AddCookie("StoreAuthenticationScheme", opt =>
 			   {
 				   opt.LoginPath = "/store/StoreUser/Login"; //登入路徑
 				   opt.AccessDeniedPath = "/store/StoreUser/Logout"; //取消登入路徑
 				   opt.ExpireTimeSpan = TimeSpan.FromMinutes(10);
 			   });
+
+               builder.Services.AddAuthentication("admin")
+                .AddCookie("admin", opt =>
+				{
+					opt.LoginPath = new PathString("/admin/Account/login");
+				});
 
 			builder.Services.AddHttpContextAccessor();
 
@@ -96,6 +102,24 @@ namespace DeliveryBro
 
 			app.UseRouting();
 
+            app.UseAuthentication();
+            app.UseAuthorization();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute(
+                name: "store",
+                pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
+                endpoints.MapControllerRoute(
+                    name: "admin",
+                    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
+            });
+            
+			
 			app.UseAuthentication();
 			app.UseAuthorization();
 
