@@ -494,10 +494,14 @@
 						<div class="collapse" id="sidebarDashboards">
 							<ul class="side-nav-second-level">
 								<li>
-									<a href="dashboard-analytics.html">用戶管理</a>
+									<a asp-area="admin"
+									   asp-controller="UserManagement"
+									   asp-action="Index">用戶管理</a>
 								</li>
 								<li>
-									<a href="index.html">訂單管理</a>
+									<a asp-area="admin"
+									   asp-controller="OrderManagement"
+									   asp-action="Index">訂單管理</a>
 								</li>
 								<li>
 									<a href="dashboard-crm.html">客戶評價</a>
