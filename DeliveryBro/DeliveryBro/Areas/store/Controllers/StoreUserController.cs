@@ -266,11 +266,17 @@ namespace DeliveryBro.Areas.store.Controllers
                 new Claim("RestaurantId",user.RestaurantId.ToString())
                 };
                 //做憑證
-                var claimsIdentity = new ClaimsIdentity(claims, "StoreAuthenticationScheme");
-                var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
-                await HttpContext.SignInAsync("StoreAuthenticationScheme", claimsPrincipal);
-                return RedirectToAction("StoreInfo", "Home");//RedirectToAction("Error", "StoreUser");//到另一個控制器
+                //var claimsIdentity = new ClaimsIdentity(claims, "StoreAuthenticationScheme");
+                //var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
+                //await HttpContext.SignInAsync("StoreAuthenticationScheme", claimsPrincipal);
+                //return RedirectToAction("StoreInfo", "Home");//RedirectToAction("Error", "StoreUser");//到另一個控制器
                                                              //return RedirectToAction("Index", "Users", new { area = "Administration" });
+                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
+                return RedirectToAction("StoreInfo", "Home");
+
+
             }
             ViewBag.ErrorMessage = "輸入的內容有誤";
             return View("Login");
