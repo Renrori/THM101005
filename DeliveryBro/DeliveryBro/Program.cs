@@ -60,21 +60,19 @@ namespace DeliveryBro
                    googleOptions.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
                });
 			//store
-			//builder.Services.AddAuthentication("StoreAuthenticationScheme")
-			//   .AddCookie("StoreAuthenticationScheme",opt =>
-			//   {
-			//	   opt.LoginPath = "/store/StoreUser/Login"; //登入路徑
-			//	   opt.AccessDeniedPath = "/store/StoreUser/Logout"; //取消登入路徑
-			//	   opt.ExpireTimeSpan = TimeSpan.FromMinutes(10);
-			//   })
-   //             .AddCookie("admin",opt =>{
-   //                 opt.LoginPath = new PathString("/admin/Account/login");
-   //             })
-   //             .AddCookie(opt =>
-   //             {
-   //                 opt.LoginPath = "/user/Login";
-   //                 opt.ExpireTimeSpan = TimeSpan.FromMinutes(10);
-   //             });
+			builder.Services.AddAuthentication("StoreAuthenticationScheme")
+			   .AddCookie("StoreAuthenticationScheme", opt =>
+			   {
+				   opt.LoginPath = "/store/StoreUser/Login"; //登入路徑
+				   opt.AccessDeniedPath = "/store/StoreUser/Logout"; //取消登入路徑
+				   opt.ExpireTimeSpan = TimeSpan.FromMinutes(10);
+			   });
+
+               builder.Services.AddAuthentication("admin")
+                .AddCookie("admin", opt =>
+				{
+					opt.LoginPath = new PathString("/admin/Account/login");
+				});
 
 			builder.Services.AddHttpContextAccessor();
 
