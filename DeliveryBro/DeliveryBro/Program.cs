@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using DeliveryBro.Services;
 using DeliveryBro.Areas.store.Hubs;
 using DeliveryBro.Areas.store.SubscribeTableDependency;
+using DeliveryBro.Hubs;
 
 namespace DeliveryBro
 {
@@ -38,17 +39,17 @@ namespace DeliveryBro
             builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                .AddCookie(opt =>
                {
-                   opt.Events = new CookieAuthenticationEvents
-                   {
-                       OnRedirectToLogin = context =>
-                       {
-                           if (context.Request.Path.StartsWithSegments("/store"))
-                           {
-                               context.Response.Redirect(context.RedirectUri = "/store/StoreUser/Login");
-                           }
-                           return Task.CompletedTask;
-                       }
-                   };
+                   //opt.Events = new CookieAuthenticationEvents
+                   //{
+                   //    OnRedirectToLogin = context =>
+                   //    {
+                   //        if (context.Request.Path.StartsWithSegments("/store"))
+                   //        {
+                   //            context.Response.Redirect(context.RedirectUri = "/store/StoreUser/Login");
+                   //        }
+                   //        return Task.CompletedTask;
+                   //    }
+                   //};
                    opt.LoginPath = "/Login/Index"; //登入路徑
                    opt.AccessDeniedPath = "/Home/Index"; //取消登入路徑
                    opt.ExpireTimeSpan = TimeSpan.FromMinutes(10);
@@ -70,19 +71,19 @@ namespace DeliveryBro
                    googleOptions.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
                });
 			//store
-			//builder.Services.AddAuthentication("StoreAuthenticationScheme")
-			//   .AddCookie("StoreAuthenticationScheme", opt =>
-			//   {
-			//	   opt.LoginPath = "/store/StoreUser/Login"; //登入路徑
-			//	   opt.AccessDeniedPath = "/store/StoreUser/Logout"; //取消登入路徑
-			//	   opt.ExpireTimeSpan = TimeSpan.FromMinutes(10);
-			//   });
+			builder.Services.AddAuthentication("StoreAuthenticationScheme")
+			   .AddCookie("StoreAuthenticationScheme", opt =>
+			   {
+				   opt.LoginPath = "/store/StoreUser/Login"; //登入路徑
+				   opt.AccessDeniedPath = "/store/StoreUser/Logout"; //取消登入路徑
+				   opt.ExpireTimeSpan = TimeSpan.FromMinutes(10);
+			   });
 
-    //           builder.Services.AddAuthentication("admin")
-    //            .AddCookie("admin", opt =>
-				//{
-				//	opt.LoginPath = new PathString("/admin/Account/login");
-				//});
+			//           builder.Services.AddAuthentication("admin")
+			//            .AddCookie("admin", opt =>
+			//{
+			//	opt.LoginPath = new PathString("/admin/Account/login");
+			//});
 
 			builder.Services.AddHttpContextAccessor();
 
@@ -143,7 +144,9 @@ namespace DeliveryBro
 				pattern: "{controller=Home}/{action=Index}/{id?}");
 
 			app.MapRazorPages();
+
 			app.MapHub<OrderHub>("/orderHub");
+			app.MapHub<ChatHub>("/chatHub");
 
 			app.Run();
 		}

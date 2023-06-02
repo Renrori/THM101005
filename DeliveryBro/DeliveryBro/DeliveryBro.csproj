@@ -1309,4 +1309,11 @@
     <None Include="wwwroot\admin\vendor\typeahead.js\typeahead.jquery.min.js" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="Areas\admin\Views\_ViewStart.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>

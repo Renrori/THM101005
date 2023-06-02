@@ -271,9 +271,9 @@ namespace DeliveryBro.Areas.store.Controllers
                 //await HttpContext.SignInAsync("StoreAuthenticationScheme", claimsPrincipal);
                 //return RedirectToAction("StoreInfo", "Home");//RedirectToAction("Error", "StoreUser");//到另一個控制器
                                                              //return RedirectToAction("Index", "Users", new { area = "Administration" });
-                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                var claimsIdentity = new ClaimsIdentity(claims, "StoreAuthenticationScheme");
                 var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
-                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
+                await HttpContext.SignInAsync("StoreAuthenticationScheme", claimsPrincipal);
                 return RedirectToAction("StoreInfo", "Home");
 
 
@@ -305,7 +305,7 @@ namespace DeliveryBro.Areas.store.Controllers
         {
             if (ModelState.IsValid)
             {
-                var id = User.GetId();//呼叫函式
+                var id = User.GetId(User.GetRole());//呼叫函式
 
                 var user = await _db.RestaurantTable.FindAsync(id);
                 if (user.RestaurantPassword == model.OldPassword)

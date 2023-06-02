@@ -30,7 +30,7 @@ namespace DeliveryBro.Areas.store.apiControllers
 		[HttpGet]
 		public async Task<IQueryable<MenuDTO>> GetMenuTables()
 		{
-			var id = User.GetId();
+			var id = User.GetId(User.GetRole());
 			var query = _context.MenuTable.AsNoTracking().Where(x => x.RestaurantId == id).Select(menu => new MenuDTO
 			{
 				DishId = menu.DishId,
