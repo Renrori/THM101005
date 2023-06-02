@@ -235,7 +235,7 @@ namespace DeliveryBro.Areas.store.apiControllers
                 .Select(q => new
                 {
                     Date = q.Key,
-                    Orders = _context.CustomerOrderTable.Where(x => x.RestaurantId == id  )
+                    Orders = _context.CustomerOrderTable.Where(x => x.RestaurantId == id && x.OrderStatus == "completed")
                             .Count(x=>x.OrderDate.Date.ToString() == DateTime.Today.Date.ToString()),
                     Revenue =q.SelectMany(o=>o.OrderDetailsTable).Sum(o=>o.Subtotal)
                 }) ;

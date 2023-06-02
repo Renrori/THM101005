@@ -204,7 +204,6 @@
                         axios.get(`/api/Orders/wait`).then(response=>{
                             _this.waitingOrder=response.data;
                         })
-                        _this.waitingOrder=order;
                     });
                     _this.hubConnection.start().then(()=>{
                         console.log('connected');

@@ -6,8 +6,12 @@ namespace DeliveryBro.Areas.admin.Controllers
     [Area("admin")]
     public class HomeController : Controller
     {
-        [Authorize]
+        
         public IActionResult Index()
+        {
+            return View();
+        }
+        public IActionResult ChatRoom()
         {
             return View();
         }
