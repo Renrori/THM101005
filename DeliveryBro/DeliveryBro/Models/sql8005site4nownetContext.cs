@@ -36,7 +36,9 @@ namespace DeliveryBro.Models
 
                 entity.ToTable("Administer_Table");
 
-                entity.Property(e => e.AdministerId).HasColumnName("AdministerID");
+                entity.Property(e => e.AdministerId)
+                    .ValueGeneratedNever()
+                    .HasColumnName("AdministerID");
 
                 entity.Property(e => e.AdministerAccount)
                     .IsRequired()
@@ -88,7 +90,6 @@ namespace DeliveryBro.Models
                 entity.HasOne(d => d.Customer)
                     .WithMany(p => p.CustomerAddressTable)
                     .HasForeignKey(d => d.CustomerId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_CustomerAddress_Table_Customers_Table");
             });
 
@@ -127,18 +128,11 @@ namespace DeliveryBro.Models
                 entity.HasOne(d => d.Customer)
                     .WithMany(p => p.CustomerOrderTable)
                     .HasForeignKey(d => d.CustomerId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_CustomerOrder_Table_Customers_Table");
-
-                entity.HasOne(d => d.Driver)
-                    .WithMany(p => p.CustomerOrderTable)
-                    .HasForeignKey(d => d.DriverId)
-                    .HasConstraintName("FK_CustomerOrder_Table_Driver_Table");
 
                 entity.HasOne(d => d.Restaurant)
                     .WithMany(p => p.CustomerOrderTable)
                     .HasForeignKey(d => d.RestaurantId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_CustomerOrder_Table_Restaurant_Table");
             });
 
@@ -148,7 +142,9 @@ namespace DeliveryBro.Models
 
                 entity.ToTable("Customers_Table");
 
-                entity.Property(e => e.CustomerId).HasColumnName("CustomerID");
+                entity.Property(e => e.CustomerId)
+                    .ValueGeneratedNever()
+                    .HasColumnName("CustomerID");
 
                 entity.Property(e => e.CouponId).HasColumnName("CouponID");
 
@@ -185,7 +181,9 @@ namespace DeliveryBro.Models
 
                 entity.ToTable("Driver_Table");
 
-                entity.Property(e => e.DriverId).HasColumnName("DriverID");
+                entity.Property(e => e.DriverId)
+                    .ValueGeneratedNever()
+                    .HasColumnName("DriverID");
 
                 entity.Property(e => e.DriverAccount)
                     .IsRequired()
@@ -239,7 +237,6 @@ namespace DeliveryBro.Models
                 entity.HasOne(d => d.Restaurant)
                     .WithMany(p => p.MenuTable)
                     .HasForeignKey(d => d.RestaurantId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Menu_Table_Restaurant_Table");
             });
 
@@ -272,7 +269,9 @@ namespace DeliveryBro.Models
 
                 entity.ToTable("Restaurant_Table");
 
-                entity.Property(e => e.RestaurantId).HasColumnName("RestaurantID");
+                entity.Property(e => e.RestaurantId)
+                    .ValueGeneratedNever()
+                    .HasColumnName("RestaurantID");
 
                 entity.Property(e => e.EndHours).HasColumnType("time(0)");
 
@@ -280,7 +279,7 @@ namespace DeliveryBro.Models
 
                 entity.Property(e => e.RestaurantAccount)
                     .IsRequired()
-                    .HasMaxLength(15)
+                    .HasMaxLength(50)
                     .IsUnicode(false);
 
                 entity.Property(e => e.RestaurantAddress).HasMaxLength(50);
@@ -293,7 +292,7 @@ namespace DeliveryBro.Models
 
                 entity.Property(e => e.RestaurantPassword)
                     .IsRequired()
-                    .HasMaxLength(15)
+                    .HasMaxLength(128)
                     .IsUnicode(false);
 
                 entity.Property(e => e.RestaurantPhone).HasMaxLength(12);

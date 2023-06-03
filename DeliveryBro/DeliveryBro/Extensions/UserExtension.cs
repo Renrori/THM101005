@@ -5,15 +5,15 @@ namespace DeliveryBro.Extensions
 {
 	public static class UserExtension
 	{
-		public static int GetId(this ClaimsPrincipal claimsPrincipal,string role)
+		public static Guid GetId(this ClaimsPrincipal claimsPrincipal,string role)
 		{
 			Claim? temp;
            if (role=="Store")
 				temp=claimsPrincipal.Claims.FirstOrDefault(c => c.Type.Contains("RestaurantId"));
 			else if(role== "Administrator")
                 temp=claimsPrincipal.Claims.FirstOrDefault(c => c.Type.Contains("AdministratorId"));
-			else return -1;
-			return int.Parse(temp.Value);
+			else return Guid.Empty;
+			return Guid.Parse(temp.Value);
 		}
 		public static string GetRole(this ClaimsPrincipal claimsPrincipal)
 		{

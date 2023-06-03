@@ -33,7 +33,6 @@
                     <form action="#" class="Personal-form">
                         <div class="pagetitle">
                             <h1>我的資料</h1>
-                            <p>登入使用者的ID：@User.Claims.FirstOrDefault(c => c.Type == "CustomerId")?.Value</p>
                         </div>
                         <button class="btn btn-primary col-3" v-if="!isEditing" @@click="toggleEdit">修改資料</button>
 
@@ -166,7 +165,7 @@
     <script src="~/axios/axios.min.js"></script>
     <script>
         var baseAddress = "https://localhost:7163/api/UserApi";
-        var CustomerId = @User.Claims.FirstOrDefault(c => c.Type == "CustomerId")?.Value;
+        var CustomerId = "@User.Claims.FirstOrDefault(c => c.Type == "CustomerId")?.Value";
         var vueApp = {
             data() {
                 return {
