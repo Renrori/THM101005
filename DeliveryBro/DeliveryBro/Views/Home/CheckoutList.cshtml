@@ -63,9 +63,9 @@
                             <div class="col-md-12">
                                 <div class="form-group mt-4">
                                     <div class="radio">
-                                        <label class="mr-3"><input type="radio" name="Takeradio"> 內用 </label>
-                                        <label class="mr-3"><input type="radio" name="Takeradio"> 外帶 </label>
-                                        <label class="mr-3"><input type="radio" name="Takeradio"> 外送 </label>
+                                        <label class="mr-3"><input type="radio" name="Takeradio" value="in"> 內用 </label>
+                                        <label class="mr-3"><input type="radio" name="Takeradio" value="out"> 外帶 </label>
+                                        <label class="mr-3"><input type="radio" name="Takeradio" value="ship" @@change="addShippingFee"> 外送 </label>
                                     </div>
                                 </div>
                             </div>
@@ -203,6 +203,13 @@
                         //確認console在f12
                         //console.log(Jsondata);
                         window.location.href = `${this.selectedPage}?data=${Jsondata}`;
+                    }
+                },
+                addShippingFee(event){
+                    if (event.target.value === "ship") {
+                        this.ShippingFee = 60;
+                    } else {
+                        this.ShippingFee = 0;
                     }
                 }
             },

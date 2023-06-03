@@ -119,7 +119,7 @@
                 </div>
                 <div class="col-xl-3">
                     <h2 class="mb-5"></h2>
-                    <div class="col-sm-4">
+                    <div class="col-sm-11">
                         <img v-if="CustomerInfo.userPicture!=null" :src="getCustomerPic(CustomerInfo.userPicture)" class="border border-dark d-block rounded"
                              alt="暫無圖片"
                              width="250"
@@ -129,21 +129,21 @@
                              alt="暫無圖片"
                              width="250"
                              height="250" />
-                    </div>
-                    <br />
-                    <div class="row justify-content-end">
-                        <div class="col-12 col-sm-6">
-                            <input ref="fileInput" type="file" style="display: none" @@change="handleFileSelect" />
-                            <button class="btn btn-primary w-100" @@click="openFilePicker"><i class="fa-solid fa-image"></i>選取圖片</button>
-                        </div>
-                        <div class="col-12 col-sm-5">
-                            <button class="btn btn-primary w-100" @@click="uploadFile" :disabled="!selectedFilePath">
-                                上傳
-                            </button>
-                        </div>
-                        <div class="col-11">
-                            <div class="d-flex">
-                                <input type="text" class="form-control" placeholder="/path" v-model="selectedFilePath" required>
+                        <br />
+                        <div class="row justify-content-end">
+                            <div class="col-12 col-sm-6">
+                                <input ref="fileInput" type="file" style="display: none" @@change="handleFileSelect" />
+                                <button class="btn btn-primary w-100" @@click="openFilePicker"><i class="fa-solid fa-image"></i>選取圖片</button>
+                            </div>
+                            <div class="col-12 col-sm-5">
+                                <button class="btn btn-primary w-100" @@click="uploadFile" :disabled="!selectedFilePath">
+                                    上傳
+                                </button>
+                            </div>
+                            <div class="col-11">
+                                <div class="d-flex">
+                                    <input type="text" class="form-control" placeholder="/path" v-model="selectedFilePath" required>
+                                </div>
                             </div>
                         </div>
                     </div>
