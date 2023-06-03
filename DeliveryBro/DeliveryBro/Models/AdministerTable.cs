@@ -7,8 +7,8 @@ namespace DeliveryBro.Models
 {
     public partial class AdministerTable
     {
-        public int AdministerId { get; set; }
         public string AdministerAccount { get; set; }
         public string AdministerPassword { get; set; }
+        public Guid AdministerId { get; set; }
     }
 }

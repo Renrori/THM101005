@@ -30,7 +30,7 @@ namespace DeliveryBro.ApiController
 
         //GET: api/UserApi/23
         [HttpGet("{customerId}")]
-        public async Task<IActionResult> GetUserInfo(int customerId)
+        public async Task<IActionResult> GetUserInfo(Guid customerId)
         {
             // 從資料庫中查找對應的用戶記錄
             var user = await _context.CustomersTable.FindAsync(customerId);
@@ -96,7 +96,7 @@ namespace DeliveryBro.ApiController
         }
 
         [HttpGet("{customerId}/orderdetails")]
-        public async Task<IEnumerable<UserOrderViewModel>> GetUserOrder(int customerId)
+        public async Task<IEnumerable<UserOrderViewModel>> GetUserOrder(Guid customerId)
         {
             var orderDetails = _context.CustomerOrderTable
             .Where(o => o.CustomerId == customerId && o.OrderStatus == "completed").OrderByDescending(x => x.OrderId).Select(o => new UserOrderViewModel
@@ -120,7 +120,7 @@ namespace DeliveryBro.ApiController
         }
 
         [HttpGet("waitorder/{customerId}")]
-        public async Task<IEnumerable<UserOrderViewModel>> GetWaitOrder (int customerId)
+        public async Task<IEnumerable<UserOrderViewModel>> GetWaitOrder (Guid customerId)
         {
             var orderDetails = _context.CustomerOrderTable
                 .Where(o => o.CustomerId == customerId && o.OrderStatus == "waiting").Select(o => new UserOrderViewModel
@@ -144,7 +144,7 @@ namespace DeliveryBro.ApiController
         }
 
         [HttpPost("pic/{customerId}")]
-        public async Task<IActionResult> PostUserPic(int customerId,IFormFile file)
+        public async Task<IActionResult> PostUserPic(Guid customerId,IFormFile file)
         {
             if (file == null || file.Length <= 0)
             {
@@ -175,7 +175,7 @@ namespace DeliveryBro.ApiController
         //    customers.CustomerPhoto = await PostUserPic(file);
         //}
 
-        private bool CustomerExists(int customerId)
+        private bool CustomerExists(Guid customerId)
         {
             return (_context.CustomersTable?.Any(e => e.CustomerId == customerId)).GetValueOrDefault();
         }

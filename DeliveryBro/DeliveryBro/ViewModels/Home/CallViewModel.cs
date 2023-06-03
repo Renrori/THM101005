@@ -2,7 +2,7 @@
 {
     public class CallViewModel
     {
-        public int storeId { get; set; }
+        public Guid storeId { get; set; }
         public int dishId { get; set; }
     }
 }

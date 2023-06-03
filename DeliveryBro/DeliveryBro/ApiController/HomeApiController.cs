@@ -77,7 +77,7 @@ namespace DeliveryBro.ApiController
         [HttpGet("{id}")]
         // Get:/api/HomeApi/1
         //之後改成傳物件呼叫形式
-        public async Task<IEnumerable<MenuViewModel>> GetProduct(int id)
+        public async Task<IEnumerable<MenuViewModel>> GetProduct(Guid id)
         {
             
             var product = await _context.MenuTable.Include(m => m.Restaurant)
@@ -123,7 +123,7 @@ namespace DeliveryBro.ApiController
         [HttpGet("getpic/{storeId}")]
         // Get:/api/HomeApi/getpic/1
         //叫用商店圖片方法，傳入StoreId回傳圖片
-        public async Task<IActionResult> GetPictureStore(int storeId)
+        public async Task<IActionResult> GetPictureStore(Guid storeId)
         {
             RestaurantTable c = await _context.RestaurantTable.FindAsync(storeId);
             byte[] imgUrl = c?.RestaurantPicture;

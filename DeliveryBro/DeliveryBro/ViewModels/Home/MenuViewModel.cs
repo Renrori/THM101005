@@ -3,7 +3,7 @@
     public class MenuViewModel
     {
         public int DishId { get; set; }
-        public int RestaurantId { get; set; }
+        public Guid RestaurantId { get; set; }
         public string DishName { get; set; }
         public int DishPrice { get; set; }
         public byte[] DishPicture { get; set; }
