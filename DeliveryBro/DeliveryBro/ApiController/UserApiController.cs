@@ -16,6 +16,7 @@ using System.IO;
 namespace DeliveryBro.ApiController
 {
     //[EnableCors("User")]  限制跨域來源
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class UserApiController : ControllerBase
@@ -98,7 +99,7 @@ namespace DeliveryBro.ApiController
         public async Task<IEnumerable<UserOrderViewModel>> GetUserOrder(int customerId)
         {
             var orderDetails = _context.CustomerOrderTable
-            .Where(o => o.CustomerId == customerId).Select(o => new UserOrderViewModel
+            .Where(o => o.CustomerId == customerId && o.OrderStatus == "completed").OrderByDescending(x => x.OrderId).Select(o => new UserOrderViewModel
             {
                 OrderId = o.OrderId,
                 OrderDate = o.OrderDate,
@@ -114,6 +115,30 @@ namespace DeliveryBro.ApiController
                 }).ToList(),
                 Total = o.OrderDetailsTable.Sum(o => o.Subtotal)
             });
+
+            return orderDetails;
+        }
+
+        [HttpGet("waitorder/{customerId}")]
+        public async Task<IEnumerable<UserOrderViewModel>> GetWaitOrder (int customerId)
+        {
+            var orderDetails = _context.CustomerOrderTable
+                .Where(o => o.CustomerId == customerId && o.OrderStatus == "waiting").Select(o => new UserOrderViewModel
+                {
+                    OrderId = o.OrderId,
+                    OrderDate = o.OrderDate,
+                    CustomerName = o.Customer.CustomerName,
+                    Note = o.Note,
+                    OrderDetails = o.OrderDetailsTable.Select(d => new UserOrderDetailsViewModel
+                    {
+                        DishName = d.DishName,
+                        UnitPrice = d.UnitPrice,
+                        Quantity = d.Quantity,
+                        Discount = d.Discount,
+                        Subtotal = d.Subtotal
+                    }).ToList(),
+                    Total = o.OrderDetailsTable.Sum(o => o.Subtotal)
+                });
 
             return orderDetails;
         }

@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using System.Security.Claims;
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -26,7 +27,7 @@
     <header id="header" class="header fixed-top d-flex align-items-center">
 
         <div class="d-flex align-items-center justify-content-between">
-            <a class="logo d-flex align-items-center" asp-area="store" asp-controller="Home" asp-action="Index">
+            <a class="logo d-flex align-items-center" style="padding-left:0px;padding-right:0px" asp-area="store" asp-controller="Home" asp-action="Index">
                 @*logo*@
                 <span class="d-none d-lg-block">DeliveryBro</span>
             </a>
@@ -245,7 +246,7 @@
                 <a class="nav-link collapsed" asp-area="store" asp-controller="Home" asp-action="StoreInfo"><i class="fa-solid fa-store"></i>商店資訊</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link collapsed" asp-area="store" asp-controller="Home" asp-action="OrdersInTime"><i class="fa-solid fa-file-pen"></i>及時訂單</a>
+                <a class="nav-link collapsed" asp-area="store" asp-controller="Home" asp-action="OrdersInTime"><i class="fa-solid fa-file-pen"></i>即時訂單</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link collapsed" asp-area="store" asp-controller="Home" asp-action="HisOrder"><i class="fa-solid fa-file-lines"></i>歷史訂單</a>
@@ -259,7 +260,7 @@
             <li class="nav-item">
                 <a class="nav-link collapsed" asp-area="store" asp-controller="Home" asp-action="Privacy"><i class="fa-solid fa-lock"></i>Privacy</a>
             </li>
-             <li class="nav-item">
+            @* <li class="nav-item">
                 <a class="nav-link collapsed" asp-area="store" asp-controller="StoreUser" asp-action="Register"><i class="fa-sharp fa-solid fa-registered"></i>註冊</a>
             </li>
              <li class="nav-item">
@@ -268,6 +269,29 @@
             <li class="nav-item">
                 <a class="nav-link collapsed" asp-area="store" asp-controller="StoreUser" asp-action="Logout"><i class="fa-solid fa-xmark"></i>登出</a>
             </li>
+*@
+            @{
+                if (User.Identity.IsAuthenticated && User.IsInRole("Store"))
+                {
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="store" asp-controller="StoreUser" asp-action="Logout">登出</a>
+                    </li>
+                    <li class="nav-item">
+                        <span class="nav-link text-dark">使用者:@User.Claims.FirstOrDefault(x=> x.Type == ClaimTypes.Name).Value</span>
+                    </li>
+                }
+                else
+                {
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="store" asp-controller="StoreUser" asp-action="Login">登入</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="store" asp-controller="StoreUser" asp-action="Register">註冊</a>
+                    </li>
+                }
+
+            }
+
 
             @*<partial name="_LoginPartialStore" />*@
         </ul>
@@ -280,7 +304,7 @@
         </main>
     </div>
 
-    <footer id="footer" class="footer">
+    <footer id="footer" class="sfooter">
         <div class="copyright">
             &copy; Copyright <strong><span>NiceAdmin</span></strong>. All Rights Reserved
         </div>

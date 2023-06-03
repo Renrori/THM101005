@@ -137,10 +137,18 @@
 					</div>
 					</div>*@
 				</div>
-
-				<form method="post" action="/admin/AccountControllers/Logout">
-					<button class="btn btn-primary" type="submit">登出</button>
-				</form>
+				@{
+					if(User.Identity.IsAuthenticated&&User.IsInRole("Administrator"))
+					{
+						<form method="post" action="/admin/Account/Logout">
+						<button class="btn btn-primary" type="submit">登出</button>
+						</form>
+					}
+					else
+					{
+						<button>登入</button>
+					}
+				}
 
 				@*<ul class="topbar-menu d-flex align-items-center gap-3">
 				<li class="dropdown d-lg-none">
@@ -494,15 +502,21 @@
 						<div class="collapse" id="sidebarDashboards">
 							<ul class="side-nav-second-level">
 								<li>
-									<a href="dashboard-analytics.html">用戶管理</a>
+									<a asp-area="admin"
+									   asp-controller="UserManagement"
+									   asp-action="Index">用戶管理</a>
 								</li>
 								<li>
-									<a href="index.html">訂單管理</a>
+									<a asp-area="admin"
+									   asp-controller="OrderManagement"
+									   asp-action="Index">訂單管理</a>
 								</li>
 								<li>
 									<a href="dashboard-crm.html">客戶評價</a>
 								</li>
-
+								<li class="nav-item">
+									<a class="nav-link" asp-area="admin" asp-controller="Home" asp-action="ChatRoom">聊天室</a>
+								</li>
 							</ul>
 						</div>
 					</li>
@@ -1260,6 +1274,6 @@
 
 	<!-- App js -->
 	<script src="~/lib/admin/assets/js/app.min.js"></script>
-
+	@await RenderSectionAsync("Scripts", required: false)
 </body>
 </html> 

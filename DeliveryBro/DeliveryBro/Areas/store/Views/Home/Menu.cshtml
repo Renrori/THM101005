@@ -205,7 +205,8 @@
 					oldpic: "",
 					oldstatus: "",
 					toastHintShow: { fadeIn: false },
-					preview: null
+					preview: null,
+					rId:""
 				};
 			},
 			mounted: function () {
@@ -215,6 +216,7 @@
 			computed:{
 				btndisable: function () {
 					let _this=this;
+					
 					if(_this.dishName==""||_this.dishPrice=="") return true;
 					else return false;
 				}
@@ -222,6 +224,7 @@
 			methods: {
 				getMenuDTOes: function () {
 					let _this = this;
+					//_this.rId = @User.Claims.FirstOrDefault(c => c.Type.Contains("RestaurantId")).Value;
 					axios.get(`/api/MenuTables`).then(
 						response => {
 							_this.MenuDTOes = response.data.map(x => ({ ...x }));
