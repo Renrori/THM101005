@@ -222,10 +222,45 @@
                         </li>
 
                         <li>
-                            <a class="dropdown-item d-flex align-items-center" href="#">
+                           @* <a class="dropdown-item d-flex align-items-center" href="#">
                                 <i class="bi bi-box-arrow-right"></i>
-                                <span>Sign Out</span>
-                            </a>
+                                <span>登出</span>
+                            </a>*@
+
+                            @{
+                                if (User.Identity.IsAuthenticated)
+                                {
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li class="nav-item">
+                                    <a class="dropdown-item d-flex align-items-center" asp-area="store" asp-controller="StoreUser" asp-action="Logout"><i class="fa-solid fa-xmark"></i>登出</a>
+                                </li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li class="nav-item">
+                                    <a class ="dropdown-item d-flex align-items-center">使用者:@User.Claims.FirstOrDefault(x=> x.Type == ClaimTypes.Name).Value</a>
+                                </li>
+                                }
+                                else
+                                {
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li class="nav-item">
+                                    <a class="dropdown-item d-flex align-items-center" asp-area="store" asp-controller="StoreUser" asp-action="Login"><i class="fa-solid fa-right-to-bracket"></i>登入</a>
+                                </li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li class="nav-item">
+                                    <a class="dropdown-item d-flex align-items-center" asp-area="store" asp-controller="StoreUser" asp-action="Register"><i class="fa-sharp fa-solid fa-registered"></i>註冊</a>
+                                </li>
+                                }
+
+                            }
+
                         </li>
 
                     </ul><!-- End Profile Dropdown Items -->
@@ -270,7 +305,7 @@
                 <a class="nav-link collapsed" asp-area="store" asp-controller="StoreUser" asp-action="Logout"><i class="fa-solid fa-xmark"></i>登出</a>
             </li>
 *@
-            @{
+            @*@{
                 if (User.Identity.IsAuthenticated)
                 {
                     <li class="nav-item">
@@ -286,11 +321,11 @@
                         <a class="nav-link text-dark" asp-area="store" asp-controller="StoreUser" asp-action="Login">登入</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="store" asp-controller="StoreUser" asp-action="Register">註冊</a>
+                        <a class="nav-link text-dark" asp-area="store" asp-controller="StoreUser" asp-action="Register"><i class="fa-sharp fa-solid fa-registered"註冊</a>
                     </li>
                 }
 
-            }
+            }*@
 
 
             @*<partial name="_LoginPartialStore" />*@
