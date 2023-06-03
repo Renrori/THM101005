@@ -2,7 +2,7 @@
 {
     public class StoreInfoDTO
     {
-        public int RestaurantId { get; set; }
+        public Guid RestaurantId { get; set; }
         public string? RestaurantName { get; set; }
         public string? RestaurantAddress { get; set; }
         public string? RestaurantPhone { get; set; }

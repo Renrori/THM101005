@@ -237,7 +237,6 @@ namespace DeliveryBro.Models
                 entity.HasOne(d => d.Restaurant)
                     .WithMany(p => p.MenuTable)
                     .HasForeignKey(d => d.RestaurantId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Menu_Table_Restaurant_Table");
             });
 

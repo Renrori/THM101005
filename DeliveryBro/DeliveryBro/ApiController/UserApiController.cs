@@ -16,7 +16,7 @@ using System.IO;
 namespace DeliveryBro.ApiController
 {
     //[EnableCors("User")]  限制跨域來源
-    [Authorize]
+    //[Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class UserApiController : ControllerBase
@@ -59,7 +59,7 @@ namespace DeliveryBro.ApiController
 
         //Put:api/UserApi/4
         [HttpPut("{customerId}")]
-        public async Task<string> EditUserInfo(int customerId, EditUserInfoViewModel eui)
+        public async Task<string> EditUserInfo(Guid customerId, EditUserInfoViewModel eui)
         {
 
 
@@ -119,7 +119,6 @@ namespace DeliveryBro.ApiController
             return orderDetails;
         }
 
-        [HttpGet("waitorder/{customerId}")]
         public async Task<IEnumerable<UserOrderViewModel>> GetWaitOrder (Guid customerId)
         {
             var orderDetails = _context.CustomerOrderTable

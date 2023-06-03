@@ -1,4 +1,9 @@
-﻿<main>
+﻿<style>
+	#btnForgetPwd {
+		background-color: #444444;
+	}
+</style>
+<main>
 	
 	<div class="container">
 
@@ -35,13 +40,13 @@
 											<h1>@ViewBag.Error</h1>
 										}
 									}*@
-									<form action="/store/StoreUser/SendEmail" method="post" class="row g-3 needs-validation" novalidate>
+									<form action="/store/StoreUser/ForgetPwd" method="post" class="row g-3 needs-validation" novalidate>
 
 										<div class="mb-3">
 											@*<label for="exampleInputEmail1" class="form-label">電子郵件</label>*@
 											<input type="email" name="RestaurantEmail" class="form-control" id="email" aria-describedby="emailHelp" placeholder="請輸入電子郵件">
 										</div>
-										<button type="submit" class="btn btn-primary">寄送驗證信</button>
+										<button id="btnForgetPwd" type="submit" class="btn btn-primary">寄送驗證信</button>
 										@*<input type="submit" value="送出" />*@
 									</form>
 
