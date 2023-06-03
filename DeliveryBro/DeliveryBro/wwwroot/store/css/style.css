@@ -15,12 +15,12 @@
 
 body {
   font-family: "Open Sans", sans-serif;
-  background: #f6f9ff;
+  /*background: #f6f9ff;*/
   color: #444444;
 }
 
 a {
-  color: #4154f1;
+  color: #fff;
   text-decoration: none;
 }
 
@@ -372,7 +372,7 @@ h6 {
 .logo span {
   font-size: 26px;
   font-weight: 700;
-  color: #012970;
+  color: #fff;
   font-family: "Nunito", sans-serif;
 }
 
@@ -391,7 +391,7 @@ h6 {
   font-size: 32px;
   /*padding-left: 10px;*/
   cursor: pointer;
-  color: #012970;
+  color: #fff;
 }
 
 .header .search-bar {
@@ -468,13 +468,13 @@ h6 {
 
 .header-nav .nav-icon {
   font-size: 22px;
-  color: #012970;
+  color: #fff;
   margin-right: 25px;
   position: relative;
 }
 
 .header-nav .nav-profile {
-  color: #012970;
+  color: #fff;
 }
 
 .header-nav .nav-profile img {
@@ -558,7 +558,7 @@ h6 {
 }
 
 .header-nav .messages .message-item:hover {
-  background-color: #f6f9ff;
+  background-color: #fff;
 }
 
 .header-nav .profile {
@@ -684,9 +684,9 @@ h6 {
   align-items: center;
   font-size: 15px;
   font-weight: 600;
-  color: #4154f1;
+  color: #fff;
   transition: 0.3;
-  background: #f6f9ff;
+  background: #444444;
   padding: 10px 15px;
   border-radius: 4px;
 }
@@ -694,25 +694,25 @@ h6 {
 .sidebar-nav .nav-link i {
   font-size: 16px;
   margin-right: 10px;
-  color: #4154f1;
+  color: #fff;
 }
 
 .sidebar-nav .nav-link.collapsed {
-  color: #012970;
-  background: #fff;
+  color: #fff;
+  background: #444444;
 }
 
 .sidebar-nav .nav-link.collapsed i {
-  color: #899bbd;
+  color: #fff;
 }
 
 .sidebar-nav .nav-link:hover {
-  color: #4154f1;
-  background: #f6f9ff;
+  color: #444444;
+  background: #fff;
 }
 
 .sidebar-nav .nav-link:hover i {
-  color: #4154f1;
+  color: #000000;
 }
 
 .sidebar-nav .nav-link .bi-chevron-down {
@@ -1213,21 +1213,25 @@ h6 {
 /*--------------------------------------------------------------
 # Footer
 --------------------------------------------------------------*/
-.footer {
+.sfooter {
   padding: 20px 0;
   font-size: 14px;
   transition: all 0.3s;
   border-top: 1px solid #cddfff;
 }
 
-.footer .copyright {
+.sfooter .copyright {
   text-align: center;
   color: #012970;
 }
 
-.footer .credits {
+.sfooter .credits {
   padding-top: 5px;
   text-align: center;
   font-size: 13px;
   color: #012970;
+}
+
+.topsellingchart{
+    color:#012970;
 }

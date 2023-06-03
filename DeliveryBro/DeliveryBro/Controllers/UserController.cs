@@ -1,6 +1,8 @@
 ﻿using DeliveryBro.Models;
 using DeliveryBro.ViewModels.User;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 
 namespace DeliveryBro.Controllers
 {   
@@ -33,12 +35,12 @@ namespace DeliveryBro.Controllers
 
         //    return View();
         //}
-
+        [Authorize(Roles = "User", AuthenticationSchemes = "CustomerAuthenticationScheme")]
         public IActionResult UserHome()
         {
             return View();
         }
-
+        [Authorize(Roles = "User", AuthenticationSchemes = "CustomerAuthenticationScheme")]
         public IActionResult UserOrderHistory()
         {
             return View();
