@@ -49,7 +49,6 @@
             </div>
             <div class="container">
                 <div class="row justify-content-end">
-                    @*<a class="nav-link col-2 btn btn-info" asp-area="" asp-controller="Home" asp-action="CheckoutList">確認明細</a>*@
                     <a class="btn btn-primary col-2 text-light" :href="CheckoutListUrl">確認明細</a>
                 </div>
             </div>
@@ -57,8 +56,6 @@
         </div>
     </div>
 </div>
-
-@*若是加上套版套件語法，購物車顯示會跑不出來*@
 
 
 @section Scripts
@@ -90,12 +87,6 @@
                     }
                     this.totalAmount = total;
                     return total;
-
-                    //this.totalAmount = this.cartItems.reduce(
-                    //    (total, item) => total + item.DishPrice * item.DishCount,
-                    //    0
-                    //);
-
                 },
                 calculateSubtotal(item) {
                     return item.dishPrice * item.dishCount;
@@ -106,19 +97,8 @@
                     );
                     if (index !== -1) {
                         this.cartItems.splice(index, 1);
-                        //this.saveCartItemsToCookie();
+                        this.saveCartItemsToCookie();
                     }
-                },
-                ToCheckout() {
-                    //const checkoutData = {
-                    //    items: this.cartItems,
-                    //    totalAmount: this.totalAmount,
-                    //};
-                    //const jsonData = JSON.stringify(checkoutData);
-                    ////確認console在f12
-                    //console.log(jsonData);
-                    ////window.location.href = "CheckoutList?data=" + encodeURIComponent(jsonData);
-
                 },
                 saveCartItemsToCookie() {
                     const cartItemsJSON = JSON.stringify(this.cartItems);

@@ -1,5 +1,6 @@
 ﻿using DeliveryBro.Models;
 using DeliveryBro.ViewModels.Home;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -72,7 +73,7 @@ namespace DeliveryBro.ApiController
 
 
 
-
+        
         [HttpGet("{id}")]
         // Get:/api/HomeApi/1
         //之後改成傳物件呼叫形式
@@ -132,12 +133,11 @@ namespace DeliveryBro.ApiController
 
         [HttpPost]
         //Post:/api/HomeApi/
-        public async Task<string> GetOrder([FromBody] OrderViewModel order)
+        public async Task<IActionResult> GetOrder([FromBody] OrderViewModel order)
         {
-            
             if(order == null)
             {
-                return "沒有傳入內容";
+                return BadRequest();
             }
             try
             {
@@ -147,7 +147,7 @@ namespace DeliveryBro.ApiController
                     CustomerAddress = order.CustomerAddress,
                     ShippingFee = order.ShippingFee,
                     Payment = order.Payment,
-                    OrderDate =DateTime.UtcNow,
+                    OrderDate = DateTime.UtcNow,
                     OrderStatus = order.OrderStatus,
                     Note = order.Note,
                     CustomerId = order.CustomerId,
@@ -156,33 +156,41 @@ namespace DeliveryBro.ApiController
                 _context.CustomerOrderTable.Add(cot);
                 await _context.SaveChangesAsync();
 
-                int orderId = cot.OrderId;
+                int orderId = cot.OrderId; //儲存訂單的自動識別ID
                 
                 foreach (var od in order.OrderDetailViewModels)
                 {
                     od.OrderId = orderId;
-                    OrderDetailsTable odt = new OrderDetailsTable
+                    var checkOd = _context.MenuTable.Include(m => m.Restaurant)
+                        .Where(m => m.Restaurant.RestaurantId == order.RestaurantId && m.DishStatus == "ongoing")
+                        .FirstOrDefault(d => d.DishId == od.DishId); //搜尋對應的資料庫商品
+
+                    if(checkOd == null) 
+                    {
+                        return BadRequest("訂單商品已有異動，請重新確認");
+                    }
+
+                    OrderDetailsTable odt = new OrderDetailsTable  //打印訂單Entity
                     {
                         OrderId = od.OrderId,
                         DishId = od.DishId,
-                        OrderDate= DateTime.Today,
-                        UnitPrice = od.UnitPrice,
+                        OrderDate= DateTime.UtcNow.Date,
+                        UnitPrice = checkOd.DishPrice,
                         Quantity = od.Quantity,
-                        Subtotal = od.Subtotal,
-                        DishName = od.DishName,
+                        DishName = checkOd.DishName,
                     };
+                    odt.Subtotal = odt.UnitPrice * odt.Quantity;
                     _context.OrderDetailsTable.Add(odt);
                 }
                 await _context.SaveChangesAsync();
 
-                
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
-                return "訂單上傳失敗";
+                return BadRequest("訂單上傳失敗");
             }
-            return "訂單上傳成功";
+            return Ok("訂單上傳成功");
         }
     }
 }

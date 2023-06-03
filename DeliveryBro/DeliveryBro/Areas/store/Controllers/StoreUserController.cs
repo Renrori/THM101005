@@ -16,9 +16,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.Facebook;
 using NuGet.Protocol.Plugins;
 using DeliveryBro.Extensions;
-using System.Security.Principal;
-using System.Text.RegularExpressions;
-using System.Runtime.Intrinsics.X86;
 
 namespace DeliveryBro.Areas.store.Controllers
 {
@@ -317,13 +314,13 @@ namespace DeliveryBro.Areas.store.Controllers
 			return View();
 		}
 
-		[HttpPost]
-		//登入時-商家重設密碼
-		public async Task<IActionResult> ResetInfoPwd(RestInfoPwdViewModel model)
-		{
-			if (ModelState.IsValid)
-			{
-				var id = User.GetId();//呼叫函式
+        [HttpPost]
+        //登入時-商家重設密碼
+        public async Task<IActionResult> ResetInfoPwd(RestInfoPwdViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var id = User.GetId(User.GetRole());//呼叫函式
 
 				var user = await _db.RestaurantTable.FindAsync(id);
 				if (user.RestaurantPassword == model.OldPassword)

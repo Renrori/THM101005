@@ -8,7 +8,7 @@ using TableDependency.SqlClient;
 namespace DeliveryBro.Areas.store.Controllers
 {
 	[Area("store")]
-	[Authorize]
+	[Authorize(Roles = "Store", AuthenticationSchemes = "StoreAuthenticationScheme")]
 	public class HomeController : Controller
 	{
 		

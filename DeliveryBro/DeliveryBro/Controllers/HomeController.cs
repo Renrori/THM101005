@@ -18,7 +18,7 @@ namespace DeliveryBro.Controllers
             _logger = logger;
             _context = context;
         }
-
+        [Authorize,AllowAnonymous]
         //預設回傳View
         public IActionResult Index()
         {
@@ -36,17 +36,22 @@ namespace DeliveryBro.Controllers
         {
             return View();
         }
-        [Authorize]
+
+        public IActionResult OrderListNav()
+        {
+            return View();
+        }
+        [Authorize(Roles ="User",AuthenticationSchemes = "CustomerAuthenticationScheme")]
         public IActionResult CheckoutList()
         {
             return View();
         }
-        [Authorize]
+        [Authorize(Roles = "User", AuthenticationSchemes = "CustomerAuthenticationScheme")]
         public IActionResult PaybyCreditCard()
         {
             return View();
         }
-        [Authorize]
+        [Authorize(Roles = "User", AuthenticationSchemes = "CustomerAuthenticationScheme")]
         public IActionResult FinalOrderList()
         {
             return View();

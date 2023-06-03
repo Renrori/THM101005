@@ -13,7 +13,7 @@ namespace DeliveryBro.Areas.store.apiControllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
-	[Authorize]
+	[Authorize(Roles = "Store", AuthenticationSchemes = "StoreAuthenticationScheme")]
 	public class OrdersController : ControllerBase
 	{
 		private readonly sql8005site4nownetContext _context;
@@ -29,7 +29,7 @@ namespace DeliveryBro.Areas.store.apiControllers
 		[HttpGet]
 		public IQueryable<HisOrderDTO> OrderDetail()
 		{
-			var id = User.GetId();
+			var id = User.GetId(User.GetRole());
 			return _context.CustomerOrderTable.Include(x => x.OrderDetailsTable)
 				.Where(x => x.RestaurantId == id && x.OrderStatus == "completed").OrderByDescending(x => x).Select(x => new HisOrderDTO
 				{
@@ -78,7 +78,7 @@ namespace DeliveryBro.Areas.store.apiControllers
 		public IQueryable<HisOrderDTO> WaitingOrder()
 		{
 			_subscribeOrder.Subscribe();
-			var id = User.GetId();
+			var id = User.GetId(User.GetRole());
 			return _context.CustomerOrderTable.Include(x => x.OrderDetailsTable)
 				.Where(x => x.RestaurantId == id && x.OrderStatus == "waiting").Select(x => new HisOrderDTO
 				{
@@ -100,7 +100,7 @@ namespace DeliveryBro.Areas.store.apiControllers
 		[HttpGet("acepted")]
 		public IQueryable<HisOrderDTO> AceptedOrder()
 		{
-			var id = User.GetId();
+			var id = User.GetId(User.GetRole());
 			return _context.CustomerOrderTable.Include(x => x.OrderDetailsTable)
 				.Where(x => x.RestaurantId == id && x.OrderStatus == "acepted").Select(x => new HisOrderDTO
 				{

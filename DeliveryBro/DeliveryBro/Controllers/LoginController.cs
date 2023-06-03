@@ -9,6 +9,7 @@ using DeliveryBro.Services;
 using Microsoft.AspNetCore.Authentication.Facebook;
 using Microsoft.AspNetCore.Authentication.Google;
 using NuGet.Versioning;
+using NuGet.Protocol.Plugins;
 
 namespace DeliveryBro.Controllers
 {
@@ -56,11 +57,11 @@ namespace DeliveryBro.Controllers
                      new Claim("CustomerId",user.CustomerId.ToString())
                 };
                 
-                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                var claimsIdentity = new ClaimsIdentity(claims, "CustomerAuthenticationScheme");
 
                 //ClaimsPrincipal也可以List
                 var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
-                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
+                await HttpContext.SignInAsync("CustomerAuthenticationScheme", claimsPrincipal);
                 
                 return RedirectToAction("Index", "Home");
             }
@@ -100,6 +101,7 @@ namespace DeliveryBro.Controllers
                         CustomerAccount = claimId,
                         CustomerName = claimName,
                         CustomerEmail = claimsEmail,
+                        CustomerOauth = "Facebook"
                     };
                     OAuthCreate(oauthData);
                 };
@@ -109,11 +111,11 @@ namespace DeliveryBro.Controllers
                      new Claim (ClaimTypes.Role,"User"),
                      new Claim("CustomerId",customer.CustomerId.ToString())
                 };
-                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                var claimsIdentity = new ClaimsIdentity(claims, "CustomerAuthenticationScheme");
 
                 //ClaimsPrincipal也可以List
                 var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
-                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
+                await HttpContext.SignInAsync("CustomerAuthenticationScheme", claimsPrincipal);
 
                 return RedirectToAction("Index", "Home");
             }
@@ -144,14 +146,17 @@ namespace DeliveryBro.Controllers
                 var claimName = result.Principal.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name).Value;
                 var claimsEmail = result.Principal.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email).Value;
 
+                
                 var checkOAuth = _context.CustomersTable.Any(c => c.CustomerAccount == claimId && c.CustomerEmail == claimsEmail);
                 if (!checkOAuth)
                 {
+                    
                     var oauthData = new CustomersTable
                     {
                         CustomerAccount = claimId,
                         CustomerName = claimName,
                         CustomerEmail = claimsEmail,
+                        CustomerOauth= "Google"
                     };
                     await OAuthCreate(oauthData);
                 }
@@ -163,11 +168,11 @@ namespace DeliveryBro.Controllers
                      new Claim("CustomerId",customer.CustomerId.ToString())
                 };
 
-                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                var claimsIdentity = new ClaimsIdentity(claims, "CustomerAuthenticationScheme");
 
                 
                 var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
-                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
+                await HttpContext.SignInAsync("CustomerAuthenticationScheme", claimsPrincipal);
                 //var claims = result.Principal.Claims.Select(x => new
                 //{
                 //    //打印Claims物件
@@ -181,18 +186,22 @@ namespace DeliveryBro.Controllers
         [HttpPost]
         public async Task<IActionResult> Logout()
         {
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            await HttpContext.SignOutAsync("CustomerAuthenticationScheme");
             return RedirectToAction("Index", "Home");
         }
 
         public async Task OAuthCreate(CustomersTable oauthData)
         {
+            Guid uniqueId = Guid.NewGuid();
+            string uniqueIdString = uniqueId.ToString("N");
+
             CustomersTable customer = new CustomersTable
             {
                 CustomerAccount = oauthData.CustomerAccount,
-                CustomerPassword = "",
+                CustomerPassword = uniqueIdString,
                 CustomerName = oauthData.CustomerName,
                 CustomerEmail = oauthData.CustomerEmail,
+                CustomerOauth = oauthData.CustomerOauth,
             };
             _context.CustomersTable.Add(customer);
             await _context.SaveChangesAsync();
