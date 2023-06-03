@@ -104,7 +104,7 @@
 
         <div class="container mt-4">
             <div class="row justify-content-end">
-                <a class="btn btn-primary col-2" :href="OrderListUrl">結帳</a>
+                <a class="btn btn-primary col-2" :href="OrderListUrl">查看購物車</a>
             </div>
         </div>
 
@@ -131,23 +131,21 @@
                     selectedProduct: null,
                     currentPage: 1, // 當前分頁
                     pageSize: 8, // 每頁顯示的商品數量
-                    //testid: 1,
-                    //productpic: { storeId: 1, dishId: 1 }
                 };
             },
             mounted() {
                 const urlParams = new URLSearchParams(window.location.search);
                 const data = urlParams.get('data');
                 this.storeInfo = JSON.parse(decodeURIComponent(data));
-                this.GetRestaurantMenuInfo();
+                //this.GetRestaurantMenuInfo(); //未帶參數
 
                 this.GetRestaurantMenuInfo(this.storeInfo.storeId).then(productMenu => {
                     this.productMenu = productMenu;
                 }).catch(
-                    console.log("fail")
+                    console.log("ok")
                 );
 
-                this.restoreCartItemsFromCookie(); // 恢復後掛載
+               /* this.restoreCartItemsFromCookie();*/ // 恢復後掛載
             },
             computed: {
                 OrderListUrl() {
@@ -183,6 +181,10 @@
                     this.cartItems.push(item);
                     selectedProduct.dishCount = 1;
                     this.SavecartItemToCookie();
+                    this.saveCartItemsToLocalStorage();
+                },
+                saveCartItemsToLocalStorage() {
+                    localStorage.setItem('cartItems', JSON.stringify(this.cartItems));
                 },
                 calculateSubtotal(item) {
                     return item.dishPrice * item.dishCount;
@@ -219,23 +221,23 @@
                     document.cookie = `cartItems=${JSON.stringify(this.cartItems)}; max-age=300`;
                     console.log(document.cookie);
                 }, 
-                getCookie(name) {
-                    const cookieString = document.cookie;
-                    const cookies = cookieString.split(';');
-                    for (let i = 0; i < cookies.length; i++) {
-                        const cookie = cookies[i].trim();
-                        if (cookie.startsWith(name + '=')) {
-                            return cookie.substring(name.length + 1);
-                        }
-                    }
-                    return '';
-                },
-                restoreCartItemsFromCookie() {
-                    const cartItemsCookie = this.getCookie('cartItems');
-                    if (cartItemsCookie) {
-                        this.cartItems = JSON.parse(cartItemsCookie);
-                    }
-                }
+                //getCookie(name) {
+                //    const cookieString = document.cookie;
+                //    const cookies = cookieString.split(';');
+                //    for (let i = 0; i < cookies.length; i++) {
+                //        const cookie = cookies[i].trim();
+                //        if (cookie.startsWith(name + '=')) {
+                //            return cookie.substring(name.length + 1);
+                //        }
+                //    }
+                //    return '';
+                //},
+                //restoreCartItemsFromCookie() {
+                //    const cartItemsCookie = this.getCookie('cartItems');
+                //    if (cartItemsCookie) {
+                //        this.cartItems = JSON.parse(cartItemsCookie);
+                //    }
+                //}
 
             },
             create() {
@@ -247,3 +249,4 @@
 
     </script>
 }
+

@@ -36,7 +36,13 @@ namespace DeliveryBro.Controllers
         {
             return View();
         }
-        [Authorize]
+
+        public IActionResult OrderListNav()
+        {
+            return View();
+        }
+
+        [Authorize(AuthenticationSchemes = "Cookies")]
         public IActionResult CheckoutList()
         {
             return View();

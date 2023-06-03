@@ -31,70 +31,79 @@
                             <div class="col">
                                 <div class="card">
                                     <div class="card-body pt-3">
-                                        <div class="tab-content pt-2">
-                                            <div class="tab-pane fade show active profile-overview" id="order-waiting">
-                                                <div class="card" v-for="wo in waitingOrder">
-                                                    <div class="card-body">
-                                                        <h5 class="card-title">訂單編號: {{wo.orderId}}</h5>
-                                                        <div class="row">
-                                                            <div class="col-10">
-                                                                <div class="row">
-                                                                    <div class="col-3 label">餐點名稱</div>
-                                                                    <div class="col-3">單價</div>
-                                                                    <div class="col-3">數量</div>
-                                                                    <div class="col-3">小計</div>
-                                                                </div>
+                                        <!-- Bordered Tabs -->
+                                        <div class="container-fluid">
+                                            <div class="row">
+                                                <div class="col-4 ">
+                                                    <label>訂單編號&emsp;</label>
+                                                    <div class="row align-items-center">
+                                                        <div class="col-8">
+                                                            <input type="text" class="--bs-dark-border-subtle --bs-dark-text-emphasis form-control" placeholder="目前無法使用" v-model="searchorderId" />
+                                                        </div>
+                                                        <div class="col-4">
+                                                            <button class="btn btn-primary" @@click="searchOrder(searchorderId)">搜尋</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                @*                                                <div class="col-3 ">
+                                                <label style="text-align:right">訂單完成日期&emsp;</label>
+                                                <input type="date" v-model="" />
+                                                </div>
+                                                <div class="col-2 ">
+                                                <input type="date" v-model="" />
+                                                </div>*@
+                                            </div>
+                                        </div>
+                                        <div class="tab-content pt-2" v-if="searchResult">
+                                            <div class="card" v-for="item in CustomerOrderInfo" :key="orderId">
+                                                <div class="card-body">
+                                                    <h5 class="card-title">訂單編號: {{ item.orderId }} </h5>
+                                                    <h5>完成時間: {{item.orderDate}}</h5>
+                                                    <hr />
+                                                    <div class="row">
+                                                        <div class="col-10" style="padding-bottom:10px">
+                                                            <div class="row" v-for="detail in item.orderDetails">
+                                                                <div class="col-lg-3 col-md-4 label">{{detail.dishName}}</div>
+                                                                <div class="col-lg-2 col-md-2">${{detail.unitPrice}}</div>
+                                                                <div class="col-lg-2 col-md-2">{{detail.quantity}}</div>
+                                                                <div class="col-lg-2 col-md-2">${{detail.subtotal}}</div>
                                                             </div>
                                                         </div>
-                                                        <div class="row">
-                                                            <div class="col-10">
-                                                                <div class="row" v-for="wod in wo.orderDetails">
-                                                                    <div class="col-3 label">{{wod.dishName}}</div>
-                                                                    <div class="col-3">$ {{wod.unitPrice}}</div>
-                                                                    <div class="col-3">{{wod.quantity}}</div>
-                                                                    <div class="col-3">$ {{wod.subtotal}}</div>
-                                                                </div>
-                                                            </div>
+                                                        <div class="col-2">
+                                                            <div>Total: ${{item.total}}</div>
                                                         </div>
-                                                        <br />
-                                                        <div>總金額: $ {{wo.total}}</div>
+                                                    </div>
+                                                    <hr />
+                                                    <div>
+                                                        <h5>備註: </h5>
+                                                        <div>{{ item.note }}</div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="tab-pane fade profile-edit" id="order-accpted">
-                                            <div class="card" v-for="ao in aceptedOrder">
+                                        <div class="tab-content pt-2" v-else>
+                                            <div class="card" v-for="item in CustomerOrderInfo" :key="orderId">
                                                 <div class="card-body">
-                                                    <h5 class="card-title">訂單編號: {{ao.orderId}}</h5>
-                                                    <h5>接收訂單時間: {{ao.orderDate}}</h5>
-                                                    <h5>預計完成時間: 接收時間+預設被餐時間</h5>
-                                                    <h5>顧客名稱: {{ao.customerName}}</h5>
+                                                    <h5 class="card-title">訂單編號: {{ item.orderId }} </h5>
+                                                    <h5>完成時間: {{item.orderDate}}</h5>
                                                     <hr />
                                                     <div class="row">
-                                                        <div class="col-10">
-                                                            <div class="row">
-                                                                <div class="col-3 label">餐點名稱</div>
-                                                                <div class="col-3">單價</div>
-                                                                <div class="col-3">數量</div>
-                                                                <div class="col-3">小計</div>
+                                                        <div class="col-10" style="padding-bottom:10px">
+                                                            <div class="row" v-for="detail in item.orderDetails">
+                                                                <div class="col-lg-3 col-md-4 label">{{detail.dishName}}</div>
+                                                                <div class="col-lg-2 col-md-2">${{detail.unitPrice}}</div>
+                                                                <div class="col-lg-2 col-md-2">{{detail.quantity}}</div>
+                                                                <div class="col-lg-2 col-md-2">${{detail.subtotal}}</div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-10" v-for="aod in ao.orderDetails">
-                                                            <div class="row">
-                                                                <div class="col-3 label">{{aod.dishName}}</div>
-                                                                <div class="col-3">$ {{aod.unitPrice}}</div>
-                                                                <div class="col-3">{{aod.quantity}}</div>
-                                                                <div class="col-3">$ {{aod.subtotal}}</div>
-                                                            </div>
+                                                        <div class="col-2">
+                                                            <div>Total: ${{item.total}}</div>
                                                         </div>
                                                     </div>
-                                                    <br />
-                                                    <hr /><div>總金額: $ {{ao.total}}</div> <br />
+                                                    <hr />
                                                     <div>
                                                         <h5>備註: </h5>
-                                                        <div>{{ao.note}}</div>
+                                                        <div>{{ item.note }}</div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -109,3 +118,50 @@
         </div>
     </div>
 </div>
+
+@section Scripts
+    {
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/vue@3.2.36/dist/vue.global.prod.js"></script>
+    <script src="~/axios/axios.min.js"></script>
+    <script>
+        var baseAddress = "https://localhost:7163/api/UserApi";
+        var CustomerId = @User.Claims.FirstOrDefault(c => c.Type == "CustomerId")?.Value;
+        var vueApp = {
+            data() {
+                return {
+                    CustomerOrderInfo: [],
+                    searchResult: null,
+                    searchorderId: ""
+                }
+            },
+            mounted() {
+                this.getUserOrder();
+            },
+            methods: {
+                async getUserOrder() {
+                    //拿出對應cusId的order
+                    try {
+                        const response = await axios.get(`${baseAddress}/${CustomerId}/orderdetails`).then(Response => {
+                            this.CustomerOrderInfo = Response.data;
+                        })
+                    } catch (error) {
+                        console.error(error);
+                    }
+                },
+                searchOrder(searchorderId) {
+                    const foundOrder = this.CustomerOrderInfo.find(order => order.orderId === searchorderId)
+                    if (foundOrder) {
+                        this.searchResult = foundOrder;
+                        console.log("match")
+                    }
+                    else {
+                        this.searchResult = null;
+                        console.log("notmatch")
+                    }
+                }
+            }
+        };
+        var app = Vue.createApp(vueApp).mount("#app");
+    </script>
+    }
