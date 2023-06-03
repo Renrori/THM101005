@@ -251,8 +251,8 @@ namespace DeliveryBro.Areas.store.Controllers
 
                 //FirstOrDefault找尋資料表中的第一筆資料 有資料回傳第一筆或是沒資料回傳null
                 //找RestaurantTable資料表篩選符合RestaurantAccount及RestaurantPassword的條件
-                RestaurantTable user = _db.RestaurantTable.FirstOrDefault(x => x.RestaurantAccount == model.Account &&
-                            x.RestaurantPassword == model.Password);
+                RestaurantTable user = _db.RestaurantTable.FirstOrDefault(x => x.RestaurantAccount ==  model.Account &&
+                            x.RestaurantPassword == _passwordEncyptService.PasswordEncrypt(model.Password));
                 if (user == null)
                 {
                     ViewBag.Error = "帳號或密碼錯誤";

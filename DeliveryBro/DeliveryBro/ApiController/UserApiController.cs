@@ -99,7 +99,7 @@ namespace DeliveryBro.ApiController
         public async Task<IEnumerable<UserOrderViewModel>> GetUserOrder(int customerId)
         {
             var orderDetails = _context.CustomerOrderTable
-            .Where(o => o.CustomerId == customerId && o.OrderStatus == "completed").Select(o => new UserOrderViewModel
+            .Where(o => o.CustomerId == customerId && o.OrderStatus == "completed").OrderByDescending(x => x.OrderId).Select(o => new UserOrderViewModel
             {
                 OrderId = o.OrderId,
                 OrderDate = o.OrderDate,
@@ -119,6 +119,7 @@ namespace DeliveryBro.ApiController
             return orderDetails;
         }
 
+        [HttpGet("waitorder/{customerId}")]
         public async Task<IEnumerable<UserOrderViewModel>> GetWaitOrder (int customerId)
         {
             var orderDetails = _context.CustomerOrderTable
