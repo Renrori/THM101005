@@ -37,15 +37,19 @@
             <table class="table">
                 <tbody>
                     <tr>
+                        <th width="120"><br />運費</th>
+                        <td>{{ ShippingFee}}</td>
+                    </tr>
+                    <tr>
+                        <th width="120"><br />訂單總金額</th>
+                        <td>{{ AmountAfterDiscount }}</td>
+                    </tr>
+                    <tr>
                         <th width="120"><br />訂單狀態</th>
                         <td>{{ orderStatus}}</td>
                     </tr>
                     <tr>
-                        <th><br />訂單總金額</th>
-                        <td>{{ AmountAfterDiscount }}</td>
-                    </tr>
-                    <tr>
-                        <th><br />交易結果</th>
+                        <th width="120"><br />交易結果</th>
                         <td v-if="OrderResult"><strong class="text-danger">請前往結帳</strong></td>
                         <td v-else>尚未送出訂單</td>
                     </tr>
