@@ -260,7 +260,7 @@
             selfID.innerHTML = id;
         });
 
-        connection.on("SendtoAdmin", (msg,name) => {
+        connection.on("updmsg", (msg, name) => {
             var li = document.createElement("li");
             li.setAttribute("class", "clearfix odd");
             var textdiv=document.createElement("div");
@@ -271,6 +271,23 @@
             i.textContent=name;
             var p=document.createElement("p")
             p.textContent=msg;
+            wrapdiv.appendChild(i).appendChild(p)
+            textdiv.appendChild(wrapdiv);
+            li.appendChild(textdiv);
+            document.getElementById("messageList").appendChild(li);
+        });
+
+        connection.on("SendtoCaller", (msg, name) => {
+            var li = document.createElement("li");
+            li.setAttribute("class", "clearfix");
+            var textdiv = document.createElement("div");
+            textdiv.setAttribute("class", "coversation-text")
+            var wrapdiv = document.createElement("div");
+            wrapdiv.setAttribute("class", "ctext-wrap")
+            var i = document.createElement("i")
+            i.textContent = name;
+            var p = document.createElement("p")
+            p.textContent = msg;
             wrapdiv.appendChild(i).appendChild(p)
             textdiv.appendChild(wrapdiv);
             li.appendChild(textdiv);

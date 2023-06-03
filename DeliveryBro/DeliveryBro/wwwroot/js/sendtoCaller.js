@@ -22,7 +22,7 @@ connection.on("UpdSelfID", (id) => {
 
 connection.on("SendtoAdmin", (msg, name) => {
     var li = document.createElement("li");
-    li.setAttribute("class", "clearfix odd");
+    li.setAttribute("class", "clearfix");
     var textdiv = document.createElement("div");
     textdiv.setAttribute("class", "coversation-text")
     var wrapdiv = document.createElement("div");
@@ -38,10 +38,10 @@ connection.on("SendtoAdmin", (msg, name) => {
 });
 
 document.getElementById("sendMsg").addEventListener("click", function (event) {
-    var message = document.getElementById("msgforadmin").value;
-    connection.invoke("SendMessage", message).catch((err) => {
+    var message = document.getElementById("msgforcaller").value;
+    connection.invoke("SendMessagetoCaller", message,connectionId).catch((err) => {
         return console.log(err.toString())
     });
-    document.getElementById("msgforadmin").value = "";
+    document.getElementById("msgforcaller").value = "";
     event.preventDefault();
 });

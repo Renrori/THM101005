@@ -271,7 +271,7 @@
             </li>
 *@
             @{
-                if (User.Identity.IsAuthenticated)
+                if (User.Identity.IsAuthenticated && User.IsInRole("Store"))
                 {
                     <li class="nav-item">
                         <a class="nav-link text-dark" asp-area="store" asp-controller="StoreUser" asp-action="Logout">登出</a>

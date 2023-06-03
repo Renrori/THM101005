@@ -56,11 +56,11 @@ namespace DeliveryBro.Controllers
                      new Claim("CustomerId",user.CustomerId.ToString())
                 };
                 
-                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                var claimsIdentity = new ClaimsIdentity(claims, "CustomerAuthenticationScheme");
 
                 //ClaimsPrincipal也可以List
                 var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
-                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
+                await HttpContext.SignInAsync("CustomerAuthenticationScheme", claimsPrincipal);
                 
                 return RedirectToAction("Index", "Home");
             }
@@ -109,11 +109,11 @@ namespace DeliveryBro.Controllers
                      new Claim (ClaimTypes.Role,"User"),
                      new Claim("CustomerId",customer.CustomerId.ToString())
                 };
-                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                var claimsIdentity = new ClaimsIdentity(claims, "CustomerAuthenticationScheme");
 
                 //ClaimsPrincipal也可以List
                 var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
-                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
+                await HttpContext.SignInAsync("CustomerAuthenticationScheme", claimsPrincipal);
 
                 return RedirectToAction("Index", "Home");
             }
@@ -163,11 +163,11 @@ namespace DeliveryBro.Controllers
                      new Claim("CustomerId",customer.CustomerId.ToString())
                 };
 
-                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                var claimsIdentity = new ClaimsIdentity(claims, "CustomerAuthenticationScheme");
 
                 
                 var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
-                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
+                await HttpContext.SignInAsync("CustomerAuthenticationScheme", claimsPrincipal);
                 //var claims = result.Principal.Claims.Select(x => new
                 //{
                 //    //打印Claims物件
@@ -181,7 +181,7 @@ namespace DeliveryBro.Controllers
         [HttpPost]
         public async Task<IActionResult> Logout()
         {
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            await HttpContext.SignOutAsync("CustomerAuthenticationScheme");
             return RedirectToAction("Index", "Home");
         }
 

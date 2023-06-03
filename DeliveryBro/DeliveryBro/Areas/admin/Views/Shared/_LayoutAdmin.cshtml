@@ -137,10 +137,18 @@
 					</div>
 					</div>*@
 				</div>
-
-				<form method="post" action="/admin/AccountControllers/Logout">
-					<button class="btn btn-primary" type="submit">登出</button>
-				</form>
+				@{
+					if(User.Identity.IsAuthenticated&&User.IsInRole("Administrator"))
+					{
+						<form method="post" action="/admin/Account/Logout">
+						<button class="btn btn-primary" type="submit">登出</button>
+						</form>
+					}
+					else
+					{
+						<button>登入</button>
+					}
+				}
 
 				@*<ul class="topbar-menu d-flex align-items-center gap-3">
 				<li class="dropdown d-lg-none">

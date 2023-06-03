@@ -13,7 +13,7 @@ namespace DeliveryBro.Areas.store.apiControllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    [Authorize(Roles = "Store", AuthenticationSchemes = "StoreAuthenticationScheme")]
     public class StoreInfoController : ControllerBase
     {
         private readonly sql8005site4nownetContext _context;

@@ -8,10 +8,10 @@ namespace DeliveryBro.Extensions
 		public static int GetId(this ClaimsPrincipal claimsPrincipal,string role)
 		{
 			Claim? temp;
-            if (role=="Store")
+           if (role=="Store")
 				temp=claimsPrincipal.Claims.FirstOrDefault(c => c.Type.Contains("RestaurantId"));
 			else if(role== "Administrator")
-                temp=claimsPrincipal.Claims.FirstOrDefault(c => c.Type.Contains("adminId"));
+                temp=claimsPrincipal.Claims.FirstOrDefault(c => c.Type.Contains("AdministratorId"));
 			else return -1;
 			return int.Parse(temp.Value);
 		}
