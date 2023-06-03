@@ -8,7 +8,6 @@ namespace DeliveryBro.Models
     public partial class MenuTable
     {
         public int DishId { get; set; }
-        public int RestaurantId { get; set; }
         public string DishName { get; set; }
         public int DishPrice { get; set; }
         public string DishDescription { get; set; }
@@ -16,6 +15,7 @@ namespace DeliveryBro.Models
         public byte[] DishPicture { get; set; }
         public string DishStatus { get; set; }
         public int? CategoryCustomSettingsId { get; set; }
+        public Guid? RestaurantId { get; set; }
 
         public virtual RestaurantTable Restaurant { get; set; }
     }

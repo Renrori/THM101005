@@ -16,6 +16,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.Facebook;
 using NuGet.Protocol.Plugins;
 using DeliveryBro.Extensions;
+using System.Text.RegularExpressions;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DeliveryBro.Areas.store.Controllers
 {
@@ -241,6 +243,7 @@ namespace DeliveryBro.Areas.store.Controllers
 
 			_db.RestaurantTable.Add(new RestaurantTable()
 			{
+				RestaurantId=Guid.NewGuid(),
 				RestaurantAccount = model.RestaurantAccount,
 				RestaurantPassword = _passwordEncyptService.PasswordEncrypt(model.RestaurantPassword),//用類別裡面的PasswordEncrypt方法加密
 				RestaurantName = model.RestaurantName,
@@ -278,7 +281,7 @@ namespace DeliveryBro.Areas.store.Controllers
 				//FirstOrDefault找尋資料表中的第一筆資料 有資料回傳第一筆或是沒資料回傳null
 				//找RestaurantTable資料表篩選符合RestaurantAccount及RestaurantPassword的條件
 				RestaurantTable user = _db.RestaurantTable.FirstOrDefault(x => x.RestaurantAccount == model.Account &&
-							x.RestaurantPassword == model.Password);
+							x.RestaurantPassword == _passwordEncyptService.PasswordEncrypt(model.Password));
 				if (user == null)
 				{
 					ViewBag.Error = "帳號或密碼錯誤";
@@ -315,6 +318,7 @@ namespace DeliveryBro.Areas.store.Controllers
 		}
 
         [HttpPost]
+		[Authorize(Roles ="Store",AuthenticationSchemes ="StoreAuthenticationScheme")]
         //登入時-商家重設密碼
         public async Task<IActionResult> ResetInfoPwd(RestInfoPwdViewModel model)
         {
@@ -323,7 +327,7 @@ namespace DeliveryBro.Areas.store.Controllers
                 var id = User.GetId(User.GetRole());//呼叫函式
 
 				var user = await _db.RestaurantTable.FindAsync(id);
-				if (user.RestaurantPassword == model.OldPassword)
+				if (user.RestaurantPassword == _passwordEncyptService.PasswordEncrypt(model.OldPassword))
 				{
 					// 使用者輸入的新密碼不為空，對新密碼進行加密
 					if (!string.IsNullOrEmpty(model.NewPassword))

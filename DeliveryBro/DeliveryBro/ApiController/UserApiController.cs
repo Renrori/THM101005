@@ -30,7 +30,7 @@ namespace DeliveryBro.ApiController
 
         //GET: api/UserApi/23
         [HttpGet("{customerId}")]
-        public async Task<IActionResult> GetUserInfo(int customerId)
+        public async Task<IActionResult> GetUserInfo(Guid customerId)
         {
             // 從資料庫中查找對應的用戶記錄
             var user = await _context.CustomersTable.FindAsync(customerId);
@@ -59,7 +59,7 @@ namespace DeliveryBro.ApiController
 
         //Put:api/UserApi/4
         [HttpPut("{customerId}")]
-        public async Task<string> EditUserInfo(int customerId, EditUserInfoViewModel eui)
+        public async Task<string> EditUserInfo(Guid customerId, EditUserInfoViewModel eui)
         {
 
 
@@ -96,7 +96,7 @@ namespace DeliveryBro.ApiController
         }
 
         [HttpGet("{customerId}/orderdetails")]
-        public async Task<IEnumerable<UserOrderViewModel>> GetUserOrder(int customerId)
+        public async Task<IEnumerable<UserOrderViewModel>> GetUserOrder(Guid customerId)
         {
             var orderDetails = _context.CustomerOrderTable
             .Where(o => o.CustomerId == customerId && o.OrderStatus == "completed").Select(o => new UserOrderViewModel
@@ -119,7 +119,7 @@ namespace DeliveryBro.ApiController
             return orderDetails;
         }
 
-        public async Task<IEnumerable<UserOrderViewModel>> GetWaitOrder (int customerId)
+        public async Task<IEnumerable<UserOrderViewModel>> GetWaitOrder (Guid customerId)
         {
             var orderDetails = _context.CustomerOrderTable
                 .Where(o => o.CustomerId == customerId && o.OrderStatus == "waiting").Select(o => new UserOrderViewModel
@@ -174,7 +174,7 @@ namespace DeliveryBro.ApiController
         //    customers.CustomerPhoto = await PostUserPic(file);
         //}
 
-        private bool CustomerExists(int customerId)
+        private bool CustomerExists(Guid customerId)
         {
             return (_context.CustomersTable?.Any(e => e.CustomerId == customerId)).GetValueOrDefault();
         }

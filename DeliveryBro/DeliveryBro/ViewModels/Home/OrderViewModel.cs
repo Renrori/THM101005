@@ -11,8 +11,8 @@
 
         public string Note { get; set; }
 
-        public int CustomerId { get; set; }
-        public int RestaurantId { get; set; }
+        public Guid CustomerId { get; set; }
+        public Guid RestaurantId { get; set; }
         public List<OrderDetailViewModel> OrderDetailViewModels { get; set; }
 
     }

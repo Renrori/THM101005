@@ -7,12 +7,6 @@ namespace DeliveryBro.Models
 {
     public partial class DriverTable
     {
-        public DriverTable()
-        {
-            CustomerOrderTable = new HashSet<CustomerOrderTable>();
-        }
-
-        public int DriverId { get; set; }
         public string DriverAccount { get; set; }
         public string DriverPassword { get; set; }
         public string DriverName { get; set; }
@@ -20,7 +14,6 @@ namespace DeliveryBro.Models
         public string DriverPhone { get; set; }
         public int? DriveLicense { get; set; }
         public byte[] DriverPicture { get; set; }
-
-        public virtual ICollection<CustomerOrderTable> CustomerOrderTable { get; set; }
+        public Guid DriverId { get; set; }
     }
 }

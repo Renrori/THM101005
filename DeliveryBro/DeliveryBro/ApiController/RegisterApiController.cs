@@ -48,6 +48,7 @@ namespace DeliveryBro.ApiController
 				{
 					CustomersTable customer = new CustomersTable
 					{
+						CustomerId = Guid.NewGuid(),
 						CustomerAccount = register.Account,
 						CustomerName = register.Name,
 						CustomerEmail = register.Email,
@@ -58,7 +59,7 @@ namespace DeliveryBro.ApiController
 					_context.CustomersTable.Add(customer);
 					await _context.SaveChangesAsync();
 
-					//return "註冊成功!";
+					return "註冊成功!";
 					//寄信
 					//	var obj = new AesValidationViewModel(register.Account, DateTime.Now.AddDays(1));
 					//	var jString = JsonSerializer.Serialize(obj);

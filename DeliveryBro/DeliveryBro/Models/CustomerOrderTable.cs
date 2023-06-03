@@ -22,12 +22,11 @@ namespace DeliveryBro.Models
         public float Discount { get; set; }
         public int AmountAfterDiscount { get; set; }
         public string Note { get; set; }
-        public int? DriverId { get; set; }
-        public int CustomerId { get; set; }
-        public int RestaurantId { get; set; }
+        public Guid? DriverId { get; set; }
+        public Guid? CustomerId { get; set; }
+        public Guid? RestaurantId { get; set; }
 
         public virtual CustomersTable Customer { get; set; }
-        public virtual DriverTable Driver { get; set; }
         public virtual RestaurantTable Restaurant { get; set; }
         public virtual ICollection<OrderDetailsTable> OrderDetailsTable { get; set; }
     }

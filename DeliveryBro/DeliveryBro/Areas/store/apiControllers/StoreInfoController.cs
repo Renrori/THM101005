@@ -244,7 +244,7 @@ namespace DeliveryBro.Areas.store.apiControllers
             return Ok(query);
         }
 
-        private bool RestaurantTableExists(int id)
+        private bool RestaurantTableExists(Guid id)
         {
             return (_context.RestaurantTable?.Any(e => e.RestaurantId == id)).GetValueOrDefault();
         }

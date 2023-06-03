@@ -15,6 +15,22 @@ connection.on("UpdContent", (connection) => {
     document.getElementById("connectingList").appendChild(li);
 });
 
+document.getElementsByTagName("li")[0].addEventListener("click", (event) => {
+    var connectionId = event.target.textContent;
+    console.log(event.target.value)
+    
+})
+
+document.getElementById("sendMsg").addEventListener("click", function (event) {
+    var message = document.getElementById("msgforcaller").value;
+    var connectionId = event.target.textContent;
+        connection.invoke("SendMessagetoCaller", message, connectionId).catch((err) => {
+            return console.log(err.toString())
+        });
+        document.getElementById("msgforcaller").value = "";
+        event.preventDefault();
+});
+
 connection.on("UpdSelfID", (id) => {
     var selfID = document.getElementById("SelfID");
     selfID.innerHTML = id;
@@ -37,11 +53,3 @@ connection.on("SendtoAdmin", (msg, name) => {
     document.getElementById("messageList").appendChild(li);
 });
 
-document.getElementById("sendMsg").addEventListener("click", function (event) {
-    var message = document.getElementById("msgforcaller").value;
-    connection.invoke("SendMessagetoCaller", message,connectionId).catch((err) => {
-        return console.log(err.toString())
-    });
-    document.getElementById("msgforcaller").value = "";
-    event.preventDefault();
-});
