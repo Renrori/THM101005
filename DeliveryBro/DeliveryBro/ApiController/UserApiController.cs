@@ -29,7 +29,7 @@ namespace DeliveryBro.ApiController
         }
 
         //GET: api/UserApi/23
-        [HttpGet("{customerId}")]
+        [HttpGet("{customerId:guid}")]
         public async Task<IActionResult> GetUserInfo(Guid customerId)
         {
             // 從資料庫中查找對應的用戶記錄
@@ -58,7 +58,7 @@ namespace DeliveryBro.ApiController
 
 
         //Put:api/UserApi/4
-        [HttpPut("{customerId}")]
+        [HttpPut("{customerId:guid}")]
         public async Task<string> EditUserInfo(Guid customerId, EditUserInfoViewModel eui)
         {
 
@@ -95,7 +95,7 @@ namespace DeliveryBro.ApiController
 
         }
 
-        [HttpGet("{customerId}/orderdetails")]
+        [HttpGet("{customerId:guid}/orderdetails")]
         public async Task<IEnumerable<UserOrderViewModel>> GetUserOrder(Guid customerId)
         {
             var orderDetails = _context.CustomerOrderTable
@@ -118,11 +118,11 @@ namespace DeliveryBro.ApiController
 
             return orderDetails;
         }
-
+        [HttpGet("waitorder/{customerId:guid}")]
         public async Task<IEnumerable<UserOrderViewModel>> GetWaitOrder (Guid customerId)
         {
             var orderDetails = _context.CustomerOrderTable
-                .Where(o => o.CustomerId == customerId && o.OrderStatus == "waiting").Select(o => new UserOrderViewModel
+                .Where(o => o.CustomerId == customerId && (o.OrderStatus == "waiting" || o.OrderStatus == "accepted")).Select(o => new UserOrderViewModel
                 {
                     OrderId = o.OrderId,
                     OrderDate = o.OrderDate,

@@ -74,7 +74,7 @@ namespace DeliveryBro.ApiController
 
 
         
-        [HttpGet("{id}")]
+        [HttpGet("{id:guid}")]
         // Get:/api/HomeApi/1
         //之後改成傳物件呼叫形式
         public async Task<IEnumerable<MenuViewModel>> GetProduct(Guid id)
@@ -120,7 +120,7 @@ namespace DeliveryBro.ApiController
             return pd.AsQueryable();
         }
 
-        [HttpGet("getpic/{storeId}")]
+        [HttpGet("getpic/{storeId:guid}")]
         // Get:/api/HomeApi/getpic/1
         //叫用商店圖片方法，傳入StoreId回傳圖片
         public async Task<IActionResult> GetPictureStore(Guid storeId)
