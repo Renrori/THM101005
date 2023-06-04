@@ -203,7 +203,7 @@ namespace DeliveryBro.ApiController
 
         [HttpPost("NewebPay")]
         //Post:/api/HomeApi/
-        public async Task<IActionResult> CreateNPOrder([FromBody] OrderViewModel order)
+        public async Task<IActionResult> CreateNPOrder([FromBody] NewebPayOrderViewModel order)
         {
             int Total = 0;
             if (order == null)
@@ -268,8 +268,8 @@ namespace DeliveryBro.ApiController
             {
                 OrderId = order.OrderId,
                 OrderTotal = Total,
-                PayCardType = "CREDIT "
-
+                PayCardType = "CREDIT",
+                Email = order.Email,
             };
 
             return Ok(npOrder);
