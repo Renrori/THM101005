@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using System.IO;
+using System.Text.Json;
 
 namespace DeliveryBro.ApiController
 {
@@ -168,7 +169,13 @@ namespace DeliveryBro.ApiController
 
             return Ok("上傳成功");
         }
+        //public async Task<IActionResult> GetCity()
+        //{
+        //    string json = System.IO.File.ReadAllText("Data/CityCountry/CityCountyData.json");
+        //    var data = JsonSerializer.Deserialize<DataModel>(json);
 
+
+        //}
         //private async Task SetPostUserPic(CustomersTable customers, IFormFile file)
         //{
         //    customers.CustomerPhoto = await PostUserPic(file);

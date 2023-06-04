@@ -39,6 +39,10 @@ namespace DeliveryBro.Controllers
         {
             return View();
         }
+        public IActionResult UserAddress()
+        {
+            return View();
+        }
         
 
     }
