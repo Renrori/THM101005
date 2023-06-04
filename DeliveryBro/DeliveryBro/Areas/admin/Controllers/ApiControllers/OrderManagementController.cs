@@ -6,8 +6,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DeliveryBro.Areas.admin.Controllers.ApiControllers
 {
-
-    [Route("api/[controller]")]
+    
+    [Route("api/OrderManagement/[action]")]
     [ApiController]
     public class OrderManagementController : ControllerBase
     {
@@ -18,18 +18,18 @@ namespace DeliveryBro.Areas.admin.Controllers.ApiControllers
         }
 
         ///api/OrderManagement/All <summary>
-        [Route("all")]
+        
         [HttpGet]
-        public async Task<IActionResult> All()
+        public object All()
         {
-            var r = await _db.CustomerOrderTable.Select(x => new
+            var r =  _db.CustomerOrderTable.Select(r => new
             {
-                OrderID = x.OrderId,
-                OrderDate = x.OrderDate.ToUniversalTime().ToLocalTime().ToString(),
-                CustomerAdd = x.CustomerAddress,
-                AmountAfterDiscount = x.AmountAfterDiscount,
-                OrderStatus = x.OrderStatus,
-            }).ToListAsync();
+                OrderID = r.OrderId,
+                OrderDate = r.OrderDate.ToUniversalTime().ToLocalTime().ToString(),
+                CustomerAdd = r.CustomerAddress,
+                AmountAfterDiscount = r.AmountAfterDiscount,
+                OrderStatus = r.OrderStatus,
+            }).ToList();
 
             return Ok(r);
         }
