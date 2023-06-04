@@ -36,7 +36,7 @@ namespace DeliveryBro.Controllers
         {
             return View();
         }
-
+        [Authorize, AllowAnonymous]
         public IActionResult OrderListNav()
         {
             return View();

@@ -15,7 +15,7 @@ namespace DeliveryBro.Models
         public byte[] DishPicture { get; set; }
         public string DishStatus { get; set; }
         public int? CategoryCustomSettingsId { get; set; }
-        public Guid? RestaurantId { get; set; }
+        public Guid RestaurantId { get; set; }
 
         public virtual RestaurantTable Restaurant { get; set; }
     }

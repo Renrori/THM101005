@@ -1,4 +1,4 @@
-﻿namespace DeliveryBro.Models.bankModel
+﻿namespace DeliveryBro.Models.BankModel
 {
     public class TradeInfo
     {

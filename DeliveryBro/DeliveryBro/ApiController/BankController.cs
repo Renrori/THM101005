@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Text;
-using DeliveryBro.Models.bankModel;
+using DeliveryBro.Models.BankModel;
 using DeliveryBro.Utility;
 
 namespace DeliveryBro.ApiController

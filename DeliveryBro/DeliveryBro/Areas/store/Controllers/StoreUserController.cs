@@ -42,7 +42,6 @@ namespace DeliveryBro.Areas.store.Controllers
 			return View();
 		}
 
-
 		public IActionResult SendEmail()
 		{
 			return View();
