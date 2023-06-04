@@ -19,7 +19,7 @@
 						</div><!-- End Logo -->
 						@*<div id="app">*@
 						@*//掛載VUE*@
-						<div class="card mb-3">
+						<div class="card mb-3" id="app">
 
 							<div class="card-body">
 
@@ -31,61 +31,69 @@
 								@*有把下方form 裡面needs-validation" novalidate刪掉
 								<form class="row g-3 needs-validation" novalidate action="/store/StoreUser/Register" method="post">*@
 
-								<form class="row g-3 needs-validation" novalidate action="/store/StoreUser/Register" method="post">
+								<form class="row g-3 needs-validation" novalidate>
 									<div class="col-12">
 										<label for="yourName" class="form-label">商家帳號</label>
-										<input type="text" name="RestaurantAccount" class="form-control" id="RestaurantAccount" v-model="addForm.RestaurantAccount" required>
+										<span v-if="isValidAccount==false" class="text-danger">&emsp;{{errorMsgAccount}}</span>
+										<input type="text" name="RestaurantAccount" class="form-control" id="RestaurantAccount" v-model="restaurantAccount">
 										<div class="invalid-feedback">請填寫帳號</div>
 									</div>
 
 									<div class="col-12">
 										<label for="yourPassword" class="form-label">商家密碼</label>
-										<input type="password" name="RestaurantPassword" class="form-control" id="RestaurantPassword" v-model="addForm.RestaurantPassword" required>
+										<span v-if="isValidPassword==false" class="text-danger">&emsp;{{errorMsgPassword}}</span>
+										<input type="password" name="RestaurantPassword" class="form-control" id="RestaurantPassword" v-model="restaurantPassword">
 										<div class="invalid-feedback">請填寫密碼</div>
 									</div>
 
 									<div class="col-12">
 										<label for="yourPassword" class="form-label">確認密碼</label>
-										<input type="password" name="ConfirmRestaurantPassword" class="form-control" id="ConfirmRestaurantPassword" v-model="addForm.RestaurantPassword" required>
+										<span v-if="isValidConfirmPassword==false" class="text-danger">&emsp{{errorMsgConfirmPassword}}</span>
+										<input type="password" name="ConfirmRestaurantPassword" class="form-control" id="ConfirmRestaurantPassword" v-model="confirmRestaurantPassword">
 										<div class="invalid-feedback">再次確認密碼</div>
 									</div>
 
 									<div class="col-12">
 										<label for="yourUsername" class="form-label">商家名稱</label>
 										<div class="input-group has-validation">
+											<span v-if="isValidName==false" class="text-danger">&emsp;{{errorMsgName}}</span>
 											@*<span class="input-group-text" id="inputGroupPrepend">@@</span>*@
-											<input type="text" name="RestaurantName" class="form-control" id="RestaurantName" v-model="addForm.RestaurantName" required>
+											<input type="text" name="RestaurantName" class="form-control" id="RestaurantName" v-model="restaurantName">
 											<div class="invalid-feedback">請填寫商家名稱</div>
 										</div>
 									</div>
 
 									<div class="col-12">
 										<label for="yourAddress" class="form-label">商家地址</label>
-										<input type="text" name="RestaurantAddress" class="form-control" id="RestaurantAddress" v-model="addForm.RestaurantAddress" required>
+										<span v-if="isValidAddress==false" class="text-danger">&emsp;{{errorMsgAddress}}</span>
+										<input type="text" name="RestaurantAddress" class="form-control" id="RestaurantAddress" v-model="restaurantAddress">
 										<div class="invalid-feedback">請填寫商家地址</div>
 									</div>
 
 									<div class="col-12">
 										<label for="yourPhone" class="form-label">商家電話</label>
-										<input type="text" name="RestaurantPhone" class="form-control" id="RestaurantPhone" v-model="addForm.RestaurantPhone" required>
+										<span v-if="isValidPhone==false" class="text-danger">&emsp;{{errorMsgPhone}}</span>
+										<input type="text" name="RestaurantPhone" class="form-control" id="RestaurantPhone" v-model="restaurantPhone">
 										<div class="invalid-feedback">請填寫商家電話</div>
 									</div>
 
 									<div class="col-12">
 										<label for="yourEmail" class="form-label">商家信箱</label>
-										<input type="email" name="RestaurantEmail" class="form-control" id="RestaurantEmail" v-model="addForm.RestaurantEmail" required>
+										<span v-if="isValidEmail==false" class="text-danger">&emsp;{{errorMsgEmail}}</span>
+										<input type="email" name="RestaurantEmail" class="form-control" id="RestaurantEmail" v-model="restaurantEmail">
 										<div class="invalid-feedback">請填寫商家信箱</div>
 									</div>
 
 									@*<div class="col-12">
-										<div class="form-check">
-											<input class="form-check-input" name="terms" type="checkbox" value="" id="acceptTerms" required>
-											<label class="form-check-label" for="acceptTerms">註冊表示同意商店服務條款與會員責任規範及個資聲明</label>
-											<div class="invalid-feedback">You must agree before submitting.</div>
-										</div>
+									<div class="form-check">
+									<input class="form-check-input" name="terms" type="checkbox" value="" id="acceptTerms" required>
+									<label class="form-check-label" for="acceptTerms">註冊表示同意商店服務條款與會員責任規範及個資聲明</label>
+									<div class="invalid-feedback">You must agree before submitting.</div>
+									</div>
 									</div>*@
 									<div class="col-12">
-										<button id="btnRegister" class="btn btn-primary w-100" type="submit">註冊</button>
+										@*<button id="btnRegister" class="btn btn-primary w-100" type="submit">註冊</button>*@
+										<button type="button" class="btn btn-primary" @@click="addRegister()">註冊</button>
 									</div>
 									<div class="col-12">
 										<p class="small mb-0">已經有商家帳號嗎? <a href="/store/StoreUser/Login" style="color:mediumblue">登入</a></p>
@@ -120,66 +128,196 @@
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 	<script src="~/axios/axios.min.js"></script>
 	<script>
-		var vueRegister = {
+
+		var vueIndex = {
 			data() {
 				return {
-					addForm: {
-						RestaurantAccount: '',
-						RestaurantPassword: '',
-						RestaurantName: '',
-						RestaurantAddress: '',
-						RestaurantPhone: '',
-						RestaurantEmail: '',
-						OpeningHours: '',
-						RestaurantDescription: "",
-						RestaurantPicture: "",//看menu 的 picture貼
-					};
-				},
-					methods: {
-					// 新增儲存
-					AddSave: function() {
-						let self = this;
-						// 組合表單資料
-						var postData = {
-							RestaurantAccount: self.RestaurantAccount,
+					//V-model 繫結變數input
+					restaurantAccount: "",
+					restaurantPassword: "",
+					confirmRestaurantPassword: "",
+					restaurantName: "",
+					restaurantAddress: "",
+					restaurantPhone: "",
+					restaurantEmail: "",
+					//渲染繫結span變數
+					errorMsgAccount: "",
+					errorMsgPassword: "",
+					errorMsgConfirmPassword: "",
+					errorMsgName: "",
+					errorMsgAddress: "",
+					errorMsgPhone: "",
+					errorMsgEmail: "",
+					//判斷錯誤訊息的變數
+					isValidAccount: true,
+					isValidPassword: true,
+					isValidConfirmPassword: true,
+					isValidName: true,
+					isValidAddress: true,
+					isValidPhone: true,
+					isValidEmail: true,
+				};
 
-
-						};
-						postData['RestaurantAccount'] = self.addForm.RestaurantAccount;
-						postData['RestaurantPassword'] = self.addForm.RestaurantPassword;
-						postData['RestaurantName'] = self.addForm.RestaurantName;
-						postData['RestaurantAddress'] = self.addForm.RestaurantAddress;
-						postData['RestaurantPhone'] = self.addForm.RestaurantPhone;
-						postData['RestaurantEmail'] = self.addForm.RestaurantEmail;
-						postData['OpeningHours'] = self.addForm.OpeningHours;
-						postData['RestaurantDescription'] = self.addForm.RestaurantDescription;
-						postData['RestaurantPicture'] = self.addForm.RestaurantPicture;
-						axios.post(`/StoreUser/Register`, postData).then(response => {
-
-						})
-						// 使用 jQuery Ajax 傳送至後端
-						$.ajax({
-							url: '@Url.Content("~/Home/AddSave")',
-							method: 'POST',
-							dataType: 'json',
-							data: { inModel: postData, __RequestVerificationToken: $('@Html.AntiForgeryToken()').val() },
-							success: function (datas) {
-								if (datas.ErrMsg) {
-									alert(datas.ErrMsg);
-									return;
-								}
-
-								alert(datas.ResultMsg);
-							},
-							error: function (err) {
-								alert(err.status + " " + err.statusText + '\n' + err.responseText);
-							}
-						});
+			},
+			mounted: function () {
+				let _this = this;
+				//_this.addRegister();
+			},
+			//方法
+			methods: {
+				//驗證帳號
+				checkAccount: function () {
+					let _this = this;
+					if (_this.restaurantAccount==''){
+						return'';
 					}
-				}
-			});
-
+					axios.get(`/api/StoreUser/isConfirm/CheckAccount`, {
+						params: {
+							account: _this.restaurantAccount
 						}
-		var app = Vue.createApp(#vueRegister).mount("#app");
+					}).then(response => {
+						if (response.data != "正確") {
+							_this.errorMsgAccount = response.data;
+							_this.isValidAccount = false;
+						}
+					})
+				},
+				//驗證密碼
+				checkPassword: function () {
+					let _this = this;
+					if (_this.restaurantPassword == '') {
+						return '';
+					}
+					axios.get(`/api/StoreUser/isConfirm/CheckPassword`, {
+						params: {
+							password: _this.restaurantPassword
+						}
+					}).then(response => {
+						if (response.data != "正確") {
+							_this.errorMsgPassword = response.data;
+							_this.isValidPassword = false;
+						}
+					})
+				},
+				////驗證再確認的密碼
+				checkConfirmPassword: function () {
+					let _this = this;
+					let tempData = new FormData();
+					tempData.append("ConfirmRestaurantPassword", _this.confirmRestaurantPassword);
+					tempData.append("RestaurantPassword", _this.restaurantPassword);
+			
+					axios.post(`/api/StoreUser/CheckConfirmPassword`, tempData,
+						{
+							headers: {
+								'Content-Type': 'multipart/form-data'
+							}
+						})
+					.then(response => {
+						if (response.data != "正確") {
+							_this.errorMsgConfirmPassword = response.data;
+							_this.isValidConfirmPassword = false;
+						}
+					})
+				},
+				//驗證名字
+				checkName: function () {
+					let _this = this;
+					if (_this.restaurantName == '') {
+						return '';
+					}
+					axios.get(`/api/StoreUser/isConfirm/CheckName`, {
+						params: {
+							name: _this.restaurantName
+						}
+					}).then(response => {
+							if (response.data != "正確") {
+								_this.errorMsgName = response.data;
+								_this.isValidName = false;
+							}
+						})
+				},
+				//驗證Email
+				checkMail: function () {
+					let _this = this;
+					if (_this.restaurantEMail == '') {
+						return '';
+					}
+					axios.get(`/api/StoreUser/isConfirm/CheckMail`, {
+						params: {
+							mail: _this.restaurantEmail
+						}
+					}).then(response => {
+						if (response.data != "正確") {
+							_this.errorMsgMail = response.data;
+							_this.isValidMail = false;
+						}
+					})
+				},
+				//驗證地址
+				checkAddress: function () {
+					let _this = this;
+					if (_this.restaurantAddress == '') {
+						return '';
+					}
+					axios.get(`/api/StoreUser/isConfirm/CheckAddress`, {
+						params: {
+							address: _this.restaurantAddress
+						}
+					}).then(response => {
+						if (response.data != "正確") {
+							_this.errorMsgAddress = response.data;
+							_this.isValidAddress = false;
+						}
+					})
+				},
+				//驗證電話
+				checkPhone: function () {
+					let _this = this;
+					if (_this.restaurantPhone == '') {
+						return '';
+					}
+					axios.get(`/api/StoreUser/isConfirm/CheckPhone`, {
+						params: {
+							phone: _this.restaurantPhone
+						}
+					}).then(response => {
+						if (response.data != "正確") {
+							_this.errorMsgPhone = response.data;
+							_this.isValidPhone = false;
+						}
+					})
+				},
+
+				addRegister: function () {
+					let _this = this;
+					_this.checkPhone();
+					_this.checkAddress();
+					_this.checkMail();
+					_this.checkName();
+					_this.checkConfirmPassword();
+					_this.checkPassword();
+					_this.checkAccount();
+
+					//如果有一個false就不能註冊
+					if (_this.isValidAccount || _this.isValidPassword || _this.isValidConfirmPassword || _this.isValidPhone || _this.isValidName || _this.isValidMail || _this.isValidAddress ||)
+					{
+					
+						//註冊的function 要呼叫controller
+						axios.get(`/api/StoreUser/isConfirm/AddRegister`, {
+						params: {
+								account: _this.restaurantAccount
+								password: _this.restaurantPassword
+								name: _this.restaurantName
+								mail: _this.restaurantEmail
+								address:_this.restaurantAddress
+								phone: _this.restaurantPhone
+						}
+					}).then(response => {response.data}
+					})
+				},
+				},
+			}
+		};
+		var app = Vue.createApp(vueIndex).mount("#app");
 	</script>
 }

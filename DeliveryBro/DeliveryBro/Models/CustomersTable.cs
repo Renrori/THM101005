@@ -13,7 +13,6 @@ namespace DeliveryBro.Models
             CustomerOrderTable = new HashSet<CustomerOrderTable>();
         }
 
-        public int CustomerId { get; set; }
         public string CustomerAccount { get; set; }
         public string CustomerPassword { get; set; }
         public string CustomerName { get; set; }
@@ -23,6 +22,7 @@ namespace DeliveryBro.Models
         public byte[] CustomerPhoto { get; set; }
         public int? CouponId { get; set; }
         public string CustomerOauth { get; set; }
+        public Guid CustomerId { get; set; }
 
         public virtual ICollection<CustomerAddressTable> CustomerAddressTable { get; set; }
         public virtual ICollection<CustomerOrderTable> CustomerOrderTable { get; set; }
