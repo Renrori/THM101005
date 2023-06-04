@@ -56,8 +56,12 @@ namespace DeliveryBro.Controllers
         {
             return View();
         }
+        public IActionResult FinalOrderListPaydone()
+        {
+            return View();
+        }
 
-        
+
 
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

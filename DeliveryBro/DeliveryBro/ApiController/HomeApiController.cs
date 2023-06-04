@@ -127,6 +127,14 @@ namespace DeliveryBro.ApiController
         {
             RestaurantTable c = await _context.RestaurantTable.FindAsync(storeId);
             byte[] imgUrl = c?.RestaurantPicture;
+
+            if (c == null || c.RestaurantPicture == null)
+            {
+                string imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "image", "noimgmed.png");
+                byte[] fakeImageBytes = await System.IO.File.ReadAllBytesAsync(imagePath);
+                return File(fakeImageBytes, "image/png");
+            }
+
             return File(imgUrl, "img/jpeg");
 
         }
