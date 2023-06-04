@@ -117,12 +117,14 @@
                                 </label>
                             </div>
                             @*<a class="btn btn-primary w-100 mt-2" asp-area="" asp-controller="Home" asp-action="FinalOrderList">確認付款</a>*@
-                            <button class="btn btn-primary w-100 mt-2" type="submit">前往訂單付款</button>
+                            <button class="btn btn-primary w-100 mt-2" @*type="submit"*@ :href="externalUrl" @*@@click="SendtoPaydonePage"*@>前往訂單付款</button>
                         </div>
                     </div>
                 </div>
             </div>
         </form>
+        @*測試*@
+        @*<div>{{ finalorderdata }}</div>*@
     </div>
 </div>
 
@@ -138,8 +140,10 @@
         var vueApp = {
             data() {
                 return {
+                    externalUrl: "https://ccore.newebpay.com/MPG/mpg_gateway",
                     AmountAfterDiscount: 0,
-                    OrderID: 1
+                    OrderID: 100,
+                    finalorderdata: ""
                 }
             },
             mounted() {
@@ -148,7 +152,22 @@
                 const finalorderdata = JSON.parse(decodeURIComponent(Jsondata));
 
                 //領出AmountAfterDiscount
-                this.AmountAfterDiscount = finalorderdata.AmountAfterDiscount
+                this.AmountAfterDiscount = finalorderdata.AmountAfterDiscount;
+                this.finalorderdata = finalorderdata;
+            },
+            methods: {
+                SendtoPaydonePage(event) {
+                    event.preventDefault();
+
+                    const Orderdata = {
+                        finalorderdata: this.finalorderdata
+                    }
+                    const Jsondata = JSON.stringify(Orderdata);
+
+                    const redirectUrl = `FinalOrderListPaydone?data=${encodeURIComponent(Jsondata)}`;
+
+                    window.location.href = redirectUrl;
+                }
             }
         };
         var app = Vue.createApp(vueApp).mount("#app");
