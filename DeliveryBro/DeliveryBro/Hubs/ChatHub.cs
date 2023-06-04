@@ -12,17 +12,17 @@ namespace DeliveryBro.Hubs
     [Authorize(AuthenticationSchemes = "AdministratorAuthenticationScheme")]
     public class ChatHub : Hub
     {
-        public static List<Dictionary<int, string>> conn = new List<Dictionary<int, string>>();
+        public static List<Dictionary<Guid, string>> conn = new List<Dictionary<Guid, string>>();
 
         public override async Task OnConnectedAsync()
         {
-            Dictionary<int,string> storedict = new Dictionary<int,string>();
-            Dictionary<int, string> cusdict = new Dictionary<int, string>();
+            Dictionary<Guid, string> storedict = new Dictionary<Guid, string>();
+            Dictionary<Guid, string> cusdict = new Dictionary<Guid, string>();
             //int i = provider.GetUserId(Context);
             conn.Add(storedict);
             conn.Add(cusdict);
             
-            int id = Context.User.GetId(Context.User.GetRole());
+            var id = Context.User.GetId(Context.User.GetRole());
             string role = Context.User.GetRole();
             string name = Context.User.GetName();
             string adminGroup = "adminGroup";
@@ -43,7 +43,7 @@ namespace DeliveryBro.Hubs
 
             await Clients.Client(Context.ConnectionId).SendAsync("UpdSelfID", Context.ConnectionId);
 
-            await Clients.Group("adminGroup").SendAsync("UpdContent", $"新連線: {name} " + Context.ConnectionId);
+            await Clients.Group("adminGroup").SendAsync("UpdContent", $"新連線: {name}"  + Context.ConnectionId);
 
             await base.OnConnectedAsync();
             
@@ -56,7 +56,7 @@ namespace DeliveryBro.Hubs
         }
         public async Task SendMessage(string message)
         {
-            int id = Context.User.GetId(Context.User.GetRole());
+            var id = Context.User.GetId(Context.User.GetRole());
             string role = Context.User.GetRole();
             string connectionId;
             string name = Context.User.GetName();

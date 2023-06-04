@@ -171,7 +171,6 @@
     <Content Include="wwwroot\admin\vendor\jquery-datatables-checkboxes\node_modules\datatables.net\License.txt" />
     <Folder Include="Areas\store\Data\" />
     <Folder Include="Areas\store\Models\" />
-    <Folder Include="Views\User\" />
   </ItemGroup>
 
   <ItemGroup>

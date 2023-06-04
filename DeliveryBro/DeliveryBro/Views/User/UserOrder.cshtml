@@ -2,6 +2,7 @@
     ViewData["HideFooter"] = true;
 }
 
+
 <aside b-y5hjwqsk06 id="sidebar" class="sidebar">
 
     <ul b-y5hjwqsk06 class="sidebar-nav" id="sidebar-nav">
@@ -30,7 +31,7 @@
         <div class="row justify-content-end">
             <div class="col-xl-9">
                 <div class="pagetitle">
-                    <h1>歷史訂單</h1>
+                    <h1>我的訂單</h1>
                 </div>
                 <div id="app">
                     <section class="section neworders">
@@ -66,6 +67,19 @@
                                                 <div class="card-body">
                                                     <h5 class="card-title">訂單編號: {{ item.orderId }} </h5>
                                                     <h5>完成時間: {{item.orderDate}}</h5>
+                                                    <div class="row">
+                                                        <div class="col-10" style="padding-bottom:10px">
+                                                            <div class="row">
+                                                                <div class="col-lg-3 col-md-4 label">商品名稱</div>
+                                                                <div class="col-lg-2 col-md-2">商品單價</div>
+                                                                <div class="col-lg-2 col-md-2">數量</div>
+                                                                <div class="col-lg-2 col-md-2">小計</div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-2">
+                                                            <div>合計</div>
+                                                        </div>
+                                                    </div>
                                                     <hr />
                                                     <div class="row">
                                                         <div class="col-10" style="padding-bottom:10px">
@@ -93,6 +107,19 @@
                                                 <div class="card-body">
                                                     <h5 class="card-title">訂單編號: {{ item.orderId }} </h5>
                                                     <h5>完成時間: {{item.orderDate}}</h5>
+                                                    <div class="row">
+                                                        <div class="col-10" style="padding-bottom:10px">
+                                                            <div class="row" >
+                                                                <div class="col-lg-3 col-md-4 label">商品名稱</div>
+                                                                <div class="col-lg-2 col-md-2">商品單價</div>
+                                                                <div class="col-lg-2 col-md-2">數量</div>
+                                                                <div class="col-lg-2 col-md-2">小計</div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-2">
+                                                            <div>合計</div>
+                                                        </div>
+                                                    </div>
                                                     <hr />
                                                     <div class="row">
                                                         <div class="col-10" style="padding-bottom:10px">
@@ -139,7 +166,7 @@
                 return {
                     CustomerOrderInfo: [],
                     searchResult: null,
-                    searchorderId: ""
+                    searchorderId: "",
                 }
             },
             mounted() {
@@ -149,7 +176,7 @@
                 async getUserOrder() {
                     //拿出對應cusId的order
                     try {
-                        const response = await axios.get(`${baseAddress}/${CustomerId}/orderdetails`).then(Response => {
+                        const response = await axios.get(`${baseAddress}/waitorder/${CustomerId}`).then(Response => {
                             this.CustomerOrderInfo = Response.data;
                         })
                     } catch (error) {
@@ -172,3 +199,5 @@
         var app = Vue.createApp(vueApp).mount("#app");
     </script>
     }
+
+
