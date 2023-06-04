@@ -1,10 +1,7 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@{
     Layout = "_Layout";
 }
-<div class="content-page">
+<div class="content-page" id="order">
     <div class="content">
 
         <!-- Start Content-->
@@ -74,7 +71,6 @@
                                             </th>
                                             <th>Order ID</th>
                                             <th>Date</th>
-                                            <th>Payment Status</th>
                                             <th>Total</th>
                                             <th>Payment Method</th>
                                             <th>Order Status</th>
@@ -92,9 +88,6 @@
                                             <td><a href="apps-ecommerce-orders-details.html" class="text-body fw-bold">#BM9708</a> </td>
                                             <td>
                                                 August 05 2018 <small class="text-muted">10:29 PM</small>
-                                            </td>
-                                            <td>
-                                                <h5><span class="badge badge-success-lighten"><i class="mdi mdi-bitcoin"></i> Paid</span></h5>
                                             </td>
                                             <td>
                                                 $176.41
@@ -388,5 +381,17 @@
         </div>
     </footer>
     <!-- end Footer -->
-
+    <script>
+        let app = new Vue({
+            e1:'#order'
+            data:{
+                order:[],
+            },
+            counted:function(){
+                let self = this;
+                axios('/ApiControllers/OrderManagementController/all').then(res=>this.order = res.data)      
+            }
+        })
+    </script>
+    
 </div>
