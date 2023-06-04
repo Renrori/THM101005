@@ -200,5 +200,79 @@ namespace DeliveryBro.ApiController
             }
             return Ok("訂單上傳成功");
         }
+
+        [HttpPost("NewebPay")]
+        //Post:/api/HomeApi/
+        public async Task<IActionResult> CreateNPOrder([FromBody] OrderViewModel order)
+        {
+            int Total = 0;
+            if (order == null)
+            {
+                return BadRequest();
+            }
+            try
+            {
+                CustomerOrderTable cot = new CustomerOrderTable
+                {
+                    OrderId = order.OrderId,
+                    CustomerAddress = order.CustomerAddress,
+                    ShippingFee = order.ShippingFee,
+                    Payment = order.Payment,
+                    OrderDate = DateTime.UtcNow,
+                    OrderStatus = order.OrderStatus,
+                    Note = order.Note,
+                    CustomerId = order.CustomerId,
+                    RestaurantId = order.RestaurantId,
+                };
+                _context.CustomerOrderTable.Add(cot);
+                await _context.SaveChangesAsync();
+
+                int orderId = cot.OrderId; //儲存訂單的自動識別ID
+
+                foreach (var od in order.OrderDetailViewModels)
+                {
+                    od.OrderId = orderId;
+                    var checkOd = _context.MenuTable.Include(m => m.Restaurant)
+                        .Where(m => m.Restaurant.RestaurantId == order.RestaurantId && m.DishStatus == "ongoing")
+                        .FirstOrDefault(d => d.DishId == od.DishId); //搜尋對應的資料庫商品
+
+                    if (checkOd == null)
+                    {
+                        return BadRequest("訂單商品已有異動，請重新確認");
+                    }
+
+                    OrderDetailsTable odt = new OrderDetailsTable  //打印訂單Entity
+                    {
+                        OrderId = od.OrderId,
+                        DishId = od.DishId,
+                        OrderDate = DateTime.UtcNow.Date,
+                        UnitPrice = checkOd.DishPrice,
+                        Quantity = od.Quantity,
+                        DishName = checkOd.DishName,
+                    };
+                    odt.Subtotal = odt.UnitPrice * odt.Quantity;
+                    Total += odt.Subtotal;
+                    _context.OrderDetailsTable.Add(odt);
+                }
+                await _context.SaveChangesAsync();
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return BadRequest("訂單上傳失敗");
+            }
+
+
+            NewebPayViewModel npOrder = new NewebPayViewModel
+            {
+                OrderId = order.OrderId,
+                OrderTotal = Total,
+                PayCardType = "CREDIT "
+
+            };
+
+            return Ok(npOrder);
+        }
     }
 }

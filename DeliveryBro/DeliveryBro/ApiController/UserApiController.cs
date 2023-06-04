@@ -119,6 +119,9 @@ namespace DeliveryBro.ApiController
 
             return orderDetails;
         }
+
+
+
         [HttpGet("waitorder/{customerId:guid}")]
         public async Task<IEnumerable<UserOrderViewModel>> GetWaitOrder (Guid customerId)
         {
