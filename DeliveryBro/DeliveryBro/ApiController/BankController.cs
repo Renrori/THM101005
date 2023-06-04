@@ -26,7 +26,7 @@ namespace DeliveryBro.ApiController
         [HttpPost]
         public async Task SpgatewayPayBillAsync(string ordernumber, int amount, string payType)
         {
-            string version = "1.5";
+            string version = "2.0";
 
             // 目前時間轉換 +08:00, 防止傳入時間或Server時間時區不同造成錯誤
             DateTimeOffset taipeiStandardTimeOffset = DateTimeOffset.Now.ToOffset(new TimeSpan(8, 0, 0));
