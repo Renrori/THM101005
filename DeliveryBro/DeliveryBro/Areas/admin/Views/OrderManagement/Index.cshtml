@@ -2,6 +2,25 @@
     Layout = "_Layout";
 }
 <div class="content-page" id="orderapp">
+
+    <!-- Modal -->
+@*    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    ...
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>*@
     <div class="content">
 
         <!-- Start Content-->
@@ -81,7 +100,7 @@
                                              <td>
                                                 <a href="javascript:void(0);" class="action-icon"> <i class="mdi mdi-eye"></i></a>
                                                 <a href="javascript:void(0);" class="action-icon"> <i class="mdi mdi-square-edit-outline"></i></a>
-                                                <a href="javascript:void(0);" class="action-icon"> <i class="mdi mdi-delete"></i></a>
+                                                <a href="javascript:void(0);" class="action-icon" v-on:click="deleteConfirm(item)" data-bs-toggle="modal" data-bs-target="#deleteModal"> <i class="mdi mdi-delete"></i></a>
                                             </td>
                                         </tr>
 
@@ -116,22 +135,64 @@
             </div>
         </div>
     </footer>
-    <!-- end Footer -->        
-</div>
-
+    <!-- end Footer -->
+<!-- Modal -->
+	<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h1 class="modal-title fs-5" id="exampleModalLabel">刪除ID:{{delInfo.title}}</h1>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+                    確定要刪除嗎:{{delInfo.msg.orderID}},價格:{{delInfo.msg.amountAfterDiscount}},
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">不要</button>
+                    <button type="button" class="btn btn-primary" @@click="deleteorder(delInfo.title)">要</button>
+				</div>
+			</div>
+		</div>
+	</div>
+ </div>
+ 
 <script type="text/javascript">
     var app = new Vue({
         el: '#orderapp',
         data: {
             order:[],
+            delInfo:{
+                title:"",
+                msg:{
+                      orderID:"",
+                      amountAfterDiscount:""
+                }
+            }
         },
         mounted:function() {
             let salf=this;
             axios('/api/OrderManagement/All')
                 .then(function(res){salf.order = res.data});
-                //.catch(function (error) { // 请求失败处理
+                //.catch(function (error) { // 請求失敗
                 //    console.log(error);
                 //});
         },
+        methods:{
+            deleteorder:function(id){
+                axios.post('/api/OrderManagement/Delete', { Id: id }).then(res => {
+                    if(res.data)
+                    {
+                        var idx = this.order.findIndex(x => x.orderID == id)
+                         this.order.splice(idx,1)
+                        $("#deleteModal").modal("hide");
+                    }
+                 })
+              },
+            deleteConfirm:function(item){
+                this.delInfo.title = item.orderID;
+                this.delInfo.msg.orderID = item.orderID;
+                this.delInfo.msg.amountAfterDiscount = item.amountAfterDiscount;
+            }        
+        }
     })
 </script>

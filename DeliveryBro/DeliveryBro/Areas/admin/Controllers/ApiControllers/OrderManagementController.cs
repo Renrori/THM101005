@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DeliveryBro.Areas.admin.Controllers.ApiControllers
 {
-    
+
     [Route("api/OrderManagement/[action]")]
     [ApiController]
     public class OrderManagementController : ControllerBase
@@ -16,9 +16,30 @@ namespace DeliveryBro.Areas.admin.Controllers.ApiControllers
         {
             _db = context;
         }
+        [HttpDelete]
+        public async Task<string> DeleteOrderManagement(int id)
+        {
+            var r = await _db.CustomerOrderTable.FindAsync(id);
+            if (r == null)
+            {
+                return "刪除成功";
+            }
+
+            _db.CustomerOrderTable.Remove(r);
+            try
+            {
+                  await _db.SaveChangesAsync();
+            }
+            catch (DbUpdateException ex)
+            {
+                return "刪除失敗!";
+            }
+
+            return "刪除成功!";
+        }
 
         ///api/OrderManagement/All <summary>
-        
+
         [HttpGet]
         public object All()
         {
@@ -33,5 +54,8 @@ namespace DeliveryBro.Areas.admin.Controllers.ApiControllers
 
             return Ok(r);
         }
+    }
+    public class DeleteDto { 
+           public int ID { get; set; } 
     }
 }
