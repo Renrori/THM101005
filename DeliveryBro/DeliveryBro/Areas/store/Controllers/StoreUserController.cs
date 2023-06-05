@@ -292,11 +292,13 @@ namespace DeliveryBro.Areas.store.Controllers
 				var claims = new List<Claim>(){
 				new Claim(ClaimTypes.Name, user.RestaurantName),
 				new Claim(ClaimTypes.Role, "Store"),
-				new Claim("RestaurantId",user.RestaurantId.ToString())
+				new Claim("Id",user.RestaurantId.ToString())
 				};
 				//做憑證
 				var claimsIdentity = new ClaimsIdentity(claims, "StoreAuthenticationScheme");
 				var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
+				await HttpContext.SignOutAsync("CustomerAuthenticationScheme");
+				await HttpContext.SignOutAsync("AdministratorAuthenticationScheme");
 				await HttpContext.SignInAsync("StoreAuthenticationScheme", claimsPrincipal);
 				return RedirectToAction("StoreInfo", "Home");//RedirectToAction("Error", "StoreUser");//到另一個控制器
 															 //return RedirectToAction("Index", "Users", new { area = "Administration" });

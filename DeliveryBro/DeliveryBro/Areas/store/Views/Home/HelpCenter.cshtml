@@ -1,307 +1,1039 @@
 ﻿@section Styles
-{
-    <link href="~/lib/admin/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
-    <link href="~/store/css/app-saas.min.css" rel="stylesheet" type="text/css" id="app-style" />
+	{
+	<link href="~/lib/admin/assets/css/app-creative.css" rel="stylesheet" />
+	<link href="~/lib/admin/assets/vendor/simplebar/simplebar.min.css" rel="stylesheet" />
 }
 <main id="main" class="main">
-    <div class="pagetitle">
-        <h1>Support</h1>
-        <nav>
-            <ol class="breadcrumb">
-                <a class="breadcrumb-item" asp-area="store" asp-controller="Home" asp-action="Index">Home</a>
-                <li class="breadcrumb-item active">Support</li>
-            </ol>
-        </nav>
-    </div>
-    <section class="section support">
-        <div class="row">
-            <div class="col">
-                <div class="card">
-                    <div class="card-body pt-3">
-                        <h5 class="card-title">Contact Us</h5>
-                        <form class="row g-3 needs-validation" novalidate>
-                            <div class="col-md-3">
-                                <label for="validationCustom01" class="form-label">Order Id</label>
-                                <input type="text" class="form-control" id="validationCustom01" value="1001" required>
-                                <div class="valid-feedback">
-                                    Looks good!
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <label for="validationCustom02" class="form-label">Delivery num</label>
-                                <input type="text" class="form-control" id="validationCustom02" value="50" required>
-                                <div class="valid-feedback">
-                                    Looks good!
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="validationCustomUsername" class="form-label">E-mail</label>
-                                <div class="input-group has-validation">
-                                    <input type="text" class="form-control" id="validationCustomUsername" aria-describedby="inputGroupPrepend" required>
-                                    <span class="input-group-text" id="inputGroupPrepend">@@</span>
-                                    <input type="text" class="form-control" id="validationCustomUsername" aria-describedby="inputGroupPrepend" placeholder="gmail.com" required>
-                                    <div class="invalid-feedback">
-                                        Please provide a valid email.
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="validationCustom03" class="form-label">Store Name</label>
-                                <input type="text" class="form-control" id="validationCustom03" required>
-                                <div class="invalid-feedback">
-                                    Cannot be empty.
-                                </div>
-                            </div>
-                            <div class="input-group">
-                                <span class="input-group-text">Feedback</span>
-                                <textarea class="form-control" aria-label="With textarea"></textarea>
-                            </div>
-                            <div></div>
-                            <div class="col-12">
-                                <button class="btn btn-primary" type="submit">Submit form</button>
-                            </div>
-                        </form>
+	<div class="pagetitle">
+		<h1>Support</h1>
+		<nav>
+			<ol class="breadcrumb">
+				<a class="breadcrumb-item" asp-area="store" asp-controller="Home" asp-action="Index">Home</a>
+				<li class="breadcrumb-item active">Support</li>
+			</ol>
+		</nav>
+	</div>
+	<section class="section support" id="app">
+		<div class="row">
+			<div class="col">
+				<div class="card">
+					<div class="card-body pt-3">
+						<h5 class="card-title">Contact Us</h5>
+						<form class="row g-3 needs-validation" novalidate>
+							<div class="col-md-3">
+								<label for="validationCustom01" class="form-label">Order Id</label>
+								<input type="text" class="form-control" id="validationCustom01" value="1001" required>
+								<div class="valid-feedback">
+									Looks good!
+								</div>
+							</div>
+							<div class="col-md-3">
+								<label for="validationCustom02" class="form-label">Delivery num</label>
+								<input type="text" class="form-control" id="validationCustom02" value="50" required>
+								<div class="valid-feedback">
+									Looks good!
+								</div>
+							</div>
+							<div class="col-md-6">
+								<label for="validationCustomUsername" class="form-label">E-mail</label>
+								<div class="input-group has-validation">
+									<input type="text" class="form-control" id="validationCustomUsername" aria-describedby="inputGroupPrepend" required>
+									<span class="input-group-text" id="inputGroupPrepend">@@</span>
+									<input type="text" class="form-control" id="validationCustomUsername" aria-describedby="inputGroupPrepend" placeholder="gmail.com" required>
+									<div class="invalid-feedback">
+										Please provide a valid email.
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<label for="validationCustom03" class="form-label">Store Name</label>
+								<input type="text" class="form-control" id="validationCustom03" required>
+								<div class="invalid-feedback">
+									Cannot be empty.
+								</div>
+							</div>
+							<div class="input-group">
+								<span class="input-group-text">Feedback</span>
+								<textarea class="form-control" aria-label="With textarea"></textarea>
+							</div>
+							<div></div>
+							<div class="col-12">
+								<button class="btn btn-primary" type="submit">Submit form</button>
+							</div>
+						</form>
 
-                        
 
-                    </div>
-                </div>
-				<h3>ConnectionId: <span id ="SelfID"></span></h3>
-                <div class="content-page" style="margin-left:0px;">
-                    <div class="content">
-                        <!-- Start Content-->
-                        <div class="container-fluid">
-                            <div class="row">
-                                <!-- start chat users-->
-                                <div class="col-xxl-3 col-xl-6 order-xl-1">
-                                    <div class="card">
-                                        <div class="card-body p-0">
-                                            @*<ul class="nav nav-tabs nav-bordered">
-                                                <li class="nav-item">
-                                                    <a href="#allUsers" data-bs-toggle="tab" aria-expanded="false" class="nav-link active py-2">
-                                                        All
-                                                    </a>
-                                                </li>
-                                                <li class="nav-item">
-                                                    <a href="#favUsers" data-bs-toggle="tab" aria-expanded="true" class="nav-link py-2">
-                                                        Favourties
-                                                    </a>
-                                                </li>
-                                                <li class="nav-item">
-                                                    <a href="#friendUsers" data-bs-toggle="tab" aria-expanded="true" class="nav-link py-2">
-                                                        Friends
-                                                    </a>
-                                                </li>
-                                            </ul>*@ <!-- end nav-->
-                                            <div class="tab-content">
-                                                @*<div class="tab-pane show active card-body pb-0" id="newpost">
-                                                    <!-- start search box -->
-                                                    <div class="app-search">
-                                                        <form>
-                                                            <div class="mb-2 w-100 position-relative">
-                                                                <input type="search" class="form-control"
-                                                                       placeholder="People, groups & messages..." />
-                                                                <span class="mdi mdi-magnify search-icon"></span>
-                                                            </div>
-                                                        </form>
-                                                    </div>
-                                                    <!-- end search box -->
-                                                </div>*@
-                                                <!-- users -->
-                                                <div class="row">
-                                                    <div class="col">
-                                                        <div class="card-body py-0 mb-3" data-simplebar style="height: 600px">
-                                                            <ul id="connectingList"></ul>
 
-                                                        </div> <!-- end slimscroll-->
-                                                    </div> <!-- End col -->
-                                                </div> <!-- end users -->
-                                            </div> <!-- end tab content-->
-                                        </div> <!-- end card-body-->
-                                    </div> <!-- end card-->
-                                </div>
-                                <!-- end chat users-->
-                                <!-- chat area -->
-                                <div class="col-xxl-6 col-xl-12 order-xl-2">
-                                    <div class="card">
-                                        <div class="card-body px-0 pb-0" style="height:580px">
-                                            <ul id="messageList" class="conversation-list px-3" data-simplebar style="max-height: 554px">
-                                                
-                                            </ul>
-                                        </div> <!-- end card-body -->
-                                        <div class="card-body p-0">
-                                            <div class="row">
-                                                <div class="col">
-                                                    <div class="mt-2 bg-light p-3">
-                                                            <div class="row">
-                                                                <div class="col mb-2 mb-sm-0">
-                                                                    <input type="text" class="form-control border-0" placeholder="Enter your text" required="" id="msgforadmin">
-                                                                    <div class="invalid-feedback">
-                                                                        Please enter your messsage
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-sm-auto">
-                                                                    <div class="btn-group">
-                                                                        <a href="#" class="btn btn-light"><i class="uil uil-paperclip"></i></a>
-                                                                        <a href="#" class="btn btn-light"> <i class='uil uil-smile'></i> </a>
-                                                                        <div class="d-grid">
-                                                                            <button id="sendMsg" type="submit" class="btn btn-success chat-send"/><i class='uil uil-message'></i></button>
-                                                                        </div>
-                                                                    </div>
-                                                                </div> <!-- end col -->
-                                                            </div> <!-- end row-->
-                                                    </div>
-                                                </div> <!-- end col-->
-                                            </div>
-                                            <!-- end row -->
-                                        </div>
-                                    </div> <!-- end card -->
-                                </div>
-                                <!-- end chat area-->
-                                <!-- start user detail -->
-                                <div class="col-xxl-3 col-xl-6 order-xl-1 order-xxl-2">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <div class="dropdown float-end">
-                                                <a href="#" class="dropdown-toggle arrow-none card-drop" data-bs-toggle="dropdown" aria-expanded="false">
-                                                    <i class="mdi mdi-dots-horizontal"></i>
-                                                </a>
-                                                <div class="dropdown-menu dropdown-menu-end">
-                                                    <!-- item-->
-                                                    <a href="javascript:void(0);" class="dropdown-item">View full</a>
-                                                    <!-- item-->
-                                                    <a href="javascript:void(0);" class="dropdown-item">Edit Contact Info</a>
-                                                    <!-- item-->
-                                                    <a href="javascript:void(0);" class="dropdown-item">Remove</a>
-                                                </div>
-                                            </div>
+					</div>
+				</div>
+				<h3>ConnectionId: {{thisUser.connectionId}}</h3>
+				<div class="content-page" style="margin-left:0px;">
+					<div class="content">
+						<!-- Start Content-->
+						<div class="container-fluid">
+							<div class="row">
+								<!-- start chat users-->
+								<div class="col-xxl-3 col-xl-6 order-xl-1">
+									<div class="card">
+										<div class="card-body p-0">
+											<div class="tab-content">
+												<div class="row">
+													<div class="col">
+														<div class="card-body py-0 mb-3" data-simplebar style="max-height: 546px">
+															<template v-for="admin in adminOn">
+																<a class="text-body">
+																	<div class="d-flex align-items-start mt-1 p-2">
+																		<div class="w-100 overflow-hidden">
+																			<h5 class="mt-0 mb-0 font-14">
+																				<span class="float-end text-muted font-12">{{admin.role}}</span>
+																				{{admin.name}}
+																			</h5>
+																			<p class="mt-1 mb-0 text-muted font-14">
+																				<span class="w-25 float-end text-end">
+																					<span class="badge badge-danger-lighten">3</span>
+																				</span>
+																				<span class="w-75">{{admin.connectionId}}</span>
+																			</p>
+																		</div>
+																	</div>
+																</a>
+															</template>
+														</div> <!-- end slimscroll-->
+													</div> <!-- End col -->
+												</div> <!-- end users -->
+											</div> <!-- end tab content-->
+										</div> <!-- end card-body-->
+									</div> <!-- end card-->
+								</div>
+								<!-- end chat users-->
+								<!-- chat area -->
+								<div class="col-xxl-6 col-xl-12 order-xl-2">
+									<div class="card">
+										<div class="card-body px-0 pb-0" style="height:580px">
+											<ul id="messageList" class="conversation-list px-3" data-simplebar style="max-height: 554px">
+												<template v-for="msg in displayMessage">
+													<li class="clearfix" v-bind:class="{odd:msg.name==thisUser.name}">
+														<div class="conversation-text">
+															<div class="ctext-wrap">
+																<i>{{msg.name}}</i>
+																<p>{{msg.message}}</p>
+															</div>
+														</div>
+													</li>
+												</template>
+											</ul>
+										</div> <!-- end card-body -->
+										<div class="card-body p-0">
+											<div class="row">
+												<div class="col">
+													<div class="mt-2 bg-light p-3">
+														<div class="row">
+															<div class="col mb-2 mb-sm-0">
+																<input type="text" class="form-control border-0" placeholder="Enter your text" required="" v-model="message">
+																<div class="invalid-feedback">
+																	Please enter your messsage
+																</div>
+															</div>
+															<div class="col-sm-auto">
+																<div class="btn-group">
+																	<a href="#" class="btn btn-light"><i class="uil uil-paperclip"></i></a>
+																	<a href="#" class="btn btn-light"> <i class='uil uil-smile'></i> </a>
+																	<div class="d-grid">
+																		<button id="sendMsg" type="submit" class="btn btn-success chat-send" @@click="sendtoAdmin" ><i class='uil uil-message'></i></button>
+																	</div>
+																</div>
+															</div> <!-- end col -->
+														</div> <!-- end row-->
+													</div>
+												</div> <!-- end col-->
+											</div>
+											<!-- end row -->
+										</div>
+									</div> <!-- end card -->
+								</div>
+								<!-- end chat area-->
+								<!-- start user detail -->
+								<div class="col-xxl-3 col-xl-6 order-xl-1 order-xxl-2">
+									<div class="card">
+										<div class="card-body">
+											<div class="dropdown float-end">
+												<a href="#" class="dropdown-toggle arrow-none card-drop" data-bs-toggle="dropdown" aria-expanded="false">
+													<i class="mdi mdi-dots-horizontal"></i>
+												</a>
+												<div class="dropdown-menu dropdown-menu-end">
+													<!-- item-->
+													<a href="javascript:void(0);" class="dropdown-item">View full</a>
+													<!-- item-->
+													<a href="javascript:void(0);" class="dropdown-item">Edit Contact Info</a>
+													<!-- item-->
+													<a href="javascript:void(0);" class="dropdown-item">Remove</a>
+												</div>
+											</div>
 
-                                            <div class="mt-3 text-center">
-                                                <img src="assets/images/users/avatar-5.jpg" alt="shreyu"
-                                                     class="img-thumbnail avatar-lg rounded-circle" />
-                                                <h4>Shreyu N</h4>
-                                                <button class="btn btn-primary btn-sm mt-1"><i class='uil uil-envelope-add me-1'></i>Send Email</button>
-                                                <p class="text-muted mt-2 font-14">Last Interacted: <strong>Few hours back</strong></p>
-                                            </div>
+											<div class="mt-3 text-center">
+												<img src="assets/images/users/avatar-5.jpg" alt="shreyu"
+													 class="img-thumbnail avatar-lg rounded-circle" />
+												<h4>Shreyu N</h4>
+												<button class="btn btn-primary btn-sm mt-1"><i class='uil uil-envelope-add me-1'></i>Send Email</button>
+												<p class="text-muted mt-2 font-14">Last Interacted: <strong>Few hours back</strong></p>
+											</div>
 
-                                            <div class="mt-3">
-                                                <hr class="" />
+											<div class="mt-3">
+												<hr class="" />
 
-                                                <p class="mt-4 mb-1"><strong><i class='uil uil-at'></i> Email:</strong></p>
-                                                <p>support@@coderthemes.com</p>
+												<p class="mt-4 mb-1"><strong><i class='uil uil-at'></i> Email:</strong></p>
+												<p>support@@coderthemes.com</p>
 
-                                                <p class="mt-3 mb-1"><strong><i class='uil uil-phone'></i> Phone Number:</strong></p>
-                                                <p>+1 456 9595 9594</p>
+												<p class="mt-3 mb-1"><strong><i class='uil uil-phone'></i> Phone Number:</strong></p>
+												<p>+1 456 9595 9594</p>
 
-                                                <p class="mt-3 mb-1"><strong><i class='uil uil-location'></i> Location:</strong></p>
-                                                <p>California, USA</p>
+												<p class="mt-3 mb-1"><strong><i class='uil uil-location'></i> Location:</strong></p>
+												<p>California, USA</p>
 
-                                                <p class="mt-3 mb-1"><strong><i class='uil uil-globe'></i> Languages:</strong></p>
-                                                <p>English, German, Spanish</p>
+												<p class="mt-3 mb-1"><strong><i class='uil uil-globe'></i> Languages:</strong></p>
+												<p>English, German, Spanish</p>
 
-                                                <p class="mt-3 mb-2"><strong><i class='uil uil-users-alt'></i> Groups:</strong></p>
-                                                <p class="mb-0">
-                                                    <span class="badge badge-success-lighten p-1 font-14">Work</span>
-                                                    <span class="badge badge-primary-lighten p-1 font-14">Friends</span>
-                                                </p>
-                                            </div>
-                                        </div> <!-- end card-body -->
-                                    </div> <!-- end card-->
-                                </div> <!-- end col -->
-                                <!-- end user detail -->
-                            </div> <!-- end row-->
+												<p class="mt-3 mb-2"><strong><i class='uil uil-users-alt'></i> Groups:</strong></p>
+												<p class="mb-0">
+													<span class="badge badge-success-lighten p-1 font-14">Work</span>
+													<span class="badge badge-primary-lighten p-1 font-14">Friends</span>
+												</p>
+											</div>
+										</div> <!-- end card-body -->
+									</div> <!-- end card-->
+								</div> <!-- end col -->
+								<!-- end user detail -->
+							</div> <!-- end row-->
 
-                        </div> <!-- container -->
+						</div> <!-- container -->
 
-                    </div> <!-- content -->
-                    <!-- Footer Start -->
-                    <footer class="footer">
-                            <div class="row">
-                                <div class="col">
-                                    <script>document.write(new Date().getFullYear())</script> © Hyper - Coderthemes.com
-                                </div>
-                            </div>
-                    </footer>
-                    <!-- end Footer -->
+					</div> <!-- content -->
+					<!-- Footer Start -->
+					<footer class="footer">
+						<div class="row">
+							<div class="col">
+								<script>document.write(new Date().getFullYear())</script> © Hyper - Coderthemes.com
+							</div>
+						</div>
+					</footer>
+					<!-- end Footer -->
 
-                </div>
-            </div>
-        </div>
-    </section>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<div class="offcanvas offcanvas-end" tabindex="-1" id="theme-settings-offcanvas">
+		<div class="d-flex align-items-center bg-primary p-3 offcanvas-header">
+			<h5 class="text-white m-0">Theme Settings</h5>
+			<button type="button" class="btn-close btn-close-white ms-auto" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+		</div>
+
+		<div class="offcanvas-body p-0">
+			<div data-simplebar class="h-100">
+				<div class="card mb-0 p-3">
+					<h5 class="mt-0 font-16 fw-bold mb-3">Choose Layout</h5>
+					<div class="row">
+						<div class="col-4">
+							<div class="form-check card-radio">
+								<input id="customizer-layout01" name="data-layout" type="radio" value="vertical" class="form-check-input">
+								<label class="form-check-label p-0 avatar-md w-100" for="customizer-layout01">
+									<span class="d-flex h-100">
+										<span class="flex-shrink-0">
+											<span class="bg-light d-flex h-100 border-end flex-column p-1 px-2">
+												<span class="d-block p-1 bg-dark-lighten rounded mb-1"></span>
+												<span class="d-block border border-3 border-secondary border-opacity-25 rounded w-100 mb-1"></span>
+												<span class="d-block border border-3 border-secondary border-opacity-25 rounded w-100 mb-1"></span>
+												<span class="d-block border border-3 border-secondary border-opacity-25 rounded w-100 mb-1"></span>
+												<span class="d-block border border-3 border-secondary border-opacity-25 rounded w-100 mb-1"></span>
+											</span>
+										</span>
+										<span class="flex-grow-1">
+											<span class="d-flex h-100 flex-column">
+												<span class="bg-light d-block p-1"></span>
+											</span>
+										</span>
+									</span>
+								</label>
+							</div>
+							<h5 class="font-14 text-center text-muted mt-2">Vertical</h5>
+						</div>
+						<div class="col-4">
+							<div class="form-check card-radio">
+								<input id="customizer-layout02" name="data-layout" type="radio" value="horizontal" class="form-check-input">
+								<label class="form-check-label p-0 avatar-md w-100" for="customizer-layout02">
+									<span class="d-flex h-100 flex-column">
+										<span class="bg-light d-flex p-1 align-items-center border-bottom border-secondary border-opacity-25">
+											<span class="d-block p-1 bg-dark-lighten rounded me-1"></span>
+											<span class="d-block border border-3 border-secondary border-opacity-25 rounded ms-auto"></span>
+											<span class="d-block border border-3 border-secondary border-opacity-25 rounded ms-1"></span>
+											<span class="d-block border border-3 border-secondary border-opacity-25 rounded ms-1"></span>
+											<span class="d-block border border-3 border-secondary border-opacity-25 rounded ms-1"></span>
+										</span>
+										<span class="bg-light d-block p-1"></span>
+									</span>
+								</label>
+							</div>
+							<h5 class="font-14 text-center text-muted mt-2">Horizontal</h5>
+						</div>
+					</div>
+
+					<h5 class="my-3 font-16 fw-bold">Color Scheme</h5>
+
+					<div class="colorscheme-cardradio">
+						<div class="row">
+							<div class="col-4">
+								<div class="form-check card-radio">
+									<input class="form-check-input" type="radio" name="data-theme" id="layout-color-light" value="light">
+									<label class="form-check-label p-0 avatar-md w-100" for="layout-color-light">
+										<div id="sidebar-size">
+											<span class="d-flex h-100">
+												<span class="flex-shrink-0">
+													<span class="bg-light d-flex h-100 border-end flex-column p-1 px-2">
+														<span class="d-block p-1 bg-secondary-lighten rounded mb-1"></span>
+														<span class="d-block border border-3 border-secondary border-opacity-25 rounded w-100 mb-1"></span>
+														<span class="d-block border border-3 border-secondary border-opacity-25 rounded w-100 mb-1"></span>
+														<span class="d-block border border-3 border-secondary border-opacity-25 rounded w-100 mb-1"></span>
+														<span class="d-block border border-3 border-secondary border-opacity-25 rounded w-100 mb-1"></span>
+													</span>
+												</span>
+												<span class="flex-grow-1">
+													<span class="d-flex h-100 flex-column bg-white rounded-2">
+														<span class="bg-light d-block p-1"></span>
+													</span>
+												</span>
+											</span>
+										</div>
+
+										<div id="topnav-color" class="bg-white rounded-2 h-100">
+											<span class="d-flex h-100 flex-column">
+												<span class="bg-light d-flex p-1 align-items-center border-bottom border-secondary border-opacity-25">
+													<span class="d-block p-1 bg-dark-lighten rounded me-1"></span>
+													<span class="d-block border border-3 border-secondary border-opacity-25 rounded ms-auto"></span>
+													<span class="d-block border border-3 border-secondary border-opacity-25 rounded ms-1"></span>
+													<span class="d-block border border-3 border-secondary border-opacity-25 rounded ms-1"></span>
+													<span class="d-block border border-3 border-secondary border-opacity-25 rounded ms-1"></span>
+												</span>
+												<span class="d-flex h-100 flex-column bg-white rounded-2">
+													<span class="bg-light d-block p-1"></span>
+												</span>
+											</span>
+										</div>
+									</label>
+								</div>
+								<h5 class="font-14 text-center text-muted mt-2">Light</h5>
+							</div>
+
+							<div class="col-4">
+								<div class="form-check card-radio">
+									<input class="form-check-input" type="radio" name="data-theme" id="layout-color-dark" value="dark">
+									<label class="form-check-label p-0 avatar-md w-100 bg-black" for="layout-color-dark">
+										<div id="sidebar-size">
+											<span class="d-flex h-100">
+												<span class="flex-shrink-0">
+													<span class="bg-light-lighten d-flex h-100 flex-column p-1 px-2">
+														<span class="d-block p-1 bg-secondary-lighten rounded mb-1"></span>
+														<span class="d-block border border-secondary border-opacity-25 border-3 rounded w-100 mb-1"></span>
+														<span class="d-block border border-secondary border-opacity-25 border-3 rounded w-100 mb-1"></span>
+														<span class="d-block border border-secondary border-opacity-25 border-3 rounded w-100 mb-1"></span>
+														<span class="d-block border border-secondary border-opacity-25 border-3 rounded w-100 mb-1"></span>
+													</span>
+												</span>
+												<span class="flex-grow-1">
+													<span class="d-flex h-100 flex-column">
+														<span class="bg-light-lighten d-block p-1"></span>
+													</span>
+												</span>
+											</span>
+										</div>
+
+										<div id="topnav-color">
+											<span class="d-flex h-100 flex-column">
+												<span class="bg-light-lighten d-flex p-1 align-items-center border-bottom border-opacity-25 border-primary border-opacity-25">
+													<span class="d-block p-1 bg-secondary-lighten rounded me-1"></span>
+													<span class="d-block border border-primary border-opacity-25 border-3 rounded ms-auto"></span>
+													<span class="d-block border border-primary border-opacity-25 border-3 rounded ms-1"></span>
+													<span class="d-block border border-primary border-opacity-25 border-3 rounded ms-1"></span>
+													<span class="d-block border border-primary border-opacity-25 border-3 rounded ms-1"></span>
+												</span>
+												<span class="bg-light-lighten d-block p-1"></span>
+											</span>
+										</div>
+									</label>
+								</div>
+								<h5 class="font-14 text-center text-muted mt-2">Dark</h5>
+							</div>
+						</div>
+					</div>
+
+					<div id="layout-width">
+						<h5 class="my-3 font-16 fw-bold">Layout Mode</h5>
+
+						<div class="row">
+							<div class="col-4">
+								<div class="form-check card-radio">
+									<input class="form-check-input" type="radio" name="data-layout-mode" id="layout-mode-fluid" value="fluid">
+									<label class="form-check-label p-0 avatar-md w-100" for="layout-mode-fluid">
+										<div id="sidebar-size">
+											<span class="d-flex h-100">
+												<span class="flex-shrink-0">
+													<span class="bg-light d-flex h-100 border-end flex-column p-1 px-2">
+														<span class="d-block p-1 bg-secondary-lighten rounded mb-1"></span>
+														<span class="d-block border border-3 border-secondary border-opacity-25 rounded w-100 mb-1"></span>
+														<span class="d-block border border-3 border-secondary border-opacity-25 rounded w-100 mb-1"></span>
+														<span class="d-block border border-3 border-secondary border-opacity-25 rounded w-100 mb-1"></span>
+														<span class="d-block border border-3 border-secondary border-opacity-25 rounded w-100 mb-1"></span>
+													</span>
+												</span>
+												<span class="flex-grow-1">
+													<span class="d-flex h-100 flex-column rounded-2">
+														<span class="bg-light d-block p-1"></span>
+													</span>
+												</span>
+											</span>
+										</div>
+
+										<div id="topnav-color">
+											<span class="d-flex h-100 flex-column">
+												<span class="bg-light d-flex p-1 align-items-center border-bottom border-secondary border-opacity-25">
+													<span class="d-block p-1 bg-dark-lighten rounded me-1"></span>
+													<span class="d-block border border-3 border-secondary border-opacity-25 rounded ms-auto"></span>
+													<span class="d-block border border-3 border-secondary border-opacity-25 rounded ms-1"></span>
+													<span class="d-block border border-3 border-secondary border-opacity-25 rounded ms-1"></span>
+													<span class="d-block border border-3 border-secondary border-opacity-25 rounded ms-1"></span>
+												</span>
+												<span class="bg-light d-block p-1"></span>
+											</span>
+										</div>
+									</label>
+								</div>
+								<h5 class="font-14 text-center text-muted mt-2">Fluid</h5>
+							</div>
+							<div class="col-4" id="layout-boxed">
+								<div class="form-check card-radio">
+									<input class="form-check-input" type="radio" name="data-layout-mode" id="layout-mode-boxed" value="boxed">
+									<label class="form-check-label p-0 avatar-md w-100 px-2" for="layout-mode-boxed">
+										<div id="sidebar-size" class="border-start border-end">
+											<span class="d-flex h-100">
+												<span class="flex-shrink-0">
+													<span class="bg-light d-flex h-100 border-end flex-column p-1 px-2">
+														<span class="d-block p-1 bg-secondary-lighten rounded mb-1"></span>
+														<span class="d-block border border-3 border-secondary border-opacity-25 rounded w-100 mb-1"></span>
+														<span class="d-block border border-3 border-secondary border-opacity-25 rounded w-100 mb-1"></span>
+														<span class="d-block border border-3 border-secondary border-opacity-25 rounded w-100 mb-1"></span>
+														<span class="d-block border border-3 border-secondary border-opacity-25 rounded w-100 mb-1"></span>
+													</span>
+												</span>
+												<span class="flex-grow-1">
+													<span class="d-flex h-100 flex-column rounded-2">
+														<span class="bg-light d-block p-1"></span>
+													</span>
+												</span>
+											</span>
+										</div>
+
+										<div id="topnav-color" class="border-start border-end h-100">
+											<span class="d-flex h-100 flex-column">
+												<span class="bg-light d-flex p-1 align-items-center border-bottom border-secondary border-opacity-25">
+													<span class="d-block p-1 bg-dark-lighten rounded me-1"></span>
+													<span class="d-block border border-3 border-secondary border-opacity-25 rounded ms-auto"></span>
+													<span class="d-block border border-3 border-secondary border-opacity-25 rounded ms-1"></span>
+													<span class="d-block border border-3 border-secondary border-opacity-25 rounded ms-1"></span>
+													<span class="d-block border border-3 border-secondary border-opacity-25 rounded ms-1"></span>
+												</span>
+												<span class="bg-light d-block p-1"></span>
+											</span>
+										</div>
+									</label>
+								</div>
+								<h5 class="font-14 text-center text-muted mt-2">Boxed</h5>
+							</div>
+
+							<div class="col-4" id="layout-detached">
+								<div class="form-check sidebar-setting card-radio">
+									<input class="form-check-input" type="radio" name="data-layout-mode" id="data-layout-detached" value="detached">
+									<label class="form-check-label p-0 avatar-md w-100" for="data-layout-detached">
+										<span class="d-flex h-100 flex-column">
+											<span class="bg-light d-flex p-1 align-items-center border-bottom ">
+												<span class="d-block p-1 bg-dark-lighten rounded me-1"></span>
+												<span class="d-block border border-3 border-secondary border-opacity-25 rounded ms-auto"></span>
+												<span class="d-block border border-3 border-secondary border-opacity-25 rounded ms-1"></span>
+												<span class="d-block border border-3 border-secondary border-opacity-25 rounded ms-1"></span>
+												<span class="d-block border border-3 border-secondary border-opacity-25 rounded ms-1"></span>
+											</span>
+											<span class="d-flex h-100 p-1 px-2">
+												<span class="flex-shrink-0">
+													<span class="bg-light d-flex h-100 flex-column p-1 px-2">
+														<span class="d-block border border-3 border-secondary border-opacity-25 rounded w-100 mb-1"></span>
+														<span class="d-block border border-3 border-secondary border-opacity-25 rounded w-100 mb-1"></span>
+														<span class="d-block border border-3 border-secondary border-opacity-25 rounded w-100"></span>
+													</span>
+												</span>
+											</span>
+											<span class="bg-light d-block p-1 mt-auto px-2"></span>
+										</span>
+
+									</label>
+								</div>
+								<h5 class="font-14 text-center text-muted mt-2">Detached</h5>
+							</div>
+						</div>
+					</div>
+
+					<h5 class="my-3 font-16 fw-bold">Topbar Color</h5>
+
+					<div class="row">
+						<div class="col-4">
+							<div class="form-check card-radio">
+								<input class="form-check-input" type="radio" name="data-topbar-color" id="topbar-color-light" value="light">
+								<label class="form-check-label p-0 avatar-md w-100" for="topbar-color-light">
+									<div id="sidebar-size">
+										<span class="d-flex h-100">
+											<span class="flex-shrink-0">
+												<span class="bg-light d-flex h-100 border-end  flex-column p-1 px-2">
+													<span class="d-block p-1 bg-dark-lighten rounded mb-1"></span>
+													<span class="d-block border border-3 border-secondary border-opacity-25 rounded w-100 mb-1"></span>
+													<span class="d-block border border-3 border-secondary border-opacity-25 rounded w-100 mb-1"></span>
+													<span class="d-block border border-3 border-secondary border-opacity-25 rounded w-100 mb-1"></span>
+													<span class="d-block border border-3 border-secondary border-opacity-25 rounded w-100 mb-1"></span>
+												</span>
+											</span>
+											<span class="flex-grow-1">
+												<span class="d-flex h-100 flex-column">
+													<span class="bg-light d-block p-1"></span>
+												</span>
+											</span>
+										</span>
+									</div>
+
+									<div id="topnav-color">
+										<span class="d-flex h-100 flex-column">
+											<span class="bg-light d-flex p-1 align-items-center border-bottom border-secondary border-opacity-25">
+												<span class="d-block p-1 bg-dark-lighten rounded me-1"></span>
+												<span class="d-block border border-3 border-secondary border-opacity-25 rounded ms-auto"></span>
+												<span class="d-block border border-3 border-secondary border-opacity-25 rounded ms-1"></span>
+												<span class="d-block border border-3 border-secondary border-opacity-25 rounded ms-1"></span>
+												<span class="d-block border border-3 border-secondary border-opacity-25 rounded ms-1"></span>
+											</span>
+											<span class="bg-light d-block p-1"></span>
+										</span>
+									</div>
+								</label>
+							</div>
+							<h5 class="font-14 text-center text-muted mt-2">Light</h5>
+						</div>
+
+						<div class="col-4" style="--ct-dark-rgb: 64,73,84;">
+							<div class="form-check card-radio">
+								<input class="form-check-input" type="radio" name="data-topbar-color" id="topbar-color-dark" value="dark">
+								<label class="form-check-label p-0 avatar-md w-100" for="topbar-color-dark">
+									<div id="sidebar-size">
+										<span class="d-flex h-100">
+											<span class="flex-shrink-0">
+												<span class="bg-light d-flex h-100 border-end  flex-column p-1 px-2">
+													<span class="d-block p-1 bg-primary-lighten rounded mb-1"></span>
+													<span class="d-block border border-3 border-secondary border-opacity-25 rounded w-100 mb-1"></span>
+													<span class="d-block border border-3 border-secondary border-opacity-25 rounded w-100 mb-1"></span>
+													<span class="d-block border border-3 border-secondary border-opacity-25 rounded w-100 mb-1"></span>
+													<span class="d-block border border-3 border-secondary border-opacity-25 rounded w-100 mb-1"></span>
+												</span>
+											</span>
+											<span class="flex-grow-1">
+												<span class="d-flex h-100 flex-column">
+													<span class="bg-dark d-block p-1"></span>
+												</span>
+											</span>
+										</span>
+									</div>
+
+									<div id="topnav-color">
+										<span class="d-flex h-100 flex-column">
+											<span class="bg-dark d-flex p-1 align-items-center border-bottom border-secondary border-opacity-25">
+												<span class="d-block p-1 bg-primary-lighten rounded me-1"></span>
+												<span class="d-block border border-primary border-opacity-25 border-3 rounded ms-auto"></span>
+												<span class="d-block border border-primary border-opacity-25 border-3 rounded ms-1"></span>
+												<span class="d-block border border-primary border-opacity-25 border-3 rounded ms-1"></span>
+												<span class="d-block border border-primary border-opacity-25 border-3 rounded ms-1"></span>
+											</span>
+											<span class="bg-light d-block p-1"></span>
+										</span>
+									</div>
+								</label>
+							</div>
+							<h5 class="font-14 text-center text-muted mt-2">Dark</h5>
+						</div>
+
+						<div class="col-4">
+							<div class="form-check card-radio">
+								<input class="form-check-input" type="radio" name="data-topbar-color" id="topbar-color-brand" value="brand">
+								<label class="form-check-label p-0 avatar-md w-100" for="topbar-color-brand">
+									<div id="sidebar-size">
+										<span class="d-flex h-100">
+											<span class="flex-shrink-0">
+												<span class="bg-light d-flex h-100 border-end  flex-column p-1 px-2">
+													<span class="d-block p-1 bg-dark-lighten rounded mb-1"></span>
+													<span class="d-block border border-3 border-secondary border-opacity-25 rounded w-100 mb-1"></span>
+													<span class="d-block border border-3 border-secondary border-opacity-25 rounded w-100 mb-1"></span>
+													<span class="d-block border border-3 border-secondary border-opacity-25 rounded w-100 mb-1"></span>
+													<span class="d-block border border-3 border-secondary border-opacity-25 rounded w-100 mb-1"></span>
+												</span>
+											</span>
+											<span class="flex-grow-1">
+												<span class="d-flex h-100 flex-column">
+													<span class="bg-primary bg-gradient d-block p-1"></span>
+												</span>
+											</span>
+										</span>
+									</div>
+
+									<div id="topnav-color">
+										<span class="d-flex h-100 flex-column">
+											<span class="bg-primary bg-gradient d-flex p-1 align-items-center border-bottom border-secondary border-opacity-25">
+												<span class="d-block p-1 bg-light opacity-25 rounded me-1"></span>
+												<span class="d-block border border-3 border opacity-25 rounded ms-auto"></span>
+												<span class="d-block border border-3 border opacity-25 rounded ms-1"></span>
+												<span class="d-block border border-3 border opacity-25 rounded ms-1"></span>
+												<span class="d-block border border-3 border opacity-25 rounded ms-1"></span>
+											</span>
+											<span class="bg-light d-block p-1"></span>
+										</span>
+									</div>
+								</label>
+							</div>
+							<h5 class="font-14 text-center text-muted mt-2">Brand</h5>
+						</div>
+					</div>
+
+					<div>
+						<h5 class="my-3 font-16 fw-bold">Menu Color</h5>
+
+						<div class="row">
+							<div class="col-4">
+								<div class="form-check sidebar-setting card-radio">
+									<input class="form-check-input" type="radio" name="data-menu-color" id="leftbar-color-light" value="light">
+									<label class="form-check-label p-0 avatar-md w-100" for="leftbar-color-light">
+										<div id="sidebar-size">
+											<span class="d-flex h-100">
+												<span class="flex-shrink-0">
+													<span class="bg-light d-flex h-100 border-end  flex-column p-1 px-2">
+														<span class="d-block p-1 bg-dark-lighten rounded mb-1"></span>
+														<span class="d-block border border-3 border-secondary border-opacity-25 rounded w-100 mb-1"></span>
+														<span class="d-block border border-3 border-secondary border-opacity-25 rounded w-100 mb-1"></span>
+														<span class="d-block border border-3 border-secondary border-opacity-25 rounded w-100 mb-1"></span>
+														<span class="d-block border border-3 border-secondary border-opacity-25 rounded w-100 mb-1"></span>
+													</span>
+												</span>
+												<span class="flex-grow-1">
+													<span class="d-flex h-100 flex-column">
+														<span class="bg-light d-block p-1"></span>
+													</span>
+												</span>
+											</span>
+										</div>
+
+										<div id="topnav-color">
+											<span class="d-flex h-100 flex-column">
+												<span class="bg-light d-flex p-1 align-items-center border-bottom border-secondary border-opacity-25">
+													<span class="d-block p-1 bg-dark-lighten rounded me-1"></span>
+													<span class="d-block border border-3 border-secondary border-opacity-25 rounded ms-auto"></span>
+													<span class="d-block border border-3 border-secondary border-opacity-25 rounded ms-1"></span>
+													<span class="d-block border border-3 border-secondary border-opacity-25 rounded ms-1"></span>
+													<span class="d-block border border-3 border-secondary border-opacity-25 rounded ms-1"></span>
+												</span>
+												<span class="bg-light d-block p-1"></span>
+											</span>
+										</div>
+									</label>
+								</div>
+								<h5 class="font-14 text-center text-muted mt-2">Light</h5>
+							</div>
+
+							<div class="col-4" style="--ct-dark-rgb: 64,73,84; --ct-border-color: #dee2e6;">
+								<div class="form-check sidebar-setting card-radio">
+									<input class="form-check-input" type="radio" name="data-menu-color" id="leftbar-color-dark" value="dark">
+									<label class="form-check-label p-0 avatar-md w-100" for="leftbar-color-dark">
+										<div id="sidebar-size">
+											<span class="d-flex h-100">
+												<span class="flex-shrink-0">
+													<span class="bg-dark d-flex h-100 flex-column p-1 px-2">
+														<span class="d-block p-1 bg-secondary-lighten rounded mb-1"></span>
+														<span class="d-block border border-secondary rounded border-opacity-25 border-3 w-100 mb-1"></span>
+														<span class="d-block border border-secondary rounded border-opacity-25 border-3 w-100 mb-1"></span>
+														<span class="d-block border border-secondary rounded border-opacity-25 border-3 w-100 mb-1"></span>
+														<span class="d-block border border-secondary rounded border-opacity-25 border-3 w-100 mb-1"></span>
+													</span>
+												</span>
+												<span class="flex-grow-1">
+													<span class="d-flex h-100 flex-column">
+														<span class="bg-light d-block p-1"></span>
+													</span>
+												</span>
+											</span>
+										</div>
+
+										<div id="topnav-color">
+											<span class="d-flex h-100 flex-column">
+												<span class="bg-light d-flex p-1 align-items-center border-bottom border-secondary border-primary border-opacity-25">
+													<span class="d-block p-1 bg-primary-lighten rounded me-1"></span>
+													<span class="d-block border border-secondary rounded border-opacity-25 border-3 ms-auto"></span>
+													<span class="d-block border border-secondary rounded border-opacity-25 border-3 ms-1"></span>
+													<span class="d-block border border-secondary rounded border-opacity-25 border-3 ms-1"></span>
+													<span class="d-block border border-secondary rounded border-opacity-25 border-3 ms-1"></span>
+												</span>
+												<span class="bg-dark d-block p-1"></span>
+											</span>
+										</div>
+									</label>
+								</div>
+								<h5 class="font-14 text-center text-muted mt-2">Dark</h5>
+							</div>
+							<div class="col-4">
+								<div class="form-check sidebar-setting card-radio">
+									<input class="form-check-input" type="radio" name="data-menu-color" id="leftbar-color-brand" value="brand">
+									<label class="form-check-label p-0 avatar-md w-100" for="leftbar-color-brand">
+										<div id="sidebar-size">
+											<span class="d-flex h-100">
+												<span class="flex-shrink-0">
+													<span class="bg-primary bg-gradient d-flex h-100 flex-column p-1 px-2">
+														<span class="d-block p-1 bg-light-lighten rounded mb-1"></span>
+														<span class="d-block border opacity-25 rounded border-3 w-100 mb-1"></span>
+														<span class="d-block border opacity-25 rounded border-3 w-100 mb-1"></span>
+														<span class="d-block border opacity-25 rounded border-3 w-100 mb-1"></span>
+														<span class="d-block border opacity-25 rounded border-3 w-100 mb-1"></span>
+													</span>
+												</span>
+												<span class="flex-grow-1">
+													<span class="d-flex h-100 flex-column">
+														<span class="bg-light d-block p-1"></span>
+													</span>
+												</span>
+											</span>
+										</div>
+
+										<div id="topnav-color">
+											<span class="d-flex h-100 flex-column">
+												<span class="bg-light d-flex p-1 align-items-center border-bottom border-secondary">
+													<span class="d-block p-1 bg-dark-lighten rounded me-1"></span>
+													<span class="d-block border border-3 border-secondary border-opacity-25 rounded ms-auto"></span>
+													<span class="d-block border border-3 border-secondary border-opacity-25 rounded ms-1"></span>
+													<span class="d-block border border-3 border-secondary border-opacity-25 rounded ms-1"></span>
+													<span class="d-block border border-3 border-secondary border-opacity-25 rounded ms-1"></span>
+												</span>
+												<span class="bg-primary bg-gradient d-block p-1"></span>
+											</span>
+										</div>
+
+									</label>
+								</div>
+								<h5 class="font-14 text-center text-muted mt-2">Brand</h5>
+							</div>
+						</div>
+					</div>
+
+					<div id="sidebar-size">
+						<h5 class="my-3 font-16 fw-bold">Sidebar Size</h5>
+
+						<div class="row">
+							<div class="col-4">
+								<div class="form-check sidebar-setting card-radio">
+									<input class="form-check-input" type="radio" name="data-sidenav-size" id="leftbar-size-default" value="default">
+									<label class="form-check-label p-0 avatar-md w-100" for="leftbar-size-default">
+										<span class="d-flex h-100">
+											<span class="flex-shrink-0">
+												<span class="bg-light d-flex h-100 border-end  flex-column p-1 px-2">
+													<span class="d-block p-1 bg-dark-lighten rounded mb-1"></span>
+													<span class="d-block border border-3 border-secondary border-opacity-25 rounded w-100 mb-1"></span>
+													<span class="d-block border border-3 border-secondary border-opacity-25 rounded w-100 mb-1"></span>
+													<span class="d-block border border-3 border-secondary border-opacity-25 rounded w-100 mb-1"></span>
+													<span class="d-block border border-3 border-secondary border-opacity-25 rounded w-100 mb-1"></span>
+												</span>
+											</span>
+											<span class="flex-grow-1">
+												<span class="d-flex h-100 flex-column">
+													<span class="bg-light d-block p-1"></span>
+												</span>
+											</span>
+										</span>
+									</label>
+								</div>
+								<h5 class="font-14 text-center text-muted mt-2">Default</h5>
+							</div>
+
+							<div class="col-4">
+								<div class="form-check sidebar-setting card-radio">
+									<input class="form-check-input" type="radio" name="data-sidenav-size" id="leftbar-size-compact" value="compact">
+									<label class="form-check-label p-0 avatar-md w-100" for="leftbar-size-compact">
+										<span class="d-flex h-100">
+											<span class="flex-shrink-0">
+												<span class="bg-light d-flex h-100 border-end  flex-column p-1">
+													<span class="d-block p-1 bg-dark-lighten rounded mb-1"></span>
+													<span class="d-block border border-3 border-secondary border-opacity-25 rounded w-100 mb-1"></span>
+													<span class="d-block border border-3 border-secondary border-opacity-25 rounded w-100 mb-1"></span>
+													<span class="d-block border border-3 border-secondary border-opacity-25 rounded w-100 mb-1"></span>
+													<span class="d-block border border-3 border-secondary border-opacity-25 rounded w-100 mb-1"></span>
+												</span>
+											</span>
+											<span class="flex-grow-1">
+												<span class="d-flex h-100 flex-column">
+													<span class="bg-light d-block p-1"></span>
+												</span>
+											</span>
+										</span>
+									</label>
+								</div>
+								<h5 class="font-14 text-center text-muted mt-2">Compact</h5>
+							</div>
+
+							<div class="col-4">
+								<div class="form-check sidebar-setting card-radio">
+									<input class="form-check-input" type="radio" name="data-sidenav-size" id="leftbar-size-small" value="condensed">
+									<label class="form-check-label p-0 avatar-md w-100" for="leftbar-size-small">
+										<span class="d-flex h-100">
+											<span class="flex-shrink-0">
+												<span class="bg-light d-flex h-100 border-end flex-column" style="padding: 2px;">
+													<span class="d-block p-1 bg-dark-lighten rounded mb-1"></span>
+													<span class="d-block border border-3 border-secondary border-opacity-25 rounded w-100 mb-1"></span>
+													<span class="d-block border border-3 border-secondary border-opacity-25 rounded w-100 mb-1"></span>
+													<span class="d-block border border-3 border-secondary border-opacity-25 rounded w-100 mb-1"></span>
+													<span class="d-block border border-3 border-secondary border-opacity-25 rounded w-100 mb-1"></span>
+												</span>
+											</span>
+											<span class="flex-grow-1">
+												<span class="d-flex h-100 flex-column">
+													<span class="bg-light d-block p-1"></span>
+												</span>
+											</span>
+										</span>
+									</label>
+								</div>
+								<h5 class="font-14 text-center text-muted mt-2">Condensed</h5>
+							</div>
+
+							<div class="col-4">
+								<div class="form-check sidebar-setting card-radio">
+									<input class="form-check-input" type="radio" name="data-sidenav-size" id="leftbar-size-small-hover" value="sm-hover">
+									<label class="form-check-label p-0 avatar-md w-100" for="leftbar-size-small-hover">
+										<span class="d-flex h-100">
+											<span class="flex-shrink-0">
+												<span class="bg-light d-flex h-100 border-end flex-column" style="padding: 2px;">
+													<span class="d-block p-1 bg-dark-lighten rounded mb-1"></span>
+													<span class="d-block border border-3 border-secondary border-opacity-25 rounded w-100 mb-1"></span>
+													<span class="d-block border border-3 border-secondary border-opacity-25 rounded w-100 mb-1"></span>
+													<span class="d-block border border-3 border-secondary border-opacity-25 rounded w-100 mb-1"></span>
+													<span class="d-block border border-3 border-secondary border-opacity-25 rounded w-100 mb-1"></span>
+												</span>
+											</span>
+											<span class="flex-grow-1">
+												<span class="d-flex h-100 flex-column">
+													<span class="bg-light d-block p-1"></span>
+												</span>
+											</span>
+										</span>
+									</label>
+								</div>
+								<h5 class="font-14 text-center text-muted mt-2">Hover View</h5>
+							</div>
+
+							<div class="col-4">
+								<div class="form-check sidebar-setting card-radio">
+									<input class="form-check-input" type="radio" name="data-sidenav-size" id="leftbar-size-full" value="full">
+									<label class="form-check-label p-0 avatar-md w-100" for="leftbar-size-full">
+										<span class="d-flex h-100">
+											<span class="flex-shrink-0">
+												<span class="d-flex h-100 flex-column">
+													<span class="d-block p-1 bg-dark-lighten mb-1"></span>
+												</span>
+											</span>
+											<span class="flex-grow-1">
+												<span class="d-flex h-100 flex-column">
+													<span class="bg-light d-block p-1"></span>
+												</span>
+											</span>
+										</span>
+									</label>
+								</div>
+								<h5 class="font-14 text-center text-muted mt-2">Full Layout</h5>
+							</div>
+
+							<div class="col-4">
+								<div class="form-check sidebar-setting card-radio">
+									<input class="form-check-input" type="radio" name="data-sidenav-size" id="leftbar-size-fullscreen" value="fullscreen">
+									<label class="form-check-label p-0 avatar-md w-100" for="leftbar-size-fullscreen">
+										<span class="d-flex h-100">
+											<span class="flex-grow-1">
+												<span class="d-flex h-100 flex-column">
+													<span class="bg-light d-block p-1"></span>
+												</span>
+											</span>
+										</span>
+									</label>
+								</div>
+								<h5 class="font-14 text-center text-muted mt-2">Fullscreen Layout</h5>
+							</div>
+						</div>
+					</div>
+
+					<div id="layout-position">
+						<h5 class="my-3 font-16 fw-bold">Layout Position</h5>
+
+						<div class="btn-group radio" role="group">
+							<input type="radio" class="btn-check" name="data-layout-position" id="layout-position-fixed" value="fixed">
+							<label class="btn btn-soft-primary w-sm" for="layout-position-fixed">Fixed</label>
+
+							<input type="radio" class="btn-check" name="data-layout-position" id="layout-position-scrollable" value="scrollable">
+							<label class="btn btn-soft-primary w-sm ms-0" for="layout-position-scrollable">Scrollable</label>
+						</div>
+					</div>
+
+					<div id="sidebar-user">
+						<div class="d-flex justify-content-between align-items-center mt-3">
+							<label class="font-16 fw-bold m-0" for="sidebaruser-check">Sidebar User Info</label>
+							<div class="form-check form-switch">
+								<input type="checkbox" class="form-check-input" name="sidebar-user" id="sidebaruser-check">
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+
+		</div>
+		<div class="offcanvas-footer border-top p-3 text-center">
+			<div class="row">
+				<div class="col-6">
+					<button type="button" class="btn btn-light w-100" id="reset-layout">Reset</button>
+				</div>
+				<div class="col-6">
+					<a href="https://themes.getbootstrap.com/product/hyper-responsive-admin-dashboard-template/" target="_blank" role="button" class="btn btn-primary w-100">Buy Now</a>
+				</div>
+			</div>
+		</div>
+	</div>
 
 </main>
 
 @section Scripts
-{
-    <script src="~/lib/admin/assets/js/vendor.min.js"></script>
-    <script src="~/lib/admin/assets/vendor/apexcharts/apexcharts.min.js"></script>
+	{
+
 	<script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
+	<script src="~/lib/admin/assets/js/ui/component.chat.js"></script>
+	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 	@*<script src="~/js/sendtocaller.js"></script>*@
-    <script>
-        var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build()
+	<script>
+		let app = Vue.createApp({
+			data() {
+				return {
+					signalr: {},
+					adminOn: [],
+					thisUser: {
+						connectionId: "",
+						userId: "",
+						name: "",
+						role: "",
+					},
+					displayMessage: [],
+					message: "",
+				};
+			},
+			mounted: function () {
+				let _this = this;
+				this.signalr = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
+				this.signalr.start()
+					.then(() => {
+						console.log("connection");
+					})
+					.catch((err) => {
+						console.log(err.toString());
+					});
+				this.signalr.on("AdminOn", this.AdminOn);
+				this.signalr.on("AdminIsOnline", this.adminConnect);
+				this.signalr.on("AdminIsOff", this.adminDisConnect);
+				this.signalr.on("SendSelfId", this.getSelfInfo);
+				this.signalr.on("ToStoreMessage", this.FromAdmin);
+				this.signalr.on("StoreGetHistoryMessage", this.History);
+			},
+			methods: {
+				getSelfInfo: function (id, userId, name, role) {
+					let _this = this;
+					_this.thisUser.connectionId = id;
+					_this.thisUser.userId = userId;
+					_this.thisUser.name = name;
+					_this.thisUser.role = role;
+				},
+				sendtoAdmin: function () {
+					this.signalr.invoke("SendMessagetoAdmin", this.message).catch((err) => {
+						return console.log(err.toString())
+					})
+					var newmsg = {
+						connectionId: this.thisUser.connectionId,
+						message: this.message,
+						userId: this.thisUser.userId,
+						name: this.thisUser.name,
+						role: this.thisUser.role
+					}
+					this.displayMessage.push(newmsg);
+					this.message = "";
+				},
+				AdminOn:function(connectionId,userId,name,role){
+					let self=this;
+					console.log('adminConnect');
+					var obj={
+						connectionId: connectionId,
+						userId: userId,
+						name: name,
+						role: role
+					}
+					self.adminOn.push(obj);
+				},
+				adminConnect: function (adminsJson) {
+					let self=this;
+					var admins=JSON.parse(adminsJson).map(x=>{
+						return{
+						name: x.Name,
+						connectionId: x.ConnectionId,
+						userId: x.UserId,
+						role: x.Role
+						}
+					})
+					for(let admin of admins)
+						self.adminOn.push(admin);
+				},
+				adminDisConnect: function (connectionID, guid, name, role) {
+					let self =this;
+					var idx=self.adminOn.findIndex(x=>x.userId==guid)
+					if(idx==-1) return
+					self.adminOn.splice(idx,1);
+				},
+				FromAdmin: function (connectionID, guid, name, role, message) {
+					var newmsg = {
+						connectionId: connectionID,
+						message: message,
+						userId: guid,
+						name:name,
+						role: role
+					};
+					this.displayMessage.push(newmsg);
+				},
+				History:function(hisMsgJson){
+					let self =this;
+					var obj=JSON.parse(hisMsgJson)
+					if(obj==null) return;
+					var msg=obj.map(x=>{
+						return{
+							connectionId: x.ConnectionId,
+							message: x.Message,
+							userId: x.Sender.UserId,
+							name: x.Sender.Name,
+							role: x.Sender.Role
+						}
+					});
+					self.displayMessage=[];
+					for(let m of msg)
+						self.displayMessage.push(m);
+				}
+			}
+		}).mount("#app")
 
-        connection.start()
-            .then(() => {
-                console.log("connection");
-            })
-            .catch((err) => {
-                console.log(err.toString());
-            });
 
-        connection.on("UpdContent", (connection) => {
-            var li = document.createElement("li");
-            li.setAttribute("class", "list-group-item");
-            li.textContent = connection;
-            document.getElementById("connectingList").appendChild(li);
-        });
-
-        connection.on("UpdSelfID", (id) => {
-            var selfID = document.getElementById("SelfID");
-            selfID.innerHTML = id;
-        });
-
-        connection.on("updmsg", (msg, name) => {
-            var li = document.createElement("li");
-            li.setAttribute("class", "clearfix odd");
-            var textdiv=document.createElement("div");
-            textdiv.setAttribute("class","coversation-text")
-            var wrapdiv=document.createElement("div");
-            wrapdiv.setAttribute("class","ctext-wrap")
-            var i=document.createElement("i")
-            i.textContent=name;
-            var p=document.createElement("p")
-            p.textContent=msg;
-            wrapdiv.appendChild(i).appendChild(p)
-            textdiv.appendChild(wrapdiv);
-            li.appendChild(textdiv);
-            document.getElementById("messageList").appendChild(li);
-        });
-
-        connection.on("SendtoCaller", (msg, name) => {
-            var li = document.createElement("li");
-            li.setAttribute("class", "clearfix");
-            var textdiv = document.createElement("div");
-            textdiv.setAttribute("class", "coversation-text")
-            var wrapdiv = document.createElement("div");
-            wrapdiv.setAttribute("class", "ctext-wrap")
-            var i = document.createElement("i")
-            i.textContent = name;
-            var p = document.createElement("p")
-            p.textContent = msg;
-            wrapdiv.appendChild(i).appendChild(p)
-            textdiv.appendChild(wrapdiv);
-            li.appendChild(textdiv);
-            document.getElementById("messageList").appendChild(li);
-        });
-
-        document.getElementById("sendMsg").addEventListener("click", function (event) {
-            var message = document.getElementById("msgforadmin").value;
-            connection.invoke("SendMessage", message).catch((err)=>{
-                return console.log(err.toString())
-            });
-            document.getElementById("msgforadmin").value = "";
-            event.preventDefault();
-        });
-        
-    </script>
+	</script>
 }
