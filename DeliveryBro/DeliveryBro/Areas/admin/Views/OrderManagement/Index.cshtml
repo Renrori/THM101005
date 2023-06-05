@@ -179,10 +179,11 @@
         },
         methods:{
             deleteorder:function(id){
-                axios.post('/api/OrderManagement/Delete', { Id: id }).then(res => {
+                axios.delete('/api/OrderManagement/DeleteOrderManagement', { Id: id }).then(res => {
                     if(res.data)
                     {
-                        var idx = this.order.findIndex(x => x.orderID == id)
+                        alert("已刪除");
+                        var idx = this.order.findIndex(x => x.orderID == id);
                          this.order.splice(idx,1)
                         $("#deleteModal").modal("hide");
                     }

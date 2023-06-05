@@ -16,6 +16,37 @@ namespace DeliveryBro.Areas.admin.Controllers.ApiControllers
         {
             _db = context;
         }
+        [HttpPut]
+        public async Task<string> PutLevel(int id, [FromBody] LevelViewModel leViewModel)
+        {
+            if (id != leViewModel.LevelId)
+            {
+                return "修改失敗!";
+            }
+            Level le = await _context.Levels.FindAsync(id);
+            le.LevelId = leViewModel.LevelId;
+            le.Name = leViewModel.Name;
+
+            _context.Entry(le).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!LevelExists(id))
+                {
+                    return "修改失敗!";
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return "修改成功!";
+        }
         [HttpDelete]
         public async Task<string> DeleteOrderManagement(int id)
         {
@@ -58,4 +89,6 @@ namespace DeliveryBro.Areas.admin.Controllers.ApiControllers
     public class DeleteDto { 
            public int ID { get; set; } 
     }
+    public class EditDto 
+    { }
 }
