@@ -1,236 +1,237 @@
 ﻿@{
-    Layout = "_Layout";
+	Layout = "_Layout";
 }
 
 
 <div class="content-page" id="orderapp">
 
-    <!-- Modal -->
-@*    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    ...
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
-                </div>
-            </div>
-        </div>
-    </div>*@
-    <div class="content">
+	<!-- Modal -->
+	@*    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+	<div class="modal-content">
+	<div class="modal-header">
+	<h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+	<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+	</div>
+	<div class="modal-body">
+	...
+	</div>
+	<div class="modal-footer">
+	<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+	<button type="button" class="btn btn-primary">Save changes</button>
+	</div>
+	</div>
+	</div>
+	</div>*@
+	<div class="content">
 
-        <!-- Start Content-->
-        <div class="container-fluid">
+		<!-- Start Content-->
+		<div class="container-fluid">
 
-            <!-- start page title -->
-            <div class="row">
-                <div class="col-12">
-                    <div class="page-title-box">
-                        <div class="page-title-right">
-                            <ol class="breadcrumb m-0">
-                                <li class="breadcrumb-item"><a href="javascript: void(0);">Hyper</a></li>
-                                <li class="breadcrumb-item"><a href="javascript: void(0);">eCommerce</a></li>
-                                <li class="breadcrumb-item active">Orders</li>
-                            </ol>
-                        </div>
-                        <h4 class="page-title">Orders</h4>
-                    </div>
-                </div>
-            </div>
-            <!-- end page title -->
-
-            <div class="row">
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="row mb-2">
-                                <div class="col-xl-8">
-                                    @*<form class="row gy-2 gx-2 align-items-center justify-content-xl-start justify-content-between">
-                                        <div class="col-auto">
-                                            <label for="inputPassword2" class="visually-hidden">Search</label>
-                                            <input type="search" class="form-control" id="inputPassword2" placeholder="Search...">
-                                        </div>                                 
-                                    </form>*@
-                                </div>
-                                <div class="col-xl-4">
-                                    <div class="text-xl-end mt-xl-0 mt-2">
-                                        <button type="button" class="btn btn-danger mb-2 me-2"><i class="mdi mdi-basket me-1"></i> Add New Order</button>
-                                        <button type="button" class="btn btn-light mb-2">Export</button>
-                                    </div>
-                                </div><!-- end col-->
-                            </div>
-
-                            <div class="table-responsive">
-                                <table class="table table-centered table-nowrap mb-0">
-                                    <thead class="table-light">
-                                        <tr>
-                                             <th>OrderID</th>
-                                            <th>OrderDate</th>
-                                            <th>CustomerAddress</th>
-                                            <th>AmountAfterDiscount</th>
-                                            <th>Order Status</th>
-                                            <th style="width: 125px;">Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr v-for="item in order">
-                                            <td>{{item.orderId}}</td>
-                                            <td>{{item.orderDate}}</td>
-                                            <td>{{item.customerAddress}}</td>
-                                            <td>{{item.amountAfterDiscount}}</td>
-                                            <td>{{item.orderStatus}}</td>
-                                             <td>
-                                                <a href="javascript:void(0);" class="action-icon"> <i class="mdi mdi-eye"></i></a>
-                                                <a href="javascript:void(0);" class="action-icon" v-on:click="editorder(item.orderId)"> <i class="mdi mdi-square-edit-outline"></i></a>
-                                                <a href="javascript:void(0);" class="action-icon" v-on:click="deleteConfirm(item)" data-bs-toggle="modal" data-bs-target="#deleteModal"> <i class="mdi mdi-delete"></i></a>
-                                            </td>
-                                        </tr>
-
-                                        
-
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div> <!-- end card-body-->
-                    </div> <!-- end card-->
-                </div> <!-- end col -->
-            </div>
-            <!-- end row -->
-                   
-        </div> <!-- container -->        
-        
-    </div> <!-- content -->
-    <!-- Footer Start -->
-    <footer class="footer">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-md-6">
-                    
-                </div>
-                <div class="col-md-6">
-                    <div class="text-md-end footer-links d-none d-md-block">
-                        <a href="javascript: void(0);">About</a>
-                        <a href="javascript: void(0);">Support</a>
-                        <a href="javascript: void(0);">Contact Us</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </footer>
-    <!-- end Footer -->
-    @*編輯用的互動視窗*@
-    <div class="form-group">
-        <div class="modal fade" id="editModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="modalTitleId">編輯</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label class="form-label">OrderID</label>
-                            <input class="form-control" v-model="pporderId" readonly />
-                       </div>
-                        <div class="form-group">
-                            <label class="form-label">OrderDate</label>
-                            <input class="form-control" />
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">CustomerAddress</label>
-                            <input class="form-control" />
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">AmountAfterDiscount</label>
-                            <input class="form-control" />
-                        </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
-                        <button type="button" @@click="" class="btn btn-primary">儲存</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-<!-- Modal -->
-	<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h1 class="modal-title fs-5" id="exampleModalLabel">刪除ID:{{delInfo.title}}</h1>
-					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			<!-- start page title -->
+			<div class="row">
+				<div class="col-12">
+					<div class="page-title-box">
+						<div class="page-title-right">
+							<ol class="breadcrumb m-0">
+								<li class="breadcrumb-item"><a href="javascript: void(0);">Hyper</a></li>
+								<li class="breadcrumb-item"><a href="javascript: void(0);">eCommerce</a></li>
+								<li class="breadcrumb-item active">Orders</li>
+							</ol>
+						</div>
+						<h4 class="page-title">Orders</h4>
+					</div>
 				</div>
-				<div class="modal-body">
-                    確定要刪除嗎:{{delInfo.msg.orderID}},價格:{{delInfo.msg.amountAfterDiscount}},
+			</div>
+			<!-- end page title -->
+
+			<div class="row">
+				<div class="col-12">
+					<div class="card">
+						<div class="card-body">
+							<div class="row mb-2">
+								<div class="col-xl-8">
+									@*<form class="row gy-2 gx-2 align-items-center justify-content-xl-start justify-content-between">
+									<div class="col-auto">
+									<label for="inputPassword2" class="visually-hidden">Search</label>
+									<input type="search" class="form-control" id="inputPassword2" placeholder="Search...">
+									</div>
+									</form>*@
+								</div>
+								<div class="col-xl-4">
+									<div class="text-xl-end mt-xl-0 mt-2">
+										<button type="button" class="btn btn-danger mb-2 me-2"><i class="mdi mdi-basket me-1"></i> Add New Order</button>
+										<button type="button" class="btn btn-light mb-2">Export</button>
+									</div>
+								</div><!-- end col-->
+							</div>
+
+							<div class="table-responsive">
+								<table class="table table-centered table-nowrap mb-0">
+									<thead class="table-light">
+										<tr>
+											<th>OrderID</th>
+											<th>OrderDate</th>
+											<th>CustomerAddress</th>
+											<th>AmountAfterDiscount</th>
+											<th>Order Status</th>
+											<th style="width: 125px;">Action</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr v-for="item in order">
+											<td>{{item.orderId}}</td>
+											<td>{{item.orderDate}}</td>
+											<td>{{item.customerAddress}}</td>
+											<td>{{item.amountAfterDiscount}}</td>
+											<td>{{item.orderStatus}}</td>
+											<td>
+												<a href="javascript:void(0);" class="action-icon"> <i class="mdi mdi-eye"></i></a>
+												<a href="javascript:void(0);" class="action-icon" v-on:click="editorder(item.orderId)"> <i class="mdi mdi-square-edit-outline"></i></a>
+												<a href="javascript:void(0);" class="action-icon" v-on:click="deleteConfirm(item)" data-bs-toggle="modal" data-bs-target="#deleteModal"> <i class="mdi mdi-delete"></i></a>
+											</td>
+										</tr>
+
+
+
+									</tbody>
+								</table>
+							</div>
+						</div> <!-- end card-body-->
+					</div> <!-- end card-->
+				</div> <!-- end col -->
+			</div>
+			<!-- end row -->
+
+		</div> <!-- container -->
+
+	</div> <!-- content -->
+	<!-- Footer Start -->
+	<footer class="footer">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-md-6">
 				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">不要</button>
-                    <button type="button" class="btn btn-primary" @@click="deleteorder(delInfo.title)">要</button>
+				<div class="col-md-6">
+					<div class="text-md-end footer-links d-none d-md-block">
+						<a href="javascript: void(0);">About</a>
+						<a href="javascript: void(0);">Support</a>
+						<a href="javascript: void(0);">Contact Us</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</footer>
+	<!-- end Footer -->
+	@*編輯用的互動視窗*@
+	<div class="form-group">
+		<div class="modal fade" id="editModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="modalTitleId">編輯</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body">
+						<div class="form-group">
+							<label class="form-label">OrderID</label>
+							<input class="form-control" v-model="orderId" readonly />
+						</div>
+						<div class="form-group">
+							<label class="form-label">OrderDate</label>
+							<input class="form-control" v-model="orderDate"  />
+						</div>
+						<div class="form-group">
+							<label class="form-label">CustomerAddress</label>
+							<input class="form-control" v-model="customerAddress" />
+						</div>
+						<div class="form-group">
+							<label class="form-label">AmountAfterDiscount</label>
+							<input class="form-control" v-model="amountAfterDiscount" />
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
+							<button type="button" @@click="" class="btn btn-primary">儲存</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Modal -->
+		<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h1 class="modal-title fs-5" id="exampleModalLabel">刪除ID:{{delInfo.title}}</h1>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body">
+						確定要刪除嗎:{{delInfo.msg.orderID}},價格:{{delInfo.msg.amountAfterDiscount}},
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">不要</button>
+						<button type="button" class="btn btn-primary" @@click="deleteorder(delInfo.title)">要</button>
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
- </div>
 </div>
 <script type="text/javascript">
-    var app = new Vue({
-        el: '#orderapp',
-        data: {
-            order:[],
-            orderId: "", pporderId:"",
-
-            delInfo:{
-                title:"",
-                msg:{
-                      orderID:"",
-                      amountAfterDiscount:""
-                }
-            }
-        },
-        mounted:function() {
-            let salf=this;
-            axios('/api/OrderManagement/GetOrder')
-                .then(function(res){salf.order = res.data});
-                //.catch(function (error) { // 請求失敗
-                //    console.log(error);
-                //});
-        },
-        methods:{
-            editorder: function (orderId) {
-                //alert("edit");
-                $("#editModal").modal("show");
-                let _this = this;
-                for (var i = 0; i < _this.order.length; i++) {
-                    var item = _this.order[i];
-                    if (orderId == item.orderId) {
-                        _this.pporderId = item.orderId;
-                    }
-                    OrderList.push(item);
-                }
-                _this.order = OrderList;
-            },
-            deleteorder:function(id){
-                axios.delete('/api/OrderManagement/DeleteOrderManagement', { Id: id }).then(res => {
-                    if(res.data)
-                    {
-                        alert("已刪除");
-                        var idx = this.order.findIndex(x => x.orderID == id);
-                         this.order.splice(idx,1)
-                        $("#deleteModal").modal("hide");
-                    }
-                 })
-              },
-            deleteConfirm:function(item){
-                this.delInfo.title = item.orderID;
-                this.delInfo.msg.orderID = item.orderID;
-                this.delInfo.msg.amountAfterDiscount = item.amountAfterDiscount;
-            }        
-        }
-    })
+	var app = new Vue({
+		el: '#orderapp',
+		data: {
+			order: [],
+			orderId: "",
+			orderDate: "",
+			customerAddress: "",
+			amountAfterDiscount: "",
+			delInfo: {
+				title: "",
+				msg: {
+					orderID: "",
+					amountAfterDiscount: ""
+				}
+			}
+		},
+		mounted: function () {
+			let salf = this;
+			axios('/api/OrderManagement/GetOrder')
+				.then(function (res) { salf.order = res.data });
+			//.catch(function (error) { // 請求失敗
+			//    console.log(error);
+			//});
+		},
+		methods: {
+			editorder: function (orderId) {
+				//alert("edit");
+				$("#editModal").modal("show");
+				let _this = this;
+				for (var i = 0; i < _this.order.length; i++) {
+					var item = _this.order[i];
+					if (orderId == item.orderId) {
+						_this.orderId = item.orderId;
+						_this.orderDate = item.orderDate;
+						_this.customerAddress = item.customerAddress;
+						_this.amountAfterDiscount = item.amountAfterDiscount;
+					}
+				}
+			},
+			deleteorder: function (id) {
+				axios.delete('/api/OrderManagement/DeleteOrderManagement', { Id: id }).then(res => {
+					if (res.data) {
+						alert("已刪除");
+						var idx = this.order.findIndex(x => x.orderID == id);
+						this.order.splice(idx, 1)
+						$("#deleteModal").modal("hide");
+					}
+				})
+			},
+			deleteConfirm: function (item) {
+				this.delInfo.title = item.orderID;
+				this.delInfo.msg.orderID = item.orderID;
+				this.delInfo.msg.amountAfterDiscount = item.amountAfterDiscount;
+			}
+		}
+	})
 </script>
