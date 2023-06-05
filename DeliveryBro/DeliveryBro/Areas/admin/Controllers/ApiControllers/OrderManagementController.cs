@@ -89,6 +89,5 @@ namespace DeliveryBro.Areas.admin.Controllers.ApiControllers
     public class DeleteDto { 
            public int ID { get; set; } 
     }
-    public class EditDto 
-    { }
+    
 }
