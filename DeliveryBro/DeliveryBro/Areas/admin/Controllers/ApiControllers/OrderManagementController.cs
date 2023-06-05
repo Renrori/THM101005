@@ -1,4 +1,5 @@
-﻿using DeliveryBro.Areas.store.DTO;
+﻿using DeliveryBro.Areas.admin.Models.ViewModel;
+using DeliveryBro.Areas.store.DTO;
 using DeliveryBro.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -16,26 +17,40 @@ namespace DeliveryBro.Areas.admin.Controllers.ApiControllers
         {
             _db = context;
         }
-        [HttpPut]
-        public async Task<string> PutLevel(int id, [FromBody] LevelViewModel leViewModel)
+        [HttpGet]
+        public async Task<IEnumerable<OrderManagementDTO>> GetOrder()
         {
-            if (id != leViewModel.LevelId)
+            var Order = await _db.CustomerOrderTable
+             .Select(Order => new OrderManagementDTO
+             {
+                 OrderId = Order.OrderId,
+                 OrderDate = Order.OrderDate,
+                 OrderStatus = Order.OrderStatus,
+                 AmountAfterDiscount = Order.AmountAfterDiscount,
+                 CustomerAddress = Order.CustomerAddress
+             }).ToListAsync();
+
+            return Order;
+        }
+        [HttpPut]
+        public async Task<string> PutOrder(int id, [FromBody] OrderManagementDTO oddetailsdto)
+        {
+            if (id != oddetailsdto.OrderId)
             {
                 return "修改失敗!";
             }
-            Level le = await _context.Levels.FindAsync(id);
-            le.LevelId = leViewModel.LevelId;
-            le.Name = leViewModel.Name;
+            CustomerOrderTable od = await _db.CustomerOrderTable.FindAsync(id);
 
-            _context.Entry(le).State = EntityState.Modified;
+
+            _db.Entry(od).State = EntityState.Modified;
 
             try
             {
-                await _context.SaveChangesAsync();
+                await _db.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!LevelExists(id))
+                if (!OrderExists(id))
                 {
                     return "修改失敗!";
                 }
@@ -47,6 +62,8 @@ namespace DeliveryBro.Areas.admin.Controllers.ApiControllers
 
             return "修改成功!";
         }
+
+
         [HttpDelete]
         public async Task<string> DeleteOrderManagement(int id)
         {
@@ -59,7 +76,7 @@ namespace DeliveryBro.Areas.admin.Controllers.ApiControllers
             _db.CustomerOrderTable.Remove(r);
             try
             {
-                  await _db.SaveChangesAsync();
+                await _db.SaveChangesAsync();
             }
             catch (DbUpdateException ex)
             {
@@ -71,23 +88,12 @@ namespace DeliveryBro.Areas.admin.Controllers.ApiControllers
 
         ///api/OrderManagement/All <summary>
 
-        [HttpGet]
-        public object All()
-        {
-            var r =  _db.CustomerOrderTable.Select(r => new
-            {
-                OrderID = r.OrderId,
-                OrderDate = r.OrderDate.ToUniversalTime().ToLocalTime().ToString(),
-                CustomerAdd = r.CustomerAddress,
-                AmountAfterDiscount = r.AmountAfterDiscount,
-                OrderStatus = r.OrderStatus,
-            }).ToList();
-
-            return Ok(r);
-        }
-    }
-    public class DeleteDto { 
-           public int ID { get; set; } 
+     
+    
+   private bool OrderExists(int id)
+    {
+        return (_db.CustomerOrderTable ?.Any(e => e.OrderId == id)).GetValueOrDefault();
     }
     
+    }
 }
