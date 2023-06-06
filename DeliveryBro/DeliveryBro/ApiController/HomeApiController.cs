@@ -203,9 +203,10 @@ namespace DeliveryBro.ApiController
 
         [HttpPost("NewebPay")]
         //Post:/api/HomeApi/
-        public async Task<IActionResult> CreateNPOrder([FromBody] OrderViewModel order)
+        public async Task<IActionResult> CreateNPOrder([FromBody] NewebPayOrderViewModel order)
         {
             int Total = 0;
+            int _orderId = 0;
             if (order == null)
             {
                 return BadRequest();
@@ -227,11 +228,11 @@ namespace DeliveryBro.ApiController
                 _context.CustomerOrderTable.Add(cot);
                 await _context.SaveChangesAsync();
 
-                int orderId = cot.OrderId; //儲存訂單的自動識別ID
+                _orderId = cot.OrderId; //儲存訂單的自動識別ID
 
                 foreach (var od in order.OrderDetailViewModels)
                 {
-                    od.OrderId = orderId;
+                    od.OrderId = _orderId;
                     var checkOd = _context.MenuTable.Include(m => m.Restaurant)
                         .Where(m => m.Restaurant.RestaurantId == order.RestaurantId && m.DishStatus == "ongoing")
                         .FirstOrDefault(d => d.DishId == od.DishId); //搜尋對應的資料庫商品
@@ -266,10 +267,10 @@ namespace DeliveryBro.ApiController
 
             NewebPayViewModel npOrder = new NewebPayViewModel
             {
-                OrderId = order.OrderId,
+                OrderId = _orderId,
                 OrderTotal = Total,
-                PayCardType = "CREDIT"
-
+                PayCardType = "CREDIT",
+                Email = order.Email,
             };
 
             return Ok(npOrder);
