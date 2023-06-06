@@ -26,7 +26,7 @@ namespace DeliveryBro.ApiController
             string statusValue = Request.Form["Status"];
             if (statusValue != "SUCCESS")
             {
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("FinalOrderListPayfail", "Home");
             }
             //// 接收參數
             StringBuilder receive = new StringBuilder();
@@ -52,7 +52,7 @@ namespace DeliveryBro.ApiController
             userOrder.Payment = "已付款";
             _context.Entry(userOrder).State = EntityState.Modified;
             await _context.SaveChangesAsync();
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("FinalOrderListPaydone", "Home");
         }
 
         public string DecryptAESHex(string source, string cryptoKey, string cryptoIV)
