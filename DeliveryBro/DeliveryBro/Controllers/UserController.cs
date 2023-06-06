@@ -23,20 +23,14 @@ namespace DeliveryBro.Controllers
         {
             return View();
         }
-        //public Task<IActionResult> Login(LoginViewModel lm)
-        //{
-        //    //比對是否存在此ID用戶
-        //    var user = _context.CustomersTable.FirstOrDefault(x => x.CustomerId == lm.UserID && x.CustomerPassword == lm.UserPassword);
-        //    if (user != null)
-        //    { 
-
-
-        //    }
-
-        //    return View();
-        //}
+       
         [Authorize(Roles = "User", AuthenticationSchemes = "CustomerAuthenticationScheme")]
         public IActionResult UserHome()
+        {
+            return View();
+        }
+        [Authorize(Roles = "User", AuthenticationSchemes = "CustomerAuthenticationScheme")]
+        public IActionResult UserOrder()
         {
             return View();
         }
@@ -45,6 +39,11 @@ namespace DeliveryBro.Controllers
         {
             return View();
         }
+        public IActionResult UserAddress()
+        {
+            return View();
+        }
+        
 
     }
 }

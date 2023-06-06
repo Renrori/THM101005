@@ -69,12 +69,12 @@ namespace DeliveryBro
                 opt.AccessDeniedPath = "/admin/Account/Logout";
                 opt.ExpireTimeSpan = TimeSpan.FromMinutes(10);
             })
-            .AddGoogle("google", googleOptions =>
+            .AddGoogle("Google", googleOptions =>
             {
                 googleOptions.ClientId = builder.Configuration["Authentication:Google:ClientId"];
                 googleOptions.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
             })
-            .AddFacebook("facebook", facebookOptions =>  //"Facebook"
+            .AddFacebook("Facebook", facebookOptions =>  //"Facebook"
             {
                 //¨ú¥Îª÷Æ_¦r¦ê
                 facebookOptions.AppId = builder.Configuration["Authentication:Facebook:AppId"];

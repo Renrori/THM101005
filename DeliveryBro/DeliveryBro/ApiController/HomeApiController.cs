@@ -74,7 +74,7 @@ namespace DeliveryBro.ApiController
 
 
         
-        [HttpGet("{id}")]
+        [HttpGet("{id:guid}")]
         // Get:/api/HomeApi/1
         //之後改成傳物件呼叫形式
         public async Task<IEnumerable<MenuViewModel>> GetProduct(Guid id)
@@ -120,13 +120,21 @@ namespace DeliveryBro.ApiController
             return pd.AsQueryable();
         }
 
-        [HttpGet("getpic/{storeId}")]
+        [HttpGet("getpic/{storeId:guid}")]
         // Get:/api/HomeApi/getpic/1
         //叫用商店圖片方法，傳入StoreId回傳圖片
         public async Task<IActionResult> GetPictureStore(Guid storeId)
         {
             RestaurantTable c = await _context.RestaurantTable.FindAsync(storeId);
             byte[] imgUrl = c?.RestaurantPicture;
+
+            if (c == null || c.RestaurantPicture == null)
+            {
+                string imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "image", "noimgmed.png");
+                byte[] fakeImageBytes = await System.IO.File.ReadAllBytesAsync(imagePath);
+                return File(fakeImageBytes, "image/png");
+            }
+
             return File(imgUrl, "img/jpeg");
 
         }
@@ -191,6 +199,81 @@ namespace DeliveryBro.ApiController
                 return BadRequest("訂單上傳失敗");
             }
             return Ok("訂單上傳成功");
+        }
+
+        [HttpPost("NewebPay")]
+        //Post:/api/HomeApi/
+        public async Task<IActionResult> CreateNPOrder([FromBody] NewebPayOrderViewModel order)
+        {
+            int Total = 0;
+            int _orderId = 0;
+            if (order == null)
+            {
+                return BadRequest();
+            }
+            try
+            {
+                CustomerOrderTable cot = new CustomerOrderTable
+                {
+                    OrderId = order.OrderId,
+                    CustomerAddress = order.CustomerAddress,
+                    ShippingFee = order.ShippingFee,
+                    Payment = order.Payment,
+                    OrderDate = DateTime.UtcNow,
+                    OrderStatus = order.OrderStatus,
+                    Note = order.Note,
+                    CustomerId = order.CustomerId,
+                    RestaurantId = order.RestaurantId,
+                };
+                _context.CustomerOrderTable.Add(cot);
+                await _context.SaveChangesAsync();
+
+                _orderId = cot.OrderId; //儲存訂單的自動識別ID
+
+                foreach (var od in order.OrderDetailViewModels)
+                {
+                    od.OrderId = _orderId;
+                    var checkOd = _context.MenuTable.Include(m => m.Restaurant)
+                        .Where(m => m.Restaurant.RestaurantId == order.RestaurantId && m.DishStatus == "ongoing")
+                        .FirstOrDefault(d => d.DishId == od.DishId); //搜尋對應的資料庫商品
+
+                    if (checkOd == null)
+                    {
+                        return BadRequest("訂單商品已有異動，請重新確認");
+                    }
+
+                    OrderDetailsTable odt = new OrderDetailsTable  //打印訂單Entity
+                    {
+                        OrderId = od.OrderId,
+                        DishId = od.DishId,
+                        OrderDate = DateTime.UtcNow.Date,
+                        UnitPrice = checkOd.DishPrice,
+                        Quantity = od.Quantity,
+                        DishName = checkOd.DishName,
+                    };
+                    odt.Subtotal = odt.UnitPrice * odt.Quantity;
+                    Total += odt.Subtotal;
+                    _context.OrderDetailsTable.Add(odt);
+                }
+                await _context.SaveChangesAsync();
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return BadRequest("訂單上傳失敗");
+            }
+
+
+            NewebPayViewModel npOrder = new NewebPayViewModel
+            {
+                OrderId = _orderId,
+                OrderTotal = Total,
+                PayCardType = "CREDIT",
+                Email = order.Email,
+            };
+
+            return Ok(npOrder);
         }
     }
 }
