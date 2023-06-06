@@ -20,6 +20,12 @@
     <link href="~/store/vendor/simple-datatables/style.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" type="text/css">
     <link href="~/store/css/style.css" rel="stylesheet" asp-append-version="true"/>
+
+    <link href="~/lib/admin/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+	
+    <script src="~/lib/admin/assets/js/hyper-config.js"></script>
+	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
     @await RenderSectionAsync("Styles", required: false)
 </head>
 <body>
@@ -357,17 +363,20 @@
     </footer><!-- End Footer -->
 
     <script src="~/store/vendor/apexcharts/apexcharts.min.js"></script>
-    <script src="~/store/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    @*<script src="~/store/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>*@
+	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/store/vendor/chart.js/chart.umd.js"></script>
     <script src="~/store/vendor/echarts/echarts.min.js"></script>
     <script src="~/store/vendor/quill/quill.min.js"></script>
     <script src="~/store/vendor/simple-datatables/simple-datatables.js"></script>
     <script src="~/store/vendor/tinymce/tinymce.min.js"></script>
     <script src="~/store/vendor/php-email-form/validate.js"></script>
+	<script src="~/store/js/main.js"></script>
 
-    <!-- Template Main JS File -->
-    <script src="~/store/js/main.js" ></script>
-	
+    <script src="~/lib/admin/assets/js/vendor.min.js"></script>
+    <script src="~/lib/admin/assets/vendor/apexcharts/apexcharts.min.js"></script>
+	<script src="~/lib/admin/assets/js/app.min.js"></script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

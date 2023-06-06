@@ -8,28 +8,20 @@ connection.start()
         console.log(err.toString());
     });
 
+var count = 0;
 connection.on("UpdContent", (connection) => {
     var li = document.createElement("li");
-    li.setAttribute("class", "list-group-item");
+    li.setAttribute("class", "connection-list");
     li.textContent = connection;
     document.getElementById("connectingList").appendChild(li);
+    document.getElementsByClassName("connection-list")[count].addEventListener("click", reply);
+    count++;
 });
 
-document.getElementsByTagName("li")[0].addEventListener("click", (event) => {
-    var connectionId = event.target.textContent;
-    console.log(event.target.value)
-    
-})
-
-document.getElementById("sendMsg").addEventListener("click", function (event) {
-    var message = document.getElementById("msgforcaller").value;
-    var connectionId = event.target.textContent;
-        connection.invoke("SendMessagetoCaller", message, connectionId).catch((err) => {
-            return console.log(err.toString())
-        });
-        document.getElementById("msgforcaller").value = "";
-        event.preventDefault();
-});
+function reply(e) {
+    var who = document.getElementById("callerId");
+    who.innerHTML = e.target.innerText;
+}
 
 connection.on("UpdSelfID", (id) => {
     var selfID = document.getElementById("SelfID");
@@ -40,7 +32,7 @@ connection.on("SendtoAdmin", (msg, name) => {
     var li = document.createElement("li");
     li.setAttribute("class", "clearfix");
     var textdiv = document.createElement("div");
-    textdiv.setAttribute("class", "coversation-text")
+    textdiv.setAttribute("class", "conversation-text")
     var wrapdiv = document.createElement("div");
     wrapdiv.setAttribute("class", "ctext-wrap")
     var i = document.createElement("i")
@@ -51,5 +43,33 @@ connection.on("SendtoAdmin", (msg, name) => {
     textdiv.appendChild(wrapdiv);
     li.appendChild(textdiv);
     document.getElementById("messageList").appendChild(li);
+});
+
+connection.on("Aupdmsg", (msg, name) => {
+    var li = document.createElement("li");
+    li.setAttribute("class", "clearfix odd");
+    var textdiv = document.createElement("div");
+    textdiv.setAttribute("class", "conversation-text")
+    var wrapdiv = document.createElement("div");
+    wrapdiv.setAttribute("class", "ctext-wrap")
+    var i = document.createElement("i")
+    i.textContent = name;
+    var p = document.createElement("p")
+    p.textContent = msg;
+    wrapdiv.appendChild(i).appendChild(p)
+    textdiv.appendChild(wrapdiv);
+    li.appendChild(textdiv);
+    document.getElementById("messageList").appendChild(li);
+});
+
+document.getElementById("sendMsg").addEventListener("click", function (event) {
+    var message = document.getElementById("msgforcaller").value;
+    var caller = document.getElementById("callerId").innerText.split(":");
+    var connectionId=caller.pop().trim();
+    connection.invoke("SendMessagetoCaller", message, connectionId).catch((err) => {
+        return console.log(err.toString())
+    });
+    document.getElementById("msgforcaller").value = "";
+    event.preventDefault();
 });
 

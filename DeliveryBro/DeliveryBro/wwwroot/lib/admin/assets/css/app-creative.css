@@ -14914,17 +14914,17 @@ html[data-theme=dark] .btn-dark {
 
 .badge-danger-lighten {
   --ct-badge-color: #fa6767 !important;
-  background-color: rgba(250, 103, 103, 0.18);
+  /*background-color: rgba(250, 103, 103, 0.18);*/
 }
 .badge-danger-lighten[href] {
   color: #fa6767;
   text-decoration: none;
-  background-color: rgba(250, 103, 103, 0.18);
+  /*background-color: rgba(250, 103, 103, 0.18);*/
 }
 .badge-danger-lighten[href]:hover, .badge-danger-lighten[href]:focus {
   color: #fa6767;
   text-decoration: none;
-  background-color: rgba(250, 103, 103, 0.4);
+  /*background-color: rgba(250, 103, 103, 0.4);*/
 }
 
 .badge-light-lighten {
