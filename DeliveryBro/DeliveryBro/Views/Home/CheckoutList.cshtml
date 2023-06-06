@@ -110,7 +110,7 @@
                                 <div class="form-group">
                                     <div class="col-md-12">
                                         <div class="radio">
-                                            <input type="radio" name="optradio" class="mr-2" value="PaybyCreditCard" v-model="selectedPage"> 信用卡付款
+                                            <input type="radio" name="optradio" class="mr-2" value="PaybyCreditCard" v-model="      "> 信用卡付款
                                         </div>
                                     </div>
                                 </div>
@@ -154,11 +154,14 @@
     <script src="https://unpkg.com/vue@3.2.36/dist/vue.global.prod.js"></script>
     <script src="~/axios/axios.min.js"></script>
     <script>
+        var baseAddress = "https://localhost:7163/api/HomeApi";
         var vueApp = {
             data() {
                 return {
                     cartItems: [],
                     totalAmount: 0,
+                    RestaurantId: "",
+                    CustomerId: "",
                     CustomerAddress: "",
                     CustomerPhone: "",
                     CustomerEmail: "",
@@ -166,9 +169,14 @@
                     note: "",
                     ShippingFee: 0,
                     Discount: 0,
+                    //subtotal: 0,
                     Takeout: null,
                     AmountAfterDiscount: 0,
-                    selectedPage: null
+                    orderStatus: "waiting",
+                    Payment: "未付款",
+                    OrderDetailViewModels: [],
+                    selectedPage: null,
+                    selectedNPPage: null,
                 };
             },
             mounted() {
@@ -177,6 +185,9 @@
                 const checkoutdata = JSON.parse(decodeURIComponent(Jsondata));
                 this.cartItems = checkoutdata.items;
                 this.totalAmount = checkoutdata.totalAmount;
+
+                this.updateRestaurantId()
+                this.CustomerId = "@User.Claims.FirstOrDefault(c => c.Type == "CustomerId")?.Value";
             },
             methods: {
                 calculateAmount() {
@@ -204,18 +215,80 @@
                         //console.log(Jsondata);
                         window.location.href = `${this.selectedPage}?data=${Jsondata}`;
                     }
+                    else if (this.selectedNPPage) {
+                        //const PayCreditCardData = {
+                        //    items: this.cartItems,
+                        //    totalAmount: this.totalAmount,
+                        //    CustomerAddress: this.CustomerAddress,
+                        //    CustomerPhone: this.CustomerPhone,
+                        //    CustomerEmail: this.CustomerEmail,
+                        //    CouponID: this.CouponID,
+                        //    note: this.note,
+                        //    ShippingFee: this.ShippingFee,
+                        //    Discount: this.Discount,
+                        //    AmountAfterDiscount: this.AmountAfterDiscount
+                        //};
+                        //const Jsondata = JSON.stringify(PayCreditCardData);
+                        ////確認console在f12
+                        ////console.log(Jsondata);
+                        //window.location.href = `${this.selectedNPPage}?data=${Jsondata}`;
+                        this.submitNPOrder(); //ok
+                    }
                 },
-                addShippingFee(event){
+                submitNPOrder() {
+                    this.OrderDetailViewModels = this.cartItems.map(item => {
+                        return {
+                            //RestaurantId: item.storeId,
+                            DishId: item.dishId,
+                            DishName: item.dishName,
+                            UnitPrice: item.dishPrice,
+                            Quantity: item.dishCount,
+                            Subtotal: this.subtotal,
+                            Total: this.AmountAfterDiscount
+                        }
+                    });
+                    const submitOrder = {
+                        CustomerAddress: this.CustomerAddress,
+                        ShippingFee: this.ShippingFee,
+                        Payment: this.Payment,
+                        Email: this.CustomerEmail,
+                        OrderStatus: this.orderStatus,
+                        Note: this.note,
+                        CustomerId: this.CustomerId,
+                        RestaurantId: this.RestaurantId,
+                        OrderDetailViewModels: this.OrderDetailViewModels
+                    };
+                    axios.post(`${baseAddress}/NewebPay`, submitOrder)
+                        .then(response => {
+                            console.log("成功respone");
+                            console.log(response.submitOrder);
+                            this.OrderResult = true;
+                        }).catch(error => {
+                            console.error(error);
+                        });
+                },
+                addShippingFee(event) {
                     if (event.target.value === "ship") {
                         this.ShippingFee = 60;
                     } else {
                         this.ShippingFee = 0;
                     }
+                },
+                updateRestaurantId() {
+                    // 將找到的相同 RestaurantId 賦值給外部的 restaurantId 變數
+                    this.RestaurantId = this.duplicateRestaurantId;
                 }
             },
             computed: {
                 isValid() {
                     return this.CustomerAddress && this.CustomerPhone && this.CustomerEmail;
+                },
+                duplicateRestaurantId() {
+                    const duplicate = this.cartItems.find((item, index, array) => {
+                        return array.findIndex((otherItem) => otherItem.storeId === item.storeId) === index;
+                    });
+
+                    return duplicate ? duplicate.storeId : '';
                 }
             }
 

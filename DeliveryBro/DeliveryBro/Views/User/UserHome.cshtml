@@ -122,32 +122,36 @@
                         </div>
                     </form>
                 </div>
-                <div class="col-xl-3">
-                    <h2 class="mb-5"></h2>
-                    <div class="col-sm-11">
-                        <img v-if="CustomerInfo.userPicture!=null" :src="getCustomerPic(CustomerInfo.userPicture)" class="border border-dark d-block rounded"
-                             alt="暫無圖片"
-                             width="250"
-                             height="250" />
-                        <img v-else-if="CustomerInfo.userPicture==null" :src="getCustomerPic(CustomerInfo.userPicture)"
-                             class="border border-dark d-block rounded"
-                             alt="暫無圖片"
-                             width="250"
-                             height="250" />
-                        <br />
-                        <div class="row justify-content-end">
-                            <div class="col-12 col-sm-6">
-                                <input ref="fileInput" type="file" style="display: none" @@change="handleFileSelect" />
-                                <button class="btn btn-primary w-100" @@click="openFilePicker"><i class="fa-solid fa-image"></i>選取圖片</button>
-                            </div>
-                            <div class="col-12 col-sm-5">
-                                <button class="btn btn-primary w-100" @@click="uploadFile" :disabled="!selectedFilePath">
-                                    上傳
-                                </button>
-                            </div>
-                            <div class="col-11">
-                                <div class="d-flex">
-                                    <input type="text" class="form-control" placeholder="/path" v-model="selectedFilePath" required>
+                <div class="col-lg-3">
+                    <div class="card position-sticky top-0">
+                        <div class="p-3 bg-light bg-opacity-10">
+                            <h2 class="mb-4"></h2>
+                            <div class="col-sm-12">
+                                <img v-if="CustomerInfo.userPicture!=null" :src="getCustomerPic(CustomerInfo.userPicture)" class="border border-dark d-block rounded"
+                                     alt="暫無圖片"
+                                     width="230"
+                                     height="230" />
+                                <img v-else-if="CustomerInfo.userPicture==null" :src="getCustomerPic(CustomerInfo.userPicture)"
+                                     class="border border-dark d-block rounded"
+                                     alt="暫無圖片"
+                                     width="250"
+                                     height="250" />
+                                <br />
+                                <div class="row justify-content-center">
+                                    <div class="col-12 col-sm-6">
+                                        <input ref="fileInput" type="file" style="display: none" @@change="handleFileSelect" />
+                                        <button class="btn btn-primary w-100" @@click="openFilePicker"><i class="fa-solid fa-image"></i>選取圖片</button>
+                                    </div>
+                                    <div class="col-12 col-sm-5">
+                                        <button class="btn btn-primary w-100" @@click="uploadFile" :disabled="!selectedFilePath">
+                                            上傳
+                                        </button>
+                                    </div>
+                                    <div class="col-11">
+                                        <div class="d-flex">
+                                            <input type="text" class="form-control" placeholder="/path" v-model="selectedFilePath" required>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
