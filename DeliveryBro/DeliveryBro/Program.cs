@@ -7,6 +7,8 @@ using Microsoft.EntityFrameworkCore;
 using DeliveryBro.Services;
 using DeliveryBro.Areas.store.Hubs;
 using DeliveryBro.Areas.store.SubscribeTableDependency;
+using System;
+using Microsoft.OpenApi.Models;
 
 namespace DeliveryBro
 {
@@ -15,9 +17,9 @@ namespace DeliveryBro
 		public static void Main(string[] args)
 		{
 			var builder = WebApplication.CreateBuilder(args);
-
-			// Add services to the container.
-			var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+            builder.Services.AddSwaggerGen();
+            // Add services to the container.
+            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 			builder.Services.AddDbContext<ApplicationDbContext>(options =>
 				options.UseSqlServer(connectionString));
 
@@ -26,9 +28,8 @@ namespace DeliveryBro
 				options.UseSqlServer(DeliveryBroconnectionString));
 
 			builder.Services.AddSingleton<subscribeOrder>();
-			
 
-			builder.Services.AddSignalR();
+            builder.Services.AddSignalR();
 
 			builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
@@ -89,7 +90,9 @@ namespace DeliveryBro
 			if (app.Environment.IsDevelopment())
 			{
 				app.UseMigrationsEndPoint();
-			}
+                app.UseSwagger();
+                app.UseSwaggerUI();
+            }
 			else
 			{
 				app.UseExceptionHandler("/Home/Error");
@@ -104,6 +107,7 @@ namespace DeliveryBro
 
             app.UseAuthentication();
             app.UseAuthorization();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

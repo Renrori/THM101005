@@ -64,13 +64,13 @@ namespace DeliveryBro.Areas.admin.Controllers.ApiControllers
         }
 
 
-        [HttpDelete]
-        public async Task<string> DeleteOrderManagement(int id)
+        [HttpDelete("{Id:int}")]
+        public async Task<string> Delete(int Id)
         {
-            var r = await _db.CustomerOrderTable.FindAsync(id);
+            var r = await _db.CustomerOrderTable.Where(x=> x.OrderId == Id).FirstOrDefaultAsync();
             if (r == null)
             {
-                return "刪除成功";
+                return "找不到資料";
             }
 
             _db.CustomerOrderTable.Remove(r);
@@ -80,7 +80,7 @@ namespace DeliveryBro.Areas.admin.Controllers.ApiControllers
             }
             catch (DbUpdateException ex)
             {
-                return "刪除失敗!";
+                return "刪除失敗!" + ex.Message;
             }
 
             return "刪除成功!";
