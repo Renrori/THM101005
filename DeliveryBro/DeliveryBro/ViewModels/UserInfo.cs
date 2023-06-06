@@ -15,5 +15,6 @@ namespace DeliveryBro.ViewModels
 		public UserInfo Receiver { get; set; }
 		public string Message { get; set; }
 		public long TimeStamp { get; set; }
+		public bool read { get; set; }
 	}
 }

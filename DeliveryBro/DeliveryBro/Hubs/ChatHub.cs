@@ -26,7 +26,7 @@ namespace DeliveryBro.Hubs
 		{
 			var u = Context.User.GetInfo();
 			u.ConnectionId = Context.ConnectionId;
-			await Clients.Group("adminGroup").ToAdminMessage(u.ConnectionId, u.UserId.ToString(), u.Name, u.Role, message);
+			await Clients.Group("adminGroup").ToAdminMessage(u.ConnectionId, u.UserId.ToString(), u.Name, u.Role, message,false);
 			var admins = AllUser.Where(x => x.Value.Role == "Administrator").ToList();			
 			foreach (var admin in admins)
 			{
@@ -35,24 +35,38 @@ namespace DeliveryBro.Hubs
 					Message = message,
 					TimeStamp = DateTime.UtcNow.Ticks,
 					Sender = u,
-					Receiver = admin.Value
+					Receiver = admin.Value,
+					read=false
 				});
-			}			
+			}
+			await Clients.Group("adminGroup").NotifyNewMessage(u.UserId.ToString());
 		}
 		public async Task SendMessagetoCaller(string message, string connectionid,string userid)
         {
             var u=Context.User.GetInfo();
 			var r = AllUser.FirstOrDefault(x => x.Key == new Guid(userid));
 			if(r.Value==null) r=OfflineUser.FirstOrDefault(x=>x.Key == new Guid(userid));
-			await Clients.Client(userid).ToStoreMessage(u.ConnectionId, u.UserId.ToString(), u.Name, u.Role, message);			
+			await Clients.Client(userid).ToStoreMessage(u.ConnectionId, u.UserId.ToString(), u.Name, u.Role, message,false);			
 			chatMessages.Add(new ChatMessage
 			{
 				Message = message,
 				TimeStamp = DateTime.UtcNow.Ticks,
 				Sender = u,
-				Receiver = r.Value
+				Receiver = r.Value,
+				read=false
 			});
 
+		}
+		public async Task UnRead()
+		{
+			var unReadMsgFromWho = chatMessages.Where(x => x.read == false).GroupBy(x => x.Sender.UserId).Select(q => q.Key.ToString()).ToList();
+			await Clients.Group("adminGroup").UnReadMessage(unReadMsgFromWho);
+		}
+		public async Task ReadStatus(string guid)
+		{
+			var Messages=chatMessages.Where(x=>x.Sender.UserId.ToString() == guid);
+			foreach(var message in Messages) 
+				message.read = true;
 		}
 		public async Task GetHistoryMessage(string guid)
 		{

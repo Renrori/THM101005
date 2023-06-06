@@ -295,7 +295,7 @@
 								</ul>
 							</div>
 							<div class="tab-content">
-								<div class="tab-pane show active card-body pb-0" id="newpost">
+								<div class="tab-pane show active card-body pb-0" id="UsersOn">
 									<!-- start search box -->
 									<div class="app-search">
 									<form>
@@ -310,7 +310,7 @@
 									<!-- users -->
 									<div class="row">
 										<div class="col">
-											<div class="card-body py-0 mb-3 tab-pane fade show active" id="UsersOn" data-simplebar style="max-height: 546px">
+											<div class="card-body py-0 mb-3 tab-pane fade show active"  data-simplebar style="max-height: 546px">
 												<template v-for="user in UserOn">
 													<a href="javascript:void(0);" class="text-body" @@click.prevent="switchConversation(user)">
 														<div class="d-flex align-items-start mt-1 p-2" v-bind:class="{ 'bg-light':user.userId == currentChatUser.userId}">
@@ -319,9 +319,9 @@
 																	<span class="float-end text-muted font-12">{{user.role}}</span>
 																	{{user.name}}
 																</h5>
-																<p class="mt-1 mb-0 text-muted font-14">
+																<p class="mt-1 mb-0 text-muted font-14 ">
 																	<span class="w-25 float-end text-end">
-																		<span class="badge badge-danger-lighten">3</span>
+																		<span class="badge badge-danger-lighten" :style="{'content-visibility':UnReadNotify(user.userId)}">新訊息</span>
 																	</span>
 																	<span class="w-75">{{user.connectionId}}</span>
 																</p>
@@ -329,9 +329,25 @@
 														</div>
 													</a>
 												</template>
+											</div> <!-- End col -->
+										</div> <!-- end users -->
+									</div>
+								</div> <!-- end slimscroll-->
 
-											</div> <!-- end slimscroll-->
-											<div class="card-body py-0 mb-3 tab-pane fade" id="UsersOff" data-simplebar style="max-height: 546px">
+								<div class="tab-pane card-body pb-0" id="UsersOff">
+									<!-- start search box -->
+									<div class="app-search">
+										<form>
+											<div class="mb-2 w-100 position-relative">
+												<input type="search" class="form-control"
+													   placeholder="People, groups & messages..." />
+												<span class="mdi mdi-magnify search-icon"></span>
+											</div>
+										</form>
+									</div>
+									<div class="row">
+										<div class="col">
+											<div class="card-body py-0 mb-3 tab-pane fade show active" data-simplebar style="max-height: 546px">
 												<template v-for="user in UserOff">
 													<a href="javascript:void(0);" class="text-body" @@click.prevent="switchConversation(user)">
 														<div class="d-flex align-items-start mt-1 p-2" v-bind:class="{ 'bg-light':user.userId == currentChatUser.userId}">
@@ -342,7 +358,7 @@
 																</h5>
 																<p class="mt-1 mb-0 text-muted font-14">
 																	<span class="w-25 float-end text-end">
-																		<span class="badge badge-danger-lighten">3</span>
+																		<span class="badge badge-danger-lighten" :style="{'content-visibility':UnReadNotify(user.userId)}">新訊息</span>
 																	</span>
 																	<span class="w-75">{{user.connectionId}}</span>
 																</p>
@@ -350,11 +366,11 @@
 														</div>
 													</a>
 												</template>
-
 											</div> <!-- end slimscroll-->
-										</div> <!-- End col -->
-									</div> <!-- end users -->
+										</div>
+									</div>
 								</div>
+										
 							</div> <!-- end tab content-->
 							<!-- end card-body-->
 						</div> <!-- end card-->
@@ -499,13 +515,16 @@
 						userId: "",
 						role: ""
 					},
+					unReadUsers:[]
 				};
 			},
 			computed: {
 				displayMessage: function () {
 					let self = this;
-					var obj = this.allMessage.find(x => x.key == self.currentChatUser.userId);
+					var obj = self.allMessage.find(x => x.key == self.currentChatUser.userId);
 					if (obj) {
+						for(let m of obj.msg) m.read=true;
+						self.signalr.invoke("ReadStatus", self.currentChatUser.userId);
 						return obj.msg;
 					}
 					return [];
@@ -517,6 +536,7 @@
 				_this.signalr.start()
 					.then(() => {
 						console.log("connection");
+						_this.signalr.invoke("UnRead");
 					})
 					.catch((err) => {
 						console.log(err.toString());
@@ -528,6 +548,8 @@
 				_this.signalr.on("SendSelfId", _this.getSelfInfo);
 				_this.signalr.on("ToAdminMessage", _this.fromUserMessage);
 				_this.signalr.on("GetHistoryMessage", _this.getHistoryMessage);
+				_this.signalr.on("NotifyNewMessage", _this.ReadMessage);
+				_this.signalr.on("UnReadMessage", _this.UnReadMessage);
 			},
 			methods: {
 				getSelfInfo: function (id, userid, name, role) {
@@ -551,7 +573,8 @@
 						message: self.message,
 						userId: self.thisUser.userId,
 						name: self.thisUser.name,
-						role: self.thisUser.role
+						role: self.thisUser.role,
+						read:false
 					};
 					var idx = self.allMessage.findIndex(x => x.key == self.currentChatUser.userId)
 					self.allMessage[idx].msg.push(newmsg);
@@ -593,14 +616,15 @@
 					var idx = this.UserOn.findIndex(x => x.userId == guid)
 					if (idx != -1) this.UserOn.splice(idx, 1);
 				},
-				fromUserMessage: function (connectionId, userId, name, role, message) {
+				fromUserMessage: function (connectionId, userId, name, role, message,read) {
 					console.log('fromUserMessage');
 					var newMsg = {
 						connectionId: connectionId,
 						message: message,
 						userId: userId,
 						name: name,
-						role: role
+						role: role,
+						read:read
 					};
 					var idx = this.allMessage.findIndex(x => x.key == userId);
 					if (idx == -1) {
@@ -613,12 +637,40 @@
 					} else {
 						this.allMessage[idx].msg.push(newMsg);
 					}
+
+				},
+				UnReadMessage:function(userIds){
+					let self=this;
+					self.unReadUsers=userIds;
+				},
+				UnReadNotify:function(userId){
+					let self=this;
+					for (let id of self.unReadUsers)
+					{
+						if(id==userId) return
+					}
+					return "hidden";
+				},
+				ReadMessage:function(userId){
+					let self=this;
+					if (this.currentChatUser.userId != userId || this.currentChatUser.userId == "") {
+						self.unReadUsers.push(userId);
+					}
+				},
+				IsRead:function(userId){
+					let self=this;
+					var idx=self.allMessage.findIndex(x=>x.userId==userId)
+					var length=self.allMessage[idx].msg.length
+					if(self.allMessage[idx].msg[length-1]==true) return hidden;
+					else return;
 				},
 				switchConversation: function (user) {
 					let self = this;
 					self.currentChatUser = user;
-					console.table(user);
 					self.signalr.invoke("GetHistoryMessage", user.userId);
+					var idx = self.unReadUsers.findIndex(x=>x.userId);
+					self.unReadUsers.splice(idx,1);
+					console.table(user);
 				},
 				getHistoryMessage: function (msgJson) {
 					let self = this;
@@ -631,14 +683,15 @@
 							message: x.Message,
 							userId: x.Sender.UserId,
 							name: x.Sender.Name,
-							role: x.Sender.Role
+							role: x.Sender.Role,
+							read:x.read
 						}
 					});
 					var idx = self.allMessage.findIndex(x => x.key == self.currentChatUser.userId);
 					if (idx == -1) {
 						var obj = {
 							key: self.currentChatUser.userId,
-							msg: []
+							msg: [],
 						};
 						for (let m of msgs) {
 							obj.msg.push(m);
