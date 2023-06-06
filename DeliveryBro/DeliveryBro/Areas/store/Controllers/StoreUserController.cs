@@ -326,7 +326,7 @@ namespace DeliveryBro.Areas.store.Controllers
         {
             if (ModelState.IsValid)
             {
-                var id = User.GetId(User.GetRole());//呼叫函式
+                var id = User.GetId();//呼叫函式
 
 				var user = await _db.RestaurantTable.FindAsync(id);
 				if (user.RestaurantPassword == _passwordEncyptService.PasswordEncrypt(model.OldPassword))

@@ -28,14 +28,11 @@ namespace DeliveryBro.Extensions
 			}
 			return result;
 		}
-		public static Guid GetId(this ClaimsPrincipal claimsPrincipal,string role)
+		public static Guid GetId(this ClaimsPrincipal claimsPrincipal)
 		{
 			Claim? temp;
-           if (role=="Store")
-				temp=claimsPrincipal.Claims.FirstOrDefault(c => c.Type.Contains("Id"));
-			else if(role== "Administrator")
-                temp=claimsPrincipal.Claims.FirstOrDefault(c => c.Type.Contains("Id"));
-			else return Guid.Empty;
+			temp=claimsPrincipal.Claims.FirstOrDefault(c => c.Type.Contains("Id"));
+			if(temp==null) return Guid.Empty;
 			return Guid.Parse(temp.Value);
 		}
 		public static string GetRole(this ClaimsPrincipal claimsPrincipal)
