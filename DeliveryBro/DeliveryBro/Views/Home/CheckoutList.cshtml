@@ -110,7 +110,7 @@
                                 <div class="form-group">
                                     <div class="col-md-12">
                                         <div class="radio">
-                                            <input type="radio" name="optradio" class="mr-2" value="PaybyCreditCard" v-model="      "> 信用卡付款
+                                            <input type="radio" name="optradio" class="mr-2" value="PaybyCreditCard" v-model="selectedNPPage"> 信用卡付款
                                         </div>
                                     </div>
                                 </div>
@@ -276,9 +276,9 @@
                     axios.post(`${baseAddress}/NewebPay`, submitOrder)
                         .then(response => {
                             console.log("成功respone");
-                            console.log(response.submitOrder);
-                            //this.OrderResult = true;
-                            window.location.href = `${this.selectedNPPage}?data=${Jsondata}`
+                            console.log(response);
+                            const submitOrderJson = JSON.stringify(response.data);
+                            window.location.href = `${this.selectedNPPage}?data=${submitOrderJson}`
                         }).catch(error => {
                             console.error(error);
                         });

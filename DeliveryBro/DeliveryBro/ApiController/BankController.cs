@@ -24,9 +24,9 @@ namespace DeliveryBro.ApiController
         }
 
         [HttpPost]
-        public async Task SpgatewayPayBillAsync(string ordernumber, int amount, string payType)
+        public async Task SpgatewayPayBillAsync(string ordernumber, int amount, string payType,string email)
         {
-            string version = "2.0";
+            string version = "1.5";
 
             // 目前時間轉換 +08:00, 防止傳入時間或Server時間時區不同造成錯誤
             DateTimeOffset taipeiStandardTimeOffset = DateTimeOffset.Now.ToOffset(new TimeSpan(8, 0, 0));
@@ -47,7 +47,7 @@ namespace DeliveryBro.ApiController
                 // * 訂單金額
                 Amt = amount,
                 // * 商品資訊
-                ItemDesc = "商品資訊(自行修改)",
+                ItemDesc = "商品",
                 // 繳費有效期限(適用於非即時交易)
                 ExpireDate = null,
                 // 支付完成 返回商店網址
@@ -59,7 +59,7 @@ namespace DeliveryBro.ApiController
                 // 支付取消 返回商店網址
                 ClientBackURL = null,
                 // * 付款人電子信箱
-                Email = "",
+                Email = email,
                 // 付款人電子信箱 是否開放修改(1=可修改 0=不可修改)
                 EmailModify = 0,
                 // 商店備註
@@ -67,9 +67,9 @@ namespace DeliveryBro.ApiController
                 // 信用卡 一次付清啟用(1=啟用、0或者未有此參數=不啟用)
                 CREDIT = 1,
                 // WEBATM啟用(1=啟用、0或者未有此參數，即代表不開啟)
-                WEBATM = 1,
+                WEBATM = 0,
                 // ATM 轉帳啟用(1=啟用、0或者未有此參數，即代表不開啟)
-                VACC = 1,
+                VACC = 0,
                 // 超商代碼繳費啟用(1=啟用、0或者未有此參數，即代表不開啟)(當該筆訂單金額小於 30 元或超過 2 萬元時，即使此參數設定為啟用，MPG 付款頁面仍不會顯示此支付方式選項。)
                 CVS = null,
                 // 超商條碼繳費啟用(1=啟用、0或者未有此參數，即代表不開啟)(當該筆訂單金額小於 20 元或超過 4 萬元時，即使此參數設定為啟用，MPG 付款頁面仍不會顯示此支付方式選項。)
