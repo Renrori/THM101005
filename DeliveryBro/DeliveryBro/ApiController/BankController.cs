@@ -59,7 +59,7 @@ namespace DeliveryBro.ApiController
                 // 支付取消 返回商店網址
                 ClientBackURL = null,
                 // * 付款人電子信箱
-                Email = "reds1210@gmail.com",
+                Email = "",
                 // 付款人電子信箱 是否開放修改(1=可修改 0=不可修改)
                 EmailModify = 0,
                 // 商店備註

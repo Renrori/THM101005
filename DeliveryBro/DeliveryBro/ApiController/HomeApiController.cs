@@ -268,7 +268,7 @@ namespace DeliveryBro.ApiController
             {
                 OrderId = order.OrderId,
                 OrderTotal = Total,
-                PayCardType = "CREDIT "
+                PayCardType = "CREDIT"
 
             };
 
