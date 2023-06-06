@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using DeliveryBro.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Specialized;
 using System.Text;
 using System.Web;
@@ -10,15 +12,24 @@ namespace DeliveryBro.ApiController
     [ApiController]
     public class CallBackURLApiController : ControllerBase
     {
-        public IActionResult CallbackReturn()
+        private readonly sql8005site4nownetContext _context;
+
+        public CallBackURLApiController(sql8005site4nownetContext context)
         {
-            // 接收參數
-            StringBuilder receive = new StringBuilder();
-            foreach (var item in Request.Form)
+            _context = context;
+        }
+        public async Task<IActionResult> CallbackReturn()
+        {
+            if (Request.Form["status"] != "success")
             {
-                receive.AppendLine(item.Key + "=" + item.Value + "<br>");
+                return RedirectToAction("Index", "Home");
             }
-            
+            //// 接收參數
+            StringBuilder receive = new StringBuilder();
+            //foreach (var item in Request.Form)
+            //{
+            //    receive.AppendLine(item.Key + "=" + item.Value + "<br>");
+            //}
 
             // 解密訊息
             IConfiguration Config = new ConfigurationBuilder().AddJsonFile("appSettings.json").Build();
@@ -33,6 +44,9 @@ namespace DeliveryBro.ApiController
                 receive.AppendLine(key + "=" + decryptTradeCollection[key] + "<br>");
             }
 
+            CustomerOrderTable userOrder = await _context.CustomerOrderTable.FindAsync(decryptTradeCollection["MerchantOrderNo"]);
+            userOrder.Payment = "已付款";
+            _context.Entry(userOrder).State = EntityState.Modified;
 
             return RedirectToAction("Index", "Home");
         }

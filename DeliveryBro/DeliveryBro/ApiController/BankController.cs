@@ -12,7 +12,7 @@ namespace DeliveryBro.ApiController
             MerchantID = "MS149059134",
             HashKey = "MKSORT4d0ti9JkiDhRQU5keB1l3EQ4Cr",
             HashIV = "C8OZkhuhY98SdP3P",
-            ReturnURL = "https://localhost:7163/Home/FinalOrderListPaydone",
+            ReturnURL = "https://localhost:7163/api/UserApi/CallbackReturn",
             NotifyURL = "http://yourWebsitUrl/Bank/SpgatewayNotify",
             CustomerURL = "http://yourWebsitUrl/Bank/SpgatewayCustomer",
             AuthUrl = "https://ccore.newebpay.com/MPG/mpg_gateway",
