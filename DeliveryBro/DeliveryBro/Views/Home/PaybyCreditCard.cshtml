@@ -28,13 +28,17 @@
                             </div>
                             <div id="collapsePP" class="accordion-collapse collapse show" data-bs-parent="#accordionPayment" style="">
                                 <div class="accordion-body">
-                                    <div class="px-2 col-lg-6 mb-3" style="display: none;">
+                                    <div class="px-2 col-lg-6 mb-3">
                                         <label class="form-label">訂單編號</label>
-                                        <input type="text" name="ordernumber" class="form-control" placeholder="OrderID" v-model="OrderID" required>
+                                        <input type="text" name="ordernumber" class="form-control" placeholder="orderId" v-model="orderId" readonly>
                                     </div>
                                     <div class="px-2 col-lg-6 mb-3">
                                         <label class="form-label">訂單金額</label>
-                                        <input type="text" name="amount" class="form-control" placeholder="AmountAfterDiscount" v-model="AmountAfterDiscount" readonly>
+                                        <input type="text" name="amount" class="form-control" placeholder="orderTotal" v-model="orderTotal" readonly>
+                                    </div>
+                                    <div class="px-2 col-lg-6 mb-3">
+                                        <label class="form-label">Email</label>
+                                        <input type="text" name="email" class="form-control" placeholder="email" v-model="email" readonly>
                                     </div>
                                     <div class="px-2 col-lg-6 mb-3">
                                         <label class="form-label">訂單類型</label>
@@ -141,9 +145,10 @@
             data() {
                 return {
                     externalUrl: "https://ccore.newebpay.com/MPG/mpg_gateway",
-                    AmountAfterDiscount: 0,
-                    OrderID: 101,
-                    finalorderdata: ""
+                    orderTotal: 0,
+                    orderId: 0,
+                    payCardType: "",
+                    email: "",
                 }
             },
             mounted() {
@@ -151,9 +156,11 @@
                 const Jsondata = urlParams.get("data");
                 const finalorderdata = JSON.parse(decodeURIComponent(Jsondata));
 
-                //領出AmountAfterDiscount
-                this.AmountAfterDiscount = finalorderdata.AmountAfterDiscount;
-                this.finalorderdata = finalorderdata;
+                this.orderTotal = finalorderdata.orderTotal;
+                this.orderId = finalorderdata.orderId;
+                this.payCardType = finalorderdata.payCardType;
+                this.email = finalorderdata.email;
+                //this.finalorderdata = finalorderdata;
             },
             methods: {
                 SendtoPaydonePage(event) {

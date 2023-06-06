@@ -110,7 +110,7 @@
                                 <div class="form-group">
                                     <div class="col-md-12">
                                         <div class="radio">
-                                            <input type="radio" name="optradio" class="mr-2" value="PaybyCreditCard" v-model="      "> 信用卡付款
+                                            <input type="radio" name="optradio" class="mr-2" value="PaybyCreditCard" v-model="selectedNPPage"> 信用卡付款
                                         </div>
                                     </div>
                                 </div>
@@ -216,6 +216,7 @@
                         window.location.href = `${this.selectedPage}?data=${Jsondata}`;
                     }
                     else if (this.selectedNPPage) {
+                        this.submitNPOrder(); //ok
                         //const PayCreditCardData = {
                         //    items: this.cartItems,
                         //    totalAmount: this.totalAmount,
@@ -229,13 +230,27 @@
                         //    AmountAfterDiscount: this.AmountAfterDiscount
                         //};
                         //const Jsondata = JSON.stringify(PayCreditCardData);
-                        ////確認console在f12
-                        ////console.log(Jsondata);
+                        //確認console在f12
+                        //console.log(Jsondata);
                         //window.location.href = `${this.selectedNPPage}?data=${Jsondata}`;
-                        this.submitNPOrder(); //ok
+
                     }
                 },
                 submitNPOrder() {
+                    const PayCreditCardData = {
+                        items: this.cartItems,
+                        totalAmount: this.totalAmount,
+                        CustomerAddress: this.CustomerAddress,
+                        CustomerPhone: this.CustomerPhone,
+                        CustomerEmail: this.CustomerEmail,
+                        CouponID: this.CouponID,
+                        note: this.note,
+                        ShippingFee: this.ShippingFee,
+                        Discount: this.Discount,
+                        AmountAfterDiscount: this.AmountAfterDiscount
+                    };
+                    const Jsondata = JSON.stringify(PayCreditCardData);
+
                     this.OrderDetailViewModels = this.cartItems.map(item => {
                         return {
                             //RestaurantId: item.storeId,
@@ -261,8 +276,9 @@
                     axios.post(`${baseAddress}/NewebPay`, submitOrder)
                         .then(response => {
                             console.log("成功respone");
-                            console.log(response.submitOrder);
-                            this.OrderResult = true;
+                            console.log(response);
+                            const submitOrderJson = JSON.stringify(response.data);
+                            window.location.href = `${this.selectedNPPage}?data=${submitOrderJson}`
                         }).catch(error => {
                             console.error(error);
                         });

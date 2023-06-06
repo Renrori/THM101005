@@ -18,9 +18,13 @@ namespace DeliveryBro.ApiController
         {
             _context = context;
         }
+
+        [Route("CallBack")]
+        [HttpPost]
         public async Task<IActionResult> CallbackReturn()
         {
-            if (Request.Form["status"] != "success")
+            string statusValue = Request.Form["Status"];
+            if (statusValue != "SUCCESS")
             {
                 return RedirectToAction("Index", "Home");
             }
@@ -43,11 +47,11 @@ namespace DeliveryBro.ApiController
             {
                 receive.AppendLine(key + "=" + decryptTradeCollection[key] + "<br>");
             }
-
-            CustomerOrderTable userOrder = await _context.CustomerOrderTable.FindAsync(decryptTradeCollection["MerchantOrderNo"]);
+            
+            CustomerOrderTable userOrder = await _context.CustomerOrderTable.FindAsync(int.Parse(decryptTradeCollection["MerchantOrderNo"]));
             userOrder.Payment = "已付款";
             _context.Entry(userOrder).State = EntityState.Modified;
-
+            await _context.SaveChangesAsync();
             return RedirectToAction("Index", "Home");
         }
 
