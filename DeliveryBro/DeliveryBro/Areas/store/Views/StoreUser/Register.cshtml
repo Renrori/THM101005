@@ -1,4 +1,9 @@
-﻿<main>
+﻿<style>
+	#btnRegister {
+		background-color: #444444;
+	}
+</style>
+<main>
 	<div class="container">
 
 		<section class="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
@@ -20,7 +25,7 @@
 
 								<div class="pt-4 pb-2">
 									<h5 class="card-title text-center pb-0 fs-4">商家註冊</h5>
-									<p class="text-center small">Enter your personal details to create account</p>
+									<p class="text-center small">輸入商家詳細資訊以利創建帳戶</p>
 								</div>
 
 								@*有把下方form 裡面needs-validation" novalidate刪掉
@@ -48,7 +53,7 @@
 									<div class="col-12">
 										<label for="yourUsername" class="form-label">商家名稱</label>
 										<div class="input-group has-validation">
-											<span class="input-group-text" id="inputGroupPrepend">@@</span>
+											@*<span class="input-group-text" id="inputGroupPrepend">@@</span>*@
 											<input type="text" name="RestaurantName" class="form-control" id="RestaurantName" v-model="addForm.RestaurantName" required>
 											<div class="invalid-feedback">請填寫商家名稱</div>
 										</div>
@@ -72,18 +77,18 @@
 										<div class="invalid-feedback">請填寫商家信箱</div>
 									</div>
 
+									@*<div class="col-12">
+									<div class="form-check">
+									<input class="form-check-input" name="terms" type="checkbox" value="" id="acceptTerms" required>
+									<label class="form-check-label" for="acceptTerms">註冊表示同意商店服務條款與會員責任規範及個資聲明</label>
+									<div class="invalid-feedback">You must agree before submitting.</div>
+									</div>
+									</div>*@
 									<div class="col-12">
-										<div class="form-check">
-											<input class="form-check-input" name="terms" type="checkbox" value="" id="acceptTerms" required>
-											<label class="form-check-label" for="acceptTerms">註冊表示同意商店服務條款與會員責任規範及個資聲明</label>
-											<div class="invalid-feedback">You must agree before submitting.</div>
-										</div>
+										<button id="btnRegister" class="btn btn-primary w-100" type="submit">註冊</button>
 									</div>
 									<div class="col-12">
-										<button class="btn btn-primary w-100" type="submit">註冊</button>
-									</div>
-									<div class="col-12">
-										<p class="small mb-0">已經有商家帳號嗎? <a href="/store/StoreUser/Login">登入</a></p>
+										<p class="small mb-0">已經有商家帳號嗎? <a href="/store/StoreUser/Login" style="color:mediumblue">登入</a></p>
 									</div>
 								</form>
 
@@ -128,53 +133,53 @@
 						OpeningHours: '',
 						RestaurantDescription: "",
 						RestaurantPicture: "",//看menu 的 picture貼
-					};
-				},
-					methods: {
-					// 新增儲存
-					AddSave: function() {
-						let self = this;
-						// 組合表單資料
-						var postData = {
-							RestaurantAccount: self.RestaurantAccount,
-
-
-						};
-						postData['RestaurantAccount'] = self.addForm.RestaurantAccount;
-						postData['RestaurantPassword'] = self.addForm.RestaurantPassword;
-						postData['RestaurantName'] = self.addForm.RestaurantName;
-						postData['RestaurantAddress'] = self.addForm.RestaurantAddress;
-						postData['RestaurantPhone'] = self.addForm.RestaurantPhone;
-						postData['RestaurantEmail'] = self.addForm.RestaurantEmail;
-						postData['OpeningHours'] = self.addForm.OpeningHours;
-						postData['RestaurantDescription'] = self.addForm.RestaurantDescription;
-						postData['RestaurantPicture'] = self.addForm.RestaurantPicture;
-						axios.post(`/StoreUser/Register`, postData).then(response => {
-
-						})
-						// 使用 jQuery Ajax 傳送至後端
-						$.ajax({
-							url: '@Url.Content("~/Home/AddSave")',
-							method: 'POST',
-							dataType: 'json',
-							data: { inModel: postData, __RequestVerificationToken: $('@Html.AntiForgeryToken()').val() },
-							success: function (datas) {
-								if (datas.ErrMsg) {
-									alert(datas.ErrMsg);
-									return;
-								}
-
-								alert(datas.ResultMsg);
-							},
-							error: function (err) {
-								alert(err.status + " " + err.statusText + '\n' + err.responseText);
-							}
-						});
 					}
 				}
-			});
+			},
+			methods: {
+				// 新增儲存
+				AddSave: function () {
+					let self = this;
+					// 組合表單資料
+					var postData = {
+						RestaurantAccount: self.RestaurantAccount,
 
+					};
+					postData['RestaurantAccount'] = self.addForm.RestaurantAccount;
+					postData['RestaurantPassword'] = self.addForm.RestaurantPassword;
+					postData['RestaurantName'] = self.addForm.RestaurantName;
+					postData['RestaurantAddress'] = self.addForm.RestaurantAddress;
+					postData['RestaurantPhone'] = self.addForm.RestaurantPhone;
+					postData['RestaurantEmail'] = self.addForm.RestaurantEmail;
+					postData['OpeningHours'] = self.addForm.OpeningHours;
+					postData['RestaurantDescription'] = self.addForm.RestaurantDescription;
+					postData['RestaurantPicture'] = self.addForm.RestaurantPicture;
+					axios.post(`/StoreUser/Register`, postData).then(response => {
+
+					})
+					// 使用 jQuery Ajax 傳送至後端
+					$.ajax({
+						url: '@Url.Content("~/Home/AddSave")',
+						method: 'POST',
+						dataType: 'json',
+						data: { inModel: postData, __RequestVerificationToken: $('@Html.AntiForgeryToken()').val() },
+						success: function (datas) {
+							if (datas.ErrMsg) {
+								alert(datas.ErrMsg);
+								return;
+							}
+
+							alert(datas.ResultMsg);
+						},
+						error: function (err) {
+							alert(err.status + " " + err.statusText + '\n' + err.responseText);
+						}
+					});
 				}
-		var app = Vue.createApp(#vueRegister).mount("#app");
+			}
+		};
+	
+	
+		var app = Vue.createApp(vueRegister).mount("#app");
 	</script>
 }

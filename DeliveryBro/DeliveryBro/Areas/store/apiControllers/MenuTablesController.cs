@@ -15,7 +15,7 @@ namespace DeliveryBro.Areas.store.apiControllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
-	[Authorize]
+	[Authorize(Roles = "Store", AuthenticationSchemes = "StoreAuthenticationScheme")]
 	public class MenuTablesController : ControllerBase
 	{
 		private readonly sql8005site4nownetContext _context;
@@ -46,25 +46,25 @@ namespace DeliveryBro.Areas.store.apiControllers
 		}
 
 		// GET: api/MenuTables/5
-		[HttpGet("{id}")]
-		public async Task<MenuDTO> GetMenuTable(int id)
-		{
-			var menuTable = await _context.MenuTable.FindAsync(id);
+		//[HttpGet("{id}")]
+		//public async Task<MenuDTO> GetMenuTable(int id)
+		//{
+		//	var menuTable = await _context.MenuTable.FindAsync(id);
+			
+		//	MenuDTO menu = new MenuDTO
+		//	{
+		//		DishId = menuTable.DishId,
+		//		DishCategory = menuTable.DishCategory,
+		//		DishDescription = menuTable.DishDescription,
+		//		DishName = menuTable.DishName,
+		//		DishPrice = menuTable.DishPrice,
+		//		DishPicture = menuTable.DishPicture,
+		//		DishStatus = menuTable.DishStatus,
+		//		RestaurantId = 3
+		//	};
 
-			MenuDTO menu = new MenuDTO
-			{
-				DishId = menuTable.DishId,
-				DishCategory = menuTable.DishCategory,
-				DishDescription = menuTable.DishDescription,
-				DishName = menuTable.DishName,
-				DishPrice = menuTable.DishPrice,
-				DishPicture = menuTable.DishPicture,
-				DishStatus = menuTable.DishStatus,
-				RestaurantId = 3
-			};
-
-			return menu;
-		}
+		//	return menu;
+		//}
 		[HttpPut("status/{id}")]
 		public async Task<string> ChangeDishStatus(int id, MenuStatusDTO msDTO)
 		{
@@ -96,7 +96,8 @@ namespace DeliveryBro.Areas.store.apiControllers
 			if (id != int.Parse(form["DishId"]))
 			{
 				return "品項修改失敗";
-			}
+			};
+			var rid = User.GetId();
 			MenuTable menu = await _context.MenuTable.FindAsync(id);
 			menu.DishId = int.Parse(form["DishId"]);
 			menu.DishName = form["DishName"];
@@ -104,7 +105,7 @@ namespace DeliveryBro.Areas.store.apiControllers
 			menu.DishDescription = form["DishDescription"];
 			menu.DishCategory = form["DishCategory"];
 			menu.DishStatus = form["DishStatus"];
-			menu.RestaurantId = 3;
+			menu.RestaurantId = rid;
 			IFormFile picfile = form.Files.GetFile("DishPicture");
 			if (picfile != null)
 				await SetPic(menu, picfile);
@@ -152,6 +153,7 @@ namespace DeliveryBro.Areas.store.apiControllers
 		[HttpPost]
 		public async Task<string> PostMenuTable(IFormCollection form)
 		{
+			var id = User.GetId();
 			MenuTable menu = new MenuTable
 			{
 				DishId = int.Parse(form["DishId"]),
@@ -160,7 +162,7 @@ namespace DeliveryBro.Areas.store.apiControllers
 				DishDescription = form["DishDescription"],
 				DishCategory = form["DishCategory"],
 				DishStatus = form["DishStatus"],
-				RestaurantId = 3
+				RestaurantId = id
 			};
 			IFormFile picfile = form.Files.GetFile("DishPicture");
 			await SetPic(menu, picfile);

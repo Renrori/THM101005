@@ -20,6 +20,12 @@
     <link href="~/store/vendor/simple-datatables/style.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" type="text/css">
     <link href="~/store/css/style.css" rel="stylesheet" asp-append-version="true"/>
+
+    <link href="~/lib/admin/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+	
+    <script src="~/lib/admin/assets/js/hyper-config.js"></script>
+	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
     @await RenderSectionAsync("Styles", required: false)
 </head>
 <body>
@@ -27,7 +33,7 @@
     <header id="header" class="header fixed-top d-flex align-items-center">
 
         <div class="d-flex align-items-center justify-content-between">
-            <a class="logo d-flex align-items-center" asp-area="store" asp-controller="Home" asp-action="Index">
+            <a class="logo d-flex align-items-center" style="padding-left:0px;padding-right:0px" asp-area="store" asp-controller="Home" asp-action="Index">
                 @*logo*@
                 <span class="d-none d-lg-block">DeliveryBro</span>
             </a>
@@ -222,10 +228,45 @@
                         </li>
 
                         <li>
-                            <a class="dropdown-item d-flex align-items-center" href="#">
+                           @* <a class="dropdown-item d-flex align-items-center" href="#">
                                 <i class="bi bi-box-arrow-right"></i>
-                                <span>Sign Out</span>
-                            </a>
+                                <span>登出</span>
+                            </a>*@
+
+                            @{
+                                if (User.Identity.IsAuthenticated)
+                                {
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li class="nav-item">
+                                    <a class="dropdown-item d-flex align-items-center" asp-area="store" asp-controller="StoreUser" asp-action="Logout"><i class="fa-solid fa-xmark"></i>登出</a>
+                                </li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li class="nav-item">
+                                    <a class ="dropdown-item d-flex align-items-center">使用者:@User.Claims.FirstOrDefault(x=> x.Type == ClaimTypes.Name).Value</a>
+                                </li>
+                                }
+                                else
+                                {
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li class="nav-item">
+                                    <a class="dropdown-item d-flex align-items-center" asp-area="store" asp-controller="StoreUser" asp-action="Login"><i class="fa-solid fa-right-to-bracket"></i>登入</a>
+                                </li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li class="nav-item">
+                                    <a class="dropdown-item d-flex align-items-center" asp-area="store" asp-controller="StoreUser" asp-action="Register"><i class="fa-sharp fa-solid fa-registered"></i>註冊</a>
+                                </li>
+                                }
+
+                            }
+
                         </li>
 
                     </ul><!-- End Profile Dropdown Items -->
@@ -246,7 +287,7 @@
                 <a class="nav-link collapsed" asp-area="store" asp-controller="Home" asp-action="StoreInfo"><i class="fa-solid fa-store"></i>商店資訊</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link collapsed" asp-area="store" asp-controller="Home" asp-action="OrdersInTime"><i class="fa-solid fa-file-pen"></i>及時訂單</a>
+                <a class="nav-link collapsed" asp-area="store" asp-controller="Home" asp-action="OrdersInTime"><i class="fa-solid fa-file-pen"></i>即時訂單</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link collapsed" asp-area="store" asp-controller="Home" asp-action="HisOrder"><i class="fa-solid fa-file-lines"></i>歷史訂單</a>
@@ -271,7 +312,7 @@
             </li>
 *@
             @{
-                if (User.Identity.IsAuthenticated)
+                if (User.Identity.IsAuthenticated && User.IsInRole("Store"))
                 {
                     <li class="nav-item">
                         <a class="nav-link text-dark" asp-area="store" asp-controller="StoreUser" asp-action="Logout">登出</a>
@@ -286,7 +327,7 @@
                         <a class="nav-link text-dark" asp-area="store" asp-controller="StoreUser" asp-action="Login">登入</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="store" asp-controller="StoreUser" asp-action="Register">註冊</a>
+                        <a class="nav-link text-dark" asp-area="store" asp-controller="StoreUser" asp-action="Register"><i class="fa-sharp fa-solid fa-registered"註冊></i></a>
                     </li>
                 }
 
@@ -304,7 +345,7 @@
         </main>
     </div>
 
-    <footer id="footer" class="footer">
+    <footer id="footer" class="sfooter">
         <div class="copyright">
             &copy; Copyright <strong><span>NiceAdmin</span></strong>. All Rights Reserved
         </div>
@@ -322,17 +363,20 @@
     </footer><!-- End Footer -->
 
     <script src="~/store/vendor/apexcharts/apexcharts.min.js"></script>
-    <script src="~/store/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    @*<script src="~/store/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>*@
+	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/store/vendor/chart.js/chart.umd.js"></script>
     <script src="~/store/vendor/echarts/echarts.min.js"></script>
     <script src="~/store/vendor/quill/quill.min.js"></script>
     <script src="~/store/vendor/simple-datatables/simple-datatables.js"></script>
     <script src="~/store/vendor/tinymce/tinymce.min.js"></script>
     <script src="~/store/vendor/php-email-form/validate.js"></script>
+	<script src="~/store/js/main.js"></script>
 
-    <!-- Template Main JS File -->
-    <script src="~/store/js/main.js" ></script>
-	
+    <script src="~/lib/admin/assets/js/vendor.min.js"></script>
+    <script src="~/lib/admin/assets/vendor/apexcharts/apexcharts.min.js"></script>
+	<script src="~/lib/admin/assets/js/app.min.js"></script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

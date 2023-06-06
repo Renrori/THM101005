@@ -13,7 +13,7 @@ namespace DeliveryBro.Areas.store.apiControllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    [Authorize(Roles = "Store", AuthenticationSchemes = "StoreAuthenticationScheme")]
     public class StoreInfoController : ControllerBase
     {
         private readonly sql8005site4nownetContext _context;
@@ -28,6 +28,7 @@ namespace DeliveryBro.Areas.store.apiControllers
         // GET: api/RestaurantTables
         [HttpGet]
         public async Task<IQueryable<StoreInfoDTO>> GetRestaurantTable()
+        
         {
 			var id = User.GetId();
 			return _context.RestaurantTable.Where(x => x.RestaurantId == id).Select(x => new StoreInfoDTO
@@ -235,7 +236,7 @@ namespace DeliveryBro.Areas.store.apiControllers
                 .Select(q => new
                 {
                     Date = q.Key,
-                    Orders = _context.CustomerOrderTable.Where(x => x.RestaurantId == id  )
+                    Orders = _context.CustomerOrderTable.Where(x => x.RestaurantId == id && x.OrderStatus == "completed")
                             .Count(x=>x.OrderDate.Date.ToString() == DateTime.Today.Date.ToString()),
                     Revenue =q.SelectMany(o=>o.OrderDetailsTable).Sum(o=>o.Subtotal)
                 }) ;
@@ -243,7 +244,7 @@ namespace DeliveryBro.Areas.store.apiControllers
             return Ok(query);
         }
 
-        private bool RestaurantTableExists(int id)
+        private bool RestaurantTableExists(Guid id)
         {
             return (_context.RestaurantTable?.Any(e => e.RestaurantId == id)).GetValueOrDefault();
         }

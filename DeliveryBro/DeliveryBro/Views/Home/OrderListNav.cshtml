@@ -1,0 +1,132 @@
+﻿<div id="app">
+    <div class="container">
+        <div class="row no-gutters slider-text align-items-center justify-content-center">
+            <div class="col-md-9 text-center">
+                <h1 class="mb-0">購物車清單</h1>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="container">
+        <div class="row">
+            <div class="row justify-content-center col-md-12">
+                <div class="cart-list">
+                    <table class="table">
+                        <thead class="thead-primary">
+                            <tr class="text-center">
+                                <th>刪除</th>
+                                <th>商品名稱</th>
+                                <th>&nbsp;</th>
+                                <th>價格</th>
+                                <th>數量</th>
+                                <th>總金額</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr v-for="item in cartItems" :key="item.dishId">
+                                <td class="product-remove">
+                                    <button @@click="removeFromCart(item)">
+                                        <span class="ion-ios-close" @@click="removeFromCart(item)"></span>
+                                    </button>
+                                </td>
+                                <td>{{ item.dishName }}</td>
+                                <td>&nbsp;</td>
+                                <td>{{ item.dishPrice }}</td>
+                                <td>{{ item.dishCount }}</td>
+                                <td>{{ calculateSubtotal(item) }}</td>
+                            </tr>
+                        </tbody>
+                        <tfoot class="text-center">
+                            <tr>
+                                <td colspan="5" class="text-end">總計</td>
+                                <td class="text-end">{{ calculateTotal() }}</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row justify-content-end">
+                    <a class="btn btn-primary col-2 text-light" :href="CheckoutListUrl">確認明細</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+@section Scripts
+    {
+    @*<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>*@
+    <script src="https://unpkg.com/vue@3.2.36/dist/vue.global.prod.js"></script>
+    <script src="~/axios/axios.min.js"></script>
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const encodedData = urlParams.get("data");
+        const data = JSON.parse(decodeURIComponent(encodedData));
+
+        var vueApp = {
+            data() {
+                return {
+                    cartItems: data,
+                    dishCount: 1,
+                    totalAmount: 0
+                };
+            },
+            mounted() {
+                this.saveCartItemsToLocalStorage();
+            },
+            methods: {
+                calculateTotal() {
+                    let total = 0;
+                    for (let i = 0; i < this.cartItems.length; i++) {
+                        total += this.cartItems[i].dishPrice * this.cartItems[i].dishCount;
+                    }
+                    this.totalAmount = total;
+                    return total;
+                },
+                calculateSubtotal(item) {
+                    return item.dishPrice * item.dishCount;
+                },
+                removeFromCart(item) {
+                    const index = this.cartItems.findIndex(
+                        (cartItem) => cartItem.dishId === item.dishId
+                    );
+                    if (index !== -1) {
+                        this.cartItems.splice(index, 1);
+                        this.saveCartItemsToCookie();
+                    }
+                },
+                saveCartItemsToCookie() {
+                    const cartItemsJSON = JSON.stringify(this.cartItems);
+                    document.cookie = `cartItems=${cartItemsJSON};`;
+                },
+                saveCartItemsToLocalStorage() {
+                    localStorage.setItem('cartItems', JSON.stringify(this.cartItems));
+                }
+
+            },
+            computed: {
+                CheckoutListUrl() {
+                    const checkoutData = {
+                        items: this.cartItems,
+                        totalAmount: this.totalAmount,
+                    };
+                    const Jsondata = JSON.stringify(checkoutData);
+                    //確認console在f12
+                    console.log(Jsondata);
+                    return `CheckoutList?data=${encodeURIComponent(Jsondata)}`;
+                }
+            }
+        };
+        var app = Vue.createApp(vueApp).mount("#app");
+    </script>
+                }
+
+
+
+
+

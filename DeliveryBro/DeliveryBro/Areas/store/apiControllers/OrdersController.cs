@@ -13,7 +13,7 @@ namespace DeliveryBro.Areas.store.apiControllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
-	[Authorize]
+	[Authorize(Roles = "Store", AuthenticationSchemes = "StoreAuthenticationScheme")]
 	public class OrdersController : ControllerBase
 	{
 		private readonly sql8005site4nownetContext _context;
@@ -51,9 +51,9 @@ namespace DeliveryBro.Areas.store.apiControllers
 		[HttpGet("time")]
 		public async Task<IQueryable<HisOrderDTO>> OrderTime(DateTime? startdate, DateTime? enddate, int? id)
 		{
-
+			var rid= User.GetId();
 			var query = _context.CustomerOrderTable.Include(x => x.OrderDetailsTable)
-				   .Where(x => x.RestaurantId == 3 && x.OrderStatus == "completed");
+				   .Where(x => x.RestaurantId == rid && x.OrderStatus == "completed");
 			if (startdate.HasValue) query = query.Where(x => x.OrderDate >= startdate);
 			if (enddate.HasValue) query = query.Where(x => x.OrderDate <= enddate);
 			if (id.HasValue) query = query.Where(x => x.OrderId == id);

@@ -1,4 +1,6 @@
-﻿using DeliveryBro.Models;
+﻿using DeliveryBro.Areas.store.DTO;
+using DeliveryBro.Data;
+using DeliveryBro.Models;
 using DeliveryBro.ViewModels.Home;
 using DeliveryBro.ViewModels.User;
 using Microsoft.AspNetCore.Authentication;
@@ -9,10 +11,13 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using System.IO;
+using System.Text.Json;
 
 namespace DeliveryBro.ApiController
 {
     //[EnableCors("User")]  限制跨域來源
+    //[Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class UserApiController : ControllerBase
@@ -25,8 +30,8 @@ namespace DeliveryBro.ApiController
         }
 
         //GET: api/UserApi/23
-        [HttpGet("{customerId}")]
-        public async Task<IActionResult> GetUserInfo(int customerId)
+        [HttpGet("{customerId:guid}")]
+        public async Task<IActionResult> GetUserInfo(Guid customerId)
         {
             // 從資料庫中查找對應的用戶記錄
             var user = await _context.CustomersTable.FindAsync(customerId);
@@ -54,10 +59,10 @@ namespace DeliveryBro.ApiController
 
 
         //Put:api/UserApi/4
-        [HttpPut("{customerId}")]
-        public async Task<string> EditUserInfo(int customerId, EditUserInfoViewModel eui)
+        [HttpPut("{customerId:guid}")]
+        public async Task<string> EditUserInfo(Guid customerId, EditUserInfoViewModel eui)
         {
-            
+
 
             //Httpcontext
             CustomersTable userInfo = await _context.CustomersTable.FindAsync(customerId);
@@ -91,7 +96,123 @@ namespace DeliveryBro.ApiController
 
         }
 
-        private bool CustomerExists(int customerId)
+        [Route("CheckAdd/{customerId:guid}")]
+        [HttpPost]
+        public async Task<IActionResult> CheckAddress(Guid customerId , UserAddressViewModel address)
+        {
+            var userAddCount = _context.CustomerAddressTable.Where(x=>x.CustomerId == customerId).Count();
+
+            if(userAddCount == 0)
+            {
+                CustomerAddressTable userAdd = new CustomerAddressTable
+                {
+                    CustomerAddress = address.UserAddress,
+                    CustomerId = customerId
+                };
+                _context.CustomerAddressTable.Add(userAdd);
+                await _context.SaveChangesAsync();
+
+                return Ok("新增地址成功");
+            }
+
+           CustomerAddressTable userAddtar = _context.CustomerAddressTable.FirstOrDefault(x => x.CustomerId == customerId);
+            userAddtar.CustomerAddress = address.UserAddress;
+
+            _context.Entry(userAddtar).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+
+            return Ok("修改地址成功");
+        }
+
+        
+        public async Task<IEnumerable<UserOrderViewModel>> GetUserOrder(Guid customerId)
+        {
+            var orderDetails = _context.CustomerOrderTable
+            .Where(o => o.CustomerId == customerId && o.OrderStatus == "completed").OrderByDescending(x => x.OrderId).Select(o => new UserOrderViewModel
+            {
+                OrderId = o.OrderId,
+                OrderDate = o.OrderDate,
+                CustomerName = o.Customer.CustomerName,
+                Note = o.Note,
+                OrderDetails = o.OrderDetailsTable.Select(d => new UserOrderDetailsViewModel
+                {
+                    DishName = d.DishName,
+                    UnitPrice = d.UnitPrice,
+                    Quantity = d.Quantity,
+                    Discount = d.Discount,
+                    Subtotal = d.Subtotal
+                }).ToList(),
+                Total = o.OrderDetailsTable.Sum(o => o.Subtotal)
+            });
+
+            return orderDetails;
+        }
+
+
+
+        [HttpGet("waitorder/{customerId:guid}")]
+        public async Task<IEnumerable<UserOrderViewModel>> GetWaitOrder (Guid customerId)
+        {
+            var orderDetails = _context.CustomerOrderTable
+                .Where(o => o.CustomerId == customerId && (o.OrderStatus == "waiting" || o.OrderStatus == "accepted")).Select(o => new UserOrderViewModel
+                {
+                    OrderId = o.OrderId,
+                    OrderDate = o.OrderDate,
+                    CustomerName = o.Customer.CustomerName,
+                    Note = o.Note,
+                    OrderDetails = o.OrderDetailsTable.Select(d => new UserOrderDetailsViewModel
+                    {
+                        DishName = d.DishName,
+                        UnitPrice = d.UnitPrice,
+                        Quantity = d.Quantity,
+                        Discount = d.Discount,
+                        Subtotal = d.Subtotal
+                    }).ToList(),
+                    Total = o.OrderDetailsTable.Sum(o => o.Subtotal)
+                });
+
+            return orderDetails;
+        }
+
+        [HttpPost("pic/{customerId}")]
+        public async Task<IActionResult> PostUserPic(Guid customerId,IFormFile file)
+        {
+            if (file == null || file.Length <= 0)
+            {
+                return BadRequest("請選擇有效的圖片檔案");
+            }
+
+            byte[] photoBytes;
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                await file.CopyToAsync(memoryStream);
+                photoBytes = memoryStream.ToArray();
+            }
+
+            CustomersTable customerPic = await _context.CustomersTable.FindAsync(customerId);
+            if (customerPic == null)
+            {
+                return NotFound("找不到指定的客戶");
+            }
+            customerPic.CustomerPhoto = photoBytes;
+
+            await _context.SaveChangesAsync();
+
+            return Ok("上傳成功");
+        }
+        //public async Task<IActionResult> GetCity()
+        //{
+        //    string json = System.IO.File.ReadAllText("Data/CityCountry/CityCountyData.json");
+        //    var data = JsonSerializer.Deserialize<DataModel>(json);
+
+
+        //}
+        //private async Task SetPostUserPic(CustomersTable customers, IFormFile file)
+        //{
+        //    customers.CustomerPhoto = await PostUserPic(file);
+        //}
+
+        private bool CustomerExists(Guid customerId)
         {
             return (_context.CustomersTable?.Any(e => e.CustomerId == customerId)).GetValueOrDefault();
         }

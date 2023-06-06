@@ -8,8 +8,8 @@ namespace DeliveryBro.Models
     public partial class CustomerAddressTable
     {
         public int CustomerAddressId { get; set; }
-        public int CustomerId { get; set; }
         public string CustomerAddress { get; set; }
+        public Guid? CustomerId { get; set; }
 
         public virtual CustomersTable Customer { get; set; }
     }

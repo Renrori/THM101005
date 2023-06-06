@@ -13087,7 +13087,7 @@ html[data-theme=dark] .logo.logo-dark {
 
 .content-page {
   position: relative;
-  margin-left: var(--ct-leftbar-width);
+  /*margin-left: var(--ct-leftbar-width);*/
   min-height: calc(100vh - var(--ct-topbar-height) - 2px);
   padding: 0 0.75rem var(--ct-footer-height);
   -webkit-transition: all 0.25s ease-in-out;
@@ -14914,17 +14914,17 @@ html[data-theme=dark] .btn-dark {
 
 .badge-danger-lighten {
   --ct-badge-color: #fa6767 !important;
-  background-color: rgba(250, 103, 103, 0.18);
+  /*background-color: rgba(250, 103, 103, 0.18);*/
 }
 .badge-danger-lighten[href] {
   color: #fa6767;
   text-decoration: none;
-  background-color: rgba(250, 103, 103, 0.18);
+  /*background-color: rgba(250, 103, 103, 0.18);*/
 }
 .badge-danger-lighten[href]:hover, .badge-danger-lighten[href]:focus {
   color: #fa6767;
   text-decoration: none;
-  background-color: rgba(250, 103, 103, 0.4);
+  /*background-color: rgba(250, 103, 103, 0.4);*/
 }
 
 .badge-light-lighten {

@@ -1,4 +1,38 @@
-﻿<main>
+﻿<style>
+	#btnlogin {
+		background-color: #444444;
+	}
+
+	.swal-title {
+		font-size: 1.2em;
+		color: red;
+	}
+
+	.swal-text {
+		font-size: 16px;
+	}
+
+	.swal-button {
+		background-color: blue;
+		color: white;
+		padding: 3px 6px;
+	}
+
+	.swal-modal {
+		background-color: #444444;
+		/*border: 2px solid white;*/
+		font-size: 10pt;
+		height: 200px;
+		width: 200px;
+	}
+
+	.swal-icon--error {
+		height: 30px;
+		width: 30px;
+	}
+</style>
+
+<main>
 	<div class="container">
 
 		<section class="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
@@ -12,36 +46,32 @@
 								@*<span class="d-none d-lg-block">NiceAdmin</span>*@
 							</a>
 						</div><!-- End Logo -->
-						@{
-							if (ViewBag.Error != "")
-							{
-								<h1>@ViewBag.Error</h1>
-							}
+						<!--新增model-->
+						@*@{
+						if (ViewBag.Error != "")
+						{
+						<h1>@ViewBag.Error</h1>
 						}
+						}*@
+
 
 						<div class="card mb-3">
 
 							<div class="card-body">
 
-								@*@{
-									if (ViewBag.Error != "")
-									{
-										<h1>@ViewBag.Error</h1>
-									}
-								}*@
 								<div class="pt-4 pb-2">
 									<h5 class="card-title text-center pb-0 fs-4">商家登入</h5>
 									@*<p class="text-center small">登入您的帳號及密碼</p>*@
-									<hr/>
+									<hr />
 								</div>
 
 								<form action="/store/StoreUser/Login" method="post" class="row g-3 ">
-									
+
 									<div class="col-12">
 										<label for="yourUsername" class="form-label">商家帳號</label>
 										<div class="input-group has-validation">
 											@*<span class="input-group-text" id="inputGroupPrepend">@@</span>*@
-											<input type="text" name="Account" class="form-control" required >
+											<input type="text" name="Account" class="form-control" id="Account">
 											@*<div class="invalid-feedback">帳號為必填欄位</div>*@
 											@*<span asp-validation-for="account"></span>*@
 										</div>
@@ -49,29 +79,39 @@
 
 									<div class="col-12">
 										<label for="yourPassword" class="form-label">商家密碼</label>
-										<input type="password" name="Password" class="form-control" id="yourPassword" required >
+										<input type="password" name="Password" class="form-control" id="yourPassword">
 										@*<div class="invalid-feedback">密碼為必填欄位</div>*@
 									</div>
 
 									<div class="col-12">
-										<div class="form-check">
-											<input class="form-check-input" type="checkbox" name="remember" value="true" id="rememberMe">
-											<label class="form-check-label" for="rememberMe">記住我</label>
-										</div>
+										@*<div class="form-check">
+										<input class="form-check-input" type="checkbox" name="remember" value="true" id="rememberMe">
+										<label class="form-check-label" for="rememberMe">記住我</label>
+										</div>*@
 									</div>
 									<div class="col-12">
-										<button class="btn btn-primary w-100" type="submit">登入</button>
+										<button id="btnlogin" class="btn btn-primary w-100" type="submit">登入</button>
 
 									</div>
+
+									@*<div>
+									<a href="/store/StoreUser/FacebookLogin" class="btn btn-primary">FaceBook登入</a>
+									</div>*@
+
 									<div>
-										<a href="/Store/StoreUser/FacebookLogin" class="btn btn-primary">FaceBook登入</a>
+										<a class="btn btn-outline-secondary w-100" href="/store/StoreUser/Register" role="button">註冊</a>
+									</div>
+
+									<div>
+										<a class="btn btn-outline-secondary w-100" href="/store/StoreUser/ForgetPwd" role="button">忘記密碼</a>
+									</div>
+
+									@*<div>
+									<p class="btn btn-primary btn-sm"<a href="/store/StoreUser/Register" style="color:blue">註冊帳號</a></p>
 									</div>
 									<div>
-										<p class="small mb-0"><a href="/store/StoreUser/Register">註冊帳號</a></p>
-									</div>
-									<div>
-										<p class="small mb-0"><a href="/store/StoreUser/ForgetPwd">忘記密碼</a></p>
-									</div>
+									<p class="btn btn-primary btn-sm"<a href="/store/StoreUser/ForgetPwd" style="color:blue">忘記密碼</a></p>
+									</div>*@
 								</form>
 
 							</div>
@@ -92,6 +132,36 @@
 		</section>
 
 	</div>
-</main><!-- End #main -->
+</main>
+
+<!-- End #main -->
 
 <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+@section Scripts{
+	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+	<script>
+		let loginBtn = document.querySelector("#btnlogin"),//取值
+			Account = document.querySelector("#Account"),
+			Password = document.querySelector("#yourPassword")
+		loginBtn.addEventListener("click", () => {    //監聽
+			if (Account.value == "" && Account.value == "") {
+				swal({
+					title: "提醒",
+					text: "帳號或密碼錯誤",
+					icon: "error",
+					customClass: {
+						container: 'custom-swal-container',
+					},
+				});
+			} else {
+				const formData = new FormData()
+				formData.append("Account", Account.value)
+				formData.append("Password", Password.value)
+				axios.post("/store/StoreUser/Login", formData).then()
+			}
+			event.preventDefault()
+		})
+	</script>
+}
