@@ -24,14 +24,13 @@ namespace DeliveryBro.Controllers
         {
             return View();
         }
-
-        
+        [Authorize, AllowAnonymous]
         public IActionResult RestaurantMenu()
         {
 
             return View();
         }
-        
+        [Authorize, AllowAnonymous]
         public IActionResult OrderList()
         {
             return View();
@@ -41,7 +40,7 @@ namespace DeliveryBro.Controllers
         {
             return View();
         }
-        [Authorize(Roles ="User",AuthenticationSchemes = "CustomerAuthenticationScheme")]
+        [Authorize(Roles = "User",AuthenticationSchemes = "CustomerAuthenticationScheme")]
         public IActionResult CheckoutList()
         {
             return View();
@@ -56,11 +55,13 @@ namespace DeliveryBro.Controllers
         {
             return View();
         }
+        [Authorize(Roles = "User", AuthenticationSchemes = "CustomerAuthenticationScheme")]
         public IActionResult FinalOrderListPaydone()
         {
             return View();
         }
 
+        [Authorize(Roles = "User", AuthenticationSchemes = "CustomerAuthenticationScheme")]
         public IActionResult FinalOrderListPayfail()
         {
             return View();

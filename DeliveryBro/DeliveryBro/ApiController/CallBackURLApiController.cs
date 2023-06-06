@@ -30,11 +30,7 @@ namespace DeliveryBro.ApiController
             }
             //// 接收參數
             StringBuilder receive = new StringBuilder();
-            //foreach (var item in Request.Form)
-            //{
-            //    receive.AppendLine(item.Key + "=" + item.Value + "<br>");
-            //}
-
+           
             // 解密訊息
             IConfiguration Config = new ConfigurationBuilder().AddJsonFile("appSettings.json").Build();
             string HashKey = Config.GetSection("HashKey").Value;//API 串接金鑰
@@ -42,12 +38,7 @@ namespace DeliveryBro.ApiController
 
             string TradeInfoDecrypt = DecryptAESHex(Request.Form["TradeInfo"], HashKey, HashIV);
             NameValueCollection decryptTradeCollection = HttpUtility.ParseQueryString(TradeInfoDecrypt);
-            receive.Length = 0;
-            foreach (String key in decryptTradeCollection.AllKeys)
-            {
-                receive.AppendLine(key + "=" + decryptTradeCollection[key] + "<br>");
-            }
-            
+           
             CustomerOrderTable userOrder = await _context.CustomerOrderTable.FindAsync(int.Parse(decryptTradeCollection["MerchantOrderNo"]));
             userOrder.Payment = "已付款";
             _context.Entry(userOrder).State = EntityState.Modified;
