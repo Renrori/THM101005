@@ -27,6 +27,7 @@
     </ul>
 
 </aside><!-- End Sidebar-->
+<div id="app">
 <template>
     <div>
         <select v-model="selectedCity">
@@ -39,7 +40,8 @@
             <option v-for="district in selectedCityDistricts" :key="district.id" :value="district.name">{{ district.name }}</option>
         </select>
     </div>
-</template>
+    </template>
+</div>
 
 @section scripts
     {

@@ -217,40 +217,9 @@
                     }
                     else if (this.selectedNPPage) {
                         this.submitNPOrder(); //ok
-                        //const PayCreditCardData = {
-                        //    items: this.cartItems,
-                        //    totalAmount: this.totalAmount,
-                        //    CustomerAddress: this.CustomerAddress,
-                        //    CustomerPhone: this.CustomerPhone,
-                        //    CustomerEmail: this.CustomerEmail,
-                        //    CouponID: this.CouponID,
-                        //    note: this.note,
-                        //    ShippingFee: this.ShippingFee,
-                        //    Discount: this.Discount,
-                        //    AmountAfterDiscount: this.AmountAfterDiscount
-                        //};
-                        //const Jsondata = JSON.stringify(PayCreditCardData);
-                        //確認console在f12
-                        //console.log(Jsondata);
-                        //window.location.href = `${this.selectedNPPage}?data=${Jsondata}`;
-
                     }
                 },
                 submitNPOrder() {
-                    const PayCreditCardData = {
-                        items: this.cartItems,
-                        totalAmount: this.totalAmount,
-                        CustomerAddress: this.CustomerAddress,
-                        CustomerPhone: this.CustomerPhone,
-                        CustomerEmail: this.CustomerEmail,
-                        CouponID: this.CouponID,
-                        note: this.note,
-                        ShippingFee: this.ShippingFee,
-                        Discount: this.Discount,
-                        AmountAfterDiscount: this.AmountAfterDiscount
-                    };
-                    const Jsondata = JSON.stringify(PayCreditCardData);
-
                     this.OrderDetailViewModels = this.cartItems.map(item => {
                         return {
                             //RestaurantId: item.storeId,
