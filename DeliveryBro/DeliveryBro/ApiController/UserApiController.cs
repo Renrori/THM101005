@@ -16,6 +16,7 @@ using System.Text.Json;
 
 namespace DeliveryBro.ApiController
 {
+    [ApiExplorerSettings(IgnoreApi = true)]
     //[EnableCors("User")]  限制跨域來源
     //[Authorize]
     [Route("api/[controller]")]

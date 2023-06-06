@@ -14,16 +14,6 @@ using Microsoft.OpenApi.Models;
 
 namespace DeliveryBro
 {
-	public class Program
-	{
-		public static void Main(string[] args)
-		{
-			var builder = WebApplication.CreateBuilder(args);
-            builder.Services.AddSwaggerGen();
-            // Add services to the container.
-            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-			builder.Services.AddDbContext<ApplicationDbContext>(options =>
-				options.UseSqlServer(connectionString));
     public class Program
     {
         public static void Main(string[] args)
@@ -47,9 +37,8 @@ namespace DeliveryBro
             #region authentication
 
 			builder.Services.AddSingleton<subscribeOrder>();
-
             builder.Services.AddSignalR();
-
+            builder.Services.AddSwaggerGen();
 
             builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
             .AddCookie("CustomerAuthenticationScheme", opt =>
@@ -155,7 +144,7 @@ namespace DeliveryBro
                 endpoints.MapControllerRoute(
                     name: "admin",
                     pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
-
+            });
             app.MapControllerRoute(
                 name: "admin",
                 pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");

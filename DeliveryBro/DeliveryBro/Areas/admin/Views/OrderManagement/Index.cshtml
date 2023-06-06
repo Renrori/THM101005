@@ -1,5 +1,5 @@
 ﻿@{
-	Layout = "_Layout";
+	Layout = "_LayoutAdmin";
 }
 
 
@@ -200,18 +200,20 @@
 				}
 			},
 			deleteorder: function (id) {
-				axios.delete('/api/OrderManagement/DeleteOrderManagement/' + Id).then(res => {
+				axios.delete('/api/OrderManagement/Delete/' + id).then(res => {
 					if (res.data) {
 						alert("已刪除");
 						var idx = this.order.findIndex(x => x.orderID == id);
 						this.order.splice(idx, 1)
 						$("#deleteModal").modal("hide");
+                        axios('/api/OrderManagement/GetOrder')
+                            .then(function (res) { salf.order = res.data });
 					}
 				})
 			},
 			deleteConfirm: function (item) {
-				this.delInfo.title = item.orderID;
-				this.delInfo.msg.orderID = item.orderID;
+				this.delInfo.title = item.orderId;
+				this.delInfo.msg.orderID = item.orderId;
 				this.delInfo.msg.amountAfterDiscount = item.amountAfterDiscount;
 			}
 		}

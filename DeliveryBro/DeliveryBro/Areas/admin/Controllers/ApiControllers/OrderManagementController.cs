@@ -67,12 +67,17 @@ namespace DeliveryBro.Areas.admin.Controllers.ApiControllers
         [HttpDelete("{Id:int}")]
         public async Task<string> Delete(int Id)
         {
-            var r = await _db.CustomerOrderTable.Where(x=> x.OrderId == Id).FirstOrDefaultAsync();
+            var r = await _db.CustomerOrderTable.Include(o=> o.OrderDetailsTable).Where(x=> x.OrderId == Id).FirstOrDefaultAsync();
             if (r == null)
             {
                 return "找不到資料";
             }
 
+            foreach (var item in r.OrderDetailsTable)
+            {
+                _db.OrderDetailsTable.Remove(item);
+            }
+            
             _db.CustomerOrderTable.Remove(r);
             try
             {
