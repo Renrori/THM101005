@@ -201,5 +201,153 @@
         /// <para>例如：MOP = 446 ….</para>
         /// </summary>
         public int? DCC_Currency_Code { get; set; }
+
+        #endregion
+
+        #region WEBATM、ATM 繳費回傳參數
+
+        /// <summary>
+        /// 付款人金融機構代碼
+        /// <para>由代收款金融機構所回應的付款人金融機構代碼。</para>
+        /// </summary>
+        public string PayBankCode { get; set; }
+
+        /// <summary>
+        /// 付款人金融機構帳號末五碼
+        /// <para>由代收款金融機構所回應的付款人金融機構帳號末五碼。</para>
+        /// </summary>
+        public string PayerAccount5Code { get; set; }
+
+        #endregion
+
+        #region 超商代碼繳費回傳參數
+
+        /// <summary>
+        /// 繳費代碼
+        /// <para>繳費代碼。</para>
+        /// </summary>
+        public string CodeNo { get; set; }
+
+        /// <summary>
+        /// 繳費門市類別
+        /// <para>1=7-11 統一超商</para>
+        /// <para>2=全家便利商店</para>
+        /// <para>3=OK 便利商店</para>
+        /// <para>4=萊爾富便利商店</para>
+        /// </summary>
+        public int? StoreType { get; set; }
+
+        /// <summary>
+        /// 繳費門市代號
+        /// <para>繳費門市代號 (全家回傳門市中文名稱)</para>
+        /// </summary>
+        public string StoreID { get; set; }
+
+        #endregion
+
+        #region 超商條碼繳費回傳參數
+
+        /// <summary>
+        /// 第一段條碼
+        /// <para>繳費條碼第一段條碼資料。</para>
+        /// </summary>
+        public string Barcode_1 { get; set; }
+
+        /// <summary>
+        /// 第二段條碼
+        /// <para>繳費條碼第二段條碼資料。</para>
+        /// </summary>
+        public string Barcode_2 { get; set; }
+
+        /// <summary>
+        /// 第三段條碼
+        /// <para>繳費條碼第三段條碼資料。</para>
+        /// </summary>
+        public string Barcode_3 { get; set; }
+
+        /// <summary>
+        /// 繳費超商
+        /// <para>付款人至超商繳費，該收款超商的代碼，</para>
+        /// <para>  SEVEN：7-11</para>
+        /// <para>  FAMILY：全家</para>
+        /// <para>  OK：OK 超商</para>
+        /// <para>  HILIFE：萊爾富</para>
+        /// </summary>
+        public string PayStore { get; set; }
+
+        #endregion
+
+        #region Pay2go 電子錢包回傳參數
+
+        /// <summary>
+        /// P2G 交易序號
+        /// <para>P2G 在筆交易所產生的序號。</para>
+        /// </summary>
+        public string P2GTradeNo { get; set; }
+
+        /// <summary>
+        /// P2G 支付方式
+        /// <para>前面會為 P2G_ 開頭，說明如下：</para>
+        /// <para>  P2G 信用卡交易 P2GPaymentType = P2G_CREDIT</para>
+        /// <para>  P2G WEBATM 交易 P2GPaymentType = P2G_WEBATM</para>
+        /// <para>  P2G ATM 轉帳交易 P2GPaymentType = P2G_VACC</para>
+        /// <para>  P2G 超商代碼繳費交易 P2GPaymentType = P2G_CVS</para>
+        /// <para>  P2G 電子帳戶交易 P2GPaymentType = P2GEACC</para>
+        /// </summary>
+        public string P2GPaymentType { get; set; }
+
+        /// <summary>
+        /// P2G 交易金額
+        /// </summary>
+        public int? P2GAmt { get; set; }
+
+        #endregion
+
+        #region 超商物流回傳參數
+
+        ///// <summary>
+        ///// 超商門市編號
+        ///// <para>取貨門市編號。</para>
+        ///// </summary>
+        //public string StoreCode { get; set; }
+
+        ///// <summary>
+        ///// 超商門市名稱
+        ///// <para>取貨門市中文名稱</para>
+        ///// </summary>
+        //public string StoreName { get; set; }
+
+        ///// <summary>
+        ///// 超商類別名稱
+        ///// <para>回傳[全家] 、[OK] 、[萊爾富]</para>
+        ///// </summary>
+        //public string StoreType { get; set; }
+
+        ///// <summary>
+        ///// 超商門市地址
+        ///// <para>取貨門市地址</para>
+        ///// </summary>
+        //public string StoreAddr { get; set; }
+
+        ///// <summary>
+        ///// 取件交易方式
+        ///// <para>1 = 取貨付款</para>
+        ///// <para>3 = 取貨不付款</para>
+        ///// </summary>
+        //public int? TradeType { get; set; }
+
+        ///// <summary>
+        ///// 取貨人
+        ///// <para>取貨人姓名</para>
+        ///// </summary>
+        //public string CVSCOMName { get; set; }
+
+        ///// <summary>
+        ///// 取貨人手機號碼
+        ///// <para>取貨人手機號碼</para>
+        ///// </summary>
+        //public string CVSCOMPhone { get; set; }
+
+        #endregion
     }
 }
