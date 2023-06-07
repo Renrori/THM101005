@@ -13,6 +13,7 @@ namespace DeliveryBro.Models
             MenuTable = new HashSet<MenuTable>();
         }
 
+        public Guid RestaurantId { get; set; }
         public string RestaurantAccount { get; set; }
         public string RestaurantPassword { get; set; }
         public string RestaurantName { get; set; }
@@ -25,7 +26,8 @@ namespace DeliveryBro.Models
         public string RestaurantDescription { get; set; }
         public byte[] RestaurantPicture { get; set; }
         public string RestaurantStatus { get; set; }
-        public Guid RestaurantId { get; set; }
+        public decimal? Latitude { get; set; }
+        public decimal? Longitude { get; set; }
 
         public virtual ICollection<CustomerOrderTable> CustomerOrderTable { get; set; }
         public virtual ICollection<MenuTable> MenuTable { get; set; }
