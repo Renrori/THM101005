@@ -163,7 +163,7 @@
     <script src="~/axios/axios.min.js"></script>
     <script>
         var baseAddress = "https://localhost:7163/api/UserApi";
-        var CustomerId = "@User.Claims.FirstOrDefault(c => c.Type == "CustomerId")?.Value";
+        
         var vueApp = {
             data() {
                 return {
@@ -179,7 +179,8 @@
                 async getUserOrder() {
                     //拿出對應cusId的order
                     try {
-                        const response = await axios.get(`${baseAddress}/waitorder/${CustomerId}`).then(Response => {
+                        const response = await axios.get(`${baseAddress}/waitorder`, {
+                            withCredentials: true}).then(Response => {
                             this.CustomerOrderInfo = Response.data;
                         })
                     } catch (error) {

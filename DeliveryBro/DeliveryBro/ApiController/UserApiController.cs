@@ -1,5 +1,6 @@
 ﻿using DeliveryBro.Areas.store.DTO;
 using DeliveryBro.Data;
+using DeliveryBro.Extensions;
 using DeliveryBro.Models;
 using DeliveryBro.ViewModels.Home;
 using DeliveryBro.ViewModels.User;
@@ -17,8 +18,9 @@ using System.Text.Json;
 namespace DeliveryBro.ApiController
 {
     //[EnableCors("User")]  限制跨域來源
-    //[Authorize]
+    
     [Route("api/[controller]")]
+    [Authorize(Roles = "User", AuthenticationSchemes = "CustomerAuthenticationScheme")]
     [ApiController]
     public class UserApiController : ControllerBase
     {
@@ -150,11 +152,12 @@ namespace DeliveryBro.ApiController
 
 
 
-        [HttpGet("waitorder/{customerId:guid}")]
-        public async Task<IEnumerable<UserOrderViewModel>> GetWaitOrder (Guid customerId)
+        [HttpGet("waitorder")]
+        public  IEnumerable<UserOrderViewModel> GetWaitOrder ()
         {
-            var orderDetails = _context.CustomerOrderTable
-                .Where(o => o.CustomerId == customerId && (o.OrderStatus == "waiting" || o.OrderStatus == "accepted")).Select(o => new UserOrderViewModel
+			var id = User.GetId();
+			var orderDetails = _context.CustomerOrderTable
+                .Where(o => o.CustomerId == id && (o.OrderStatus == "waiting" || o.OrderStatus == "acepted")).Select(o => new UserOrderViewModel
                 {
                     OrderId = o.OrderId,
                     OrderDate = o.OrderDate,
@@ -200,18 +203,6 @@ namespace DeliveryBro.ApiController
 
             return Ok("上傳成功");
         }
-        //public async Task<IActionResult> GetCity()
-        //{
-        //    string json = System.IO.File.ReadAllText("Data/CityCountry/CityCountyData.json");
-        //    var data = JsonSerializer.Deserialize<DataModel>(json);
-
-
-        //}
-        //private async Task SetPostUserPic(CustomersTable customers, IFormFile file)
-        //{
-        //    customers.CustomerPhoto = await PostUserPic(file);
-        //}
-
         private bool CustomerExists(Guid customerId)
         {
             return (_context.CustomersTable?.Any(e => e.CustomerId == customerId)).GetValueOrDefault();

@@ -35,12 +35,12 @@ namespace DeliveryBro.Controllers
 
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Index([Bind("UserAccount, UserPassword")] LoginViewModel login)
+		public async Task<IActionResult> Index([Bind("UserAccount, UserPassword")] LoginViewModel login, string returnUrl)
 		{
 			if (!ModelState.IsValid)
 			{
 				ViewBag.ErrorMessage = "輸入的內容有誤";
-				return View(login);
+                return View();
 			}
 			//先將內容加密
 			var encyptpassword = _passwordEncyptService.PasswordEncrypt(login.UserPassword);
@@ -49,7 +49,8 @@ namespace DeliveryBro.Controllers
 			if (user == null)
 			{
 				ViewBag.ErrorMessage = "帳號或密碼錯誤";
-				return View(login);
+                return View();
+				
 			}
 
 			//ClaimsPrincipal也可以List
@@ -62,18 +63,19 @@ namespace DeliveryBro.Controllers
 			await HttpContext.SignOutAsync("StoreAuthenticationScheme");
 			await HttpContext.SignOutAsync("AdministratorAuthenticationScheme");
 			await HttpContext.SignInAsync("CustomerAuthenticationScheme", claimsPrincipal);
-
+			if (!string.IsNullOrEmpty(returnUrl))
+			{
+				return Redirect(returnUrl);
+			}
 			return RedirectToAction("Index", "Home");
+
 		}
 
 		public IActionResult FacebookLogin()
 		{
-			//prop
-
 			var prop = new AuthenticationProperties
 			{
 				RedirectUri = Url.Action("FacebookRes")
-
 			};
 			//發請求內容並傳入
 			return Challenge(prop, FacebookDefaults.AuthenticationScheme);
@@ -107,7 +109,7 @@ namespace DeliveryBro.Controllers
 				var claims = new List<Claim>() {
 					 new Claim(ClaimTypes.Name,customer.CustomerName),
 					 new Claim (ClaimTypes.Role,"User"),
-					 new Claim("CustomerId",customer.CustomerId.ToString())
+					 new Claim("Id",customer.CustomerId.ToString())
 				};
 				var claimsIdentity = new ClaimsIdentity(claims, "CustomerAuthenticationScheme");
 
@@ -164,7 +166,7 @@ namespace DeliveryBro.Controllers
 				var claims = new List<Claim>() {
 					 new Claim(ClaimTypes.Name,customer.CustomerName),
 					 new Claim (ClaimTypes.Role,"User"),
-					 new Claim("CustomerId",customer.CustomerId.ToString())
+					 new Claim("Id",customer.CustomerId.ToString())
 				};
 
 				var claimsIdentity = new ClaimsIdentity(claims, "CustomerAuthenticationScheme");
