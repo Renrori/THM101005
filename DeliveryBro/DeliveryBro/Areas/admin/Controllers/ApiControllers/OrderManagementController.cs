@@ -3,102 +3,122 @@ using DeliveryBro.Areas.store.DTO;
 using DeliveryBro.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 
 namespace DeliveryBro.Areas.admin.Controllers.ApiControllers
 {
 
-    [Route("api/OrderManagement/[action]")]
-    [ApiController]
-    public class OrderManagementController : ControllerBase
-    {
-        private readonly sql8005site4nownetContext _db;
-        public OrderManagementController(sql8005site4nownetContext context)
-        {
-            _db = context;
-        }
-        [HttpGet]
-        public async Task<IEnumerable<OrderManagementDTO>> GetOrder()
-        {
-            var Order = await _db.CustomerOrderTable
-             .Select(Order => new OrderManagementDTO
-             {
-                 OrderId = Order.OrderId,
-                 OrderDate = Order.OrderDate,
-                 OrderStatus = Order.OrderStatus,
-                 AmountAfterDiscount = Order.AmountAfterDiscount,
-                 CustomerAddress = Order.CustomerAddress
-             }).ToListAsync();
+	[Route("api/OrderManagement/[action]")]
+	[ApiController]
+	public class OrderManagementController : ControllerBase
+	{
+		private readonly sql8005site4nownetContext _db;
+		public OrderManagementController(sql8005site4nownetContext context)
+		{
+			_db = context;
+		}
 
-            return Order;
-        }
-        [HttpPut]
-        public async Task<string> PutOrder(int id, [FromBody] OrderManagementDTO oddetailsdto)
-        {
-            if (id != oddetailsdto.OrderId)
-            {
-                return "修改失敗!";
-            }
-            CustomerOrderTable od = await _db.CustomerOrderTable.FindAsync(id);
+		[HttpGet("{page}")]
+		public async Task<OrderManagementDTO> GetOrder(int page)
+		{
 
+			var quantity = 10; // 一頁幾筆
+			var count = 0; // 全部幾筆
 
-            _db.Entry(od).State = EntityState.Modified;
+			//var nextPage = context.Posts
+			//	.OrderBy(b => b.PostId)
+			//	.Skip(position)
+			//	.Take(10)
+			//	.ToList();
+			var query = _db.CustomerOrderTable				
+			 .OrderBy(x => x.OrderId); //遞增排序
+			count = await query.CountAsync(); // 先查全部有幾筆
 
-            try
-            {
-                await _db.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!OrderExists(id))
-                {
-                    return "修改失敗!";
-                }
-                else
-                {
-                    throw;
-                }
-            }
+			var Order = await query
+			   .Skip(quantity * (page - 1)) //跳過一頁幾筆*頁碼
+			   .Take(quantity) // 取幾筆
+			   .Select(Order => new OrderDTO
+			   {
+				   OrderId = Order.OrderId,
+				   OrderDate = Order.OrderDate,
+				   OrderStatus = Order.OrderStatus,
+				   AmountAfterDiscount = Order.AmountAfterDiscount,
+				   CustomerAddress = Order.CustomerAddress
+			   }).ToListAsync();
 
-            return "修改成功!";
-        }
+			return new OrderManagementDTO
+			{
+				Count = count,
+				Items = Order
+			};
+		}
+		[HttpPut]
+		public async Task<string> PutOrder(int id, [FromBody] OrderDTO oddetailsdto)
+		{
+			if (id != oddetailsdto.OrderId)
+			{
+				return "修改失敗!";
+			}
+			CustomerOrderTable od = await _db.CustomerOrderTable.FindAsync(id);
 
 
-        [HttpDelete("{Id:int}")]
-        public async Task<string> Delete(int Id)
-        {
-            var r = await _db.CustomerOrderTable.Include(o=> o.OrderDetailsTable).Where(x=> x.OrderId == Id).FirstOrDefaultAsync();
-            if (r == null)
-            {
-                return "找不到資料";
-            }
+			_db.Entry(od).State = EntityState.Modified;
 
-            foreach (var item in r.OrderDetailsTable)
-            {
-                _db.OrderDetailsTable.Remove(item);
-            }
-            
-            _db.CustomerOrderTable.Remove(r);
-            try
-            {
-                await _db.SaveChangesAsync();
-            }
-            catch (DbUpdateException ex)
-            {
-                return "刪除失敗!" + ex.Message;
-            }
+			try
+			{
+				await _db.SaveChangesAsync();
+			}
+			catch (DbUpdateConcurrencyException)
+			{
+				if (!OrderExists(id))
+				{
+					return "修改失敗!";
+				}
+				else
+				{
+					throw;
+				}
+			}
 
-            return "刪除成功!";
-        }
+			return "修改成功!";
+		}
 
-        ///api/OrderManagement/All <summary>
 
-     
-    
-   private bool OrderExists(int id)
-    {
-        return (_db.CustomerOrderTable ?.Any(e => e.OrderId == id)).GetValueOrDefault();
-    }
-    
-    }
+		[HttpDelete("{Id:int}")]
+		public async Task<string> Delete(int Id)
+		{
+			var r = await _db.CustomerOrderTable.Include(o => o.OrderDetailsTable).Where(x => x.OrderId == Id).FirstOrDefaultAsync();
+			if (r == null)
+			{
+				return "找不到資料";
+			}
+
+			foreach (var item in r.OrderDetailsTable)
+			{
+				_db.OrderDetailsTable.Remove(item);
+			}
+
+			_db.CustomerOrderTable.Remove(r);
+			try
+			{
+				await _db.SaveChangesAsync();
+			}
+			catch (DbUpdateException ex)
+			{
+				return "刪除失敗!" + ex.Message;
+			}
+
+			return "刪除成功!";
+		}
+
+
+
+
+		private bool OrderExists(int id)
+		{
+			return (_db.CustomerOrderTable?.Any(e => e.OrderId == id)).GetValueOrDefault();
+		}
+
+	}
 }

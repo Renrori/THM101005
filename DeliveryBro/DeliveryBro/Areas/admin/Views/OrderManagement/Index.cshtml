@@ -78,8 +78,33 @@
 
 									</tbody>
 								</table>
+								<div class="container">
+									<div class="row justify-content-center" style="height:100px;">
+										<div class="col-4 h-100">
+											{{ maxcount }}
+											<nav>
+												<ul class="pagination">
+													<li class="page-item">
+														<a class="page-link" href="javascript: void(0);" aria-label="Previous">
+															<span aria-hidden="true">&laquo;</span>
+														</a>
+													</li>
+
+													<li class="page-item" v-for="n in Math.ceil(maxcount / 10)"><a class="page-link" @@click="nextpage(n)">{{ n }}</a></li>
+
+													<li class="page-item">
+														<a class="page-link" href="javascript: void(0);" aria-label="Next">
+															<span aria-hidden="true">&raquo;</span>
+														</a>
+													</li>
+												</ul>
+											</nav>
+										</div>
+									</div>
+								</div>
 							</div>
 						</div> <!-- end card-body-->
+
 					</div> <!-- end card-->
 				</div> <!-- end col -->
 			</div>
@@ -104,6 +129,7 @@
 			</div>
 		</div>
 	</footer>
+
 	<!-- end Footer -->
 	<!-- Modal -->
 	<div class="form-group">
@@ -121,7 +147,7 @@
 						</div>
 						<div class="form-group">
 							<label class="form-label">OrderDate</label>
-							<input class="form-control" v-model="orderDate"  />
+							<input class="form-control" v-model="orderDate" />
 						</div>
 						<div class="form-group">
 							<label class="form-label">CustomerAddress</label>
@@ -159,11 +185,14 @@
 		</div>
 	</div>
 </div>
+
 <script type="text/javascript">
 	var app = new Vue({
 		el: '#orderapp',
 		data: {
-			order: [],
+			maxcount: 0, // 總比數
+			order: [], // 資料暫存
+			nowpage: 1, // 現在的頁數
 			orderId: "",
 			orderDate: "",
 			customerAddress: "",
@@ -177,14 +206,30 @@
 			}
 		},
 		mounted: function () {
+			// vue 第一次執行的內容, 只會直行一次
 			let salf = this;
-			axios('/api/OrderManagement/GetOrder')
-				.then(function (res) { salf.order = res.data });
+			axios('/api/OrderManagement/GetOrder/1')
+				.then(function (res) {
+					salf.order = res.data.items; // 回船的orders
+					salf.maxcount = res.data.count; // 總比數
+				});
 			//.catch(function (error) { // 請求失敗
 			//    console.log(error);
 			//});
 		},
-		methods: {
+		methods: { // 放置方法的地方
+			// 讀取下一頁 (傳入頁馬)
+			nextpage: function (page) {
+				let salf = this;
+				// 跟後端讀取ORDER
+				axios('/api/OrderManagement/GetOrder/' + page)
+					.then(function (res) {
+						// 讀取完成
+						salf.nowpage = page;
+						salf.order = res.data.items;
+						salf.maxcount = res.data.count;
+					});
+			},
 			editorder: function (orderId) {
 				//alert("edit");
 				$("#editModal").modal("show");
@@ -203,11 +248,10 @@
 				axios.delete('/api/OrderManagement/Delete/' + id).then(res => {
 					if (res.data) {
 						alert("已刪除");
+						this.nextpage(this.nowpage);
 						var idx = this.order.findIndex(x => x.orderID == id);
 						this.order.splice(idx, 1)
 						$("#deleteModal").modal("hide");
-                        axios('/api/OrderManagement/GetOrder')
-                            .then(function (res) { salf.order = res.data });
 					}
 				})
 			},
