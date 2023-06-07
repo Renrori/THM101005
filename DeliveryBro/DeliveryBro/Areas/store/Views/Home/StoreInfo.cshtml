@@ -220,12 +220,12 @@
                                         <div class="row mb-3">
                                             <label for="renewPassword" class="col-md-4 col-lg-3 col-form-label">確認新密碼</label>
                                             <div class="col-md-8 col-lg-9">
-                                                <input name="NewPassword" type="password" class="form-control" id="NewPassword">
+                                                <input name="ConfirmPassword" type="password" class="form-control" id="ConfirmPassword">
                                             </div>
                                         </div>
 
                                         <div class="text-center">
-                                            <button type="submit" class="btn btn-primary">更新密碼</button>
+                                            <button type="submit" class="btn btn-primary">修改</button>
                                         </div>
                                     </form><!-- End Change Password Form -->
 
@@ -256,8 +256,8 @@
                     preview: null,
                     oldDescription: "",
                     oldopeningtime: "",
-                    oldendtime:"",
-                    preparetime:"",
+                    oldendtime: "",
+                    preparetime: "",
                     storePic: ""
                 }
             },
@@ -269,10 +269,10 @@
                 getStoreInfo: function () {
                     let _this = this;
                     axios.get(`/api/StoreInfo`).then(response => {
-                        _this.storeInfo = response.data.map(x => ({ 
+                        _this.storeInfo = response.data.map(x => ({
                             ...x,
                             openingHours: x.openingHours == null ? "" : x.openingHours.substring(0, 5),
-                            endHours: x.endHours==null?"":x.endHours.substring(0, 5)
+                            endHours: x.endHours == null ? "" : x.endHours.substring(0, 5)
                         }));
                     })
                 },

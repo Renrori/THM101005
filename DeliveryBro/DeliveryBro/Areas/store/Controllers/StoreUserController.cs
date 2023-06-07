@@ -280,8 +280,8 @@ namespace DeliveryBro.Areas.store.Controllers
 
 				//FirstOrDefault找尋資料表中的第一筆資料 有資料回傳第一筆或是沒資料回傳null
 				//找RestaurantTable資料表篩選符合RestaurantAccount及RestaurantPassword的條件
-				RestaurantTable user = _db.RestaurantTable.FirstOrDefault(x => x.RestaurantAccount == model.Account &&
-							x.RestaurantPassword == _passwordEncyptService.PasswordEncrypt(model.Password));
+				RestaurantTable user = _db.RestaurantTable.FirstOrDefault(x => x.RestaurantAccount == model.account &&
+							x.RestaurantPassword == _passwordEncyptService.PasswordEncrypt(model.password));
 				if (user == null)
 				{
 					ViewBag.Error = "帳號或密碼錯誤";
@@ -337,6 +337,12 @@ namespace DeliveryBro.Areas.store.Controllers
 						user.RestaurantPassword = _passwordEncyptService.PasswordEncrypt(model.NewPassword);
 					}
 
+					if (model.NewPassword != model.ConfirmPassword) 
+					{
+                        string script = "<script>alert('新密碼與確認密碼不一致');window.history.go(-1);</script>";
+                        return Content(script, "text/html; charset=utf-8");
+                    }
+
 					_db.Entry(user).State = EntityState.Modified;
 
 					try
@@ -347,9 +353,10 @@ namespace DeliveryBro.Areas.store.Controllers
 					{
 						throw;
 					}
-					return RedirectToAction("StoreInfo", "Home");
-				}
-			}
+                    return RedirectToAction("StoreInfo", "Home");
+                    //return RedirectToAction("ResetInfoPwd", "StoreUser");
+                }
+            }
 			return View();
 		}
 

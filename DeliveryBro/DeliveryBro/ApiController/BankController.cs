@@ -5,6 +5,7 @@ using DeliveryBro.Utility;
 
 namespace DeliveryBro.ApiController
 {
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class BankController : Controller
     {
         private BankInfoModel _bankInfoModel = new BankInfoModel

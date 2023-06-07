@@ -16,6 +16,7 @@ using System.Text.Json;
 
 namespace DeliveryBro.ApiController
 {
+    [ApiExplorerSettings(IgnoreApi = true)]
     //[EnableCors("User")]  限制跨域來源
     //[Authorize]
     [Route("api/[controller]")]
@@ -96,7 +97,35 @@ namespace DeliveryBro.ApiController
 
         }
 
-        [HttpGet("{customerId:guid}/orderdetails")]
+        [Route("CheckAdd/{customerId:guid}")]
+        [HttpPost]
+        public async Task<IActionResult> CheckAddress(Guid customerId , UserAddressViewModel address)
+        {
+            var userAddCount = _context.CustomerAddressTable.Where(x=>x.CustomerId == customerId).Count();
+
+            if(userAddCount == 0)
+            {
+                CustomerAddressTable userAdd = new CustomerAddressTable
+                {
+                    CustomerAddress = address.UserAddress,
+                    CustomerId = customerId
+                };
+                _context.CustomerAddressTable.Add(userAdd);
+                await _context.SaveChangesAsync();
+
+                return Ok("新增地址成功");
+            }
+
+           CustomerAddressTable userAddtar = _context.CustomerAddressTable.FirstOrDefault(x => x.CustomerId == customerId);
+            userAddtar.CustomerAddress = address.UserAddress;
+
+            _context.Entry(userAddtar).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+
+            return Ok("修改地址成功");
+        }
+
+        
         public async Task<IEnumerable<UserOrderViewModel>> GetUserOrder(Guid customerId)
         {
             var orderDetails = _context.CustomerOrderTable

@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DeliveryBro.ApiController
 {
+    [ApiExplorerSettings(IgnoreApi = true)]
     [Route("api/[controller]")]
     [ApiController]
     public class HomeApiController : ControllerBase
@@ -138,7 +139,19 @@ namespace DeliveryBro.ApiController
             return File(imgUrl, "img/jpeg");
 
         }
+        [HttpGet("coustomer/{customerId:guid}")]
+        public async Task<IActionResult> SerchAddress(Guid customerId)
+        {
+            var userAddress = await _context.CustomerAddressTable.Where(c => c.CustomerId == customerId)
+                .Select(c => c.CustomerAddress).ToListAsync();
 
+            if (userAddress.Count() == 0)
+            {
+                return Content("使用者沒有地址資料");
+            }
+
+            return Ok(userAddress);
+        }
         [HttpPost]
         //Post:/api/HomeApi/
         public async Task<IActionResult> GetOrder([FromBody] OrderViewModel order)
