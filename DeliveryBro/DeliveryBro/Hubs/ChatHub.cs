@@ -22,7 +22,7 @@ namespace DeliveryBro.Hubs
             conn.Add(storedict);
             conn.Add(cusdict);
             
-            var id = Context.User.GetId(Context.User.GetRole());
+            var id = Context.User.GetId();
             string role = Context.User.GetRole();
             string name = Context.User.GetName();
             string adminGroup = "adminGroup";
@@ -56,7 +56,7 @@ namespace DeliveryBro.Hubs
         }
         public async Task SendMessage(string message)
         {
-            var id = Context.User.GetId(Context.User.GetRole());
+            var id = Context.User.GetId();
             string role = Context.User.GetRole();
             string connectionId;
             string name = Context.User.GetName();

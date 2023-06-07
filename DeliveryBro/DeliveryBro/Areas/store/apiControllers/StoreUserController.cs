@@ -33,7 +33,7 @@ namespace DeliveryBro.Areas.store.apiControllers
 		/// <param name="account"></param>
 		/// <returns></returns>
 		[HttpGet("isConfirm/CheckAccount")]
-		public async Task<string> CheckAccount(string account)
+		public async Task<string> CheckAccount(string? account)
 		{
 			string result = "正確";
 			//查詢table是否有一樣的帳號
@@ -49,7 +49,7 @@ namespace DeliveryBro.Areas.store.apiControllers
 			bool checkAccount = regex.IsMatch(account);
 			if (!checkAccount)
 			{
-				result = "長度要介於6-15且數字和英文字母結合";
+				result = "介於6-15字母且包含數字和英文";
 				return result;
 			}
 
@@ -59,10 +59,10 @@ namespace DeliveryBro.Areas.store.apiControllers
 		/// <summary>
 		/// 驗證密碼
 		/// </summary>
-		/// <param name="account"></param>
+		/// <param name="password"></param>
 		/// <returns></returns>
 		[HttpGet("isConfirm/CheckPassword")]
-		public async Task<string> CheckPassword(string password)
+		public async Task<string> CheckPassword(string? password)
 		{
 			string result = "正確";
 
@@ -70,7 +70,7 @@ namespace DeliveryBro.Areas.store.apiControllers
 			bool checkPassword = regex.IsMatch(password);
 			if (!checkPassword)
 			{
-				result = "長度要介於6-15且數字和英文字母結合";
+				result = "介於6-15字母且包含數字和英文";
 				return result;
 			}
 
@@ -80,16 +80,14 @@ namespace DeliveryBro.Areas.store.apiControllers
 		/// <summary>
 		/// 驗證再次輸入的密碼
 		/// </summary>
-		/// <param name="inputData"></param>
+		/// <param name="confirmPassword"></param>
 		/// <returns></returns>
-		[HttpPost]
-		public async Task<string> CheckConfirmPassword(IFormCollection inputData)
+		[HttpPost("isConfirm/CheckConfirmPassword")]
+		public async Task<string> CheckConfirmPassword(RegisterViewModel inputData)
 		{
-			string password = inputData["RestaurantPassword"];
-			string confirmPassword = inputData["ConfirmRestaurantPassword"];
 			string result = "正確";
 
-			if (!string.Equals(password, confirmPassword))
+			if (!string.Equals(inputData.RestaurantPassword, inputData.ConfirmRestaurantPassword))
 			{
 				result = "密碼輸入不一致";
 				return result;
@@ -98,8 +96,13 @@ namespace DeliveryBro.Areas.store.apiControllers
 			return result;
 		}
 
+		/// <summary>
+		/// 驗證電話
+		/// </summary>
+		/// <param name="phone"></param>
+		/// <returns></returns>
 		[HttpGet("isConfirm/CheckPhone")]
-		public async Task<string> CheckPhone(string phone)
+		public async Task<string> CheckPhone(string? phone)
 		{
 			string result = "正確";
 			if (phone.Length < 6 || phone.Length > 15)
@@ -117,14 +120,14 @@ namespace DeliveryBro.Areas.store.apiControllers
 		/// <param name="inputData"></param>
 		/// <returns></returns>
 		[HttpGet("isConfirm/CheckMail")]
-		public async Task<string> CheckMail(string mail)
+		public async Task<string> CheckMail(string? mail)
 		{
 			string result = "正確";
 			Regex regex = new Regex(@"^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$");
 			bool checkEmail = regex.IsMatch(mail);
 			if (!checkEmail)
 			{
-				result = "不符合mail格式";
+				result = "不符合mail格式";//必須包含一個@字符。
 				return result;
 			}
 
@@ -132,12 +135,12 @@ namespace DeliveryBro.Areas.store.apiControllers
 		}
 
 		/// <summary>
-		/// 驗證電話
+		/// 驗證名字
 		/// </summary>
 		/// <param name="inputData"></param>
 		/// <returns></returns>
-		[HttpGet("isConfirm/CheckPhone")]
-		public async Task<string> CheckName(string name)
+		[HttpGet("isConfirm/CheckName")]
+		public async Task<string> CheckName(string? name)
 		{
 			string result = "正確";
 			if (name.Length < 6 || name.Length > 20)
@@ -155,7 +158,7 @@ namespace DeliveryBro.Areas.store.apiControllers
 		/// <param name="inputData"></param>
 		/// <returns></returns>
 		[HttpGet("isConfirm/CheckAddress")]
-		public async Task<string> CheckAddress(string address)
+		public async Task<string> CheckAddress(string? address)
 		{
 			string result = "正確";
 			if (string.IsNullOrEmpty(address))
@@ -168,31 +171,30 @@ namespace DeliveryBro.Areas.store.apiControllers
 		}
 
 
-
-
 		/// <summary>
 		/// 註冊
 		/// </summary>
 		/// <param name="inputData"></param>
 		/// <returns></returns>
-		[HttpGet]
-		public async Task<string> AddRegister(RegisterViewModel model)
+		[HttpPost("Add/AddRegister")]
+		public string AddRegister(RegisterViewModel model)
 		{
-			string result = "正確";
+			string result = "註冊成功";
 
 			_context.RestaurantTable.Add(new RestaurantTable()
 			{
+				RestaurantId = Guid.NewGuid(),
 				RestaurantAccount = model.RestaurantAccount,
 				RestaurantPassword = _passwordEncyptService.PasswordEncrypt(model.RestaurantPassword),//用類別裡面的PasswordEncrypt方法加密
 				RestaurantName = model.RestaurantName,
 				RestaurantAddress = model.RestaurantAddress,
 				RestaurantPhone = model.RestaurantPhone,
-				RestaurantEmail = model.RestaurantEmail,
+				RestaurantEmail = model.RestaurantEmail
 			});
 			//存入資料庫
 			try
 			{
-				_context.SaveChangesAsync();
+				_context.SaveChanges();
 			}
 			catch (Exception ex)
 			{

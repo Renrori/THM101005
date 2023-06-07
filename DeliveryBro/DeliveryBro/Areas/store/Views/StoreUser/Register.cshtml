@@ -2,6 +2,14 @@
 	#btnRegister {
 		background-color: #444444;
 	}
+
+	#btnDemo1 {
+		background-color: #444444;
+	}
+
+	#btnDemo2 {
+		background-color: #444444;
+	}
 </style>
 <main>
 	<div class="container">
@@ -17,8 +25,7 @@
 								<span class="d-none d-lg-block">NiceAdmin</span>
 							</a>
 						</div><!-- End Logo -->
-						@*<div id="app">*@
-						@*//掛載VUE*@
+						
 						<div class="card mb-3" id="app">
 
 							<div class="card-body">
@@ -28,60 +35,57 @@
 									<p class="text-center small">輸入商家詳細資訊以利創建帳戶</p>
 								</div>
 
-								@*有把下方form 裡面needs-validation" novalidate刪掉
-								<form class="row g-3 needs-validation" novalidate action="/store/StoreUser/Register" method="post">*@
-
 								<form class="row g-3 needs-validation" novalidate>
 									<div class="col-12">
 										<label for="yourName" class="form-label">商家帳號</label>
 										<span v-if="isValidAccount==false" class="text-danger">&emsp;{{errorMsgAccount}}</span>
 										<input type="text" name="RestaurantAccount" class="form-control" id="RestaurantAccount" v-model="restaurantAccount">
-										<div class="invalid-feedback">請填寫帳號</div>
+										@*<div class="invalid-feedback">請填寫帳號</div>*@
 									</div>
 
 									<div class="col-12">
 										<label for="yourPassword" class="form-label">商家密碼</label>
 										<span v-if="isValidPassword==false" class="text-danger">&emsp;{{errorMsgPassword}}</span>
 										<input type="password" name="RestaurantPassword" class="form-control" id="RestaurantPassword" v-model="restaurantPassword">
-										<div class="invalid-feedback">請填寫密碼</div>
+										@*<div class="invalid-feedback">請填寫密碼</div>*@
 									</div>
 
 									<div class="col-12">
 										<label for="yourPassword" class="form-label">確認密碼</label>
-										<span v-if="isValidConfirmPassword==false" class="text-danger">&emsp{{errorMsgConfirmPassword}}</span>
+										<span v-if="isValidConfirmPassword==false" class="text-danger">&emsp;{{errorMsgConfirmPassword}}</span>
 										<input type="password" name="ConfirmRestaurantPassword" class="form-control" id="ConfirmRestaurantPassword" v-model="confirmRestaurantPassword">
-										<div class="invalid-feedback">再次確認密碼</div>
+										@*<div class="invalid-feedback">再次確認密碼</div>*@
 									</div>
 
 									<div class="col-12">
 										<label for="yourUsername" class="form-label">商家名稱</label>
-										<div class="input-group has-validation">
+										@*<div class="input-group has-validation">*@
 											<span v-if="isValidName==false" class="text-danger">&emsp;{{errorMsgName}}</span>
 											@*<span class="input-group-text" id="inputGroupPrepend">@@</span>*@
 											<input type="text" name="RestaurantName" class="form-control" id="RestaurantName" v-model="restaurantName">
-											<div class="invalid-feedback">請填寫商家名稱</div>
-										</div>
+											@*<div class="invalid-feedback">請填寫商家名稱</div>*@
+										@*</div>*@
 									</div>
 
 									<div class="col-12">
 										<label for="yourAddress" class="form-label">商家地址</label>
 										<span v-if="isValidAddress==false" class="text-danger">&emsp;{{errorMsgAddress}}</span>
 										<input type="text" name="RestaurantAddress" class="form-control" id="RestaurantAddress" v-model="restaurantAddress">
-										<div class="invalid-feedback">請填寫商家地址</div>
+										@*<div class="invalid-feedback">請填寫商家地址</div>*@
 									</div>
 
 									<div class="col-12">
 										<label for="yourPhone" class="form-label">商家電話</label>
 										<span v-if="isValidPhone==false" class="text-danger">&emsp;{{errorMsgPhone}}</span>
 										<input type="text" name="RestaurantPhone" class="form-control" id="RestaurantPhone" v-model="restaurantPhone">
-										<div class="invalid-feedback">請填寫商家電話</div>
+										@*<div class="invalid-feedback">請填寫商家電話</div>*@
 									</div>
 
 									<div class="col-12">
 										<label for="yourEmail" class="form-label">商家信箱</label>
-										<span v-if="isValidEmail==false" class="text-danger">&emsp;{{errorMsgEmail}}</span>
+										<span v-if="isValidMail==false" class="text-danger">&emsp;{{errorMsgMail}}</span>
 										<input type="email" name="RestaurantEmail" class="form-control" id="RestaurantEmail" v-model="restaurantEmail">
-										<div class="invalid-feedback">請填寫商家信箱</div>
+										@*<div class="invalid-feedback">請填寫商家信箱</div>*@
 									</div>
 
 									@*<div class="col-12">
@@ -93,8 +97,21 @@
 									</div>*@
 									<div class="col-12">
 										@*<button id="btnRegister" class="btn btn-primary w-100" type="submit">註冊</button>*@
-										<button type="button" class="btn btn-primary" @@click="addRegister()">註冊</button>
+										@*<button id="btnRegister" type="button" class="btn btn-primary" @@click="addRegister()">註冊</button>*@
+
+										<button id="btnRegister" class="btn btn-secondary w-100" type="button" @@click="addRegister()">註冊</button>
+										
 									</div>
+									<div>
+										<button id="btnDemo1" type="button" class="btn btn-secondary" @@click="setData()">Demo1</button>
+										<button id="btnDemo2" type="button" class="btn btn-secondary" @@click="setDataError()">Demo2</button>
+									</div>
+									@*<div>
+										<button id="btnDemo2" type="button" class="btn btn-secondary" @@click="setDataError()">Demo2</button>
+									</div>*@
+									@*<div>
+										<a class="btn btn-outline-secondary w-100" href="/store/StoreUser/Register" type="button" @@click="setData()">DEMO</a>
+									</div>*@
 									<div class="col-12">
 										<p class="small mb-0">已經有商家帳號嗎? <a href="/store/StoreUser/Login" style="color:mediumblue">登入</a></p>
 									</div>
@@ -147,15 +164,16 @@
 					errorMsgName: "",
 					errorMsgAddress: "",
 					errorMsgPhone: "",
-					errorMsgEmail: "",
+					errorMsgMail: "",
 					//判斷錯誤訊息的變數
-					isValidAccount: true,
-					isValidPassword: true,
-					isValidConfirmPassword: true,
-					isValidName: true,
-					isValidAddress: true,
-					isValidPhone: true,
-					isValidEmail: true,
+					isValidAccount: null,
+					isValidPassword: null,
+					isValidConfirmPassword: null,
+					isValidName: null,
+					isValidAddress: null,
+					isValidPhone: null,
+					isValidMail: null,
+					registerresult: "",
 				};
 
 			},
@@ -166,12 +184,12 @@
 			//方法
 			methods: {
 				//驗證帳號
-				checkAccount: function () {
+				checkAccount: async function () {
 					let _this = this;
-					if (_this.restaurantAccount==''){
-						return'';
+					if (_this.restaurantAccount == '') {
+						return '';
 					}
-					axios.get(`/api/StoreUser/isConfirm/CheckAccount`, {
+					await axios.get(`/api/StoreUser/isConfirm/CheckAccount`, {
 						params: {
 							account: _this.restaurantAccount
 						}
@@ -179,16 +197,18 @@
 						if (response.data != "正確") {
 							_this.errorMsgAccount = response.data;
 							_this.isValidAccount = false;
+						} else {
+							_this.isValidAccount = true;
 						}
 					})
 				},
 				//驗證密碼
-				checkPassword: function () {
+				checkPassword: async function () {
 					let _this = this;
 					if (_this.restaurantPassword == '') {
 						return '';
 					}
-					axios.get(`/api/StoreUser/isConfirm/CheckPassword`, {
+					await axios.get(`/api/StoreUser/isConfirm/CheckPassword`, {
 						params: {
 							password: _this.restaurantPassword
 						}
@@ -196,53 +216,61 @@
 						if (response.data != "正確") {
 							_this.errorMsgPassword = response.data;
 							_this.isValidPassword = false;
+						} else {
+							_this.isValidPassword = true;
 						}
+
 					})
 				},
 				////驗證再確認的密碼
-				checkConfirmPassword: function () {
+				checkConfirmPassword: async function () {
 					let _this = this;
-					let tempData = new FormData();
-					tempData.append("ConfirmRestaurantPassword", _this.confirmRestaurantPassword);
-					tempData.append("RestaurantPassword", _this.restaurantPassword);
-			
-					axios.post(`/api/StoreUser/CheckConfirmPassword`, tempData,
-						{
-							headers: {
-								'Content-Type': 'multipart/form-data'
+					//let tempData = new FormData();
+					//tempData.append("ConfirmRestaurantPassword", _this.confirmRestaurantPassword);
+					//tempData.append("RestaurantPassword", _this.restaurantPassword);
+
+					let model = {
+						ConfirmRestaurantPassword: _this.confirmRestaurantPassword,
+						RestaurantPassword: _this.restaurantPassword
+					}
+					await axios.post(`/api/StoreUser/isConfirm/CheckConfirmPassword`, model)
+						.then(response => {
+							if (response.data != "正確") {
+								_this.errorMsgConfirmPassword = response.data;
+								_this.isValidConfirmPassword = false;
+							}
+							else {
+								_this.isValidConfirmPassword = true;
 							}
 						})
-					.then(response => {
-						if (response.data != "正確") {
-							_this.errorMsgConfirmPassword = response.data;
-							_this.isValidConfirmPassword = false;
-						}
-					})
 				},
 				//驗證名字
-				checkName: function () {
+				checkName: async function () {
 					let _this = this;
 					if (_this.restaurantName == '') {
 						return '';
 					}
-					axios.get(`/api/StoreUser/isConfirm/CheckName`, {
+					await axios.get(`/api/StoreUser/isConfirm/CheckName`, {
 						params: {
 							name: _this.restaurantName
 						}
 					}).then(response => {
-							if (response.data != "正確") {
-								_this.errorMsgName = response.data;
-								_this.isValidName = false;
-							}
-						})
+						if (response.data != "正確") {
+							_this.errorMsgName = response.data;
+							_this.isValidName = false;
+						}
+						else {
+							_this.isValidName = true;
+						}
+					})
 				},
 				//驗證Email
-				checkMail: function () {
+				checkMail:async function () {
 					let _this = this;
-					if (_this.restaurantEMail == '') {
+					if (_this.restaurantEmail == '') {
 						return '';
 					}
-					axios.get(`/api/StoreUser/isConfirm/CheckMail`, {
+					await axios.get(`/api/StoreUser/isConfirm/CheckMail`, {
 						params: {
 							mail: _this.restaurantEmail
 						}
@@ -251,15 +279,18 @@
 							_this.errorMsgMail = response.data;
 							_this.isValidMail = false;
 						}
+						else {
+							_this.isValidMail = true;
+						}
 					})
 				},
 				//驗證地址
-				checkAddress: function () {
+				checkAddress: async function () {
 					let _this = this;
-					if (_this.restaurantAddress == '') {
-						return '';
-					}
-					axios.get(`/api/StoreUser/isConfirm/CheckAddress`, {
+					//if (_this.restaurantAddress == '') {
+					//	return '';
+					//}
+					await axios.get(`/api/StoreUser/isConfirm/CheckAddress`, {
 						params: {
 							address: _this.restaurantAddress
 						}
@@ -268,15 +299,18 @@
 							_this.errorMsgAddress = response.data;
 							_this.isValidAddress = false;
 						}
+						else {
+							_this.isValidAddress = true;
+						}
 					})
 				},
 				//驗證電話
-				checkPhone: function () {
+				checkPhone:async function () {
 					let _this = this;
 					if (_this.restaurantPhone == '') {
 						return '';
 					}
-					axios.get(`/api/StoreUser/isConfirm/CheckPhone`, {
+					await axios.get(`/api/StoreUser/isConfirm/CheckPhone`, {
 						params: {
 							phone: _this.restaurantPhone
 						}
@@ -285,37 +319,82 @@
 							_this.errorMsgPhone = response.data;
 							_this.isValidPhone = false;
 						}
-					})
-				},
-
-				addRegister: function () {
-					let _this = this;
-					_this.checkPhone();
-					_this.checkAddress();
-					_this.checkMail();
-					_this.checkName();
-					_this.checkConfirmPassword();
-					_this.checkPassword();
-					_this.checkAccount();
-
-					//如果有一個false就不能註冊
-					if (_this.isValidAccount || _this.isValidPassword || _this.isValidConfirmPassword || _this.isValidPhone || _this.isValidName || _this.isValidMail || _this.isValidAddress ||)
-					{
-					
-						//註冊的function 要呼叫controller
-						axios.get(`/api/StoreUser/isConfirm/AddRegister`, {
-						params: {
-								account: _this.restaurantAccount
-								password: _this.restaurantPassword
-								name: _this.restaurantName
-								mail: _this.restaurantEmail
-								address:_this.restaurantAddress
-								phone: _this.restaurantPhone
+						else {
+							_this.isValidPhone = true;
 						}
-					}).then(response => {response.data}
 					})
 				},
+
+				addRegister:async function () {
+					let _this = this;
+					await _this.checkPhone();
+					await _this.checkAddress();
+					await _this.checkMail();
+					await _this.checkName();
+					await _this.checkConfirmPassword();
+					await _this.checkPassword();
+					await _this.checkAccount();
+					var request = {
+						RestaurantAccount: _this.restaurantAccount,
+						RestaurantPassword: _this.restaurantPassword,
+						RestaurantName: _this.restaurantName,
+						RestaurantEmail: _this.restaurantEmail,
+						RestaurantAddress: _this.restaurantAddress,
+						RestaurantPhone: _this.restaurantPhone,
+						ConfirmRestaurantPassword: _this.errorMsgConfirmPassword,
+					}
+
+					console.log(_this.isValidAccount);
+					console.log(_this.isValidPassword);
+					console.log(_this.isValidConfirmPassword);
+					console.log(_this.isValidPhone);
+					console.log(_this.isValidName);
+					console.log(_this.isValidMail);
+					console.log(_this.isValidAddress);
+
+					console.log(request);
+					//如果有一個false就不能註冊
+					if (_this.isValidAccount && _this.isValidPassword && _this.isValidConfirmPassword && _this.isValidPhone && _this.isValidName && _this.isValidMail && _this.isValidAddress) 
+					{
+						//註冊的function 要呼叫controller
+						axios.post(`/api/StoreUser/Add/AddRegister`, request)
+							.then(response => {
+								_this.restaurantAccount = '';
+								_this.restaurantPassword = '';
+								_this.confirmRestaurantPassword = '';
+								_this.restaurantName = '';
+								_this.restaurantEmail = '';
+								_this.restaurantAddress = '';
+								_this.restaurantPhone = '';
+								//Swal.fire(
+								//	response.data
+								//)
+								alert(response.data);
+								window.location.href = 'Login';
+								//_this.registerresult=response.data;
+							});
+					}
 				},
+				setData: function () {
+					let _this = this;
+					_this.restaurantAccount='store2';
+					_this.restaurantPassword = 'store2';
+					_this.confirmRestaurantPassword = 'store2';
+					 _this.restaurantName='緯育商城00';
+					 _this.restaurantEmail='123@gmail.com';
+					 _this.restaurantAddress='台北市青島東路1號';
+					 _this.restaurantPhone='0234567890';
+				},
+				setDataError: function () {
+					let _this = this;
+					_this.restaurantAccount = '1111';
+					_this.restaurantPassword = '123';
+					_this.confirmRestaurantPassword = '132';
+					_this.restaurantName = '緯育';
+					_this.restaurantEmail = '123gmail';
+					_this.restaurantAddress = '台北市青島東路1號';
+					_this.restaurantPhone = '023456';
+				}
 			}
 		};
 		var app = Vue.createApp(vueIndex).mount("#app");

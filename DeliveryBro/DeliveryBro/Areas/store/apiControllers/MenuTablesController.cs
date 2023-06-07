@@ -30,7 +30,7 @@ namespace DeliveryBro.Areas.store.apiControllers
 		[HttpGet]
 		public async Task<IQueryable<MenuDTO>> GetMenuTables()
 		{
-			var id = User.GetId(User.GetRole());
+			var id = User.GetId();
 			var query = _context.MenuTable.AsNoTracking().Where(x => x.RestaurantId == id).Select(menu => new MenuDTO
 			{
 				DishId = menu.DishId,
@@ -97,7 +97,7 @@ namespace DeliveryBro.Areas.store.apiControllers
 			{
 				return "品項修改失敗";
 			};
-			var rid = User.GetId(User.GetRole());
+			var rid = User.GetId();
 			MenuTable menu = await _context.MenuTable.FindAsync(id);
 			menu.DishId = int.Parse(form["DishId"]);
 			menu.DishName = form["DishName"];
@@ -153,7 +153,7 @@ namespace DeliveryBro.Areas.store.apiControllers
 		[HttpPost]
 		public async Task<string> PostMenuTable(IFormCollection form)
 		{
-			var id = User.GetId(User.GetRole());
+			var id = User.GetId();
 			MenuTable menu = new MenuTable
 			{
 				DishId = int.Parse(form["DishId"]),

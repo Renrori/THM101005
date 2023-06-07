@@ -30,7 +30,7 @@ namespace DeliveryBro.Areas.store.apiControllers
         public async Task<IQueryable<StoreInfoDTO>> GetRestaurantTable()
         
         {
-			var id = User.GetId(User.GetRole());
+			var id = User.GetId();
 			return _context.RestaurantTable.Where(x => x.RestaurantId == id).Select(x => new StoreInfoDTO
             {
                 RestaurantId = x.RestaurantId,
@@ -68,7 +68,7 @@ namespace DeliveryBro.Areas.store.apiControllers
         [HttpPut]
         public async Task<string> PutRestaurantTable(IFormCollection form)
         {
-			var id = User.GetId(User.GetRole());
+			var id = User.GetId();
 			RestaurantTable store = await _context.RestaurantTable.FindAsync(id);
             store.RestaurantDescription = form["RestaurantDescription"];
             DateTime dateTimeOpen = DateTime.ParseExact(form["OpeningHours"], "HH:mm", CultureInfo.InvariantCulture);
@@ -103,7 +103,7 @@ namespace DeliveryBro.Areas.store.apiControllers
         [HttpPut("status")]
         public async Task<string> StoreStatusChange(StoreStatusDTO statusDTO)
         {
-			var id = User.GetId(User.GetRole());
+			var id = User.GetId();
 			if (id != statusDTO.RestaurantId)
             {
                 return "無法更改營業狀態";
@@ -128,7 +128,7 @@ namespace DeliveryBro.Areas.store.apiControllers
 		[HttpGet("dishcount")]
 		public Object GetDishCount()
 		{
-			var id = User.GetId(User.GetRole());
+			var id = User.GetId();
 			//var query = _context.CustomerOrderTable.Where(x => x.RestaurantId == 3 && x.OrderStatus == "completed")
 			//    .GroupBy(x => x.OrderDate.Month).Select(q => new
 			//    {
@@ -180,7 +180,7 @@ namespace DeliveryBro.Areas.store.apiControllers
 		[HttpGet("topselling")]
         public Object GetTopSelling()
         {
-			var id = User.GetId(User.GetRole());
+			var id = User.GetId();
 			List<DishDTO> list = new List<DishDTO>();
             Dictionary<int,int> IdLocation=new Dictionary<int,int>();
             var menuName = _context.MenuTable.Where(x => x.RestaurantId == id).Select(x => x.DishName).ToList();
@@ -229,7 +229,7 @@ namespace DeliveryBro.Areas.store.apiControllers
         [HttpGet("orderscount")]
         public Object GetMointhliyOrders()
         {
-			var id = User.GetId(User.GetRole());
+			var id = User.GetId();
 			var query = _context.CustomerOrderTable
                 .Where(x => x.RestaurantId == id && x.OrderDate.Date.ToString() == DateTime.Today.Date.ToString()&&x.OrderStatus=="completed")
                 .GroupBy(x=>x.OrderDate.Date.ToString())

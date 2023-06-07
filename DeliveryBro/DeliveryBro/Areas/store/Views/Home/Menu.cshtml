@@ -224,7 +224,7 @@
 			methods: {
 				getMenuDTOes: function () {
 					let _this = this;
-					//_this.rId = @User.Claims.FirstOrDefault(c => c.Type.Contains("RestaurantId")).Value;
+					//_this.rId = @User.Claims.FirstOrDefault(c => c.Type.Contains("Id")).Value;
 					axios.get(`/api/MenuTables`).then(
 						response => {
 							_this.MenuDTOes = response.data.map(x => ({ ...x }));
