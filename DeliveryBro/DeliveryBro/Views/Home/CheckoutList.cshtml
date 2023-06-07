@@ -187,7 +187,7 @@
                 this.totalAmount = checkoutdata.totalAmount;
 
                 this.updateRestaurantId()
-                this.CustomerId = "@User.Claims.FirstOrDefault(c => c.Type == "CustomerId")?.Value";
+                this.CustomerId = "@User.Claims.FirstOrDefault(c => c.Type == "Id")?.Value";
             },
             methods: {
                 calculateAmount() {
