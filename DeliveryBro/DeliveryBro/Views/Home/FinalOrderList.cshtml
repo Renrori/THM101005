@@ -89,7 +89,7 @@
                     cartItems: [],
                     totalAmount: 0,
                     RestaurantId: "",
-                    CustomerId: 1,
+                    CustomerId: "",
                     CustomerAddress: "",
                     CustomerPhone: "",
                     CustomerEmail: "",
@@ -100,7 +100,7 @@
                     subtotal: 0,
                     AmountAfterDiscount: 0,
                     orderStatus: "waiting",
-                    Payment: "未付款", //暫時寫死
+                    Payment: "未付款", 
                     OrderResult: false,
                     OrderDetailViewModels: []
                     //orderDate: ""
@@ -129,7 +129,7 @@
                 });
                 this.updateRestaurantId()
 
-                this.CustomerId = @User.Claims.FirstOrDefault(c => c.Type == "CustomerId")?.Value;
+                this.CustomerId = "@User.Claims.FirstOrDefault(c => c.Type == "CustomerId")?.Value";
             },
             methods: {
                 calculateSubtotal(item) {

@@ -7,6 +7,9 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
 	<meta content="Coderthemes" name="author" />
+	<script src="https://cdn.jsdelivr.net/npm/vue@2.7.14/dist/vue.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js" integrity="sha512-uMtXmF28A2Ab/JJO2t/vYhlaa/3ahUOgj1Zf27M5rOo8/+fcTUVH0/E0ll68njmjrLqOBjXM3V9NiPFL5ywWPQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
 
 	<!-- App favicon -->
 	<link rel="shortcut icon" src="~/lib/admin/assets/images/favicon.ico" />
@@ -20,13 +23,13 @@
 	<script src="~/lib/admin/assets/js/hyper-config.js"></script>
 
 	<!-- App css -->
-	<link href="~/lib/admin/assets/css/app-saas.min.css" rel="stylesheet" type="text/css" id="app-style" />
+	<link href="~/lib/admin/assets/css/app-creative.css" rel="stylesheet" type="text/css" id="app-style" />
 
 	<!-- Icons css -->
 	<link href="~/lib/admin/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
 
-	@await RenderSectionAsync("Styles",required:false);
-
+	<link href="~/lib/admin/assets/vendor/simplebar/simplebar.min.css" rel="stylesheet" />
+	@await RenderSectionAsync("Styles",required:false)
 </head>
 
 <body>
@@ -1263,7 +1266,7 @@
 
 	<!-- Daterangepicker js -->
 	<script src="~/lib/admin/assets/vendor/daterangepicker/moment.min.js"></script>
-	<script src="assets/vendor/daterangepicker/daterangepicker.js"></script>
+	<script src="~/lib/admin/assets/vendor/daterangepicker/daterangepicker.js"></script>
 
 	<!-- Apex Charts js -->
 	<script src="~/lib/admin/assets/vendor/apexcharts/apexcharts.min.js"></script>
@@ -1277,6 +1280,9 @@
 
 	<!-- App js -->
 	<script src="~/lib/admin/assets/js/app.min.js"></script>
+	<script src="~/lib/admin/assets/vendor/simplebar/simplebar.min.js"></script>
+	
+
 	@await RenderSectionAsync("Scripts", required: false)
 </body>
 </html> 

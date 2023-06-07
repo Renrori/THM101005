@@ -5,6 +5,8 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>aspnet-DeliveryBro-987e2b6b-452b-4107-91fb-c174545ee805</UserSecretsId>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+	  <NoWarn>$(NoWarn);1591</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
@@ -12,28 +14,24 @@
     <Compile Remove="Areas\store\Models\**" />
     <Compile Remove="NewFolder1\**" />
     <Compile Remove="NewFolder2\**" />
-    <Compile Remove="NewFolder\**" />
     <Content Remove="Areas\store\Data\**" />
     <Content Remove="Areas\store\Models\**" />
     <Compile Remove="ViewModels\NewFolder\**" />
     <Content Remove="Areas\store\Views\User\**" />
     <Content Remove="NewFolder1\**" />
     <Content Remove="NewFolder2\**" />
-    <Content Remove="NewFolder\**" />
     <EmbeddedResource Remove="Areas\store\Data\**" />
     <EmbeddedResource Remove="Areas\store\Models\**" />
     <Content Remove="ViewModels\NewFolder\**" />
     <EmbeddedResource Remove="Areas\store\Views\User\**" />
     <EmbeddedResource Remove="NewFolder1\**" />
     <EmbeddedResource Remove="NewFolder2\**" />
-    <EmbeddedResource Remove="NewFolder\**" />
     <None Remove="Areas\store\Data\**" />
     <None Remove="Areas\store\Models\**" />
     <EmbeddedResource Remove="ViewModels\NewFolder\**" />
     <None Remove="Areas\store\Views\User\**" />
     <None Remove="NewFolder1\**" />
     <None Remove="NewFolder2\**" />
-    <None Remove="NewFolder\**" />
     <None Remove="ViewModels\NewFolder\**" />
   </ItemGroup>
 
@@ -55,6 +53,10 @@
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.13" />
     <PackageReference Include="SqlTableDependency" Version="8.5.8" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="6.5.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.5.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.5.0" />
   </ItemGroup>
 
   <ItemGroup>
