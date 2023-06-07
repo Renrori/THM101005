@@ -14,7 +14,8 @@ using DeliveryBro.ViewModels;
 
 namespace DeliveryBro.ApiController
 {
-	[Route("api/[controller]")]
+    [ApiExplorerSettings(IgnoreApi = true)]
+    [Route("api/[controller]")]
 	[ApiController]
 	public class RegisterApiController : ControllerBase
 	{

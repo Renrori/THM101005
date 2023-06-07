@@ -237,6 +237,7 @@ namespace DeliveryBro.Models
                 entity.HasOne(d => d.Restaurant)
                     .WithMany(p => p.MenuTable)
                     .HasForeignKey(d => d.RestaurantId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Menu_Table_Restaurant_Table");
             });
 
@@ -274,6 +275,10 @@ namespace DeliveryBro.Models
                     .HasColumnName("RestaurantID");
 
                 entity.Property(e => e.EndHours).HasColumnType("time(0)");
+
+                entity.Property(e => e.Latitude).HasColumnType("decimal(9, 6)");
+
+                entity.Property(e => e.Longitude).HasColumnType("decimal(9, 6)");
 
                 entity.Property(e => e.OpeningHours).HasColumnType("time(0)");
 
