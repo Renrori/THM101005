@@ -27,61 +27,86 @@
     </ul>
 
 </aside><!-- End Sidebar-->
-<template>
-    <div>
-        <select v-model="selectedCity">
-            <option value="">請選擇縣市</option>
-            <option v-for="city in addressData" :key="city.id" :value="city.name">{{ city.name }}</option>
-        </select>
+<div b-y5hjwqsk06>
+    <div class="container">
+        <div class="row justify-content-end">
+            <div class="col-xl-9">
+                <div class="pagetitle">
+                    <h1>我的地址</h1>
+                </div>
+                <div id="app">
 
-        <select v-model="selectedDistrict" v-if="selectedCity">
-            <option value="">請選擇區域</option>
-            <option v-for="district in selectedCityDistricts" :key="district.id" :value="district.name">{{ district.name }}</option>
-        </select>
+                    <div>
+                        <label for="city">縣市：</label>
+                        <select v-model="selectedCity" @@change="onCityChange">
+                            <option value="">請選擇</option>
+                            <option v-for="city in CityCountryInfo" :key="city.CityName" :value="city.CityName">{{ city.CityName }}</option>
+                        </select>
+
+                        <label for="area">區域：</label>
+                        <select v-model="selectedDistrict" >
+                            <option value="">請選擇</option>
+                            <option v-for="district in filterAddress" :key="district.AreaName" :value="district.AreaNam">{{ district.AreaName }}</option>
+                        </select>
+                    </div>
+
+                </div>
+            </div>
+        </div>
     </div>
-</template>
+</div>
+
 
 @section scripts
     {
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://unpkg.com/vue@3.2.36/dist/vue.global.prod.js"></script>
     <script src="~/axios/axios.min.js"></script>
+
     <script>
-        var baseAddress = "https://localhost:7163/api/UserApi";
-        var CustomerId = "@User.Claims.FirstOrDefault(c => c.Type == "CustomerId")?.Value";
         var vueApp = {
             data() {
                 return {
                     CityCountryInfo: [],
-                    searchResult: null,
-                    searchorderId: "",
+                    selectedCity:"",
+                    selectedDistrict:"",
+
                 }
             },
             mounted() {
-                this.getUserOrder();
+                this.getAddress()
+            },
+            computed:{
+                filterAddress() {
+                    if(this.selectedCity){
+                        var city = this.CityCountryInfo.find(c => c.CityName == this.selectedCity);
+                        if(city){
+                            return city.AreaList;
+                        }
+                    }
+                    return [];
+                }
             },
             methods: {
-                async getUserOrder() {
-                    //拿出對應cusId的order
+                async getAddress() {
                     try {
-                        const response = await axios.get(`${baseAddress}/waitorder/${CustomerId}`).then(Response => {
-                            this.CustomerOrderInfo = Response.data;
+                        await axios.get('../CityCountyData.json')
+                        .then(res =>
+                        {this.CityCountryInfo = res.data})  
+                        .catch(err=>{
+                        console.log(err)
                         })
-                    } catch (error) {
-                        console.error(error);
                     }
+                    catch {
+
+                    }
+
                 },
-                searchOrder(searchorderId) {
-                    const foundOrder = this.CustomerOrderInfo.find(order => order.orderId === searchorderId)
-                    if (foundOrder) {
-                        this.searchResult = foundOrder;
-                        console.log("match")
-                    }
-                    else {
-                        this.searchResult = null;
-                        console.log("notmatch")
-                    }
+                onCityChange() {
+
+                    this.selectedDistrict = "";
                 }
+               
             }
         };
         var app = Vue.createApp(vueApp).mount("#app");

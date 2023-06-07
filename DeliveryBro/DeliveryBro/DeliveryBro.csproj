@@ -101,6 +101,7 @@
     <Folder Include="wwwroot\admin\vendor\jquery-sparkline\src\" />
     <Folder Include="wwwroot\admin\vendor\moment\src\" />
     <Folder Include="wwwroot\admin\vendor\twitter-bootstrap-wizard\examples\" />
+    <Folder Include="wwwroot\Data\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -1304,6 +1305,9 @@
     <Content Update="Areas\admin\Views\_ViewStart.cshtml">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="wwwroot\CityCountyData.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 
