@@ -43,9 +43,25 @@
                                 <div class="w-100"></div>
                                 <div class="col-md-10">
                                     <div class="form-group">
-                                        <label for="CustomerAddress">地址</label>
+                                        <label for="CustomerAddress"><strong>地址</strong></label>
                                         <div class="d-flex">
-                                            <input type="text" class="form-control" placeholder="CustomerInfo.userAddress" v-model="CustomerInfo.userAddress" required>
+                                            <input type="text" class="form-control" placeholder="CustomerInfo.userAddress" v-model="CustomerInfo.userAddress">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="city">縣市：</label>
+                                        <select v-model="selectedCity" @@change="onCityChange">
+                                            <option value="">請選擇</option>
+                                            <option v-for="city in CityCountryInfo" :key="city.CityName" :value="city.CityName">{{ city.CityName }}</option>
+                                        </select>
+
+                                        <label for="area">區域：</label>
+                                        <select v-model="selectedDistrict">
+                                            <option value="">請選擇</option>
+                                            <option v-for="district in filterAddress" :key="district.AreaName" :value="district.AreaNam">{{ district.AreaName }}</option>
+                                        </select>
+                                        <div class="d-flex">
+                                            <input type="text" class="form-control" placeholder="" v-model="">
                                         </div>
                                     </div>
                                 </div>
@@ -60,7 +76,7 @@
                                     <div class="form-group">
                                         <label for="CustomerAddress">地址</label>
                                         <div class="d-flex">
-                                            <input type="text" class="form-control" placeholder="userAddress" v-model="userAddress" required>
+                                            <input type="text" class="form-control" placeholder="userAddress" v-model="userAddress">
                                         </div>
                                     </div>
                                 </div>
@@ -82,6 +98,10 @@
     <option value="">請選擇縣市</option>
     <option v-for="city in addressData" :key="city.id" :value="city.name">{{ city.name }}</option>
     </select>
+=======
+</div>
+
+>>>>>>> origin/feature/Customer_Menu
 
     <select v-model="selectedDistrict" v-if="selectedCity">
     <option value="">請選擇區域</option>
@@ -103,24 +123,17 @@
                     isEditing: false,
                     CityCountryInfo: [],
                     CustomerInfo: {},
-                    userAddress:""
+                    userAddress: "",
+                    selectedCity: "",
+                    selectedDistrict: "",
                 }
             },
             mounted() {
-                //this.loadCityCountryData();
                 this.getCustomerInfo();
                 //this.postCustomerAddress();
+                this.getAddress()
             },
             methods: {
-                loadCityCountryData() {
-                    axios.get(`${baseJsonAddress}`)
-                        .then(response => {
-                            this.CityCountryInfo = response.data;
-                        })
-                        .catch(error => {
-                            console.error(error);
-                        });
-                },
                 toggleEdit() {
                     this.isEditing = !this.isEditing;
                 },
@@ -132,6 +145,18 @@
                         })
                     } catch (error) {
                         console.error(error);
+                    }
+                },
+                async getAddress() {
+                    try {
+                        await axios.get('../CityCountyData.json')
+                            .then(res => { this.CityCountryInfo = res.data })
+                            .catch(err => {
+                                console.log(err)
+                            })
+                    }
+                    catch {
+                        console.log("error")
                     }
                 },
                 async postCustomerAddress() {
@@ -147,8 +172,22 @@
                     } catch (error) {
                         console.error(error);
                     }
+                },
+                onCityChange() {
+                    this.selectedDistrict = "";
                 }
-            }
+            },
+            computed: {
+                filterAddress() {
+                    if (this.selectedCity) {
+                        var city = this.CityCountryInfo.find(c => c.CityName == this.selectedCity);
+                        if (city) {
+                            return city.AreaList;
+                        }
+                    }
+                    return [];
+                }
+            },
         };
         var app = Vue.createApp(vueApp).mount("#app");
     </script>

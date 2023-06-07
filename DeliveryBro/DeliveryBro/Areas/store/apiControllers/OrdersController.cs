@@ -29,7 +29,7 @@ namespace DeliveryBro.Areas.store.apiControllers
 		[HttpGet]
 		public IQueryable<HisOrderDTO> OrderDetail()
 		{
-			var id = User.GetId(User.GetRole());
+			var id = User.GetId();
 			return _context.CustomerOrderTable.Include(x => x.OrderDetailsTable)
 				.Where(x => x.RestaurantId == id && x.OrderStatus == "completed").OrderByDescending(x => x).Select(x => new HisOrderDTO
 				{
@@ -51,7 +51,7 @@ namespace DeliveryBro.Areas.store.apiControllers
 		[HttpGet("time")]
 		public async Task<IQueryable<HisOrderDTO>> OrderTime(DateTime? startdate, DateTime? enddate, int? id)
 		{
-			var rid= User.GetId(User.GetRole());
+			var rid= User.GetId();
 			var query = _context.CustomerOrderTable.Include(x => x.OrderDetailsTable)
 				   .Where(x => x.RestaurantId == rid && x.OrderStatus == "completed");
 			if (startdate.HasValue) query = query.Where(x => x.OrderDate >= startdate);
@@ -78,7 +78,7 @@ namespace DeliveryBro.Areas.store.apiControllers
 		public IQueryable<HisOrderDTO> WaitingOrder()
 		{
 			_subscribeOrder.Subscribe();
-			var id = User.GetId(User.GetRole());
+			var id = User.GetId();
 			return _context.CustomerOrderTable.Include(x => x.OrderDetailsTable)
 				.Where(x => x.RestaurantId == id && x.OrderStatus == "waiting").Select(x => new HisOrderDTO
 				{
@@ -100,7 +100,7 @@ namespace DeliveryBro.Areas.store.apiControllers
 		[HttpGet("acepted")]
 		public IQueryable<HisOrderDTO> AceptedOrder()
 		{
-			var id = User.GetId(User.GetRole());
+			var id = User.GetId();
 			return _context.CustomerOrderTable.Include(x => x.OrderDetailsTable)
 				.Where(x => x.RestaurantId == id && x.OrderStatus == "acepted").Select(x => new HisOrderDTO
 				{
