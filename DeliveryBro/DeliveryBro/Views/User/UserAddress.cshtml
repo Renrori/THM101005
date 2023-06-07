@@ -28,60 +28,124 @@
 
 </aside><!-- End Sidebar-->
 <div id="app">
-<template>
-    <div>
-        <select v-model="selectedCity">
-            <option value="">請選擇縣市</option>
-            <option v-for="city in addressData" :key="city.id" :value="city.name">{{ city.name }}</option>
-        </select>
+    <div b-y5hjwqsk06>
+        <div class="container">
+            <div class="row justify-content-end">
+                <div class="col-xl-6">
+                    <form action="#" class="Personal-form">
+                        <div class="pagetitle">
+                            <h1>我的地址</h1>
+                        </div>
+                        <button class="btn btn-primary col-3" v-if="!isEditing" @@click="toggleEdit">修改地址</button>
 
-        <select v-model="selectedDistrict" v-if="selectedCity">
-            <option value="">請選擇區域</option>
-            <option v-for="district in selectedCityDistricts" :key="district.id" :value="district.name">{{ district.name }}</option>
-        </select>
+                        <div v-if="!isEditing">
+                            <div class="row align-items-end">
+                                <div class="w-100"></div>
+                                <div class="col-md-10">
+                                    <div class="form-group">
+                                        <label for="CustomerAddress">地址</label>
+                                        <div class="d-flex">
+                                            <input type="text" class="form-control" placeholder="CustomerInfo.userAddress" v-model="CustomerInfo.userAddress" required>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div v-if="isEditing">
+                            <button class="btn btn-outline-primary col-3" @@click="postCustomerAddress">確認修改</button>
+                            <div class="row align-items-end" v-if="isEditing">
+                                <div class="w-100"></div>
+                                <div class="col-md-10">
+                                    <div class="form-group">
+                                        <label for="CustomerAddress">地址</label>
+                                        <div class="d-flex">
+                                            <input type="text" class="form-control" placeholder="userAddress" v-model="userAddress" required>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="col-lg-3">
+                    <div class="card position-sticky top-0">
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    </template>
+    @*{{CustomerInfo}}*@
 </div>
+@*        <select v-model="selectedCity">
+    <option value="">請選擇縣市</option>
+    <option v-for="city in addressData" :key="city.id" :value="city.name">{{ city.name }}</option>
+    </select>
 
-@section scripts
+    <select v-model="selectedDistrict" v-if="selectedCity">
+    <option value="">請選擇區域</option>
+    <option v-for="district in selectedCityDistricts" :key="district.id" :value="district.name">{{ district.name }}</option>
+    </select>*@
+
+@section Scripts
     {
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://unpkg.com/vue@3.2.36/dist/vue.global.prod.js"></script>
     <script src="~/axios/axios.min.js"></script>
     <script>
         var baseAddress = "https://localhost:7163/api/UserApi";
+        var baseJsonAddress = "https://localhost:7163/Data/CityCountry/CityCountyData.json";
         var CustomerId = "@User.Claims.FirstOrDefault(c => c.Type == "CustomerId")?.Value";
         var vueApp = {
             data() {
                 return {
+                    isEditing: false,
                     CityCountryInfo: [],
-                    searchResult: null,
-                    searchorderId: "",
+                    CustomerInfo: {},
+                    userAddress:""
                 }
             },
             mounted() {
-                this.getUserOrder();
+                //this.loadCityCountryData();
+                this.getCustomerInfo();
+                //this.postCustomerAddress();
             },
             methods: {
-                async getUserOrder() {
-                    //拿出對應cusId的order
+                loadCityCountryData() {
+                    axios.get(`${baseJsonAddress}`)
+                        .then(response => {
+                            this.CityCountryInfo = response.data;
+                        })
+                        .catch(error => {
+                            console.error(error);
+                        });
+                },
+                toggleEdit() {
+                    this.isEditing = !this.isEditing;
+                },
+                async getCustomerInfo() {
+                    //拿出對應cusId
                     try {
-                        const response = await axios.get(`${baseAddress}/waitorder/${CustomerId}`).then(Response => {
-                            this.CustomerOrderInfo = Response.data;
+                        const response = await axios.get(`${baseAddress}/${CustomerId}`).then(Response => {
+                            this.CustomerInfo = Response.data;
                         })
                     } catch (error) {
                         console.error(error);
                     }
                 },
-                searchOrder(searchorderId) {
-                    const foundOrder = this.CustomerOrderInfo.find(order => order.orderId === searchorderId)
-                    if (foundOrder) {
-                        this.searchResult = foundOrder;
-                        console.log("match")
+                async postCustomerAddress() {
+                    const data = {
+                        userAddress: this.userAddress
                     }
-                    else {
-                        this.searchResult = null;
-                        console.log("notmatch")
+                    //拿出對應cusId
+                    try {
+                        axios.post(`${baseAddress}/CheckAdd/${CustomerId}`, data).then(Response => {
+                            console.log("修改成功");
+                            this.isEditing = false;
+                        })
+                    } catch (error) {
+                        console.error(error);
                     }
                 }
             }
@@ -89,4 +153,4 @@
         var app = Vue.createApp(vueApp).mount("#app");
     </script>
 
-}
+    }
