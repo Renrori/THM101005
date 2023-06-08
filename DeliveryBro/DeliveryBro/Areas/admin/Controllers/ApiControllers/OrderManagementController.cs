@@ -18,20 +18,18 @@ namespace DeliveryBro.Areas.admin.Controllers.ApiControllers
 		{
 			_db = context;
 		}
-
+        //var nextPage = context.Posts
+		//	.OrderBy(b => b.PostId)
+		//	.Skip(position)
+		//	.Take(10)
+		//	.ToList();
 		[HttpGet("{page}")]
 		public async Task<OrderManagementDTO> GetOrder(int page)
 		{
 
 			var quantity = 10; // 一頁幾筆
 			var count = 0; // 全部幾筆
-
-			//var nextPage = context.Posts
-			//	.OrderBy(b => b.PostId)
-			//	.Skip(position)
-			//	.Take(10)
-			//	.ToList();
-			var query = _db.CustomerOrderTable				
+  			var query = _db.CustomerOrderTable				
 			 .OrderBy(x => x.OrderId); //遞增排序
 			count = await query.CountAsync(); // 先查全部有幾筆
 

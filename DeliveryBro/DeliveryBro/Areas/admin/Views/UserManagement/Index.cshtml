@@ -1,7 +1,7 @@
 ﻿@{
 	Layout = "_LayoutAdmin";
 }
-<div class="content-page">
+<div class="content-page" id="userapp">
 	<div class="content">
 
 		<!-- Start Content-->
@@ -49,38 +49,72 @@
 </div> <!-- container -->
 <script type="text/javascript">
 	var app = new Vue({
-		el: '#userapp'
-				data: {
+		el: '#userapp',
+		data: {
+			maxcount: 0, // 總比數
+			user: [], // 資料暫存
+			nowpage: 1, // 現在的頁數
 			customerName: "",
 			customerAccount: "",
 			customerEmail: "",
 			customerPhone: "",
-		}
+			
+		},
 		mounted: function () {
 			// vue 第一次執行的內容, 只會直行一次
 			let salf = this;
-			axios('/api/UserManagement/GetUser/1')
+			axios('/api/UserManagement/GetUser/')
 				.then(function (res) {
-					salf.order = res.data.items; // 回船的orders
+					salf.user = res.data.items; // 回船的user
 					salf.maxcount = res.data.count; // 總比數
 				});
+			//.catch(function (error) { // 請求失敗
+			//    console.log(error);
+			//});
 		},
-		methods: {
+		methods: { // 放置方法的地方
+			// 讀取下一頁 (傳入頁馬)
 			nextpage: function (page) {
 				let salf = this;
 				// 跟後端讀取ORDER
-				axios('/api/UserManagement/GetUser/')
+				axios('/api/UserManagement/GetUser/' + page)
 					.then(function (res) {
 						// 讀取完成
 						salf.nowpage = page;
 						salf.order = res.data.items;
 						salf.maxcount = res.data.count;
 					});
-			});
+			},
+			//editorder: function (orderId) {
+			//	alert("edit");
+			//	$("#editModal").modal("show");
+			//	let _this = this;
+			//	for (var i = 0; i < _this.order.length; i++) {
+			//		var item = _this.order[i];
+			//		if (orderId == item.orderId) {
+			//			_this.orderId = item.orderId;
+			//			_this.orderDate = item.orderDate;
+			//			_this.customerAddress = item.customerAddress;
+			//			_this.amountAfterDiscount = item.amountAfterDiscount;
+			//		}
+			//	}
+			//},
+			//deleteorder: function (id) {
+			//	axios.delete('/api/OrderManagement/Delete/' + id).then(res => {
+			//		if (res.data) {
+			//			alert("已刪除");
+			//			this.nextpage(this.nowpage);
+			//			var idx = this.order.findIndex(x => x.orderID == id);
+			//			this.order.splice(idx, 1)
+			//			$("#deleteModal").modal("hide");
+			//		}
+			//	})
+			//},
+			//deleteConfirm: function (item) {
+			//	this.delInfo.title = item.orderId;
+			//	this.delInfo.msg.orderID = item.orderId;
+			//	this.delInfo.msg.amountAfterDiscount = item.amountAfterDiscount;
+			//}
 		}
-	}
-
-
-		})
-
+	})
 </script>

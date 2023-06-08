@@ -20,7 +20,7 @@ namespace DeliveryBro.Areas.admin.Controllers.ApiControllers
 
 		[HttpGet]
 		//IEnumerable 副數集合方法
-		public async Task<IEnumerable<UserManagementDTO>>GetUser()
+		public async Task<IEnumerable<UserManagementDTO>> GetUser()
 		{
 
 			var User = await _db.CustomersTable
