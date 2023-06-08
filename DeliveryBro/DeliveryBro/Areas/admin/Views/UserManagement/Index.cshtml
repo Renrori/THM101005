@@ -1,546 +1,88 @@
-﻿
-@{
-    Layout = "_Layout";
+﻿@{
+	Layout = "_LayoutAdmin";
 }
 <div class="content-page">
-    <div class="content">
+	<div class="content">
 
-        <!-- Start Content-->
-        <div class="container-fluid">
+		<!-- Start Content-->
+		<div class="container-fluid">
 
-            <!-- start page title -->
-            <div class="row">
-                <div class="col-12">
-                    <div class="page-title-box">
-                        <div class="page-title-right">
-                            <ol class="breadcrumb m-0">
-                                <li class="breadcrumb-item"><a href="javascript: void(0);"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">超</font></font></a></li>
-                                <li class="breadcrumb-item"><a href="javascript: void(0);"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">電子商務</font></font></a></li>
-                                <li class="breadcrumb-item active"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">顧客</font></font></li>
-                            </ol>
-                        </div>
-                        <h4 class="page-title"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">顧客</font></font></h4>
-                    </div>
-                </div>
-            </div>
-            <!-- end page title -->
+			<!-- start page title -->
+			<div class="row">
+				<div class="col-12">
+					<div class="page-title-box">
+						<h4 class="page-title"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">顧客</font></font></h4>
+					</div>
+				</div>
+			</div>
+			<!-- end page title -->
 
-            <div class="row">
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="row mb-2">
-                                <div class="col-sm-5">
-                                    <a href="javascript:void(0);" class="btn btn-danger mb-2"><i class="mdi mdi-plus-circle me-2"></i><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">添加客戶</font></font></a>
-                                </div>
-                                <div class="col-sm-7">
-                                    <div class="text-sm-end">
-                                        <button type="button" class="btn btn-success mb-2 me-1"><i class="mdi mdi-cog"></i></button>
-                                        <button type="button" class="btn btn-light mb-2 me-1"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">進口</font></font></button>
-                                        <button type="button" class="btn btn-light mb-2"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">出口</font></font></button>
-                                    </div>
-                                </div><!-- end col-->
-                            </div>
+			<div class="col-sm-12">
+				<table class="table table-centered table-striped dt-responsive nowrap w-100 dataTable no-footer dtr-inline" id="products-datatable" aria-describedby="products-datatable_info" style="width: 1534px;">
+ 					<thead>
+						<tr>
+ 							<th class="sorting" tabindex="0" aria-controls="products-datatable" rowspan="1" colspan="1" style="width: 249.8px;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">姓名</font></font></th>
+							<th class="sorting" tabindex="0" aria-controls="products-datatable" rowspan="1" colspan="1" style="width: 181.8px;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">帳號</font></font></th>
+							<th class="sorting" tabindex="0" aria-controls="products-datatable" rowspan="1" colspan="1" style="width: 260.8px;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">電子郵件</font></font></th>
+							<th class="sorting" tabindex="0" aria-controls="products-datatable" rowspan="1" colspan="1" style="width: 164.8px;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">是否啟用</font></font></th>
+							<th class="sorting sorting_asc" tabindex="0" aria-controls="products-datatable" rowspan="1" colspan="1" style="width: 148.8px;" aria-sort="ascending"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">地址</font></font></th>
+							<th class="sorting" tabindex="0" aria-controls="products-datatable" rowspan="1" colspan="1" style="width: 92.8px;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">電話</font></font></th>
+							<th style="width: 75.6px;" class="dt-body-right sorting_disabled" rowspan="1" colspan="1" aria-label="行動"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">行動</font></font></th>
+						</tr>
+					</thead>
 
-                            <div class="table-responsive">
-                                <div id="products-datatable_wrapper" class="dataTables_wrapper dt-bootstrap5 no-footer">
-                                    <div class="row"><div class="col-sm-6"><div class="dataTables_length" id="products-datatable_length"><label class="form-label"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">展示</font></font><select class="form-select form-select-sm ms-1 me-1"><option value="10"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">10</font></font></option><option value="20"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">20</font></font></option><option value="-1"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">全部</font></font></option></select><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">顧客</font></font></label></div></div><div class="col-sm-6"><div id="products-datatable_filter" class="dataTables_filter"><label><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">搜索：</font></font><input type="search" class="form-control form-control-sm" placeholder="" aria-controls="products-datatable"></label></div></div></div><div class="row">
-                                        <div class="col-sm-12">
-                                            <table class="table table-centered table-striped dt-responsive nowrap w-100 dataTable no-footer dtr-inline" id="products-datatable" aria-describedby="products-datatable_info" style="width: 1534px;">
-                                                <thead>
-                                                    <tr>
-                                                        <th style="width: 27.6px;" class="sorting_disabled dt-checkboxes-cell dt-checkboxes-select-all" rowspan="1" colspan="1" data-col="0" aria-label="
+					<tr class="odd">
+						<td class="dt-checkboxes-cell dtr-control"><div class="form-check"><input type="checkbox" class="form-check-input dt-checkboxes"><label class="form-check-label">&nbsp;</label></div></td>
+						<td class="table-user">
+							<img src="assets/images/users/avatar-2.jpg" alt="表用戶" class="me-2 rounded-circle">
+							<a href="javascript:void(0);" class="text-body fw-semibold"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">羅里西坎普</font></font></a>
+						</td>
+						<td style="">
+							<font style="vertical-align: inherit;">
+								<font style="vertical-align: inherit;">
+									078 5054 8877
+								</font>
+							</font>
+						</td>
+						<td style="">
+							<font style="vertical-align: inherit;">
+								<font style="vertical-align: inherit;">
+									roryamp@dayrep.com
+								</font>
+							</font>
+						</td>
+						<td style="">
+							<font style="vertical-align: inherit;">
+								<font style="vertical-align: inherit;">
+									美國
+								</font>
+							</font>
+						</td>
+						<td class="sorting_1" style="">
+							<font style="vertical-align: inherit;">
+								<font style="vertical-align: inherit;">
+									2018-03-24
+								</font>
+							</font>
+						</td>
+						<td style="">
+							<span class="badge badge-danger-lighten"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">封鎖</font></font></span>
+						</td>
 
-                                                        "><div class="form-check"><input type="checkbox" class="form-check-input dt-checkboxes"><label class="form-check-label">&nbsp;</label></div></th>
-                                                        <th class="sorting" tabindex="0" aria-controls="products-datatable" rowspan="1" colspan="1" style="width: 249.8px;" aria-label="客戶：激活以對列進行升序排序"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">顧客</font></font></th>
-                                                        <th class="sorting" tabindex="0" aria-controls="products-datatable" rowspan="1" colspan="1" style="width: 181.8px;" aria-label="電話：激活以對列升序排序"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">電話</font></font></th>
-                                                        <th class="sorting" tabindex="0" aria-controls="products-datatable" rowspan="1" colspan="1" style="width: 260.8px;" aria-label="電子郵件：激活以對列升序排序"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">電子郵件</font></font></th>
-                                                        <th class="sorting" tabindex="0" aria-controls="products-datatable" rowspan="1" colspan="1" style="width: 164.8px;" aria-label="位置：激活以對列升序排序"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">地點</font></font></th>
-                                                        <th class="sorting sorting_asc" tabindex="0" aria-controls="products-datatable" rowspan="1" colspan="1" style="width: 148.8px;" aria-sort="ascending" aria-label="創建日期：激活以對列進行降序排序"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">創建日期</font></font></th>
-                                                        <th class="sorting" tabindex="0" aria-controls="products-datatable" rowspan="1" colspan="1" style="width: 92.8px;" aria-label="狀態：激活以對列升序排序"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">地位</font></font></th>
-                                                        <th style="width: 75.6px;" class="dt-body-right sorting_disabled" rowspan="1" colspan="1" aria-label="行動"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">行動</font></font></th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
+						<td class=" dt-body-right" style="">
+							<a href="javascript:void(0);" class="action-icon"> <i class="mdi mdi-square-edit-outline"></i></a>
+							<a href="javascript:void(0);" class="action-icon"> <i class="mdi mdi-delete"></i></a>
+						</td>
+					</tr>
+					<tr class="even">
+						<td class="dtr-control dt-checkboxes-cell" tabindex="0"><div class="form-check"><input type="checkbox" class="form-check-input dt-checkboxes"><label class="form-check-label">&nbsp;</label></div></td>
+				</table>
+			</div>
 
 
+		</div> <!-- end card-->
 
+	</div>
+	<!-- end row -->
 
-
-
-
-
-
-
-
-
-
-                                                    <tr class="odd">
-                                                        <td class="dt-checkboxes-cell dtr-control"><div class="form-check"><input type="checkbox" class="form-check-input dt-checkboxes"><label class="form-check-label">&nbsp;</label></div></td>
-                                                        <td class="table-user">
-                                                            <img src="assets/images/users/avatar-2.jpg" alt="表用戶" class="me-2 rounded-circle">
-                                                            <a href="javascript:void(0);" class="text-body fw-semibold"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">羅里西坎普</font></font></a>
-                                                        </td>
-                                                        <td style="">
-                                                            <font style="vertical-align: inherit;">
-                                                                <font style="vertical-align: inherit;">
-                                                                    078 5054 8877
-                                                                </font>
-                                                            </font>
-                                                        </td>
-                                                        <td style="">
-                                                            <font style="vertical-align: inherit;">
-                                                                <font style="vertical-align: inherit;">
-                                                                    roryamp@dayrep.com
-                                                                </font>
-                                                            </font>
-                                                        </td>
-                                                        <td style="">
-                                                            <font style="vertical-align: inherit;">
-                                                                <font style="vertical-align: inherit;">
-                                                                    美國
-                                                                </font>
-                                                            </font>
-                                                        </td>
-                                                        <td class="sorting_1" style="">
-                                                            <font style="vertical-align: inherit;">
-                                                                <font style="vertical-align: inherit;">
-                                                                    2018-03-24
-                                                                </font>
-                                                            </font>
-                                                        </td>
-                                                        <td style="">
-                                                            <span class="badge badge-danger-lighten"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">封鎖</font></font></span>
-                                                        </td>
-
-                                                        <td class=" dt-body-right" style="">
-                                                            <a href="javascript:void(0);" class="action-icon"> <i class="mdi mdi-square-edit-outline"></i></a>
-                                                            <a href="javascript:void(0);" class="action-icon"> <i class="mdi mdi-delete"></i></a>
-                                                        </td>
-                                                    </tr>
-                                                    <tr class="even">
-                                                        <td class="dtr-control dt-checkboxes-cell" tabindex="0"><div class="form-check"><input type="checkbox" class="form-check-input dt-checkboxes"><label class="form-check-label">&nbsp;</label></div></td>
-                                                        <td class="table-user">
-                                                            <img src="assets/images/users/avatar-10.jpg" alt="表用戶" class="me-2 rounded-circle">
-                                                            <a href="javascript:void(0);" class="text-body fw-semibold"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">院長鐵匠鋪</font></font></a>
-                                                        </td>
-                                                        <td style="">
-                                                            <font style="vertical-align: inherit;">
-                                                                <font style="vertical-align: inherit;">
-                                                                    077 6157 4248
-                                                                </font>
-                                                            </font>
-                                                        </td>
-                                                        <td style="">
-                                                            <font style="vertical-align: inherit;">
-                                                                <font style="vertical-align: inherit;">
-                                                                    deanes@dayrep.com
-                                                                </font>
-                                                            </font>
-                                                        </td>
-                                                        <td style="">
-                                                            <font style="vertical-align: inherit;">
-                                                                <font style="vertical-align: inherit;">
-                                                                    新加坡
-                                                                </font>
-                                                            </font>
-                                                        </td>
-                                                        <td class="sorting_1" style="">
-                                                            <font style="vertical-align: inherit;">
-                                                                <font style="vertical-align: inherit;">
-                                                                    2018-04-09
-                                                                </font>
-                                                            </font>
-                                                        </td>
-                                                        <td style="">
-                                                            <span class="badge badge-success-lighten"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">積極的</font></font></span>
-                                                        </td>
-
-                                                        <td class=" dt-body-right" style="">
-                                                            <a href="javascript:void(0);" class="action-icon"> <i class="mdi mdi-square-edit-outline"></i></a>
-                                                            <a href="javascript:void(0);" class="action-icon"> <i class="mdi mdi-delete"></i></a>
-                                                        </td>
-                                                    </tr>
-                                                    <tr class="odd">
-                                                        <td class="dtr-control dt-checkboxes-cell" tabindex="0"><div class="form-check"><input type="checkbox" class="form-check-input dt-checkboxes"><label class="form-check-label">&nbsp;</label></div></td>
-                                                        <td class="table-user">
-                                                            <img src="assets/images/users/avatar-9.jpg" alt="表用戶" class="me-2 rounded-circle">
-                                                            <a href="javascript:void(0);" class="text-body fw-semibold"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">安娜·錢塔爾</font></font></a>
-                                                        </td>
-                                                        <td style="">
-                                                            <font style="vertical-align: inherit;">
-                                                                <font style="vertical-align: inherit;">
-                                                                    (216) 76 298 896
-                                                                </font>
-                                                            </font>
-                                                        </td>
-                                                        <td style="">
-                                                            <font style="vertical-align: inherit;">
-                                                                <font style="vertical-align: inherit;">
-                                                                    annac@hotmai.us
-                                                                </font>
-                                                            </font>
-                                                        </td>
-                                                        <td style="">
-                                                            <font style="vertical-align: inherit;">
-                                                                <font style="vertical-align: inherit;">
-                                                                    菲律賓
-                                                                </font>
-                                                            </font>
-                                                        </td>
-                                                        <td class="sorting_1" style="">
-                                                            <font style="vertical-align: inherit;">
-                                                                <font style="vertical-align: inherit;">
-                                                                    05/06/2018
-                                                                </font>
-                                                            </font>
-                                                        </td>
-                                                        <td style="">
-                                                            <span class="badge badge-success-lighten"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">積極的</font></font></span>
-                                                        </td>
-
-                                                        <td class=" dt-body-right" style="">
-                                                            <a href="javascript:void(0);" class="action-icon"> <i class="mdi mdi-square-edit-outline"></i></a>
-                                                            <a href="javascript:void(0);" class="action-icon"> <i class="mdi mdi-delete"></i></a>
-                                                        </td>
-                                                    </tr>
-                                                    <tr class="even">
-                                                        <td class="dt-checkboxes-cell dtr-control"><div class="form-check"><input type="checkbox" class="form-check-input dt-checkboxes"><label class="form-check-label">&nbsp;</label></div></td>
-                                                        <td class="table-user">
-                                                            <img src="assets/images/users/avatar-1.jpg" alt="表用戶" class="me-2 rounded-circle">
-                                                            <a href="javascript:void(0);" class="text-body fw-semibold"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">拉比布加利</font></font></a>
-                                                        </td>
-                                                        <td style="">
-                                                            <font style="vertical-align: inherit;">
-                                                                <font style="vertical-align: inherit;">
-                                                                    050 414 8778
-                                                                </font>
-                                                            </font>
-                                                        </td>
-                                                        <td style="">
-                                                            <font style="vertical-align: inherit;">
-                                                                <font style="vertical-align: inherit;">
-                                                                    labebswad@teleworm.us
-                                                                </font>
-                                                            </font>
-                                                        </td>
-                                                        <td style="">
-                                                            <font style="vertical-align: inherit;">
-                                                                <font style="vertical-align: inherit;">
-                                                                    英國
-                                                                </font>
-                                                            </font>
-                                                        </td>
-                                                        <td class="sorting_1" style="">
-                                                            <font style="vertical-align: inherit;">
-                                                                <font style="vertical-align: inherit;">
-                                                                    2018/06/19
-                                                                </font>
-                                                            </font>
-                                                        </td>
-                                                        <td style="">
-                                                            <span class="badge badge-success-lighten"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">積極的</font></font></span>
-                                                        </td>
-
-                                                        <td class=" dt-body-right" style="">
-                                                            <a href="javascript:void(0);" class="action-icon"> <i class="mdi mdi-square-edit-outline"></i></a>
-                                                            <a href="javascript:void(0);" class="action-icon"> <i class="mdi mdi-delete"></i></a>
-                                                        </td>
-                                                    </tr>
-                                                    <tr class="odd">
-                                                        <td class="dtr-control dt-checkboxes-cell" tabindex="0"><div class="form-check"><input type="checkbox" class="form-check-input dt-checkboxes"><label class="form-check-label">&nbsp;</label></div></td>
-                                                        <td class="table-user">
-                                                            <img src="assets/images/users/avatar-3.jpg" alt="表用戶" class="me-2 rounded-circle">
-                                                            <a href="javascript:void(0);" class="text-body fw-semibold"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">凱瑟琳·科利爾</font></font></a>
-                                                        </td>
-                                                        <td style="">
-                                                            <font style="vertical-align: inherit;">
-                                                                <font style="vertical-align: inherit;">
-                                                                    828-216-2190
-                                                                </font>
-                                                            </font>
-                                                        </td>
-                                                        <td style="">
-                                                            <font style="vertical-align: inherit;">
-                                                                <font style="vertical-align: inherit;">
-                                                                    collier@jourrapide.com
-                                                                </font>
-                                                            </font>
-                                                        </td>
-                                                        <td style="">
-                                                            <font style="vertical-align: inherit;">
-                                                                <font style="vertical-align: inherit;">
-                                                                    加拿大
-                                                                </font>
-                                                            </font>
-                                                        </td>
-                                                        <td class="sorting_1" style="">
-                                                            <font style="vertical-align: inherit;">
-                                                                <font style="vertical-align: inherit;">
-                                                                    06/30/2018
-                                                                </font>
-                                                            </font>
-                                                        </td>
-                                                        <td style="">
-                                                            <span class="badge badge-danger-lighten"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">封鎖</font></font></span>
-                                                        </td>
-
-                                                        <td class=" dt-body-right" style="">
-                                                            <a href="javascript:void(0);" class="action-icon"> <i class="mdi mdi-square-edit-outline"></i></a>
-                                                            <a href="javascript:void(0);" class="action-icon"> <i class="mdi mdi-delete"></i></a>
-                                                        </td>
-                                                    </tr>
-                                                    <tr class="even">
-                                                        <td class="dtr-control dt-checkboxes-cell" tabindex="0"><div class="form-check"><input type="checkbox" class="form-check-input dt-checkboxes"><label class="form-check-label">&nbsp;</label></div></td>
-                                                        <td class="table-user">
-                                                            <img src="assets/images/users/avatar-4.jpg" alt="表用戶" class="me-2 rounded-circle">
-                                                            <a href="javascript:void(0);" class="text-body fw-semibold"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">保羅·弗蘭德</font></font></a>
-                                                        </td>
-                                                        <td style="">
-                                                            <font style="vertical-align: inherit;">
-                                                                <font style="vertical-align: inherit;">
-                                                                    937-330-1634
-                                                                </font>
-                                                            </font>
-                                                        </td>
-                                                        <td style="">
-                                                            <font style="vertical-align: inherit;">
-                                                                <font style="vertical-align: inherit;">
-                                                                    pauljfrnd@jourrapide.com
-                                                                </font>
-                                                            </font>
-                                                        </td>
-                                                        <td style="">
-                                                            <font style="vertical-align: inherit;">
-                                                                <font style="vertical-align: inherit;">
-                                                                    紐約
-                                                                </font>
-                                                            </font>
-                                                        </td>
-                                                        <td class="sorting_1" style="">
-                                                            <font style="vertical-align: inherit;">
-                                                                <font style="vertical-align: inherit;">
-                                                                    07/07/2018
-                                                                </font>
-                                                            </font>
-                                                        </td>
-                                                        <td style="">
-                                                            <span class="badge badge-success-lighten"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">積極的</font></font></span>
-                                                        </td>
-
-                                                        <td class=" dt-body-right" style="">
-                                                            <a href="javascript:void(0);" class="action-icon"> <i class="mdi mdi-square-edit-outline"></i></a>
-                                                            <a href="javascript:void(0);" class="action-icon"> <i class="mdi mdi-delete"></i></a>
-                                                        </td>
-                                                    </tr>
-                                                    <tr class="odd">
-                                                        <td class="dtr-control dt-checkboxes-cell" tabindex="0"><div class="form-check"><input type="checkbox" class="form-check-input dt-checkboxes"><label class="form-check-label">&nbsp;</label></div></td>
-                                                        <td class="table-user">
-                                                            <img src="assets/images/users/avatar-5.jpg" alt="表用戶" class="me-2 rounded-circle">
-                                                            <a href="javascript:void(0);" class="text-body fw-semibold"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">扎拉勞斯</font></font></a>
-                                                        </td>
-                                                        <td style="">
-                                                            <font style="vertical-align: inherit;">
-                                                                <font style="vertical-align: inherit;">
-                                                                    (02) 75 150 655
-                                                                </font>
-                                                            </font>
-                                                        </td>
-                                                        <td style="">
-                                                            <font style="vertical-align: inherit;">
-                                                                <font style="vertical-align: inherit;">
-                                                                    austin@dayrep.com
-                                                                </font>
-                                                            </font>
-                                                        </td>
-                                                        <td style="">
-                                                            <font style="vertical-align: inherit;">
-                                                                <font style="vertical-align: inherit;">
-                                                                    德國
-                                                                </font>
-                                                            </font>
-                                                        </td>
-                                                        <td class="sorting_1" style="">
-                                                            <font style="vertical-align: inherit;">
-                                                                <font style="vertical-align: inherit;">
-                                                                    07/15/2018
-                                                                </font>
-                                                            </font>
-                                                        </td>
-                                                        <td style="">
-                                                            <span class="badge badge-success-lighten"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">積極的</font></font></span>
-                                                        </td>
-
-                                                        <td class=" dt-body-right" style="">
-                                                            <a href="javascript:void(0);" class="action-icon"> <i class="mdi mdi-square-edit-outline"></i></a>
-                                                            <a href="javascript:void(0);" class="action-icon"> <i class="mdi mdi-delete"></i></a>
-                                                        </td>
-                                                    </tr>
-                                                    <tr class="even">
-                                                        <td class="dtr-control dt-checkboxes-cell" tabindex="0"><div class="form-check"><input type="checkbox" class="form-check-input dt-checkboxes"><label class="form-check-label">&nbsp;</label></div></td>
-                                                        <td class="table-user">
-                                                            <img src="assets/images/users/avatar-7.jpg" alt="表用戶" class="me-2 rounded-circle">
-                                                            <a href="javascript:void(0);" class="text-body fw-semibold"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">珍妮 C. 格羅</font></font></a>
-                                                        </td>
-                                                        <td style="">
-                                                            <font style="vertical-align: inherit;">
-                                                                <font style="vertical-align: inherit;">
-                                                                    078 7173 9261
-                                                                </font>
-                                                            </font>
-                                                        </td>
-                                                        <td style="">
-                                                            <font style="vertical-align: inherit;">
-                                                                <font style="vertical-align: inherit;">
-                                                                    jennygero@teleworm.us
-                                                                </font>
-                                                            </font>
-                                                        </td>
-                                                        <td style="">
-                                                            <font style="vertical-align: inherit;">
-                                                                <font style="vertical-align: inherit;">
-                                                                    萊索托
-                                                                </font>
-                                                            </font>
-                                                        </td>
-                                                        <td class="sorting_1" style="">
-                                                            <font style="vertical-align: inherit;">
-                                                                <font style="vertical-align: inherit;">
-                                                                    08/02/2018
-                                                                </font>
-                                                            </font>
-                                                        </td>
-                                                        <td style="">
-                                                            <span class="badge badge-danger-lighten"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">封鎖</font></font></span>
-                                                        </td>
-
-                                                        <td class=" dt-body-right" style="">
-                                                            <a href="javascript:void(0);" class="action-icon"> <i class="mdi mdi-square-edit-outline"></i></a>
-                                                            <a href="javascript:void(0);" class="action-icon"> <i class="mdi mdi-delete"></i></a>
-                                                        </td>
-                                                    </tr>
-                                                    <tr class="odd">
-                                                        <td class="dtr-control dt-checkboxes-cell" tabindex="0"><div class="form-check"><input type="checkbox" class="form-check-input dt-checkboxes"><label class="form-check-label">&nbsp;</label></div></td>
-                                                        <td class="table-user">
-                                                            <img src="assets/images/users/avatar-8.jpg" alt="表用戶" class="me-2 rounded-circle">
-                                                            <a href="javascript:void(0);" class="text-body fw-semibold"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">愛德華羅斯比</font></font></a>
-                                                        </td>
-                                                        <td style="">
-                                                            <font style="vertical-align: inherit;">
-                                                                <font style="vertical-align: inherit;">
-                                                                    078 6013 3854
-                                                                </font>
-                                                            </font>
-                                                        </td>
-                                                        <td style="">
-                                                            <font style="vertical-align: inherit;">
-                                                                <font style="vertical-align: inherit;">
-                                                                    edwardR@armyspy.com
-                                                                </font>
-                                                            </font>
-                                                        </td>
-                                                        <td style="">
-                                                            <font style="vertical-align: inherit;">
-                                                                <font style="vertical-align: inherit;">
-                                                                    摩納哥
-                                                                </font>
-                                                            </font>
-                                                        </td>
-                                                        <td class="sorting_1" style="">
-                                                            <font style="vertical-align: inherit;">
-                                                                <font style="vertical-align: inherit;">
-                                                                    08/23/2018
-                                                                </font>
-                                                            </font>
-                                                        </td>
-                                                        <td style="">
-                                                            <span class="badge badge-success-lighten"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">積極的</font></font></span>
-                                                        </td>
-
-                                                        <td class=" dt-body-right" style="">
-                                                            <a href="javascript:void(0);" class="action-icon"> <i class="mdi mdi-square-edit-outline"></i></a>
-                                                            <a href="javascript:void(0);" class="action-icon"> <i class="mdi mdi-delete"></i></a>
-                                                        </td>
-                                                    </tr>
-                                                    <tr class="even">
-                                                        <td class="dtr-control dt-checkboxes-cell" tabindex="0"><div class="form-check"><input type="checkbox" class="form-check-input dt-checkboxes"><label class="form-check-label">&nbsp;</label></div></td>
-                                                        <td class="table-user">
-                                                            <img src="assets/images/users/avatar-6.jpg" alt="表用戶" class="me-2 rounded-circle">
-                                                            <a href="javascript:void(0);" class="text-body fw-semibold"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">安妮特·P·凱爾施</font></font></a>
-                                                        </td>
-                                                        <td style="">
-                                                            <font style="vertical-align: inherit;">
-                                                                <font style="vertical-align: inherit;">
-                                                                    (+15) 73 483 758
-                                                                </font>
-                                                            </font>
-                                                        </td>
-                                                        <td style="">
-                                                            <font style="vertical-align: inherit;">
-                                                                <font style="vertical-align: inherit;">
-                                                                    annette@email.net
-                                                                </font>
-                                                            </font>
-                                                        </td>
-                                                        <td style="">
-                                                            <font style="vertical-align: inherit;">
-                                                                <font style="vertical-align: inherit;">
-                                                                    印度
-                                                                </font>
-                                                            </font>
-                                                        </td>
-                                                        <td class="sorting_1" style="">
-                                                            <font style="vertical-align: inherit;">
-                                                                <font style="vertical-align: inherit;">
-                                                                    09/05/2018
-                                                                </font>
-                                                            </font>
-                                                        </td>
-                                                        <td style="">
-                                                            <span class="badge badge-success-lighten"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">積極的</font></font></span>
-                                                        </td>
-
-                                                        <td class=" dt-body-right" style="">
-                                                            <a href="javascript:void(0);" class="action-icon"> <i class="mdi mdi-square-edit-outline"></i></a>
-                                                            <a href="javascript:void(0);" class="action-icon"> <i class="mdi mdi-delete"></i></a>
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div><div class="row"><div class="col-sm-12 col-md-5"><div class="dataTables_info" id="products-datatable_info" role="status" aria-live="polite"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">顯示客戶 1 到 10，共 12</font></font></div></div><div class="col-sm-12 col-md-7"><div class="dataTables_paginate paging_simple_numbers" id="products-datatable_paginate"><ul class="pagination pagination-rounded"><li class="paginate_button page-item previous disabled" id="products-datatable_previous"><a href="#" aria-controls="products-datatable" data-dt-idx="0" tabindex="0" class="page-link"><i class="mdi mdi-chevron-left"></i></a></li><li class="paginate_button page-item active"><a href="#" aria-controls="products-datatable" data-dt-idx="1" tabindex="0" class="page-link"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">1個</font></font></a></li><li class="paginate_button page-item "><a href="#" aria-controls="products-datatable" data-dt-idx="2" tabindex="0" class="page-link"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">2個</font></font></a></li><li class="paginate_button page-item next" id="products-datatable_next"><a href="#" aria-controls="products-datatable" data-dt-idx="3" tabindex="0" class="page-link"><i class="mdi mdi-chevron-right"></i></a></li></ul></div></div></div>
-                                </div>
-                            </div>
-                        </div> <!-- end card-body-->
-                    </div> <!-- end card-->
-                </div> <!-- end col -->
-            </div>
-            <!-- end row -->
-
-        </div> <!-- container -->
-
-    </div> <!-- content -->
-    <!-- Footer Start -->
-    <footer class="footer">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-md-6">
-                    <script>document.write(new Date().getFullYear())</script><font style="vertical-align: inherit;">
-                        <font style="vertical-align: inherit;">
-                            2023 © 超 - Coderthemes.com
-                        </font>
-                    </font>
-                </div>
-                <div class="col-md-6">
-                    <div class="text-md-end footer-links d-none d-md-block">
-                        <a href="javascript: void(0);"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">關於</font></font></a>
-                        <a href="javascript: void(0);"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">支持</font></font></a>
-                        <a href="javascript: void(0);"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">聯繫我們</font></font></a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </footer>
-    <!-- end Footer -->
-
-</div>
+</div> <!-- container -->

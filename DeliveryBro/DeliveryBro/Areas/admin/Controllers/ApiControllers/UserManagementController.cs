@@ -19,7 +19,7 @@
 //		}
 
 //		[HttpGet]
-//		public async Task<IEnumerable<UserManagementDTO>> GetUser()
+//		public async Task<UserManagementDTO> GetUser()
 //		{
 //			var User = await _db.CustomersTable
 //			 .Select(User => new UserManagementDTO
@@ -29,7 +29,7 @@
 //				 CustomerEmail = User.CustomerEmail,
 //				 CustomerPhone = User.CustomerPhone,
 //			 }).ToListAsync();
-			 
+
 
 //			return User;
 //		}
@@ -85,48 +85,48 @@
 //		}
 
 //	}
-//	//[HttpPost]
-//	//public async Task<string> PostLevel([FromBody] LevelViewModel leViewModel)
-//	//{
-//	//    Level le = new Level
-//	//    {
-//	//        LevelId = leViewModel.LevelId,
-//	//        Name = leViewModel.Name,
-//	//    };
-//	//    _context.Levels.Add(le);
-//	//    await _context.SaveChangesAsync();
+//	[HttpPost]
+//	public async Task<string> PostLevel([FromBody] LevelViewModel leViewModel)
+//	{
+//		Level le = new Level
+//		{
+//			LevelId = leViewModel.LevelId,
+//			Name = leViewModel.Name,
+//		};
+//		_db.Levels.Add(le);
+//		await _context.SaveChangesAsync();
 
-//	//    return $"會員等級編號:{le.LevelId}";
-//	//}
+//		return $"會員編號:{le.LevelId}";
+//	}
 
-//	//[HttpDelete]
-//	//public async Task<string> DeleteLevel(int id)
-//	//{
+//	[HttpDelete]
+//	public async Task<string> Delete(int id)
+//	{
 
-//	//    var Levels = await _context.Levels.FindAsync(id);
-//	//    if (Levels == null)
-//	//    {
-//	//        return "刪除會員等級成功!";
-//	//    }
+//		var = await _db.Levels.FindAsync(id);
+//		if (Levels == null)
+//		{
+//			return "刪除會員成功!";
+//		}
 
-//	//    _context.Levels.Remove(Levels);
-//	//    try
-//	//    {
-//	//        await _context.SaveChangesAsync();
-//	//    }
-//	//    catch (DbUpdateException ex)
-//	//    {
-//	//        return "刪除會員等級失敗!";
-//	//    }
+//		_db.Levels.Remove(Levels);
+//		try
+//		{
+//			await _db.SaveChangesAsync();
+//		}
+//		catch (DbUpdateException ex)
+//		{
+//			return "刪除會員失敗!";
+//		}
 
-//	//    return "刪除會員等級成功!";
-//	//}
+//		return "刪除會員成功!";
+//	}
 
-//	//private bool LevelExists(int id)
-//	//{
-//	//    return (_context.Levels?.Any(e => e.LevelId == id)).GetValueOrDefault();
-//	//}
-//	//    }
-//	//}
+//	private bool LevelExists(int id)
+//	{
+//		return (_db.Levels?.Any(e => e.LevelId == id)).GetValueOrDefault();
+//	}
+//}
+//	}
 //}
 //	}
