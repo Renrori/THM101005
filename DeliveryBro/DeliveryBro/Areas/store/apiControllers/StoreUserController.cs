@@ -1,7 +1,9 @@
 ﻿using DeliveryBro.Areas.store.SubscribeTableDependency;
 using DeliveryBro.Areas.store.ViewModels;
+using DeliveryBro.Extensions;
 using DeliveryBro.Models;
 using DeliveryBro.Services;
+using GoogleMaps.LocationServices;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -143,7 +145,7 @@ namespace DeliveryBro.Areas.store.apiControllers
 		public async Task<string> CheckName(string? name)
 		{
 			string result = "正確";
-			if (name.Length < 6 || name.Length > 20)
+			if (name.Length < 1 || name.Length > 20)
 			{
 				result = "名字格式錯誤";
 				return result;
@@ -180,7 +182,6 @@ namespace DeliveryBro.Areas.store.apiControllers
 		public string AddRegister(RegisterViewModel model)
 		{
 			string result = "註冊成功";
-
 			_context.RestaurantTable.Add(new RestaurantTable()
 			{
 				RestaurantId = Guid.NewGuid(),
@@ -189,8 +190,10 @@ namespace DeliveryBro.Areas.store.apiControllers
 				RestaurantName = model.RestaurantName,
 				RestaurantAddress = model.RestaurantAddress,
 				RestaurantPhone = model.RestaurantPhone,
-				RestaurantEmail = model.RestaurantEmail
-			});
+				RestaurantEmail = model.RestaurantEmail,
+				Latitude=Map.GetLatitude(model.RestaurantAddress),
+				Longitude=Map.GetLongitude(model.RestaurantAddress),
+			}) ;
 			//存入資料庫
 			try
 			{
