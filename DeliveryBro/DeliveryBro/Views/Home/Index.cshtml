@@ -6,7 +6,7 @@
 {
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
 	<link href="~/css/map.css" rel="stylesheet" />
-    
+    <script type="module" src="~/js/mapaddressautocomplete.js"></script>
 }
 @*<---------------旋轉軸--------------->*@
 <div id="carouselExampleDark"
@@ -152,9 +152,7 @@
     {
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://unpkg.com/vue@3.2.36/dist/vue.global.prod.js"></script>
-    <script type="module" src="~/js/mapaddressautocomplete.js"></script>
-	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDSVv7tpJnSFG82cLsD3wazbDCksKfic_o&callback=initMap&libraries=places"
-            async defer></script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDSVv7tpJnSFG82cLsD3wazbDCksKfic_o&callback=initMap&libraries=places" async defer></script>
     <script src="~/axios/axios.min.js"></script>
     <script>
         var baseAddress = "https://localhost:7163/api/HomeApi";

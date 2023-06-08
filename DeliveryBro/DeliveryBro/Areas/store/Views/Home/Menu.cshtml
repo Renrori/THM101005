@@ -58,7 +58,7 @@
 							<div class="row row-cols-1 row-cols-sm-2 row-cols-md-5 g-4 pt-3">
 								<div class="col" v-for="(item,index) in MenuDTOes" :key="index">
 									<div class="card menucard">
-										<img v-if="item.dishPicture!=null" :src="createImgUrl(item.dishPicture)" class="card-img-top outcardpic" />
+										<img v-if="item.pictureUrl!=null" :src="item.pictureUrl" class="card-img-top outcardpic" />
 										<img v-else src="~/store/images/no image.jpg" class="card-img-top outcardpic" />
 										<div class="card-body outcardbody">
 											<p class="card-text outcardcategory">{{item.dishCategory}}</p>
@@ -82,7 +82,7 @@
 													</div>
 													<div class="modal-body">
 														<div class="form-group">
-															<img v-if="item.dishPicture!=null&&preview==null" :src="createImgUrl(item.dishPicture)" class="card-img-top img-thumbnail img" />
+															<img v-if="item.pictureUrl!=null&&preview==null" :src="item.pictureUrl" class="card-img-top img-thumbnail img" />
 															<img v-else-if="preview!=null" :src="preview" class="img-thumbnail img" />
 															<img v-else src="~/store/images/no image.jpg" class="img-thumbnail img" />
 															<br /><br />
@@ -164,7 +164,7 @@
 								</div>
 							</div>
 							<div class="modal-footer">
-								<button type="button" :disabled="btndisable" class="btn btn-primary" data-bs-dismiss="modal" @@click="insert">新增</button>
+								<button type="button" v-bind:disabled="btndisable" class="btn btn-primary" data-bs-dismiss="modal" @@click="insert">新增</button>
 								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @@click="close">關閉</button>
 							</div>
 					</div>
@@ -195,7 +195,7 @@
 					dishName: "",
 					dishPrice: "",
 					dishDescription: "",
-					dishPicture: "",
+					pictureUrl: "",
 					dishCategory: "",
 					dishStatus: "",
 					oldname: "",
@@ -230,23 +230,13 @@
 						}
 					)
 				},
-				createImgUrl: function (pic) {
-					//var binaryString=window.atob(pic);
-					//var bytes=new Uint8Array(binaryString.length);
-					//for(let i=0;i<binaryString.length;i++)
-					//	bytes[i]=binaryString.charCodeAt(i)
-					//var blob=new Blob([bytes],{type:"image/jpeg"});
-					//return URL.createObjectURL(blob);
-					//URL.revokeObjectURL(imageUrl);
-					return `data:image/jpeg;base64,${pic}`;
-				},
 				edit: function (item) {
 					let _this = this;
 					_this.oldname = item.dishName;
 					_this.oldprice = item.dishPrice;
 					_this.oldcategory = item.dishCategory;
 					_this.olddescription = item.dishDescription;
-					_this.oldpic = item.dishPicture;
+					_this.oldpic = item.pictureUrl;
 					_this.oldstatus = item.dishStatus;
 				},
 				cancel: function (item) {
@@ -255,7 +245,7 @@
 					item.dishPrice = _this.oldprice;
 					item.dishCategory = _this.oldcategory;
 					item.dishDescription = _this.olddescription;
-					item.dishPicture = _this.oldpic;
+					item.pictureUrl = _this.oldpic;
 					item.dishStatus = _this.oldstatus;
 					_this.preview = null;
 				},
@@ -268,12 +258,12 @@
 					formData.append("DishCategory", item.dishCategory);
 					formData.append("DishDescription", item.dishDescription);
 					formData.append("DishStatus", item.dishStatus);
-					if (_this.preview != null && _this.dishPicture != null) {
-						formData.append("DishPicture", _this.dishPicture);
+					if (_this.preview != null && _this.pictureUrl != null) {
+						formData.append("PictureUrl", _this.pictureUrl);
 						_this.preview = null;
 					}
 					else {
-						formData.append("DishPicture", item.dishPicture);
+						formData.append("PictureUrl", item.pictureUrl);
 					}
 					axios.put(`/api/MenuTables/${item.dishId}`, formData,
 						{
@@ -306,11 +296,11 @@
 						reader.onload = (e) => {
 							_this.preview = e.target.result;
 						}
-						_this.dishPicture = input.files[0];
+						_this.pictureUrl = input.files[0];
 						reader.readAsDataURL(input.files[0]);
 					}
 					else {
-						_this.dishPicture = null;
+						_this.pictureUrl = null;
 						_this.preview = null;
 					}
 				},
@@ -345,7 +335,7 @@
 					formData.append("DishPrice", _this.dishPrice);
 					formData.append("DishCategory", _this.dishCategory);
 					formData.append("DishDescription", _this.dishDescription);
-					formData.append("DishPicture", _this.dishPicture);
+					formData.append("PictureUrl", _this.pictureUrl);
 					formData.append("DishStatus", "ongoing");
 					axios.post(`/api/MenuTables`, formData,
 						{
@@ -371,7 +361,7 @@
 				},
 				close: function () {
 					let _this = this;
-					_this.dishName = _this.dishPrice = _this.dishCategory = _this.dishDescription = _this.dishPicture = "";
+					_this.dishName = _this.dishPrice = _this.dishCategory = _this.dishDescription = _this.pictureUrl = "";
 					_this.preview = null;
 				},
 				statuschange: function (item) {

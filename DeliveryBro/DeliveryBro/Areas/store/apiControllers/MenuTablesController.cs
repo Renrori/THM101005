@@ -10,6 +10,7 @@ using DeliveryBro.Areas.store.DTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using DeliveryBro.Extensions;
+using System.IO.Compression;
 
 namespace DeliveryBro.Areas.store.apiControllers
 {
@@ -19,11 +20,11 @@ namespace DeliveryBro.Areas.store.apiControllers
 	public class MenuTablesController : ControllerBase
 	{
 		private readonly sql8005site4nownetContext _context;
-		public MenuTablesController(sql8005site4nownetContext context)
+		private readonly IWebHostEnvironment _environment;
+		public MenuTablesController(sql8005site4nownetContext context,IWebHostEnvironment environment)
 		{
 			_context = context;
-
-
+			_environment = environment;
 		}
 		
 		// GET: api/MenuTables
@@ -38,33 +39,13 @@ namespace DeliveryBro.Areas.store.apiControllers
 				DishDescription = menu.DishDescription,
 				DishName = menu.DishName,
 				DishPrice = menu.DishPrice,
-				DishPicture = menu.DishPicture,
-				DishStatus = menu.DishStatus
+				DishStatus = menu.DishStatus,
+				PictureUrl=menu.PicturePath
 			});
 
 			return query;
 		}
 
-		// GET: api/MenuTables/5
-		//[HttpGet("{id}")]
-		//public async Task<MenuDTO> GetMenuTable(int id)
-		//{
-		//	var menuTable = await _context.MenuTable.FindAsync(id);
-			
-		//	MenuDTO menu = new MenuDTO
-		//	{
-		//		DishId = menuTable.DishId,
-		//		DishCategory = menuTable.DishCategory,
-		//		DishDescription = menuTable.DishDescription,
-		//		DishName = menuTable.DishName,
-		//		DishPrice = menuTable.DishPrice,
-		//		DishPicture = menuTable.DishPicture,
-		//		DishStatus = menuTable.DishStatus,
-		//		RestaurantId = 3
-		//	};
-
-		//	return menu;
-		//}
 		[HttpPut("status/{id}")]
 		public async Task<string> ChangeDishStatus(int id, MenuStatusDTO msDTO)
 		{
@@ -106,7 +87,7 @@ namespace DeliveryBro.Areas.store.apiControllers
 			menu.DishCategory = form["DishCategory"];
 			menu.DishStatus = form["DishStatus"];
 			menu.RestaurantId = rid;
-			IFormFile picfile = form.Files.GetFile("DishPicture");
+			IFormFile picfile = form.Files.GetFile("PictureUrl");
 			if (picfile != null)
 				await SetPic(menu, picfile);
 
@@ -131,6 +112,16 @@ namespace DeliveryBro.Areas.store.apiControllers
 			return "品項修改成功";
 		}
 
+		private async Task<string> GetPicPath(IFormFile file)
+		{
+			var root = $@"{_environment.WebRootPath}\store\images";
+			var path = $@"{root}\{file.FileName}";
+			using(var st=System.IO.File.Create(path))
+			{
+				file.CopyTo(st);
+			}
+			return $@"/store/images/{file.FileName}";
+		}
 		private async Task<byte[]> GetPic(IFormFile file)
 		{
 			if (file != null)
@@ -145,7 +136,13 @@ namespace DeliveryBro.Areas.store.apiControllers
 		}
 		private async Task SetPic(MenuTable menu, IFormFile file)
 		{
+			//var getPicTask = GetPic(file);
+			//var getPicPathTask = GetPicPath(file);
+			//await Task.WhenAll(getPicTask, getPicPathTask);
+			//menu.DishPicture = await getPicTask;
+			//menu.PicturePath = await getPicPathTask;
 			menu.DishPicture = await GetPic(file);
+			menu.PicturePath = await GetPicPath(file);
 		}
 
 		// POST: api/MenuTables
@@ -164,7 +161,7 @@ namespace DeliveryBro.Areas.store.apiControllers
 				DishStatus = form["DishStatus"],
 				RestaurantId = id
 			};
-			IFormFile picfile = form.Files.GetFile("DishPicture");
+			IFormFile picfile = form.Files.GetFile("PictureUrl");
 			await SetPic(menu, picfile);
 			_context.MenuTable.Add(menu);
 			await _context.SaveChangesAsync();
