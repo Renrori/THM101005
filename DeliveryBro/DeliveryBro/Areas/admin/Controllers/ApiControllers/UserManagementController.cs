@@ -1,38 +1,40 @@
-﻿//using DeliveryBro.Areas.admin.Models.ViewModel;
-//using DeliveryBro.Areas.store.DTO;
-//using DeliveryBro.Models;
-//using Microsoft.AspNetCore.Http;
-//using Microsoft.AspNetCore.Mvc;
-//using Microsoft.EntityFrameworkCore;
+﻿using DeliveryBro.Areas.admin.Models.ViewModel;
+using DeliveryBro.Areas.store.DTO;
+using DeliveryBro.Models;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
-//namespace DeliveryBro.Areas.admin.Controllers.ApiControllers
-//{
+namespace DeliveryBro.Areas.admin.Controllers.ApiControllers
+{
 
-//	[Route("api/UserManagement/[action]")]
-//	[ApiController]
-//	public class UserManagementController : ControllerBase
-//	{
-//		private readonly sql8005site4nownetContext _db;
-//		public UserManagementController(sql8005site4nownetContext context)
-//		{
-//			_db = context;
-//		}
+	[Route("api/UserManagement/[action]")]
+	[ApiController]
+	public class UserManagementController : ControllerBase
+	{
+		private readonly sql8005site4nownetContext _db;
+		public UserManagementController(sql8005site4nownetContext context)
+		{
+			_db = context;
+		}
 
-//		[HttpGet]
-//		public async Task<UserManagementDTO> GetUser()
-//		{
-//			var User = await _db.CustomersTable
-//			 .Select(User => new UserManagementDTO
-//			 {
-//				 CustomerAccount = User.CustomerAccount,
-//				 CustomerName = User.CustomerName,
-//				 CustomerEmail = User.CustomerEmail,
-//				 CustomerPhone = User.CustomerPhone,
-//			 }).ToListAsync();
+		[HttpGet]
+		//IEnumerable 副數集合方法
+		public async Task<IEnumerable<UserManagementDTO>>GetUser()
+		{
 
-
-//			return User;
-//		}
+			var User = await _db.CustomersTable
+			 .Select(User => new UserManagementDTO
+			 {
+				 CustomerAccount = User.CustomerAccount,
+				 CustomerName = User.CustomerName,
+				 CustomerEmail = User.CustomerEmail,
+				 CustomerPhone = User.CustomerPhone,
+			 }).ToListAsync();
+			return User;
+		}
+	}
+}
 
 //		[HttpPost]
 //		public IEnumerable<UserManagementDTO> FilterLevel(

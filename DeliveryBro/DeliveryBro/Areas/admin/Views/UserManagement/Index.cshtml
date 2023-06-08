@@ -19,68 +19,68 @@
 
 			<div class="col-sm-12">
 				<table class="table table-centered table-striped dt-responsive nowrap w-100 dataTable no-footer dtr-inline" id="products-datatable" aria-describedby="products-datatable_info" style="width: 1534px;">
- 					<thead>
+					<thead>
 						<tr>
- 							<th tabindex="0" aria-controls="products-datatable" rowspan="1" colspan="1" style="width: 249.8px;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">姓名</font></font></th>
-							<th tabindex="0" aria-controls="products-datatable" rowspan="1" colspan="1" style="width: 181.8px;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">帳號</font></font></th>
-							<th tabindex="0" aria-controls="products-datatable" rowspan="1" colspan="1" style="width: 260.8px;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">電子郵件</font></font></th>
-							<th tabindex="0" aria-controls="products-datatable" rowspan="1" colspan="1" style="width: 164.8px;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">是否啟用</font></font></th>
-							<th tabindex="0" aria-controls="products-datatable" rowspan="1" colspan="1" style="width: 148.8px;" aria-sort="ascending"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">地址</font></font></th>
-							<th tabindex="0" aria-controls="products-datatable" rowspan="1" colspan="1" style="width: 92.8px;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">電話</font></font></th>
-							<th style="width: 75.6px;" class="dt-body-right sorting_disabled" rowspan="1" colspan="1" aria-label="行動"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">行動</font></font></th>
+							<th tabindex="0" aria-controls="products-datatable" rowspan="1" colspan="1" style="width: 249.8px;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">customerName</font></font></th>
+							<th tabindex="0" aria-controls="products-datatable" rowspan="1" colspan="1" style="width: 181.8px;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">customerAccount</font></font></th>
+							<th tabindex="0" aria-controls="products-datatable" rowspan="1" colspan="1" style="width: 260.8px;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">customerEmail</font></font></th>
+							<th tabindex="0" aria-controls="products-datatable" rowspan="1" colspan="1" style="width: 249.8px;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">state</font></font></th>
+							<th tabindex="0" aria-controls="products-datatable" rowspan="1" colspan="1" style="width: 249.8px;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">customerAddress</font></font></th>
+							<th tabindex="0" aria-controls="products-datatable" rowspan="1" colspan="1" style="width: 148.8px;" aria-sort="ascending"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">customerPhone</font></font></th>
+							<th tabindex="0" aria-controls="products-datatable" rowspan="1" colspan="1" style="width: 92.8px;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">role</font></font></th>
 						</tr>
 					</thead>
-
-					<tr class="odd">
-						<td class="table-user">
-							<a href="javascript:void(0);" class="text-body fw-semibold"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">羅里西坎普</font></font></a>
-						</td>
-						<td style="">
-							<font style="vertical-align: inherit;">
-								<font style="vertical-align: inherit;">
-									078 5054 8877
-								</font>
-							</font>
-						</td>
-						<td style="">
-							<font style="vertical-align: inherit;">
-								<font style="vertical-align: inherit;">
-									roryamp@dayrep.com
-								</font>
-							</font>
-						</td>
-						<td style="">
-							<font style="vertical-align: inherit;">
-								<font style="vertical-align: inherit;">
-									美國
-								</font>
-							</font>
-						</td>
-						<td class="sorting_1" style="">
-							<font style="vertical-align: inherit;">
-								<font style="vertical-align: inherit;">
-									2018-03-24
-								</font>
-							</font>
-						</td>
-						<td style="">
-							<span class="badge badge-danger-lighten"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">封鎖</font></font></span>
-						</td>
-
-						<td class=" dt-body-right" style="">
-							<a href="javascript:void(0);" class="action-icon"> <i class="mdi mdi-square-edit-outline"></i></a>
-							<a href="javascript:void(0);" class="action-icon"> <i class="mdi mdi-delete"></i></a>
-						</td>
-					</tr>
-					<tr class="even">
-						<td class="dtr-control dt-checkboxes-cell" tabindex="0"><div class="form-check"><input type="checkbox" class="form-check-input dt-checkboxes"><label class="form-check-label">&nbsp;</label></div></td>
+					<tbody>
+						<tr v-for="item in user">
+							<td>{{item.customerName}}</td>
+							<td>{{item.customerAccount}}</td>
+							<td>{{item.customerEmail}}</td>
+							<td>{{item.state}}</td>
+							<td>{{item.customerAddress}}</td>
+							<td>{{item.customerPhone}}</td>
+							<td>{{item.role}}</td>
+						</tr>
+					</tbody>
 				</table>
 			</div>
-
-
 		</div> <!-- end card-->
-
 	</div>
 	<!-- end row -->
-
 </div> <!-- container -->
+<script type="text/javascript">
+	var app = new Vue({
+		el: '#userapp'
+				data: {
+			customerName: "",
+			customerAccount: "",
+			customerEmail: "",
+			customerPhone: "",
+		}
+		mounted: function () {
+			// vue 第一次執行的內容, 只會直行一次
+			let salf = this;
+			axios('/api/UserManagement/GetUser/1')
+				.then(function (res) {
+					salf.order = res.data.items; // 回船的orders
+					salf.maxcount = res.data.count; // 總比數
+				});
+		},
+		methods: {
+			nextpage: function (page) {
+				let salf = this;
+				// 跟後端讀取ORDER
+				axios('/api/UserManagement/GetUser/')
+					.then(function (res) {
+						// 讀取完成
+						salf.nowpage = page;
+						salf.order = res.data.items;
+						salf.maxcount = res.data.count;
+					});
+			});
+		}
+	}
+
+
+		})
+
+</script>
