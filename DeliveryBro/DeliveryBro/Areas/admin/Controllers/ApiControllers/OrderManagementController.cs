@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Metadata;
 
 namespace DeliveryBro.Areas.admin.Controllers.ApiControllers
 {
@@ -65,8 +66,15 @@ namespace DeliveryBro.Areas.admin.Controllers.ApiControllers
 
 			try
 			{
+				var Order = _db.CustomerOrderTable
+					.Where(m => m.OrderId == oddetailsdto.OrderId).FirstOrDefault();
+				Order.OrderId = oddetailsdto.OrderId;
+				Order.OrderDate= oddetailsdto.OrderDate;
+				Order.CustomerAddress = oddetailsdto.CustomerAddress;
+				Order.AmountAfterDiscount = oddetailsdto.AmountAfterDiscount;
+
 				await _db.SaveChangesAsync();
-			}
+ 			}
 			catch (DbUpdateConcurrencyException)
 			{
 				if (!OrderExists(id))
