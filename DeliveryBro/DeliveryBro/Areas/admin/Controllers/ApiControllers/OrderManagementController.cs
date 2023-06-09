@@ -59,35 +59,35 @@ namespace DeliveryBro.Areas.admin.Controllers.ApiControllers
 			{
 				return "修改失敗!";
 			}
-			CustomerOrderTable od = await _db.CustomerOrderTable.FindAsync(id);
+			var order = await _db.CustomerOrderTable.FindAsync(id);
 
+			if (order == null)
+			{
+				return "修改失敗!"; // 訂單不存在，返回失敗訊息
+			}
 
-			_db.Entry(od).State = EntityState.Modified;
+			order.OrderId = oddetailsdto.OrderId;
+			order.OrderDate = oddetailsdto.OrderDate;
+			order.CustomerAddress = oddetailsdto.CustomerAddress;
+			order.AmountAfterDiscount = oddetailsdto.AmountAfterDiscount;
 
 			try
 			{
-				var Order = _db.CustomerOrderTable
-					.Where(m => m.OrderId == oddetailsdto.OrderId).FirstOrDefault();
-				Order.OrderId = oddetailsdto.OrderId;
-				Order.OrderDate= oddetailsdto.OrderDate;
-				Order.CustomerAddress = oddetailsdto.CustomerAddress;
-				Order.AmountAfterDiscount = oddetailsdto.AmountAfterDiscount;
-
 				await _db.SaveChangesAsync();
- 			}
+			}
 			catch (DbUpdateConcurrencyException)
 			{
-				if (!OrderExists(id))
+				if (!_db.CustomerOrderTable.Any(m => m.OrderId == oddetailsdto.OrderId))
 				{
-					return "修改失敗!";
+					return "修改失敗!"; // 訂單不存在，返回失敗訊息
 				}
 				else
 				{
-					throw;
+					throw; // 其他並行更新異常，重新拋出
 				}
 			}
 
-			return "修改成功!";
+			return "修改成功!"; // 更新成功，返回成功訊息
 		}
 
 

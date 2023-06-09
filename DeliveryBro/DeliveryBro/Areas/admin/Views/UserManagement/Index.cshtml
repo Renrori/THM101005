@@ -190,7 +190,7 @@
 				}
 			},
 			deleteorder: function (id) {
-				axios.delete('/api/UserCustomer/Delete/' , id).then(res => {
+				axios.delete('/api/UserCustomer/Delete/' + id).then(res => {
 					if (res.data) {
 						alert("已刪除");
 						this.nextpage(this.nowpage);
@@ -200,6 +200,7 @@
 					}
 				})
 			},
+
 			deleteConfirm: function (item) {
 				this.delInfo.title = item.customerAccount;
 				this.delInfo.msg.customerAccount = item.customerAccount;
