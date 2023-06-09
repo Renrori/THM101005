@@ -120,6 +120,14 @@ namespace DeliveryBro.Areas.store.apiControllers
 			{
 				file.CopyTo(st);
 			}
+			using(var image = Image.Load(path))
+			{
+				image.Mutate(x => x.Resize(new ResizeOptions
+				{
+					Size = new Size(540, 540)
+				}));
+				image.Save(path);
+			}
 			return $@"/store/images/{file.FileName}";
 		}
 		private async Task<byte[]> GetPic(IFormFile file)

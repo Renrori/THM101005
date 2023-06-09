@@ -1,5 +1,4 @@
-﻿using DeliveryBro.Areas.store.SubscribeTableDependency;
-using DeliveryBro.Areas.store.ViewModels;
+﻿using DeliveryBro.Areas.store.ViewModels;
 using DeliveryBro.Extensions;
 using DeliveryBro.Models;
 using DeliveryBro.Services;
