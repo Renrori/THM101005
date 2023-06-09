@@ -13,9 +13,9 @@
 	}
 
 	.swal-button {
-		background-color: blue;
+		background-color: darkgray;
 		color: white;
-		padding: 3px 6px;
+		padding: 10px 6px;
 	}
 
 	.swal-modal {
@@ -27,8 +27,8 @@
 	}
 
 	.swal-icon--error {
-		height: 30px;
-		width: 30px;
+		height: 10px;
+		width: 0px;
 	}
 </style>
 
@@ -45,17 +45,10 @@
 								@*<img src="assets/img/logo.png" alt="">*@
 								@*<span class="d-none d-lg-block">NiceAdmin</span>*@
 							</a>
-						</div><!-- End Logo -->
-						<!--新增model-->
-						@*@{
-						if (ViewBag.Error != "")
-						{
-						<h1>@ViewBag.Error</h1>
-						}
-						}*@
+						</div>
 
 
-						<div class="card mb-3">
+						<div class="card mb-3" id="app">
 
 							<div class="card-body">
 
@@ -65,21 +58,21 @@
 									<hr />
 								</div>
 
-								<form action="/store/StoreUser/Login" method="post" class="row g-3 ">
+								<form class="row g-3 ">
 
 									<div class="col-12">
 										<label for="yourUsername" class="form-label">商家帳號</label>
-										<div class="input-group has-validation">
+										@*<div class="input-group has-validation">*@
 											@*<span class="input-group-text" id="inputGroupPrepend">@@</span>*@
-											<input type="text" name="Account" class="form-control" id="Account">
-											@*<div class="invalid-feedback">帳號為必填欄位</div>*@
-											@*<span asp-validation-for="account"></span>*@
-										</div>
+											<span v-if="isValidLoginAccount==false" class="text-danger">&emsp;{{errorMsgLoginAccount}}</span>
+											<input type="text" name="Account" class="form-control" v-model="restaurantLoginAccount">
+										@*</div>*@
 									</div>
 
 									<div class="col-12">
 										<label for="yourPassword" class="form-label">商家密碼</label>
-										<input type="password" name="Password" class="form-control" id="yourPassword">
+										<span v-if="isValidLoginPassword==false" class="text-danger">&emsp;{{errorMsgLoginPassword}}</span>
+										<input type="password" name="Password" class="form-control" v-model="restaurantLoginPassword">
 										@*<div class="invalid-feedback">密碼為必填欄位</div>*@
 									</div>
 
@@ -90,20 +83,20 @@
 										</div>*@
 									</div>
 									<div class="col-12">
-										<button id="btnlogin" class="btn btn-primary w-100" type="submit">登入</button>
+										<button id="btnlogin" class="btn btn-primary w-100" type="button" @@click="addLogin()">登入</button>
 
 									</div>
 
-									@*<div>
+										@*<div>
 									<a href="/store/StoreUser/FacebookLogin" class="btn btn-primary">FaceBook登入</a>
 									</div>*@
 
 									<div>
-										<a class="btn btn-outline-secondary w-100" href="/store/StoreUser/Register" role="button">註冊</a>
+										<a class="btn btn-outline-secondary w-100" href="/store/StoreUser/Register" type="button">註冊</a>
 									</div>
 
 									<div>
-										<a class="btn btn-outline-secondary w-100" href="/store/StoreUser/ForgetPwd" role="button">忘記密碼</a>
+										<a class="btn btn-outline-secondary w-100" href="/store/StoreUser/ForgetPwd" type="button">忘記密碼</a>
 									</div>
 
 									@*<div>
@@ -139,29 +132,54 @@
 <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
 @section Scripts{
-	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+	<script src="~/axios/axios.min.js"></script>
 
 	<script>
-		let loginBtn = document.querySelector("#btnlogin"),//取值
-			Account = document.querySelector("#Account"),
-			Password = document.querySelector("#yourPassword")
-		loginBtn.addEventListener("click", () => {    //監聽
-			if (Account.value == "" && Account.value == "") {
-				swal({
-					title: "提醒",
-					text: "帳號或密碼錯誤",
-					icon: "error",
-					customClass: {
-						container: 'custom-swal-container',
-					},
-				});
-			} else {
-				const formData = new FormData()
-				formData.append("Account", Account.value)
-				formData.append("Password", Password.value)
-				axios.post("/store/StoreUser/Login", formData).then()
+		var vueLogin = {
+			data() {
+				return {
+					//V-model 繫結變數input
+					restaurantLoginAccount: "",
+					restaurantLoginPassword: "",
+
+					//渲染繫結span變數
+					errorMsgLoginAccount: "",
+					errorMsgLoginPassword: "",
+
+					//判斷錯誤訊息的變數
+					isValidLoginAccount: true,
+					isValidLoginPassword: true,
+
+					loginresult: "",
+				};
+
+			},
+			methods: {
+				//驗證帳號密碼
+				addLogin: function () {
+					let _this = this;
+					axios.post(`/api/StoreLogin/isConfirm/StoreLogin`, {
+						account: _this.restaurantLoginAccount,
+						password: _this.restaurantLoginPassword
+					}).then(response => {
+						if (response.data != "登入成功") {
+							_this.errorMsgLoginAccount = response.data;
+							_this.isValidLoginAccount = false;
+							_this.errorMsgLoginPassword = response.data;
+							_this.isValidLoginPassword = false;
+						}
+						else {
+							_this.isValidLoginAccount = true;
+							_this.isValidLoginPassword = true;
+							window.location.href = '../home'
+						}
+					})
+				}
 			}
-			event.preventDefault()
-		})
+
+		}
+		var app = Vue.createApp(vueLogin).mount("#app");
 	</script>
 }

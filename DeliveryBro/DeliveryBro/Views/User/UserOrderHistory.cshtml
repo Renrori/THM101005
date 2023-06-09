@@ -7,7 +7,7 @@
     <ul b-y5hjwqsk06 class="sidebar-nav" id="sidebar-nav">
 
         <li b-y5hjwqsk06 class="nav-item">
-            <a class="nav-link" href="#"><i b-y5hjwqsk06 class="bi bi-grid"></i>Home</a>
+            <a class="nav-link" asp-controller="User" asp-action="UserHome"><i b-y5hjwqsk06 class="bi bi-grid"></i>Home</a>
         </li>
         <li b-y5hjwqsk06 class="nav-item">
             <a class="nav-link collapsed" asp-controller="User" asp-action="UserHome"><i b-y5hjwqsk06 class="fa-solid fa-store"></i>我的資料</a>
@@ -136,7 +136,7 @@
     <script src="~/axios/axios.min.js"></script>
     <script>
         var baseAddress = "https://localhost:7163/api/UserApi";
-        var CustomerId = "@User.Claims.FirstOrDefault(c => c.Type == "CustomerId")?.Value";
+        var CustomerId = "@User.Claims.FirstOrDefault(c => c.Type == "Id")?.Value";
         var vueApp = {
             data() {
                 return {

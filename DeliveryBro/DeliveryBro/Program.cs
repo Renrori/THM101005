@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
+using System;
+using Microsoft.OpenApi.Models;
 
 namespace DeliveryBro
 {
@@ -34,7 +36,9 @@ namespace DeliveryBro
 
             #region authentication
 
-
+			builder.Services.AddSingleton<subscribeOrder>();
+            builder.Services.AddSignalR();
+            builder.Services.AddSwaggerGen();
 
             builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
             .AddCookie("CustomerAuthenticationScheme", opt =>
@@ -109,17 +113,19 @@ namespace DeliveryBro
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
-            {
-                app.UseMigrationsEndPoint();
+			// Configure the HTTP request pipeline.
+			if (app.Environment.IsDevelopment())
+			{
+				app.UseMigrationsEndPoint();
+                app.UseSwagger();
+                app.UseSwaggerUI();
             }
-            else
-            {
-                app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
+			else
+			{
+				app.UseExceptionHandler("/Home/Error");
+				// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+				app.UseHsts();
+			}
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
@@ -129,6 +135,16 @@ namespace DeliveryBro
             app.UseAuthentication();
             app.UseAuthorization();
 
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute(
+                name: "store",
+                pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
+                endpoints.MapControllerRoute(
+                    name: "admin",
+                    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+            });
             app.MapControllerRoute(
                 name: "admin",
                 pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");

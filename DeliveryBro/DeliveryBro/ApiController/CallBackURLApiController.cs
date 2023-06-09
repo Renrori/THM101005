@@ -8,6 +8,7 @@ using System.Web;
 
 namespace DeliveryBro.ApiController
 {
+    [ApiExplorerSettings(IgnoreApi = true)]
     [Route("api/[controller]")]
     [ApiController]
     public class CallBackURLApiController : ControllerBase
