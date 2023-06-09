@@ -1,5 +1,9 @@
 ﻿@model LoginViewModel
 
+@{
+	// 獲取先前頁面的 URL
+	string returnUrl = Context.Request.Headers["Referer"].ToString();
+}
 @*網頁內容*@
 
 <main class="form-signin w-100 m-auto text-center">
@@ -51,7 +55,7 @@
 			</div>
 		</div>
 	</div>
-	
+		<input type="hidden" name="returnUrl" value="@returnUrl" />
 
 	
 	
