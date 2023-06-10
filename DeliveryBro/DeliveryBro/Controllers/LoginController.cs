@@ -63,7 +63,7 @@ namespace DeliveryBro.Controllers
 			await HttpContext.SignOutAsync("StoreAuthenticationScheme");
 			await HttpContext.SignOutAsync("AdministratorAuthenticationScheme");
 			await HttpContext.SignInAsync("CustomerAuthenticationScheme", claimsPrincipal);
-			if (!string.IsNullOrEmpty(returnUrl))
+			if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
 			{
 				return Redirect(returnUrl);
 			}
@@ -174,12 +174,7 @@ namespace DeliveryBro.Controllers
 
 				var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
 				await HttpContext.SignInAsync("CustomerAuthenticationScheme", claimsPrincipal);
-				//var claims = result.Principal.Claims.Select(x => new
-				//{
-				//    //打印Claims物件
-				//    x.Type,
-				//    x.Value,
-				//});
+
 				return RedirectToAction("Index", "Home");
 			}
 			return Ok();

@@ -37,7 +37,7 @@ namespace DeliveryBro
             #region authentication
 
             builder.Services.AddSignalR();
-            builder.Services.AddSwaggerGen();
+            //builder.Services.AddSwaggerGen();
 
             builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
             .AddCookie("CustomerAuthenticationScheme", opt =>
@@ -92,7 +92,7 @@ namespace DeliveryBro
             {
                 var policybuilder = new AuthorizationPolicyBuilder("CustomerAuthenticationScheme");
                 policybuilder = policybuilder.RequireAuthenticatedUser();
-                option.DefaultPolicy=policybuilder.Build();
+                option.DefaultPolicy = policybuilder.Build();
             });
 
 
@@ -117,19 +117,19 @@ namespace DeliveryBro
 
 			var app = builder.Build();
 
-			// Configure the HTTP request pipeline.
-			if (app.Environment.IsDevelopment())
-			{
-				app.UseMigrationsEndPoint();
-                app.UseSwagger();
-                app.UseSwaggerUI();
+            // Configure the HTTP request pipeline.
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseMigrationsEndPoint();
+                //app.UseSwagger();
+                //app.UseSwaggerUI();
             }
-			else
-			{
-				app.UseExceptionHandler("/Home/Error");
-				// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-				app.UseHsts();
-			}
+            else
+            {
+                app.UseExceptionHandler("/Home/Error");
+                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                app.UseHsts();
+            }
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
@@ -161,7 +161,7 @@ namespace DeliveryBro
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
 
-            app.MapRazorPages();           
+            app.MapRazorPages();
 
             app.Run();
         }

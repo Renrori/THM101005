@@ -65,8 +65,6 @@ namespace DeliveryBro.ApiController
         [HttpPut("{customerId:guid}")]
         public async Task<string> EditUserInfo(Guid customerId, EditUserInfoViewModel eui)
         {
-
-
             //Httpcontext
             CustomersTable userInfo = await _context.CustomersTable.FindAsync(customerId);
 
@@ -94,7 +92,6 @@ namespace DeliveryBro.ApiController
                     throw;
                 }
             }
-
             return "成功";
 
         }
@@ -134,7 +131,7 @@ namespace DeliveryBro.ApiController
             .Where(o => o.CustomerId == customerId && o.OrderStatus == "completed").OrderByDescending(x => x.OrderId).Select(o => new UserOrderViewModel
             {
                 OrderId = o.OrderId,
-                OrderDate = o.OrderDate,
+                OrderDate = o.OrderDate.AddHours(8),
                 CustomerName = o.Customer.CustomerName,
                 Note = o.Note,
                 OrderDetails = o.OrderDetailsTable.Select(d => new UserOrderDetailsViewModel
@@ -151,17 +148,15 @@ namespace DeliveryBro.ApiController
             return orderDetails;
         }
 
-
-
         [HttpGet("waitorder")]
         public  IEnumerable<UserOrderViewModel> GetWaitOrder ()
         {
 			var id = User.GetId();
 			var orderDetails = _context.CustomerOrderTable
-                .Where(o => o.CustomerId == id && (o.OrderStatus == "waiting" || o.OrderStatus == "acepted")).Select(o => new UserOrderViewModel
+                .Where(o => o.CustomerId == id && (o.OrderStatus == "waiting" || o.OrderStatus == "acepted")).OrderByDescending(x => x.OrderId).Select(o => new UserOrderViewModel
                 {
                     OrderId = o.OrderId,
-                    OrderDate = o.OrderDate,
+                    OrderDate = o.OrderDate.AddHours(8),
                     CustomerName = o.Customer.CustomerName,
                     Note = o.Note,
                     OrderDetails = o.OrderDetailsTable.Select(d => new UserOrderDetailsViewModel

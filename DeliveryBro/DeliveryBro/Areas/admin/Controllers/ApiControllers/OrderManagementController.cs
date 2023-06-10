@@ -19,11 +19,7 @@ namespace DeliveryBro.Areas.admin.Controllers.ApiControllers
 		{
 			_db = context;
 		}
-        //var nextPage = context.Posts
-		//	.OrderBy(b => b.PostId)
-		//	.Skip(position)
-		//	.Take(10)
-		//	.ToList();
+        
 		[HttpGet("{page}")]
 		public async Task<OrderManagementDTO> GetOrder(int page)
 		{
@@ -91,7 +87,7 @@ namespace DeliveryBro.Areas.admin.Controllers.ApiControllers
 		}
 
 
-		[HttpDelete("{Id:int}")]
+		[HttpDelete("{Id}")]
 		public async Task<string> Delete(int Id)
 		{
 			var r = await _db.CustomerOrderTable.Include(o => o.OrderDetailsTable).Where(x => x.OrderId == Id).FirstOrDefaultAsync();
@@ -117,14 +113,26 @@ namespace DeliveryBro.Areas.admin.Controllers.ApiControllers
 
 			return "刪除成功!";
 		}
-
-
-
-
 		private bool OrderExists(int id)
 		{
 			return (_db.CustomerOrderTable?.Any(e => e.OrderId == id)).GetValueOrDefault();
 		}
+
+	//[HttpPost]
+	//	public async Task<string> CreateRooms([FromBody] CreateViewModel room)
+	//	{
+	//		Room NewRoom = new Room
+	//		{
+	//			HotelId = room.HotelId,
+	//			Type = room.Type,
+	//			Price = room.Price,
+	//			MaxGuests = room.MaxGuests,
+	//		};
+	//		NewRoom.RoomImages.AddRange(images);
+	//		_db.Rooms.Add(NewRoom);
+	//		await _db.SaveChangesAsync();
+	//		return "新增成功";
+	//	}
 
 	}
 }
