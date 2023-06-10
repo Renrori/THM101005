@@ -1,6 +1,6 @@
 ﻿<main id="main" class="main">
 	<div class="pagetitle">
-		<h1>及時訂單</h1>
+		<h1>即時訂單</h1>
 		<nav>
 			<ol class="breadcrumb">
 				<a class="breadcrumb-item" asp-area="store" asp-controller="Home" asp-action="Index">Home</a>
@@ -177,15 +177,14 @@
 						if (result.isConfirmed) {
 							Swal.fire(
 								'拒絕成功!',
-								'order.orderId 已拒絕!',
+								`訂單編號 ${order.orderId} 已拒絕!`,
 								'success'
 							)
 							axios.delete(`/api/Orders/${order.orderId}`).then(response => {
-
+								_this.getOrders();
 							});
 						}
 					})
-
 				},
 				completed: function (order) {
 					let _this = this;

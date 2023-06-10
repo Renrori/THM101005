@@ -1,5 +1,4 @@
 ﻿using DeliveryBro.Areas.store.DTO;
-using DeliveryBro.Areas.store.SubscribeTableDependency;
 using DeliveryBro.Extensions;
 using DeliveryBro.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -17,12 +16,10 @@ namespace DeliveryBro.Areas.store.apiControllers
     public class StoreInfoController : ControllerBase
     {
         private readonly sql8005site4nownetContext _context;
-        private readonly subscribeOrder _subscribeOrder;
 
-        public StoreInfoController(sql8005site4nownetContext context,subscribeOrder subscribeOrder)
+        public StoreInfoController(sql8005site4nownetContext context)
         {
             _context = context;
-            _subscribeOrder = subscribeOrder;
         }
 
         // GET: api/RestaurantTables
