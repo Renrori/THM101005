@@ -210,6 +210,7 @@
                     try {
                         axios.put(`${baseAddress}/${CustomerId}`, data).then(Response => {
                             console.log("修改成功");
+                            alert("修改成功")
                             this.isEditing = false;
                         })
                     } catch {

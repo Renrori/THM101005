@@ -15,39 +15,51 @@
    "SelectedToBeGenerated": 0,
    "Tables": [
       {
-         "Name": "[dbo].[Administer_Table]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[Coupon_Table]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[CustomerAddress_Table]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[CustomerOrder_Table]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[Customers_Table]",
-         "ObjectType": 0
-      },
-      {
          "Name": "[dbo].[Driver_Table]",
          "ObjectType": 0
       },
       {
-         "Name": "[dbo].[Menu_Table]",
+         "Name": "[HangFire].[AggregatedCounter]",
          "ObjectType": 0
       },
       {
-         "Name": "[dbo].[OrderDetails_Table]",
+         "Name": "[HangFire].[Counter]",
          "ObjectType": 0
       },
       {
-         "Name": "[dbo].[Restaurant_Table]",
+         "Name": "[HangFire].[Hash]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[HangFire].[Job]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[HangFire].[JobParameter]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[HangFire].[JobQueue]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[HangFire].[List]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[HangFire].[Schema]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[HangFire].[Server]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[HangFire].[Set]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[HangFire].[State]",
          "ObjectType": 0
       }
    ],

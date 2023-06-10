@@ -18,161 +18,48 @@ namespace DeliveryBro.Models
         {
         }
 
-        public virtual DbSet<AdministerTable> AdministerTable { get; set; }
-        public virtual DbSet<CouponTable> CouponTable { get; set; }
-        public virtual DbSet<CustomerAddressTable> CustomerAddressTable { get; set; }
-        public virtual DbSet<CustomerOrderTable> CustomerOrderTable { get; set; }
-        public virtual DbSet<CustomersTable> CustomersTable { get; set; }
+        public virtual DbSet<AggregatedCounter> AggregatedCounter { get; set; }
+        public virtual DbSet<Counter> Counter { get; set; }
         public virtual DbSet<DriverTable> DriverTable { get; set; }
-        public virtual DbSet<MenuTable> MenuTable { get; set; }
-        public virtual DbSet<OrderDetailsTable> OrderDetailsTable { get; set; }
-        public virtual DbSet<RestaurantTable> RestaurantTable { get; set; }
+        public virtual DbSet<Hash> Hash { get; set; }
+        public virtual DbSet<Job> Job { get; set; }
+        public virtual DbSet<JobParameter> JobParameter { get; set; }
+        public virtual DbSet<JobQueue> JobQueue { get; set; }
+        public virtual DbSet<List> List { get; set; }
+        public virtual DbSet<Schema> Schema { get; set; }
+        public virtual DbSet<Server> Server { get; set; }
+        public virtual DbSet<Set> Set { get; set; }
+        public virtual DbSet<State> State { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<AdministerTable>(entity =>
+            modelBuilder.Entity<AggregatedCounter>(entity =>
             {
-                entity.HasKey(e => e.AdministerId);
+                entity.HasKey(e => e.Key)
+                    .HasName("PK_HangFire_CounterAggregated");
 
-                entity.ToTable("Administer_Table");
+                entity.ToTable("AggregatedCounter", "HangFire");
 
-                entity.Property(e => e.AdministerId)
-                    .ValueGeneratedNever()
-                    .HasColumnName("AdministerID");
+                entity.HasIndex(e => e.ExpireAt, "IX_HangFire_AggregatedCounter_ExpireAt")
+                    .HasFilter("([ExpireAt] IS NOT NULL)");
 
-                entity.Property(e => e.AdministerAccount)
-                    .IsRequired()
-                    .HasMaxLength(15)
-                    .IsUnicode(false);
+                entity.Property(e => e.Key).HasMaxLength(100);
 
-                entity.Property(e => e.AdministerPassword)
-                    .IsRequired()
-                    .HasMaxLength(15)
-                    .IsUnicode(false);
+                entity.Property(e => e.ExpireAt).HasColumnType("datetime");
             });
 
-            modelBuilder.Entity<CouponTable>(entity =>
+            modelBuilder.Entity<Counter>(entity =>
             {
-                entity.HasKey(e => e.CouponId);
+                entity.HasKey(e => new { e.Key, e.Id })
+                    .HasName("PK_HangFire_Counter");
 
-                entity.ToTable("Coupon_Table");
+                entity.ToTable("Counter", "HangFire");
 
-                entity.Property(e => e.CouponId).HasColumnName("CouponID");
+                entity.Property(e => e.Key).HasMaxLength(100);
 
-                entity.Property(e => e.CouponDesription).HasMaxLength(50);
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
 
-                entity.Property(e => e.CouponLimit).HasMaxLength(50);
-
-                entity.Property(e => e.CouponName)
-                    .IsRequired()
-                    .HasMaxLength(10)
-                    .IsFixedLength();
-
-                entity.Property(e => e.CouponPicture).HasColumnType("image");
-            });
-
-            modelBuilder.Entity<CustomerAddressTable>(entity =>
-            {
-                entity.HasKey(e => e.CustomerAddressId);
-
-                entity.ToTable("CustomerAddress_Table");
-
-                entity.HasIndex(e => e.CustomerAddressId, "IX_CustomerAddress_Table");
-
-                entity.Property(e => e.CustomerAddressId).HasColumnName("CustomerAddressID");
-
-                entity.Property(e => e.CustomerAddress)
-                    .IsRequired()
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.CustomerId).HasColumnName("CustomerID");
-
-                entity.HasOne(d => d.Customer)
-                    .WithMany(p => p.CustomerAddressTable)
-                    .HasForeignKey(d => d.CustomerId)
-                    .HasConstraintName("FK_CustomerAddress_Table_Customers_Table");
-            });
-
-            modelBuilder.Entity<CustomerOrderTable>(entity =>
-            {
-                entity.HasKey(e => e.OrderId);
-
-                entity.ToTable("CustomerOrder_Table");
-
-                entity.Property(e => e.OrderId).HasColumnName("OrderID");
-
-                entity.Property(e => e.CouponId).HasColumnName("CouponID");
-
-                entity.Property(e => e.CustomerAddress).HasMaxLength(50);
-
-                entity.Property(e => e.CustomerId).HasColumnName("CustomerID");
-
-                entity.Property(e => e.DriverId).HasColumnName("DriverID");
-
-                entity.Property(e => e.Note)
-                    .HasMaxLength(50)
-                    .HasColumnName("note");
-
-                entity.Property(e => e.OrderDate).HasColumnType("datetime");
-
-                entity.Property(e => e.OrderStatus)
-                    .IsRequired()
-                    .HasMaxLength(10);
-
-                entity.Property(e => e.Payment)
-                    .IsRequired()
-                    .HasMaxLength(6);
-
-                entity.Property(e => e.RestaurantId).HasColumnName("RestaurantID");
-
-                entity.HasOne(d => d.Customer)
-                    .WithMany(p => p.CustomerOrderTable)
-                    .HasForeignKey(d => d.CustomerId)
-                    .HasConstraintName("FK_CustomerOrder_Table_Customers_Table");
-
-                entity.HasOne(d => d.Restaurant)
-                    .WithMany(p => p.CustomerOrderTable)
-                    .HasForeignKey(d => d.RestaurantId)
-                    .HasConstraintName("FK_CustomerOrder_Table_Restaurant_Table");
-            });
-
-            modelBuilder.Entity<CustomersTable>(entity =>
-            {
-                entity.HasKey(e => e.CustomerId);
-
-                entity.ToTable("Customers_Table");
-
-                entity.Property(e => e.CustomerId)
-                    .ValueGeneratedNever()
-                    .HasColumnName("CustomerID");
-
-                entity.Property(e => e.CouponId).HasColumnName("CouponID");
-
-                entity.Property(e => e.CustomerAccount)
-                    .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.CustomerEmail).HasMaxLength(50);
-
-                entity.Property(e => e.CustomerName)
-                    .IsRequired()
-                    .HasMaxLength(16);
-
-                entity.Property(e => e.CustomerOauth)
-                    .HasMaxLength(10)
-                    .HasColumnName("CustomerOAuth")
-                    .IsFixedLength();
-
-                entity.Property(e => e.CustomerPassword)
-                    .IsRequired()
-                    .HasMaxLength(128);
-
-                entity.Property(e => e.CustomerPhone).HasMaxLength(12);
-
-                entity.Property(e => e.CustomerPhoto).HasColumnType("image");
-
-                entity.Property(e => e.DateOfBirth).HasColumnType("date");
+                entity.Property(e => e.ExpireAt).HasColumnType("datetime");
             });
 
             modelBuilder.Entity<DriverTable>(entity =>
@@ -208,103 +95,151 @@ namespace DeliveryBro.Models
                 entity.Property(e => e.DriverPicture).HasColumnType("image");
             });
 
-            modelBuilder.Entity<MenuTable>(entity =>
+            modelBuilder.Entity<Hash>(entity =>
             {
-                entity.HasKey(e => e.DishId);
+                entity.HasKey(e => new { e.Key, e.Field })
+                    .HasName("PK_HangFire_Hash");
 
-                entity.ToTable("Menu_Table");
+                entity.ToTable("Hash", "HangFire");
 
-                entity.Property(e => e.DishId).HasColumnName("DishID");
+                entity.HasIndex(e => e.ExpireAt, "IX_HangFire_Hash_ExpireAt")
+                    .HasFilter("([ExpireAt] IS NOT NULL)");
 
-                entity.Property(e => e.CategoryCustomSettingsId).HasColumnName("CategoryCustomSettingsID");
+                entity.Property(e => e.Key).HasMaxLength(100);
 
-                entity.Property(e => e.DishCategory)
+                entity.Property(e => e.Field).HasMaxLength(100);
+            });
+
+            modelBuilder.Entity<Job>(entity =>
+            {
+                entity.ToTable("Job", "HangFire");
+
+                entity.HasIndex(e => e.ExpireAt, "IX_HangFire_Job_ExpireAt")
+                    .HasFilter("([ExpireAt] IS NOT NULL)");
+
+                entity.HasIndex(e => e.StateName, "IX_HangFire_Job_StateName")
+                    .HasFilter("([StateName] IS NOT NULL)");
+
+                entity.Property(e => e.Arguments).IsRequired();
+
+                entity.Property(e => e.CreatedAt).HasColumnType("datetime");
+
+                entity.Property(e => e.ExpireAt).HasColumnType("datetime");
+
+                entity.Property(e => e.InvocationData).IsRequired();
+
+                entity.Property(e => e.StateName).HasMaxLength(20);
+            });
+
+            modelBuilder.Entity<JobParameter>(entity =>
+            {
+                entity.HasKey(e => new { e.JobId, e.Name })
+                    .HasName("PK_HangFire_JobParameter");
+
+                entity.ToTable("JobParameter", "HangFire");
+
+                entity.Property(e => e.Name).HasMaxLength(40);
+
+                entity.HasOne(d => d.Job)
+                    .WithMany(p => p.JobParameter)
+                    .HasForeignKey(d => d.JobId)
+                    .HasConstraintName("FK_HangFire_JobParameter_Job");
+            });
+
+            modelBuilder.Entity<JobQueue>(entity =>
+            {
+                entity.HasKey(e => new { e.Queue, e.Id })
+                    .HasName("PK_HangFire_JobQueue");
+
+                entity.ToTable("JobQueue", "HangFire");
+
+                entity.Property(e => e.Queue).HasMaxLength(50);
+
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
+
+                entity.Property(e => e.FetchedAt).HasColumnType("datetime");
+            });
+
+            modelBuilder.Entity<List>(entity =>
+            {
+                entity.HasKey(e => new { e.Key, e.Id })
+                    .HasName("PK_HangFire_List");
+
+                entity.ToTable("List", "HangFire");
+
+                entity.HasIndex(e => e.ExpireAt, "IX_HangFire_List_ExpireAt")
+                    .HasFilter("([ExpireAt] IS NOT NULL)");
+
+                entity.Property(e => e.Key).HasMaxLength(100);
+
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
+
+                entity.Property(e => e.ExpireAt).HasColumnType("datetime");
+            });
+
+            modelBuilder.Entity<Schema>(entity =>
+            {
+                entity.HasKey(e => e.Version)
+                    .HasName("PK_HangFire_Schema");
+
+                entity.ToTable("Schema", "HangFire");
+
+                entity.Property(e => e.Version).ValueGeneratedNever();
+            });
+
+            modelBuilder.Entity<Server>(entity =>
+            {
+                entity.ToTable("Server", "HangFire");
+
+                entity.HasIndex(e => e.LastHeartbeat, "IX_HangFire_Server_LastHeartbeat");
+
+                entity.Property(e => e.Id).HasMaxLength(200);
+
+                entity.Property(e => e.LastHeartbeat).HasColumnType("datetime");
+            });
+
+            modelBuilder.Entity<Set>(entity =>
+            {
+                entity.HasKey(e => new { e.Key, e.Value })
+                    .HasName("PK_HangFire_Set");
+
+                entity.ToTable("Set", "HangFire");
+
+                entity.HasIndex(e => e.ExpireAt, "IX_HangFire_Set_ExpireAt")
+                    .HasFilter("([ExpireAt] IS NOT NULL)");
+
+                entity.HasIndex(e => new { e.Key, e.Score }, "IX_HangFire_Set_Score");
+
+                entity.Property(e => e.Key).HasMaxLength(100);
+
+                entity.Property(e => e.Value).HasMaxLength(256);
+
+                entity.Property(e => e.ExpireAt).HasColumnType("datetime");
+            });
+
+            modelBuilder.Entity<State>(entity =>
+            {
+                entity.HasKey(e => new { e.JobId, e.Id })
+                    .HasName("PK_HangFire_State");
+
+                entity.ToTable("State", "HangFire");
+
+                entity.HasIndex(e => e.CreatedAt, "IX_HangFire_State_CreatedAt");
+
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
+
+                entity.Property(e => e.CreatedAt).HasColumnType("datetime");
+
+                entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(20);
 
-                entity.Property(e => e.DishDescription).HasMaxLength(60);
+                entity.Property(e => e.Reason).HasMaxLength(100);
 
-                entity.Property(e => e.DishName)
-                    .IsRequired()
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.DishStatus)
-                    .IsRequired()
-                    .HasMaxLength(30);
-
-                entity.Property(e => e.RestaurantId).HasColumnName("RestaurantID");
-
-                entity.HasOne(d => d.Restaurant)
-                    .WithMany(p => p.MenuTable)
-                    .HasForeignKey(d => d.RestaurantId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Menu_Table_Restaurant_Table");
-            });
-
-            modelBuilder.Entity<OrderDetailsTable>(entity =>
-            {
-                entity.HasKey(e => new { e.OrderId, e.DishId });
-
-                entity.ToTable("OrderDetails_Table");
-
-                entity.Property(e => e.OrderId).HasColumnName("OrderID");
-
-                entity.Property(e => e.DishId).HasColumnName("DishID");
-
-                entity.Property(e => e.DishName)
-                    .IsRequired()
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.OrderDate).HasColumnType("date");
-
-                entity.HasOne(d => d.Order)
-                    .WithMany(p => p.OrderDetailsTable)
-                    .HasForeignKey(d => d.OrderId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_OrderDetails_Table_CustomerOrder_Table");
-            });
-
-            modelBuilder.Entity<RestaurantTable>(entity =>
-            {
-                entity.HasKey(e => e.RestaurantId);
-
-                entity.ToTable("Restaurant_Table");
-
-                entity.Property(e => e.RestaurantId)
-                    .ValueGeneratedNever()
-                    .HasColumnName("RestaurantID");
-
-                entity.Property(e => e.EndHours).HasColumnType("time(0)");
-
-                entity.Property(e => e.Latitude).HasColumnType("decimal(9, 6)");
-
-                entity.Property(e => e.Longitude).HasColumnType("decimal(9, 6)");
-
-                entity.Property(e => e.OpeningHours).HasColumnType("time(0)");
-
-                entity.Property(e => e.RestaurantAccount)
-                    .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.RestaurantAddress).HasMaxLength(50);
-
-                entity.Property(e => e.RestaurantDescription).HasMaxLength(50);
-
-                entity.Property(e => e.RestaurantEmail).HasMaxLength(50);
-
-                entity.Property(e => e.RestaurantName).HasMaxLength(20);
-
-                entity.Property(e => e.RestaurantPassword)
-                    .IsRequired()
-                    .HasMaxLength(128)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.RestaurantPhone).HasMaxLength(12);
-
-                entity.Property(e => e.RestaurantPicture).HasColumnType("image");
-
-                entity.Property(e => e.RestaurantStatus).HasMaxLength(10);
+                entity.HasOne(d => d.Job)
+                    .WithMany(p => p.State)
+                    .HasForeignKey(d => d.JobId)
+                    .HasConstraintName("FK_HangFire_State_Job");
             });
 
             OnModelCreatingPartial(modelBuilder);
