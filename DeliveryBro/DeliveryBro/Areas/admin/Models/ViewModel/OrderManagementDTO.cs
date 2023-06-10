@@ -2,12 +2,17 @@
 {
     public class OrderManagementDTO
     {
-        public int OrderId { get; set; }
-        public DateTime OrderDate { get; set; }
-        public string CustomerAddress { get; set; }
-        public int AmountAfterDiscount { get; set; }
-        public string OrderStatus { get; set; }
+        public int Count { get; set; }
+		public List<OrderDTO> Items { get; set; }
 
     }
+
+    public class OrderDTO {
+		public int OrderId { get; set; }
+		public DateTime OrderDate { get; set; }
+		public string CustomerAddress { get; set; }
+		public int AmountAfterDiscount { get; set; }
+		public string OrderStatus { get; set; }
+	}
 
 }
