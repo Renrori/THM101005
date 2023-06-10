@@ -53,32 +53,27 @@
 						<li class="dropdown-header">
 							<h6>@User.Claims.FirstOrDefault(x=> x.Type == ClaimTypes.Name)?.Value</h6>
 						</li>
+						
 						<li>
 							<hr class="dropdown-divider">
 						</li>
+						@{
+							if (User.Identity.IsAuthenticated)
+							{
+								<li>
+									<hr class="dropdown-divider">
+								</li>
 
-						<li>
-							<a class="dropdown-item d-flex align-items-center" asp-area="store" asp-controller="Home" asp-action="StoreInfo"><i class="fa-solid fa-store"></i>商店資訊</a>
-						</li>
-						<li>
-							<hr class="dropdown-divider">
-						</li>
+								<li>
+									<a class="dropdown-item d-flex align-items-center" asp-area="store" asp-controller="Home" asp-action="StoreInfo"><i class="fa-solid fa-store"></i>商店資訊</a>
+								</li>
+								<li>
+									<hr class="dropdown-divider">
+								</li>
 
-						<li>
-							<a class="dropdown-item d-flex align-items-center" asp-area="store" asp-controller="Home" asp-action="HelpCenter"><i class="fa-solid fa-circle-info"></i>幫助中心</a>
-						</li>
-						<li>
-							<hr class="dropdown-divider">
-						</li>
-
-						<li>
-							@* <a class="dropdown-item d-flex align-items-center" href="#">
-							<i class="bi bi-box-arrow-right"></i>
-							<span>登出</span>
-							</a>*@
-							@{
-								if (User.Identity.IsAuthenticated)
-								{
+								<li>
+									<a class="dropdown-item d-flex align-items-center" asp-area="store" asp-controller="Home" asp-action="HelpCenter"><i class="fa-solid fa-circle-info"></i>幫助中心</a>
+								</li>
 								<li>
 									<hr class="dropdown-divider">
 								</li>
@@ -100,10 +95,10 @@
 								<li class="nav-item">
 									<a class="dropdown-item d-flex align-items-center" asp-area="store" asp-controller="StoreUser" asp-action="Register"><i class="fa-sharp fa-solid fa-registered"></i>註冊</a>
 								</li>
-								}
-
 							}
-						</li><!-- End Profile Nav -->
+
+						}
+						<!-- End Profile Nav -->
 					</ul><!-- End Profile Dropdown Items -->
 				</li>
 			</ul>
@@ -113,25 +108,30 @@
 	<aside id="sidebar" class="sidebar">
 
 		<ul class="sidebar-nav" id="sidebar-nav">
-
-			<li class="nav-item">
-				<a class="nav-link collapsed" asp-area="store" asp-controller="Home" asp-action="Index"><i class="bi bi-grid"></i>首頁</a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link collapsed" asp-area="store" asp-controller="Home" asp-action="StoreInfo"><i class="fa-solid fa-store"></i>商店資訊</a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link collapsed" asp-area="store" asp-controller="Home" asp-action="OrdersInTime"><i class="fa-solid fa-file-pen"></i>即時訂單</a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link collapsed" asp-area="store" asp-controller="Home" asp-action="HisOrder"><i class="fa-solid fa-file-lines"></i>歷史訂單</a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link collapsed" asp-area="store" asp-controller="Home" asp-action="Menu"><i class="fa-solid fa-receipt"></i>菜單管理</a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link collapsed" asp-area="store" asp-controller="Home" asp-action="HelpCenter"><i class="fa-solid fa-circle-info"></i>幫助中心</a>
-			</li>
+			@{
+				if(User.Identity.IsAuthenticated)
+				{
+					<li class="nav-item">
+						<a class="nav-link collapsed" asp-area="store" asp-controller="Home" asp-action="Index"><i class="bi bi-grid"></i>首頁</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link collapsed" asp-area="store" asp-controller="Home" asp-action="StoreInfo"><i class="fa-solid fa-store"></i>商店資訊</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link collapsed" asp-area="store" asp-controller="Home" asp-action="OrdersInTime"><i class="fa-solid fa-file-pen"></i>即時訂單</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link collapsed" asp-area="store" asp-controller="Home" asp-action="HisOrder"><i class="fa-solid fa-file-lines"></i>歷史訂單</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link collapsed" asp-area="store" asp-controller="Home" asp-action="Menu"><i class="fa-solid fa-receipt"></i>菜單管理</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link collapsed" asp-area="store" asp-controller="Home" asp-action="HelpCenter"><i class="fa-solid fa-circle-info"></i>幫助中心</a>
+					</li>
+				}
+			}
+			
 		</ul>
 
 	</aside><!-- End Sidebar-->
