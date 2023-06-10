@@ -27,7 +27,7 @@
 							<th tabindex="0" aria-controls="products-datatable" rowspan="1" colspan="1" style="width: 249.8px;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">state</font></font></th>
 							<th tabindex="0" aria-controls="products-datatable" rowspan="1" colspan="1" style="width: 249.8px;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">customerAddress</font></font></th>
 							<th tabindex="0" aria-controls="products-datatable" rowspan="1" colspan="1" style="width: 148.8px;" aria-sort="ascending"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">customerPhone</font></font></th>
-							<th tabindex="0" aria-controls="products-datatable" rowspan="1" colspan="1" style="width: 92.8px;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">role</font></font></th>
+							<th tabindex="0" aria-controls="products-datatable" rowspan="1" colspan="1" style="width: 92.8px;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">action</font></font></th>
 						</tr>
 					</thead>
 					<tbody>
@@ -38,15 +38,16 @@
 							<td>{{item.state}}</td>
 							<td>{{item.customerAddress}}</td>
 							<td>{{item.customerPhone}}</td>
-							<td>{{item.role}}</td>
-							<td>
+ 							<td>
 								<a href="javascript:void(0);" class="action-icon"> <i class="mdi mdi-eye"></i></a>
 								<a href="javascript:void(0);" class="action-icon" v-on:click="editorder(item.orderId)"> <i class="mdi mdi-square-edit-outline"></i></a>
 								<a href="javascript:void(0);" class="action-icon" v-on:click="deleteConfirm(item)" data-bs-toggle="modal" data-bs-target="#deleteModal"> <i class="mdi mdi-delete"></i></a>
 							</td>
 						</tr>
 					</tbody>
-					<div class="container">
+					
+				</table>
+				<div class="container">
 						<div class="row justify-content-center" style="height:100px;">
 							<div class="col-4 h-100">
 								{{ maxcount }}
@@ -70,7 +71,6 @@
 							</div>
 						</div>
 					</div>
-				</table>
 			</div>
 		</div> <!-- end card-->
 	</div>
