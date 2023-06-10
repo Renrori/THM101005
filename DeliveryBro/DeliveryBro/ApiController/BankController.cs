@@ -48,7 +48,7 @@ namespace DeliveryBro.ApiController
                 // * 訂單金額
                 Amt = amount,
                 // * 商品資訊
-                ItemDesc = "商品",
+                ItemDesc = "Deeliver的商品",
                 // 繳費有效期限(適用於非即時交易)
                 ExpireDate = null,
                 // 支付完成 返回商店網址
@@ -64,7 +64,7 @@ namespace DeliveryBro.ApiController
                 // 付款人電子信箱 是否開放修改(1=可修改 0=不可修改)
                 EmailModify = 0,
                 // 商店備註
-                OrderComment = "xxxxx",
+                OrderComment = "這個商品還沒付錢阿",
                 // 信用卡 一次付清啟用(1=啟用、0或者未有此參數=不啟用)
                 CREDIT = 1,
                 // WEBATM啟用(1=啟用、0或者未有此參數，即代表不開啟)
