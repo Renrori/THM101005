@@ -19,8 +19,9 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label for="streetaddress">外送地址</label>
-                                    <input type="text" class="form-control" placeholder="請填寫詳細地址" v-model="CustomerAddress" required>
+                                    <input type="text" class="form-control" placeholder="CustomerAddress" v-model="CustomerAddress" required>
                                 </div>
+                              @*  <div>{{ CustomerAddress }}</div>*@
                             </div>
                             <div class="w-100"></div>
                             <div class="col-md-6">
@@ -138,6 +139,8 @@
     <script src="~/axios/axios.min.js"></script>
     <script>
         var baseAddress = "https://localhost:7163/api/HomeApi";
+        var baseAddressUser = "https://localhost:7163/api/UserApi";
+        var CustomerId = "@User.Claims.FirstOrDefault(c => c.Type == "Id")?.Value";
         var vueApp = {
             data() {
                 return {
@@ -160,6 +163,7 @@
                     OrderDetailViewModels: [],
                     selectedPage: null,
                     selectedNPPage: null,
+                    CustomerInfo: {}
                 };
             },
             mounted() {
@@ -169,8 +173,9 @@
                 this.cartItems = checkoutdata.items;
                 this.totalAmount = checkoutdata.totalAmount;
 
-                this.updateRestaurantId()
+                this.updateRestaurantId();
                 this.CustomerId = "@User.Claims.FirstOrDefault(c => c.Type == "Id")?.Value";
+                this.getCustomerInfo();
             },
             methods: {
                 calculateAmount() {
@@ -245,6 +250,21 @@
                 updateRestaurantId() {
                     // 將找到的相同 RestaurantId 賦值給外部的 restaurantId 變數
                     this.RestaurantId = this.duplicateRestaurantId;
+                },
+                async getCustomerInfo() {
+                    const CustomerId = "@User.Claims.FirstOrDefault(c => c.Type == "Id")?.Value";
+                    //console.log(CustomerId)
+                    //拿出對應cusId
+                    try {
+                        const response = await axios.get(`${baseAddressUser}/${CustomerId}`).then(Response => {
+                            this.CustomerInfo = Response.data;
+                            const userAddress = this.CustomerInfo.userAddress;
+                            const addressString = userAddress.join(", "); 
+                            this.CustomerAddress = addressString;
+                        })
+                    } catch (error) {
+                        console.error(error);
+                    }
                 }
             },
             computed: {
