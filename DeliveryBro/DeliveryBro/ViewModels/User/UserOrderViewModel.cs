@@ -5,7 +5,7 @@ namespace DeliveryBro.ViewModels.User
     public class UserOrderViewModel
     {
         public int OrderId { get; set; }
-        public DateTime OrderDate { get; set; }
+        public string OrderDate { get; set; }
         //public string DishName { get; set; }
         public string CustomerName { get; set; }
         public string Note { get; set; }

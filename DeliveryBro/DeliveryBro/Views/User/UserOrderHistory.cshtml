@@ -152,7 +152,7 @@
                 async getUserOrder() {
                     //拿出對應cusId的order
                     try {
-                        const response = await axios.get(`${baseAddress}/${CustomerId}/orderdetails`).then(Response => {
+                        const response = await axios.get(`${baseAddress}/hisorder`).then(Response => {
                             this.CustomerOrderInfo = Response.data;
                         })
                     } catch (error) {
