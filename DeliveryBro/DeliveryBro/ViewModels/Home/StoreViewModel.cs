@@ -6,5 +6,6 @@
         public string StoreName { get; set; }
         public string StoreAddress { get; set; }
         public string StoreDescription { get; set; }
+        public LocationViewModel Location { get; set; }
     }
 }

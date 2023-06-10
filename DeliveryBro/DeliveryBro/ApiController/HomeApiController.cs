@@ -1,15 +1,20 @@
-﻿using DeliveryBro.Models;
+﻿using DeliveryBro.Extensions;
+using DeliveryBro.Models;
+using DeliveryBro.ViewModels;
 using DeliveryBro.ViewModels.Home;
+using DeliveryBro.ViewModels.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Net;
 
 namespace DeliveryBro.ApiController
 {
     [ApiExplorerSettings(IgnoreApi = true)]
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize, AllowAnonymous]
     public class HomeApiController : ControllerBase
     {
         private readonly sql8005site4nownetContext _context;
@@ -19,11 +24,23 @@ namespace DeliveryBro.ApiController
             _context = context;
         }
 
-        //抓取有商品的店家回傳
-        [HttpGet]
-        // Get:/api/HomeApi/
-        public async Task<IEnumerable<StoreViewModel>> GetStore()
+        [HttpGet("start/address")]
+        public IQueryable<UserAddressViewModel> GetAddress()
         {
+            var id = User.GetId();
+            if (id == Guid.Empty) return null;
+            return _context.CustomerAddressTable.Where(x => x.CustomerId == id).Select(x => new UserAddressViewModel
+            {
+                UserAddress = x.CustomerAddress
+            });
+        }
+
+        //抓取有商品的店家回傳
+        [HttpGet("{address}")]
+        // Get:/api/HomeApi/
+        public async Task<IEnumerable<StoreViewModel>> GetStore(string address)
+        {
+            if (address == "") return null;
             var groupMenu = await _context.MenuTable
                //.Where(m => !string.IsNullOrEmpty(m.DishName))
                .GroupBy(m => m.RestaurantId)
@@ -37,11 +54,33 @@ namespace DeliveryBro.ApiController
                     StoreId = s.RestaurantId,
                     StoreName = s.RestaurantName,
                     StoreAddress = s.RestaurantAddress,
-                    StoreDescription = s.RestaurantDescription
+                    StoreDescription = s.RestaurantDescription,
+                    Location=new LocationViewModel 
+                    { 
+                        Latitude=Convert.ToDouble(s.Latitude),
+                        Longitude=Convert.ToDouble(s.Longitude),
+                    }
                 })
                 .ToListAsync();
-            return sm;
+            
+            return Distance(address,sm);
         }
+        public List<StoreViewModel> Distance(string address, List<StoreViewModel> store)
+        {
+            List<StoreViewModel> StoreInRange=new List<StoreViewModel>();
+            LocationViewModel customer = new LocationViewModel
+            {
+                Latitude = Convert.ToDouble(Map.GetLatitude(address)),
+                Longitude = Convert.ToDouble(Map.GetLongitude(address))
+            };
+            foreach(var s in store)
+            {
+                var range=Map.GetDistance(customer, s.Location);
+                if (range <= 3) StoreInRange.Add(s);
+            }
+            return StoreInRange;
+        }
+
         //Post:/api/HomeApi/Filter
         //此功能未成功請勿使用
         [HttpPost("Filter")]

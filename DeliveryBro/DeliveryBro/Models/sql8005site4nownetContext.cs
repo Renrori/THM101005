@@ -130,6 +130,11 @@ namespace DeliveryBro.Models
                     .HasForeignKey(d => d.CustomerId)
                     .HasConstraintName("FK_CustomerOrder_Table_Customers_Table");
 
+                entity.HasOne(d => d.Driver)
+                    .WithMany(p => p.CustomerOrderTable)
+                    .HasForeignKey(d => d.DriverId)
+                    .HasConstraintName("FK_CustomerOrder_Table_Driver_Table");
+
                 entity.HasOne(d => d.Restaurant)
                     .WithMany(p => p.CustomerOrderTable)
                     .HasForeignKey(d => d.RestaurantId)
@@ -232,6 +237,8 @@ namespace DeliveryBro.Models
                     .IsRequired()
                     .HasMaxLength(30);
 
+                entity.Property(e => e.PicturePath).HasMaxLength(100);
+
                 entity.Property(e => e.RestaurantId).HasColumnName("RestaurantID");
 
                 entity.HasOne(d => d.Restaurant)
@@ -281,6 +288,8 @@ namespace DeliveryBro.Models
                 entity.Property(e => e.Longitude).HasColumnType("decimal(9, 6)");
 
                 entity.Property(e => e.OpeningHours).HasColumnType("time(0)");
+
+                entity.Property(e => e.PicturePath).HasMaxLength(100);
 
                 entity.Property(e => e.RestaurantAccount)
                     .IsRequired()

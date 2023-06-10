@@ -3,7 +3,6 @@ using DeliveryBro.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using DeliveryBro.Services;
-using DeliveryBro.Areas.store.SubscribeTableDependency;
 using DeliveryBro.Hubs;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -11,6 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
 using System;
 using Microsoft.OpenApi.Models;
+using Hangfire;
 
 namespace DeliveryBro
 {
@@ -36,9 +36,8 @@ namespace DeliveryBro
 
             #region authentication
 
-			builder.Services.AddSingleton<subscribeOrder>();
             builder.Services.AddSignalR();
-            builder.Services.AddSwaggerGen();
+            //builder.Services.AddSwaggerGen();
 
             builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
             .AddCookie("CustomerAuthenticationScheme", opt =>
@@ -93,7 +92,7 @@ namespace DeliveryBro
             {
                 var policybuilder = new AuthorizationPolicyBuilder("CustomerAuthenticationScheme");
                 policybuilder = policybuilder.RequireAuthenticatedUser();
-                option.DefaultPolicy=policybuilder.Build();
+                option.DefaultPolicy = policybuilder.Build();
             });
 
 
@@ -104,34 +103,40 @@ namespace DeliveryBro
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
             builder.Services.AddHttpContextAccessor();
             builder.Services.AddControllersWithViews();
-
+            builder.Services.AddHangfire(configuration => configuration
+		                    .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
+		                    .UseSimpleAssemblyNameTypeSerializer()
+		                    .UseRecommendedSerializerSettings()
+		                    .UseSqlServerStorage(builder.Configuration.GetConnectionString("HangfireConnection")));
+            builder.Services.AddHangfireServer();
             builder.Services.AddSingleton<IUserIdProvider, BasedUserIdProvider>();
             builder.Services.AddTransient<EncryptService>();
             builder.Services.AddTransient<PasswordEncyptService>();
-            builder.Services.AddSingleton<subscribeOrder>(); 
-            #endregion
+			builder.Services.AddSingleton<OrderNotificationTask>();
+			#endregion
 
-            var app = builder.Build();
+			var app = builder.Build();
 
-			// Configure the HTTP request pipeline.
-			if (app.Environment.IsDevelopment())
-			{
-				app.UseMigrationsEndPoint();
-                app.UseSwagger();
-                app.UseSwaggerUI();
+            // Configure the HTTP request pipeline.
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseMigrationsEndPoint();
+                //app.UseSwagger();
+                //app.UseSwaggerUI();
             }
-			else
-			{
-				app.UseExceptionHandler("/Home/Error");
-				// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-				app.UseHsts();
-			}
+            else
+            {
+                app.UseExceptionHandler("/Home/Error");
+                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                app.UseHsts();
+            }
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseHangfireDashboard();
             app.MapHub<OrderHub>("/orderHub");
             app.MapHub<ChatHub>("/chatHub");
-            app.UseRouting();
+			app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
 
@@ -144,7 +149,11 @@ namespace DeliveryBro
                 endpoints.MapControllerRoute(
                     name: "admin",
                     pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
+                endpoints.MapControllers();
+                endpoints.MapHangfireDashboard();
             });
+
             app.MapControllerRoute(
                 name: "admin",
                 pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
@@ -152,7 +161,7 @@ namespace DeliveryBro
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
 
-            app.MapRazorPages();           
+            app.MapRazorPages();
 
             app.Run();
         }
