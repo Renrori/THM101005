@@ -27,6 +27,7 @@ namespace DeliveryBro.Models
         public Guid? RestaurantId { get; set; }
 
         public virtual CustomersTable Customer { get; set; }
+        public virtual DriverTable Driver { get; set; }
         public virtual RestaurantTable Restaurant { get; set; }
         public virtual ICollection<OrderDetailsTable> OrderDetailsTable { get; set; }
     }

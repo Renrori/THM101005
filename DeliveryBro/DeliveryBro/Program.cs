@@ -3,14 +3,14 @@ using DeliveryBro.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using DeliveryBro.Services;
-using DeliveryBro.Areas.store.SubscribeTableDependency;
 using DeliveryBro.Hubs;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
 using System;
-//using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi.Models;
+using Hangfire;
 
 namespace DeliveryBro
 {
@@ -36,7 +36,6 @@ namespace DeliveryBro
 
             #region authentication
 
-            builder.Services.AddSingleton<subscribeOrder>();
             builder.Services.AddSignalR();
             //builder.Services.AddSwaggerGen();
 
@@ -104,14 +103,19 @@ namespace DeliveryBro
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
             builder.Services.AddHttpContextAccessor();
             builder.Services.AddControllersWithViews();
-
+            builder.Services.AddHangfire(configuration => configuration
+		                    .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
+		                    .UseSimpleAssemblyNameTypeSerializer()
+		                    .UseRecommendedSerializerSettings()
+		                    .UseSqlServerStorage(builder.Configuration.GetConnectionString("HangfireConnection")));
+            builder.Services.AddHangfireServer();
             builder.Services.AddSingleton<IUserIdProvider, BasedUserIdProvider>();
             builder.Services.AddTransient<EncryptService>();
             builder.Services.AddTransient<PasswordEncyptService>();
-            builder.Services.AddSingleton<subscribeOrder>();
-            #endregion
+			builder.Services.AddSingleton<OrderNotificationTask>();
+			#endregion
 
-            var app = builder.Build();
+			var app = builder.Build();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -129,9 +133,10 @@ namespace DeliveryBro
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseHangfireDashboard();
             app.MapHub<OrderHub>("/orderHub");
             app.MapHub<ChatHub>("/chatHub");
-            app.UseRouting();
+			app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
 
@@ -144,7 +149,11 @@ namespace DeliveryBro
                 endpoints.MapControllerRoute(
                     name: "admin",
                     pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
+                endpoints.MapControllers();
+                endpoints.MapHangfireDashboard();
             });
+
             app.MapControllerRoute(
                 name: "admin",
                 pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
