@@ -75,7 +75,7 @@
 		</div> <!-- end card-->
 	</div>
 	<!-- end row -->
-</div> <!-- container -->
+<!-- container -->
 <!-- Modal -->
 <div class="form-group">
 	<div class="modal fade" id="editModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
@@ -119,7 +119,7 @@
 					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 				</div>
 				<div class="modal-body">
-					確定要刪除嗎:{{delInfo.msg.customerAccount}},價格:{{delInfo.msg.customerName}},
+					確定要刪除嗎:{{delInfo.title}}{{delInfo.msg.customerAccount}},價格:{{delInfo.msg.customerName}},
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">不要</button>
@@ -129,7 +129,8 @@
 		</div>
 	</div>
 </div>
-
+</div>
+@section Scripts{
 <script type="text/javascript">
 	var app = new Vue({
 		el: '#userapp',
@@ -190,11 +191,11 @@
 				}
 			},
 			deleteorder: function (id) {
-				axios.delete('/api/UserCustomer/Delete/' + id).then(res => {
+					axios.delete(`/api/UserManagement/Delete/${id}`).then(res => {
 					if (res.data) {
 						alert("已刪除");
 						this.nextpage(this.nowpage);
-						var idx = this.user.findIndex(x => x.customerAccount == id);
+							var idx = this.user.findIndex(x => x.customerAccount == id);
 						this.user.splice(idx, 1)
 						$("#deleteModal").modal("hide");
 					}
@@ -202,11 +203,13 @@
 			},
 
 			deleteConfirm: function (item) {
-				this.delInfo.title = item.customerAccount;
-				this.delInfo.msg.customerAccount = item.customerAccount;
-				this.delInfo.msg.customerName = item.customerName;
+				
+					this.delInfo.title = item.customerAccount;
+					this.delInfo.msg.customerAccount = item.customerAccount;
+					this.delInfo.msg.customerName = item.customerName;
 				console.log(this.delInfo.title);
 			}
 		}
 	})
 </script>
+}
