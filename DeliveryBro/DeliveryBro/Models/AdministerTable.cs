@@ -5,12 +5,10 @@ using System.Collections.Generic;
 
 namespace DeliveryBro.Models
 {
-    public partial class JobParameter
+    public partial class AdministerTable
     {
-        public long JobId { get; set; }
-        public string Name { get; set; }
-        public string Value { get; set; }
-
-        public virtual Job Job { get; set; }
+        public string AdministerAccount { get; set; }
+        public string AdministerPassword { get; set; }
+        public Guid AdministerId { get; set; }
     }
 }
