@@ -173,6 +173,7 @@
                             axios.post(`${baseAddress}/CheckAdd/${CustomerId}`, data).then(Response => {
                                 console.log("修改成功");
                                 this.isEditing = false;
+                                alert("修改成功");
                             })
                         } catch (error) {
                             console.error(error);
@@ -190,6 +191,7 @@
                             axios.post(`${baseAddress}/CheckAdd/${CustomerId}`, data).then(Response => {
                                 console.log("修改成功");
                                 this.isEditing = false;
+                                alert("修改成功");
                             })
                         } catch (error) {
                             console.error(error);
