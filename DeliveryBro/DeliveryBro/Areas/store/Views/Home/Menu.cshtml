@@ -55,7 +55,7 @@
 					<div class="card cardscreen">
 						<div class="card-body pt-3">
 							<button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#insertnew">新增品項  <i class="fa-solid fa-plus"></i></button>
-							<div class="row row-cols-1 row-cols-sm-2 row-cols-md-5 g-4 pt-3">
+							<div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-4 pt-3">
 								<div class="col" v-for="(item,index) in MenuDTOes" :key="index">
 									<div class="card menucard">
 										<img v-if="item.pictureUrl!=null" :src="item.pictureUrl" class="card-img-top outcardpic" />

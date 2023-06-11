@@ -46,7 +46,7 @@ namespace DeliveryBro.Hubs
             var u=Context.User.GetInfo();
 			var r = AllUser.FirstOrDefault(x => x.Key == new Guid(userid));
 			if(r.Value==null) r=OfflineUser.FirstOrDefault(x=>x.Key == new Guid(userid));
-			await Clients.Client(userid).ToStoreMessage(u.ConnectionId, u.UserId.ToString(), u.Name, u.Role, message,false);			
+			await Clients.Client(connectionid).ToStoreMessage(u.ConnectionId, u.UserId.ToString(), u.Name, u.Role, message,false);			
 			chatMessages.Add(new ChatMessage
 			{
 				Message = message,

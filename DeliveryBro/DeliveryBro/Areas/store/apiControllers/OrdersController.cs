@@ -35,7 +35,7 @@ namespace DeliveryBro.Areas.store.apiControllers
 				.Where(x => x.RestaurantId == id && x.OrderStatus == "completed").OrderByDescending(x => x).Select(x => new HisOrderDTO
 				{
 					OrderId = x.OrderId,
-					OrderDate = x.OrderDate.ToUniversalTime().ToLocalTime().ToString(),
+					OrderDate = x.OrderDate.ToLocalTime().ToString(),
 					CustomerName = x.Customer.CustomerName,
 					Note = x.Note,
 					OrderDetails = x.OrderDetailsTable.Select(d => new OrderDetailsDTO
@@ -61,7 +61,7 @@ namespace DeliveryBro.Areas.store.apiControllers
 			return query.OrderByDescending(x => x).Select(x => new HisOrderDTO
 			{
 				OrderId = x.OrderId,
-				OrderDate = x.OrderDate.ToUniversalTime().ToLocalTime().ToString(),
+				OrderDate = x.OrderDate.ToLocalTime().ToString(),
 				CustomerName = x.Customer.CustomerName,
 				Note = x.Note,
 				OrderDetails = x.OrderDetailsTable.Select(d => new OrderDetailsDTO
@@ -80,14 +80,15 @@ namespace DeliveryBro.Areas.store.apiControllers
 		{
 			var id = User.GetId();
 			var orderHub = new OrderHub();
-			BackgroundJob.Schedule(() => _task.Notify(), TimeSpan.FromSeconds(1));
+			BackgroundJob.Schedule(() => _task.Notify(), TimeSpan.FromSeconds(30));
 			//BackgroundJob.Schedule(() => NoResponseOrder(), TimeSpan.FromMinutes(1));
 			var query= _context.CustomerOrderTable.Include(x => x.OrderDetailsTable)
 				.Where(x => x.RestaurantId == id && x.OrderStatus == "waiting").Select(x => new HisOrderDTO
 				{
 					OrderId = x.OrderId,
-					OrderDate = x.OrderDate.ToUniversalTime().ToLocalTime().ToString(),
+					OrderDate = x.OrderDate.ToLocalTime().ToString(),
 					CustomerName = x.Customer.CustomerName,
+					CustomerId=x.CustomerId,
 					Note = x.Note,
 					OrderDetails = x.OrderDetailsTable.Select(d => new OrderDetailsDTO
 					{
@@ -109,8 +110,8 @@ namespace DeliveryBro.Areas.store.apiControllers
 				.Where(x => x.RestaurantId == id && x.OrderStatus == "acepted").Select(x => new HisOrderDTO
 				{
 					OrderId = x.OrderId,
-					OrderDate = x.OrderDate.ToUniversalTime().ToLocalTime().ToString(),
-					CompletedTime=x.OrderDate.ToUniversalTime().ToLocalTime().AddMinutes((double)x.Restaurant.PrepareTime).ToString(),
+					OrderDate = x.OrderDate.ToLocalTime().ToString(),
+					CompletedTime=x.OrderDate.ToLocalTime().AddMinutes((double)x.Restaurant.PrepareTime).ToString(),
 					CustomerName = x.Customer.CustomerName,
 					Note = x.Note,
 					OrderDetails = x.OrderDetailsTable.Select(d => new OrderDetailsDTO
