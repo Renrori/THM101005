@@ -31,6 +31,7 @@
 									<div class="card" v-for="wo in waitingOrder">
 										<div class="card-body">
 											<h5 class="card-title">訂單編號: {{wo.orderId}}</h5>
+											<h5>顧客地址: {{wo.address}}</h5>
 											<div class="row">
 												<div class="col-10">
 													<div class="row">
@@ -71,6 +72,7 @@
 											<h5>接收訂單時間: {{ao.orderDate}}</h5>
 											<h5>預計完成時間: {{ao.completedTime}}</h5>
 											<h5>顧客名稱: {{ao.customerName}}</h5>
+											<h5>顧客名稱: {{ao.address}}</h5>
 											<hr />
 											<div class="row">
 												<div class="col-10">
@@ -132,7 +134,7 @@
 					waitingOrder: [],
 					aceptedOrder: [],
 					signalr: {},
-					SCsignalr:{}
+					SCsignalr: {}
 				};
 			},
 			mounted: function () {
@@ -153,10 +155,10 @@
 			methods: {
 				getOrders: function () {
 					let _this = this;
-					axios.get(`/api/Orders/wait`).then(response => {
+					axios.get(`/api/DeliverOrders/prepared`).then(response => {
 						_this.waitingOrder = response.data.map(x => ({ ...x }));
 					});
-					axios.get(`/api/Orders/acepted`).then(response => {
+					axios.get(`/api/DeliverOrders/deliver`).then(response => {
 						_this.aceptedOrder = response.data.map(x => ({ ...x }));
 					});
 				},
@@ -164,15 +166,19 @@
 					let _this = this;
 					var request = {
 						OrderId: order.orderId,
-						OrderStatus: "acepted"
+						OrderStatus: "deliver"
 					}
-					axios.put(`/api/Orders/${order.orderId}`, request).then(response => {
+					axios.put(`/api/DeliverOrders/${order.orderId}`, request).then(response => {
 						_this.getOrders();
 					});
-					_this.signalr.invoke("Infomation", order.customerId, order.orderId, "已被接受，正在處理中!")
+					//_this.signalr.invoke("Infomation", order.customerId, order.orderId, "已被接受，正在處理中!")
 				},
 				deleteOrders: function (order) {
 					let _this = this;
+					var request = {
+						OrderId: order.orderId,
+						OrderStatus: "prepared"
+					}
 					Swal.fire({
 						icon: 'warning',
 						title: 'Are you sure?',
@@ -188,8 +194,8 @@
 								`訂單編號 ${order.orderId} 已拒絕!`,
 								'success'
 							)
-							_this.signalr.invoke("Infomation", order.customerId, order.orderId, "被取消!")
-							axios.delete(`/api/Orders/${order.orderId}`).then(response => {
+							//_this.signalr.invoke("Infomation", order.customerId, order.orderId, "被取消!")
+							axios.delete(`/api/DeliverOrders/${order.orderId}`,request).then(response => {
 								_this.getOrders();
 							});
 						}
@@ -199,7 +205,7 @@
 					let _this = this;
 					var request = {
 						OrderId: order.orderId,
-						OrderStatus: "prepared"
+						OrderStatus: "completed"
 					};
 					axios.put(`/api/Orders/${order.orderId}`, request).then(response => {
 						_this.getOrders();

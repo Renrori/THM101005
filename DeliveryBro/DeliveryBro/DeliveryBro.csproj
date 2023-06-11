@@ -68,6 +68,8 @@
 
   <ItemGroup>
     <Folder Include="Areas\admin\Data\" />
+    <Folder Include="Areas\deliver\Data\" />
+    <Folder Include="Areas\deliver\Models\" />
     <Folder Include="wwwroot\admin\vendor\blueimp-file-upload\node_modules\" />
     <Folder Include="wwwroot\admin\vendor\datatables.net-bs5\node_modules\datatables.net\types\" />
     <Folder Include="wwwroot\admin\vendor\datatables.net-bs5\types\" />

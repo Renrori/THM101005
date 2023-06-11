@@ -1,0 +1,185 @@
+﻿<style>
+	#btnlogin {
+		background-color: #444444;
+	}
+
+	.swal-title {
+		font-size: 1.2em;
+		color: red;
+	}
+
+	.swal-text {
+		font-size: 16px;
+	}
+
+	.swal-button {
+		background-color: darkgray;
+		color: white;
+		padding: 10px 6px;
+	}
+
+	.swal-modal {
+		background-color: #444444;
+		/*border: 2px solid white;*/
+		font-size: 10pt;
+		height: 200px;
+		width: 200px;
+	}
+
+	.swal-icon--error {
+		height: 10px;
+		width: 0px;
+	}
+</style>
+
+<main>
+	<div class="container">
+
+		<section class="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
+			<div class="container">
+				<div class="row justify-content-center">
+					<div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
+
+						<div class="d-flex justify-content-center py-4">
+							<a href="index.html" class="logo d-flex align-items-center w-auto">
+								@*<img src="assets/img/logo.png" alt="">*@
+								@*<span class="d-none d-lg-block">NiceAdmin</span>*@
+							</a>
+						</div>
+
+
+						<div class="card mb-3" id="app">
+
+							<div class="card-body">
+
+								<div class="pt-4 pb-2">
+									<h5 class="card-title text-center pb-0 fs-4">商家登入</h5>
+									@*<p class="text-center small">登入您的帳號及密碼</p>*@
+									<hr />
+								</div>
+
+								<form class="row g-3 ">
+
+									<div class="col-12">
+										<label for="yourUsername" class="form-label">商家帳號</label>
+										@*<div class="input-group has-validation">*@
+										@*<span class="input-group-text" id="inputGroupPrepend">@@</span>*@
+										<span v-if="isValidLoginAccount==false" class="text-danger">&emsp;{{errorMsgLoginAccount}}</span>
+										<input type="text" name="Account" class="form-control" v-model="restaurantLoginAccount">
+										@*</div>*@
+									</div>
+
+									<div class="col-12">
+										<label for="yourPassword" class="form-label">商家密碼</label>
+										<span v-if="isValidLoginPassword==false" class="text-danger">&emsp;{{errorMsgLoginPassword}}</span>
+										<input type="password" name="Password" class="form-control" v-model="restaurantLoginPassword">
+										@*<div class="invalid-feedback">密碼為必填欄位</div>*@
+									</div>
+
+									<div class="col-12">
+										@*<div class="form-check">
+										<input class="form-check-input" type="checkbox" name="remember" value="true" id="rememberMe">
+										<label class="form-check-label" for="rememberMe">記住我</label>
+										</div>*@
+									</div>
+									<div class="col-12">
+										<button id="btnlogin" class="btn btn-primary w-100" type="button" @@click="addLogin()">登入</button>
+
+									</div>
+
+									@*<div>
+									<a href="/store/StoreUser/FacebookLogin" class="btn btn-primary">FaceBook登入</a>
+									</div>*@
+
+									<div>
+										<a class="btn btn-outline-secondary w-100" href="/deliver/Home/Register" type="button">註冊</a>
+									</div>
+
+									<div>
+										<a class="btn btn-outline-secondary w-100" href="/deliver/Home/ForgetPwd" type="button">忘記密碼</a>
+									</div>
+
+									@*<div>
+									<p class="btn btn-primary btn-sm"<a href="/store/StoreUser/Register" style="color:blue">註冊帳號</a></p>
+									</div>
+									<div>
+									<p class="btn btn-primary btn-sm"<a href="/store/StoreUser/ForgetPwd" style="color:blue">忘記密碼</a></p>
+									</div>*@
+								</form>
+
+							</div>
+						</div>
+
+						<div class="credits">
+							<!-- All the links in the footer should remain intact. -->
+							<!-- You can delete the links only if you purchased the pro version. -->
+							<!-- Licensing information: https://bootstrapmade.com/license/ -->
+							<!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
+							Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+						</div>
+
+					</div>
+				</div>
+			</div>
+
+		</section>
+
+	</div>
+</main>
+
+<!-- End #main -->
+
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+@section Scripts{
+	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+	<script src="~/axios/axios.min.js"></script>
+
+	<script>
+		var vueLogin = {
+			data() {
+				return {
+					//V-model 繫結變數input
+					restaurantLoginAccount: "",
+					restaurantLoginPassword: "",
+
+					//渲染繫結span變數
+					errorMsgLoginAccount: "",
+					errorMsgLoginPassword: "",
+
+					//判斷錯誤訊息的變數
+					isValidLoginAccount: true,
+					isValidLoginPassword: true,
+
+					loginresult: "",
+				};
+
+			},
+			methods: {
+				//驗證帳號密碼
+				addLogin: function () {
+					let _this = this;
+					axios.post(`/api/StoreLogin/isConfirm/StoreLogin`, {
+						account: _this.restaurantLoginAccount,
+						password: _this.restaurantLoginPassword
+					}).then(response => {
+						if (response.data != "登入成功") {
+							_this.errorMsgLoginAccount = response.data;
+							_this.isValidLoginAccount = false;
+							_this.errorMsgLoginPassword = response.data;
+							_this.isValidLoginPassword = false;
+						}
+						else {
+							_this.isValidLoginAccount = true;
+							_this.isValidLoginPassword = true;
+							window.location.href = '../home'
+						}
+					})
+				}
+			}
+
+		}
+		var app = Vue.createApp(vueLogin).mount("#app");
+	</script>
+}

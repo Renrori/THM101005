@@ -54,7 +54,8 @@ namespace DeliveryBro.Areas.store.apiControllers
             //做憑證
             await HttpContext.SignOutAsync("CustomerAuthenticationScheme");
             await HttpContext.SignOutAsync("AdministratorAuthenticationScheme");
-            var claimsIdentity = new ClaimsIdentity(claims, "StoreAuthenticationScheme");
+			await HttpContext.SignOutAsync("DeliverAuthenticationScheme");
+			var claimsIdentity = new ClaimsIdentity(claims, "StoreAuthenticationScheme");
 			var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
 			await HttpContext.SignInAsync("StoreAuthenticationScheme", claimsPrincipal);
 
