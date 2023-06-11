@@ -124,14 +124,16 @@ namespace DeliveryBro.ApiController
             return Ok("修改地址成功");
         }
 
-        
-        public async Task<IEnumerable<UserOrderViewModel>> GetUserOrder(Guid customerId)
+        [Route("hisorder")]
+        public async Task<IEnumerable<UserOrderViewModel>> GetUserOrder()
         {
+            var id = User.GetId();
             var orderDetails = _context.CustomerOrderTable
-            .Where(o => o.CustomerId == customerId && o.OrderStatus == "completed").OrderByDescending(x => x.OrderId).Select(o => new UserOrderViewModel
+            .Where(o => o.CustomerId == id && o.OrderStatus == "completed").OrderByDescending(x => x.OrderId).Select(o => new UserOrderViewModel
             {
+
                 OrderId = o.OrderId,
-                OrderDate = o.OrderDate.AddHours(8),
+                OrderDate = o.OrderDate.ToLocalTime().ToString(),
                 CustomerName = o.Customer.CustomerName,
                 Note = o.Note,
                 OrderDetails = o.OrderDetailsTable.Select(d => new UserOrderDetailsViewModel
@@ -152,11 +154,15 @@ namespace DeliveryBro.ApiController
         public  IEnumerable<UserOrderViewModel> GetWaitOrder ()
         {
 			var id = User.GetId();
+            CheckOrder(id);
 			var orderDetails = _context.CustomerOrderTable
-                .Where(o => o.CustomerId == id && (o.OrderStatus == "waiting" || o.OrderStatus == "acepted")).OrderByDescending(x => x.OrderId).Select(o => new UserOrderViewModel
+                .Where(o => o.CustomerId == id && (o.OrderStatus == "waiting" || 
+                o.OrderStatus == "acepted" || o.OrderStatus == "prepared" ||
+                o.OrderStatus == "deliver")).OrderByDescending(x => x.OrderId).Select(o => new UserOrderViewModel
                 {
                     OrderId = o.OrderId,
-                    OrderDate = o.OrderDate.AddHours(8),
+                    OrderDate = o.OrderDate.ToLocalTime().ToString(),
+                    OrderStatus = o.OrderStatus,
                     CustomerName = o.Customer.CustomerName,
                     Note = o.Note,
                     OrderDetails = o.OrderDetailsTable.Select(d => new UserOrderDetailsViewModel
@@ -171,6 +177,22 @@ namespace DeliveryBro.ApiController
                 });
 
             return orderDetails;
+        }
+
+        private async void CheckOrder(Guid id)
+        {
+            DateTime dt = DateTime.Now;
+            _context.CustomerOrderTable.Where(o => o.CustomerId == id && o.OrderStatus == "waiting").ToList().ForEach(
+                x =>
+                {
+                    TimeSpan ts = dt - x.OrderDate.ToLocalTime();
+                    if (ts.Minutes > 10)
+                    {
+                        x.OrderStatus = "refused";
+                    }
+
+                });
+            _context.SaveChanges();
         }
 
         [HttpPost("pic/{customerId}")]
