@@ -197,11 +197,16 @@
             computed: {
                 CheckOrderStatus(){
                     return (status)=>{
-                        switch (status){
+                        switch (status) {
                             case 'waiting':
-                                return '等待商家回應..';
+                                return '商家確認中';
                             case 'acepted':
-                                return '訂單已接受!';
+                                return '商品正在準備';
+                            case 'prepared':
+                                return '等待配送員中';
+                            case 'deliver':
+                                return '配送中';
+
                             default:
                                 return '訂單異常，請洽管理人員';
                         }

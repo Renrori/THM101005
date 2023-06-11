@@ -156,7 +156,9 @@ namespace DeliveryBro.ApiController
 			var id = User.GetId();
             CheckOrder(id);
 			var orderDetails = _context.CustomerOrderTable
-                .Where(o => o.CustomerId == id && (o.OrderStatus == "waiting" || o.OrderStatus == "acepted")).OrderByDescending(x => x.OrderId).Select(o => new UserOrderViewModel
+                .Where(o => o.CustomerId == id && (o.OrderStatus == "waiting" || 
+                o.OrderStatus == "acepted" || o.OrderStatus == "prepared" ||
+                o.OrderStatus == "deliver")).OrderByDescending(x => x.OrderId).Select(o => new UserOrderViewModel
                 {
                     OrderId = o.OrderId,
                     OrderDate = o.OrderDate.ToLocalTime().ToString(),
