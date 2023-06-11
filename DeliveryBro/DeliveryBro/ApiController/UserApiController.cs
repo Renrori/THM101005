@@ -160,6 +160,7 @@ namespace DeliveryBro.ApiController
                 {
                     OrderId = o.OrderId,
                     OrderDate = o.OrderDate.ToLocalTime().ToString(),
+                    OrderStatus = o.OrderStatus,
                     CustomerName = o.Customer.CustomerName,
                     Note = o.Note,
                     OrderDetails = o.OrderDetailsTable.Select(d => new UserOrderDetailsViewModel
@@ -176,21 +177,20 @@ namespace DeliveryBro.ApiController
             return orderDetails;
         }
 
-        private void CheckOrder(Guid id)
+        private async void CheckOrder(Guid id)
         {
             DateTime dt = DateTime.Now;
-            _context.CustomerOrderTable.Where(o => o.CustomerId == id && o.OrderStatus == "waiting").ForEachAsync(
+            _context.CustomerOrderTable.Where(o => o.CustomerId == id && o.OrderStatus == "waiting").ToList().ForEach(
                 x =>
                 {
-                    TimeSpan ts = dt - x.OrderDate;
-                    if(ts.Minutes > 10)
+                    TimeSpan ts = dt - x.OrderDate.ToLocalTime();
+                    if (ts.Minutes > 10)
                     {
                         x.OrderStatus = "refused";
                     }
-                }
-                );
 
-
+                });
+            _context.SaveChanges();
         }
 
         [HttpPost("pic/{customerId}")]

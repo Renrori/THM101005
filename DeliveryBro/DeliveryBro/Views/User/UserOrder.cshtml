@@ -108,7 +108,10 @@
                                         <div class="tab-content pt-2" v-else>
                                             <div class="card" v-for="item in currentPageOrders" :key="item.orderId">
                                                 <div class="card-body">
-                                                    <h5 class="card-title">訂單編號: {{ item.orderId }} </h5>
+                                                    <div class="row">
+                                                        <h5 class="card-title col-9">訂單編號: {{ item.orderId }} </h5>
+                                                        <h5 class="card-title col-3"> 訂單狀態: {{CheckOrderStatus(item.orderStatus)}}</h5>
+                                                </div>
                                                     <h5>下訂時間: {{item.orderDate}}</h5>
                                                     <div class="row">
                                                         <div class="col-10" style="padding-bottom:10px">
@@ -192,6 +195,19 @@
                 this.getUserOrder();
             },
             computed: {
+                CheckOrderStatus(){
+                    return (status)=>{
+                        switch (status){
+                            case 'waiting':
+                                return '等待商家回應..';
+                            case 'acepted':
+                                return '訂單已接受!';
+                            default:
+                                return '訂單異常，請洽管理人員';
+                        }
+                    }
+
+                },
                 totalPages() {
                     // 計算總分頁數
                     return Math.ceil(this.CustomerOrderInfo.length / this.pageSize);
