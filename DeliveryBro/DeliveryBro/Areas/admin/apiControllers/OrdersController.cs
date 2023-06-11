@@ -1,5 +1,6 @@
 ﻿using DeliveryBro.Areas.admin.DTO;
 using DeliveryBro.Areas.admin.Models;
+using DeliveryBro.Areas.admin.Models.ViewModel;
 using DeliveryBro.Areas.store.DTO;
 using DeliveryBro.Extensions;
 using DeliveryBro.MetaData;
@@ -20,59 +21,96 @@ namespace DeliveryBro.Areas.admin.apiControllers
 	[ApiController]
 	public class OrdersController : ControllerBase
 	{
-		private readonly sql8005site4nownetContext _context;	
+		private readonly sql8005site4nownetContext _context;
 		public OrdersController(sql8005site4nownetContext context)
-        {
+		{
 			_context = context;
 		}
 
-		[HttpPost("{status}")]
-		public object GetOrders(string? status)
+		[HttpPost]
+		public IEnumerable<OrderBasicDTO> GetOrders(OrdersViewModel query)
 		{
 			//Include所需要的資料表 等待(餐廳接收前) 接收 完成 可用if else
-			return _context.CustomerOrderTable
+			IEnumerable<OrderBasicDTO> data = _context.CustomerOrderTable
 				.Include(x => x.OrderDetailsTable)
 				.Include(x => x.Restaurant)
-				.Include(x => x.DriverId)
+				.Include(x => x.Driver)
 				.Include(x => x.Customer)
-				.Where(x => x.OrderStatus == status).Select(x => new OrderViewModel
+				.Select(x => new OrderBasicDTO
 				{
 					OrderID = x.OrderId,
 					OrderDate = x.OrderDate.ToString(),//DateTime轉string
 					CustomerID = x.CustomerId,
 					DriverID = x.DriverId,
-					Total = x.OrderDetailsTable.Sum(x => x.Subtotal)
-
+					Total = x.OrderDetailsTable.Sum(x => x.Subtotal),
+					RestaurantName = x.Restaurant.RestaurantName,
+					OrderStatus = x.OrderStatus,
+					
 					//OrderDetail裡面所有的明細要放進來(所以要做兩隻)
+					CustomerName = x.Customer.CustomerName,
+					Subtotal = x.OrderDetailsTable.Sum(x => x.Subtotal),
+					DriverName = x.Driver.DriverName,
+					Address = x.CustomerAddress,
+					Payment = x.Payment,
+					Note = x.Note
+
+				}).AsNoTracking().AsEnumerable();
 
 
-				});
+
+			if (!string.IsNullOrWhiteSpace(query.StartDate)) //接單時間大於等於起始時間(如果有值會做{}內的事情)
+			{
+				data = data.Where(x => DateTime.Parse(x.OrderDate) >= DateTime.Parse(query.StartDate)).AsEnumerable();
+			}
+
+			if (!string.IsNullOrWhiteSpace(query.EndDate)) //接單時間小於結束時間
+			{
+				data = data.Where(x => DateTime.Parse(x.OrderDate) < DateTime.Parse(query.EndDate)).AsEnumerable();
+			}
+
+
+			if (!string.IsNullOrWhiteSpace(query.StoreName)) //模糊查詢將相符的資料全撈出來
+			{
+				data = data.Where(x => x.RestaurantName.Contains(query.StoreName)).AsEnumerable();
+			}
+
+
+			if (!string.IsNullOrWhiteSpace(query.Status))
+			{
+				if (query.Status == "已接收")
+				{
+					data = data.Where(x => x.OrderStatus == "acepted").AsEnumerable();
+				}
+				if (query.Status == "已完成")
+				{
+					data = data.Where(x => x.OrderStatus == "completed").AsEnumerable();
+				}
+				if (query.Status == "等待中")
+				{
+					data = data.Where(x => x.OrderStatus == "waiting").AsEnumerable();
+				}
+			}
+
+			return data;
 		}
-		//[HttpPost("{status}")]
-		//public IQueryable<OdetailDTO> OrderDetail(string? status)
-		//{
-			
-		//	_context.CustomerOrderTable
-		//		.Include(x => x.OrderDetailsTable)
-		//		.Where(x.OrderStatus == status).OrderByDescending(x => x).Select(x => new OdetailDTO
-		//		{
-		//			OrderId = x.OrderId,
-		//			OrderDate = x.OrderDate.ToString(),
-		//			CustomerName = x.Customer.CustomerName,
-		//			Note = x.Note,
-		//			OrderDetails = x.OrderDetailsTable.Select(d => new OdetailDTO
-		//			{
-		//				DishName = d.DishName,
-		//				UnitPrice = d.UnitPrice,
-		//				Quantity = d.Quantity,
-		//				Discount = d.Discount,
-		//				Subtotal = d.Subtotal
-		//			}).ToList(),
-		//			Total = x.OrderDetailsTable.Sum(x => x.Subtotal)
-		//		});
-		//}
 
+		//completed已完成/acepted已接收/waiting等待中  共三個狀態
 
+		[HttpPost]
+		public string UpdateDetails(UpdateDetailsDTO data) 
+		{
+			var a = _context.CustomerOrderTable.FirstOrDefault(x=>x.OrderId== data.OrderID);
+			if (a != null) 
+			{
+				a.OrderDate = (DateTime)data.OrderDate;
+				a.CustomerAddress = data.CustomerAddress;
+				a.OrderStatus = data.OrderStatus;
+				a.Note = data.Note;
+				_context.SaveChanges();
+			}
+
+			return "";
+		}
 	}
 }
 

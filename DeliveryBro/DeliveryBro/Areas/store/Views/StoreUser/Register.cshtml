@@ -40,78 +40,52 @@
 										<label for="yourName" class="form-label">商家帳號</label>
 										<span v-if="isValidAccount==false" class="text-danger">&emsp;{{errorMsgAccount}}</span>
 										<input type="text" name="RestaurantAccount" class="form-control" id="RestaurantAccount" v-model="restaurantAccount">
-										@*<div class="invalid-feedback">請填寫帳號</div>*@
 									</div>
 
 									<div class="col-12">
 										<label for="yourPassword" class="form-label">商家密碼</label>
 										<span v-if="isValidPassword==false" class="text-danger">&emsp;{{errorMsgPassword}}</span>
 										<input type="password" name="RestaurantPassword" class="form-control" id="RestaurantPassword" v-model="restaurantPassword">
-										@*<div class="invalid-feedback">請填寫密碼</div>*@
 									</div>
 
 									<div class="col-12">
 										<label for="yourPassword" class="form-label">確認密碼</label>
 										<span v-if="isValidConfirmPassword==false" class="text-danger">&emsp;{{errorMsgConfirmPassword}}</span>
 										<input type="password" name="ConfirmRestaurantPassword" class="form-control" id="ConfirmRestaurantPassword" v-model="confirmRestaurantPassword">
-										@*<div class="invalid-feedback">再次確認密碼</div>*@
 									</div>
 
 									<div class="col-12">
 										<label for="yourUsername" class="form-label">商家名稱</label>
-										@*<div class="input-group has-validation">*@
 											<span v-if="isValidName==false" class="text-danger">&emsp;{{errorMsgName}}</span>
-											@*<span class="input-group-text" id="inputGroupPrepend">@@</span>*@
 											<input type="text" name="RestaurantName" class="form-control" id="RestaurantName" v-model="restaurantName">
-											@*<div class="invalid-feedback">請填寫商家名稱</div>*@
-										@*</div>*@
 									</div>
 
 									<div class="col-12">
 										<label for="yourAddress" class="form-label">商家地址</label>
 										<span v-if="isValidAddress==false" class="text-danger">&emsp;{{errorMsgAddress}}</span>
 										<input type="text" name="RestaurantAddress" class="form-control" id="RestaurantAddress" v-model="restaurantAddress">
-										@*<div class="invalid-feedback">請填寫商家地址</div>*@
 									</div>
 
 									<div class="col-12">
 										<label for="yourPhone" class="form-label">商家電話</label>
 										<span v-if="isValidPhone==false" class="text-danger">&emsp;{{errorMsgPhone}}</span>
 										<input type="text" name="RestaurantPhone" class="form-control" id="RestaurantPhone" v-model="restaurantPhone">
-										@*<div class="invalid-feedback">請填寫商家電話</div>*@
 									</div>
 
 									<div class="col-12">
 										<label for="yourEmail" class="form-label">商家信箱</label>
 										<span v-if="isValidMail==false" class="text-danger">&emsp;{{errorMsgMail}}</span>
 										<input type="email" name="RestaurantEmail" class="form-control" id="RestaurantEmail" v-model="restaurantEmail">
-										@*<div class="invalid-feedback">請填寫商家信箱</div>*@
 									</div>
 
-									@*<div class="col-12">
-									<div class="form-check">
-									<input class="form-check-input" name="terms" type="checkbox" value="" id="acceptTerms" required>
-									<label class="form-check-label" for="acceptTerms">註冊表示同意商店服務條款與會員責任規範及個資聲明</label>
-									<div class="invalid-feedback">You must agree before submitting.</div>
-									</div>
-									</div>*@
 									<div class="col-12">
-										@*<button id="btnRegister" class="btn btn-primary w-100" type="submit">註冊</button>*@
-										@*<button id="btnRegister" type="button" class="btn btn-primary" @@click="addRegister()">註冊</button>*@
-
-										<button id="btnRegister" class="btn btn-secondary w-100" type="button" @@click="addRegister()">註冊</button>
-										
+										<button id="btnRegister" class="btn btn-secondary w-100" type="button" @@click="addRegister()">註冊</button>										
 									</div>
 									<div>
 										<button id="btnDemo1" type="button" class="btn btn-secondary" @@click="setData()">Demo1</button>
 										<button id="btnDemo2" type="button" class="btn btn-secondary" @@click="setDataError()">Demo2</button>
 									</div>
-									@*<div>
-										<button id="btnDemo2" type="button" class="btn btn-secondary" @@click="setDataError()">Demo2</button>
-									</div>*@
-									@*<div>
-										<a class="btn btn-outline-secondary w-100" href="/store/StoreUser/Register" type="button" @@click="setData()">DEMO</a>
-									</div>*@
+									
 									<div class="col-12">
 										<p class="small mb-0">已經有商家帳號嗎? <a href="/store/StoreUser/Login" style="color:mediumblue">登入</a></p>
 									</div>
@@ -125,7 +99,7 @@
 							<!-- You can delete the links only if you purchased the pro version. -->
 							<!-- Licensing information: https://bootstrapmade.com/license/ -->
 							<!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
-							Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+							@*Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>*@
 						</div>
 
 					</div>
@@ -179,7 +153,6 @@
 			},
 			mounted: function () {
 				let _this = this;
-				//_this.addRegister();
 			},
 			//方法
 			methods: {
@@ -225,9 +198,6 @@
 				////驗證再確認的密碼
 				checkConfirmPassword: async function () {
 					let _this = this;
-					//let tempData = new FormData();
-					//tempData.append("ConfirmRestaurantPassword", _this.confirmRestaurantPassword);
-					//tempData.append("RestaurantPassword", _this.restaurantPassword);
 
 					let model = {
 						ConfirmRestaurantPassword: _this.confirmRestaurantPassword,
@@ -287,9 +257,6 @@
 				//驗證地址
 				checkAddress: async function () {
 					let _this = this;
-					//if (_this.restaurantAddress == '') {
-					//	return '';
-					//}
 					await axios.get(`/api/StoreUser/isConfirm/CheckAddress`, {
 						params: {
 							address: _this.restaurantAddress
@@ -344,15 +311,6 @@
 						ConfirmRestaurantPassword: _this.errorMsgConfirmPassword,
 					}
 
-					console.log(_this.isValidAccount);
-					console.log(_this.isValidPassword);
-					console.log(_this.isValidConfirmPassword);
-					console.log(_this.isValidPhone);
-					console.log(_this.isValidName);
-					console.log(_this.isValidMail);
-					console.log(_this.isValidAddress);
-
-					console.log(request);
 					//如果有一個false就不能註冊
 					if (_this.isValidAccount && _this.isValidPassword && _this.isValidConfirmPassword && _this.isValidPhone && _this.isValidName && _this.isValidMail && _this.isValidAddress) 
 					{
@@ -366,20 +324,34 @@
 								_this.restaurantEmail = '';
 								_this.restaurantAddress = '';
 								_this.restaurantPhone = '';
-								//Swal.fire(
-								//	response.data
-								//)
-								alert(response.data);
-								window.location.href = 'Login';
-								//_this.registerresult=response.data;
+
+								Swal.fire({
+									title: '提醒',
+									text: "是否確認註冊?",
+									icon: 'warning',
+									showCancelButton: true,
+									confirmButtonColor: '#3085d6',
+									cancelButtonColor: '#d33',
+									confirmButtonText: '確認',
+									cancelButtonText:'取消',
+
+								}).then((result) => {
+									if (result.isConfirmed) {
+										Swal.fire(
+											'註冊成功',
+											'可至登入畫面登入',
+											'success'
+										)
+									}
+								})
 							});
 					}
 				},
 				setData: function () {
 					let _this = this;
-					_this.restaurantAccount='store2';
-					_this.restaurantPassword = 'store2';
-					_this.confirmRestaurantPassword = 'store2';
+					_this.restaurantAccount='store5';
+					_this.restaurantPassword = 'store5';
+					_this.confirmRestaurantPassword = 'store5';
 					 _this.restaurantName='緯育商城00';
 					 _this.restaurantEmail='123@gmail.com';
 					 _this.restaurantAddress='台北市青島東路1號';

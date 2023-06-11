@@ -4,7 +4,7 @@
 	}
 </style>
 <main>
-	
+
 	<div class="container">
 
 		<section class="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
@@ -12,20 +12,9 @@
 				<div class="row justify-content-center">
 					<div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
 
-						<div class="d-flex justify-content-center py-4">
-							<a href="index.html" class="logo d-flex align-items-center w-auto">
-								@*<img src="assets/img/logo.png" alt="">*@
-								@*<span class="d-none d-lg-block">NiceAdmin</span>*@
-							</a>
-							@{
-								if (ViewBag.Error != "")
-								{
-									<h1>@ViewBag.Error</h1>
-								}
-							}
-						</div><!-- End Logo -->
 
-						<div >
+
+						<div id="app">
 							<div class="card mb-3">
 
 								<div class="card-body">
@@ -35,20 +24,16 @@
 										<p class="text-center small">請輸入電子郵件，並至信箱收取驗證信</p>
 									</div>
 									@*@{
-										if (ViewBag.Error != "")
-										{
-											<h1>@ViewBag.Error</h1>
-										}
+									if (ViewBag.Error != "")
+									{
+									<h1>@ViewBag.Error</h1>
+									}
 									}*@
-									<form action="/store/StoreUser/ForgetPwd" method="post" class="row g-3 needs-validation" novalidate>
 
-										<div class="mb-3">
-											@*<label for="exampleInputEmail1" class="form-label">電子郵件</label>*@
-											<input type="email" name="RestaurantEmail" class="form-control" id="email" aria-describedby="emailHelp" placeholder="請輸入電子郵件">
-										</div>
-										<button id="btnForgetPwd" type="submit" class="btn btn-primary">寄送驗證信</button>
-										@*<input type="submit" value="送出" />*@
-									</form>
+									<div class="mb-3">
+										<input type="email" name="RestaurantEmail" v-model="RestaurantEmail" class="form-control" id="email" aria-describedby="emailHelp" placeholder="請輸入電子郵件">
+									</div>
+									<button @@click="sendMail()" class="btn btn-primary" id="btnForgetPwd">寄送驗證信</button>
 
 								</div>
 							</div>
@@ -58,7 +43,7 @@
 								<!-- You can delete the links only if you purchased the pro version. -->
 								<!-- Licensing information: https://bootstrapmade.com/license/ -->
 								<!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
-								Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+								@*	Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>*@
 							</div>
 						</div>
 					</div>
@@ -69,8 +54,8 @@
 
 	</div>
 </main><!-- End #main -->
-
-<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+@*
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>*@
 
 @section Scripts{
 	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
@@ -80,31 +65,27 @@
 		var vueForgetPwd = {
 			data() {
 				return {
-					RestaurantEmail: ""
+					RestaurantEmail: "",
 				};
 			},
 			methods: {
-				reset: function () {
+				sendMail: function () {
 					let _this = this;
-					axios.post(`/StoreUser/ForgetPwd`,""
+					axios.post(`/api/StoreUser/Send/SendMail`, {
+						Email: this.RestaurantEmail
+					}
 					).then(response => {
-						Swal.fire(
-							'修改成功!'
-						)
-					}).catch(
-						function (error) {
-							Swal.fire({
-								icon: 'error',
-								title: 'Oops...',
-								text: '新增失敗!',
-								footer: '請重新確認輸入欄位'
-							})
-						}
-					);
+					//	Swal.fire({
+					//		//position: 'top-end',
+					//		position: 'center',
+					//		icon: 'success',
+					//		title: '登入成功',
+					//		showConfirmButton: false,
+					//		timer: 1500
+					//});
 				}
 			}
 		}
-		//vueForgetPws().mount("#app");
 		var app = Vue.createApp(vueForgetPwd).mount("#app");
 	</script>
 }

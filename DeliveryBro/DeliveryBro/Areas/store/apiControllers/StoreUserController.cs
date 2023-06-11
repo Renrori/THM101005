@@ -1,4 +1,5 @@
-﻿using DeliveryBro.Areas.store.SubscribeTableDependency;
+﻿using DeliveryBro.Areas.store.DTO;
+using DeliveryBro.Areas.store.SubscribeTableDependency;
 using DeliveryBro.Areas.store.ViewModels;
 using DeliveryBro.Models;
 using DeliveryBro.Services;
@@ -7,8 +8,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NuGet.Protocol.Plugins;
 using System.Drawing;
+using System.Net.Mail;
+using System.Net;
 using System.Security.Principal;
+using System.Text;
 using System.Text.RegularExpressions;
+using System.Text.Json;
 
 namespace DeliveryBro.Areas.store.apiControllers
 {
@@ -127,7 +132,7 @@ namespace DeliveryBro.Areas.store.apiControllers
 			bool checkEmail = regex.IsMatch(mail);
 			if (!checkEmail)
 			{
-				result = "不符合mail格式";//必須包含一個@字符。
+				result = "不符合mail格式";
 				return result;
 			}
 
@@ -202,6 +207,67 @@ namespace DeliveryBro.Areas.store.apiControllers
 			}
 
 			return result;
+		}
+
+
+		//寄驗證信(沒成功)
+		[HttpPost("Send/SendMail")]
+		public string SendEmail(SendMailDTO model)
+		{
+			RestaurantTable temp = _context.RestaurantTable.FirstOrDefault(x => x.RestaurantEmail == model.Email);
+			if (temp == null)
+			{
+				return "此Email尚未註冊";
+			}
+			AesValidationDto obj = new AesValidationDto(model.Email, DateTime.Now.AddDays(3));//現在時間往後加三天
+			string jString = JsonSerializer.Serialize(obj);//Obj轉成Json格式(出來是string)
+			var code = _encrypt.AesEncryptToBase64(jString);//加密
+
+			var mail = new MailMessage()
+			{
+				From = new MailAddress("linyh22031@gmail.com"),
+				Subject = "重設密碼驗證",
+				Body = $@"請點擊 <a href='https://localhost:7163/api/StoreUser/Send/ResetPwd?code={code}'>這裡</a> 重設您的密碼",
+				IsBodyHtml = true,
+				BodyEncoding = Encoding.UTF8,//整個網頁的編碼
+			};
+			mail.To.Add(new MailAddress(model.Email));
+
+			try
+			{
+				using (var sm = new SmtpClient("smtp.gmail.com", 587))
+				{
+					sm.EnableSsl = true;
+					sm.Credentials = new NetworkCredential("linyh22031@gmail.com", "xluyufcxhuvsdknp");
+					sm.UseDefaultCredentials = false;
+					//sm.Credentials = Netcre;
+					sm.Send(mail);
+				}
+			}
+			catch (Exception ex)
+			{
+				throw;
+			}
+
+			return "已發送重設密碼信件";
+		}
+
+		//重設密碼(沒成功)
+		[HttpGet("Send/ResetPwd")]
+		public IActionResult ResetPwd(string? code)
+		{
+			string inputData=_encrypt.AesDecryptToString(code);
+
+			AesValidationDto aesValidationDto =  JsonSerializer.Deserialize<AesValidationDto>(inputData);
+
+			RestaurantTable temp = _context.RestaurantTable.FirstOrDefault(x => x.RestaurantEmail == aesValidationDto.RestaurantEmail);
+
+			if (temp == null)
+			{
+				//return "此Email尚未註冊";
+			}
+
+			return RedirectToAction("StoreInfo", "Home"); 
 		}
 	}
 }

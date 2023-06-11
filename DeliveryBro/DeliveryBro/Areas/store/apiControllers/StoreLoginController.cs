@@ -31,9 +31,6 @@ namespace DeliveryBro.Areas.store.apiControllers
 		//[ValidateAntiForgeryToken]
 		public async Task<string> Login(LoginViewModel model)
 		{
-			////驗證ViewModel的欄位屬性
-			//if (ModelState.IsValid)
-			//{
 			
 			//FirstOrDefault找尋資料表中的第一筆資料 有資料回傳第一筆或是沒資料回傳null
 			//找RestaurantTable資料表篩選符合RestaurantAccount及RestaurantPassword的條件
@@ -58,11 +55,6 @@ namespace DeliveryBro.Areas.store.apiControllers
 
 			return "登入成功";
 		
-		}
-		[HttpPost("pic")]
-		public byte[] GetPicture()
-		{
-			return _context.RestaurantTable.FirstOrDefault(x => x.RestaurantId == User.GetId()).RestaurantPicture;
 		}
 
 	}

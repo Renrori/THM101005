@@ -353,7 +353,8 @@ namespace DeliveryBro.Areas.store.Controllers
 					{
 						throw;
 					}
-                    return RedirectToAction("StoreInfo", "Home");
+                    string script1 = "<script>alert('修改成功!');window.location.href = '../home';</script>";
+                    return Content(script1, "text/html; charset=utf-8");
                     //return RedirectToAction("ResetInfoPwd", "StoreUser");
                 }
             }

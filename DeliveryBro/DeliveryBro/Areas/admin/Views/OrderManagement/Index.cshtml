@@ -28,20 +28,22 @@
 			<!-- end page title -->
 
 			<div>
-				<select>
-					<option>請選擇狀態</option>
+				<select v-model="status">
+					<option selected>請選擇狀態</option>
 					<option>等待中</option>s
 					<option>已接收</option>
 					<option>已完成</option>
 				</select>
 				<label for="bookdate">訂單開始日期：</label>
-				<input type="date" id="startdate" placeholder="2023-06-06">
+				<input type="date" id="startdate" v-model="startdate">
 				<label for="bookdate">訂單結束日期：</label>
-				<input type="date" id="enddate" placeholder="2023-06-06">
+				<input type="date" id="enddate" v-model="enddate">
 
-				<input id="input1" type="text" placeholder="輸入店家名稱">
+				<input id="input1" type="text" placeholder="輸入店家名稱" v-model="storename">
 				<button type="button" @@click="searchOrders()">搜尋</button>
 			</div>
+
+
 
 
 			<div class="row">
@@ -87,6 +89,7 @@
 								<tr>
 									<th>#</th>
 									<th>訂單編號</th>
+									<th>訂單狀態</th>
 									<th>訂單日期</th>
 									<th>訂購人</th>
 									<th>餐廳名稱</th>
@@ -95,29 +98,105 @@
 								</tr>
 							</thead>
 
-
 							<tbody>
-								<tr>
-									<td><button type="button" class="btn btn-secondary">明細</button></td>
-									<td>Tiger Nixon</td>
-									<td>System Architect</td>
-									<td>Edinburgh</td>
-									<td>61</td>
-									<td>2011/04/25</td>
-									<td>$320,800</td>
+								<tr v-for="order in orderdetails">
+									<td><button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal" @@click="editConfirm(order)">修改</button></td>
+									<td>{{order.orderID}}</td>
+									<td>{{order.orderStatus}}</td>
+									<td>{{order.orderDate}}</td>
+									<td>{{order.customerName}}</td>
+									<td>{{order.restaurantName}}</td>
+									<td>{{order.driverName}}</td>
+									<td>{{order.subtotal}}</td>
 								</tr>
-								<tr>
-									<th>#</th>
-									<td>Garrett Winters</td>
-									<td>Accountant</td>
-									<td>Tokyo</td>
-									<td>63</td>
-									<td>2011/07/25</td>
-									<td>$170,750</td>
-								</tr>
+
 							</tbody>
 						</table>
 
+						<!-- Modal -->
+						<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h5 class="modal-title" id="exampleModalLabel">訂單明細</h5>
+										<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+									</div>
+									<div class="modal-body">
+										@*//可以用row 分割*@
+										<div>
+											<label>訂單編號:</label>
+											<input type="text" v-model="editorderID">
+										</div>
+
+										<div>
+											<label>訂購人:</label>
+											<input type="text" v-model="editcustomerName">
+										</div>
+										<div>
+											<label>訂單狀態:</label>
+											<input type="text" v-model="editorderStatus">
+										</div>
+
+										<div>
+											<label>餐廳名稱:</label>
+											<input type="text" v-model="editrestaurantName">
+										</div>
+										<div>
+											<label>商品名稱:</label>
+											<input type="text" v-model="editdishName">
+										</div>
+										<div>
+											<label>訂購日期:</label>
+											<input type="text" v-model="editorderDate">
+										</div>
+										<div>
+											<label>價格:</label>
+											<input type="text" v-model="editunitPrice">
+										</div>
+
+										<div>
+											<label>數量:</label>
+											<input type="text" v-model="editquantity">
+										</div>
+										<div>
+											<label>小計:</label>
+											<input type="text" v-model="editsubtotal">
+										</div>
+										<div>
+											<label>折扣:</label>
+											<input type="text" v-model="editdiscount">
+										</div>
+										<div>
+											<label>合計:</label>
+											<input type="text" v-model="editsubtotal">
+										</div>
+
+										<div>
+											<label>外送員:</label>
+											<input type="text" v-model="editdriverName">
+										</div>
+
+										<div>
+											<label>配送地:</label>
+											<input type="text" v-model="editaddress">
+										</div>
+										<div>
+											<label>付款方式:</label>
+											<input type="text" v-model="editpayment">
+										</div>
+										<div>
+											<label>備註:</label>
+											<input type="text" v-model="editnote">
+										</div>
+
+									</div>
+									<div class="modal-footer">
+										<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close關閉</button>
+										<button type="button" class="btn btn-primary" @@click="updateOrder()">Save changes修改</button>
+									</div>
+								</div>
+							</div>
+						</div>
 
 
 					</div>
@@ -157,6 +236,7 @@
 	<script src="~/lib/admin/assets/vendor/datatables.net-responsive/js/datatables.responsive.min.js"></script>
 	<script src="~/lib/admin/assets/vendor/datatables.net-responsive-bs5/js/responsive.bootstrap5.min.js"></script>
 	<script src="~/lib/admin/assets/js/pages/demo.datatable-init.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
 
@@ -165,20 +245,98 @@
 	<script>
 		var vueOrder = {
 			data() {
+				return {
+					//篩選
+					orderdetails:[],
+					status:"",
+					startdate:"",
+					enddate: "",
+					storename:"",
 
+					//明細
+					editorderID: "",
+					editorderStatus: "",
+					editpayment: "",
+					editquantity: "",
+					editrestaurantName: "",
+					editdriverName: "",
+					editcustomerName: "",
+					editdishName: "",
+					editaddress: "",
+					editnote: "",
+					editsubtotal: "",
+					editorderDate: "",
+					editcouponID: "",//上面沒有
+					editdiscount: "",
+
+					editunitPrice: "",
+
+				};
+			},
+			created: function () {
+				let _this = this;
+				_this.searchOrders();
 			},
 			methods: {
-				//驗證帳號密碼
 				searchOrders: function () {
 					console.log(1);
 					let _this = this;
-					axios.post(`/api/Orders/GetOrders`)
-					.then(response=>
-						console.log(response.data)
-					)
-				}
-			}
+					axios.post(`/api/orders/GetOrders`, {
+						Status: _this.status,
+						StartDate: _this.startdate,
+						EndDate: _this.enddate,
+						StoreName: _this.storename,
+					}).then(response => {
 
+						_this.orderdetails = response.data.map(x => ({ ...x }));
+						console.log(_this.orderdetails);
+
+					})
+				},
+				editConfirm: function (item) {
+					console.log(item);
+					let _this = this;
+					this.editorderID = item.orderID;
+					this.editorderStatus = item.orderStatus;
+					this.editpayment = item.payment;
+					this.editquantity = item.quantity;
+					this.editrestaurantName = item.restaurantName;
+					this.editdriverName = item.driverName;
+					this.editcustomerName = item.customerName;
+					this.editdishName = item.dishName;
+					this.editaddress = item.address;
+					this.editnote = item.note;
+					this.editsubtotal = item.subtotal;
+
+					this.editorderDate = item.orderDate;
+					this.editcouponID = item.couponID;
+					this.editdiscount = item.discount;
+					this.editunitPrice = item.unitPrice;
+
+
+					//加入修改資料
+
+				},
+				updateOrder: function () {
+					let _this = this;
+					axios.post(`/api/orders/UpdateDetails`, {
+						//這左邊是要給api接到的名稱(DTO裡面的欄位)右邊為要傳進去的值
+						OrderID: _this.editorderID,
+						OrderName: _this.editcustomerName,
+						OrderDate: _this.editorderDate,
+						OrderStatus: _this.editorderStatus,
+						CustomerAddress: _this.editaddress,
+						Note: _this.note,
+					}).then(response => {
+						//Swal.fire({
+						//	title: "提醒",
+						//	text: "確定修改嗎?",
+						//	icon: "warning",
+						//	},
+						//});
+					})
+				},	
+			}
 		}
 		var app = Vue.createApp(vueOrder).mount("#app");
 	</script>
