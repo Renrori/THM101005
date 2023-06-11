@@ -10,6 +10,8 @@ namespace DeliveryBro.Models
         public int CustomerAddressId { get; set; }
         public string CustomerAddress { get; set; }
         public Guid? CustomerId { get; set; }
+        public decimal? Latitude { get; set; }
+        public decimal? Longitude { get; set; }
 
         public virtual CustomersTable Customer { get; set; }
     }

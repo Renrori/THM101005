@@ -17,6 +17,7 @@ namespace DeliveryBro.Areas.deliver.DTO
         public string Note { get; set; }
         public int Total { get; set; }
         public double RandCdistance { get; set; }
+        public string OrderStatus { get; set; }
         public ICollection<OrderDetailsDTO> OrderDetails { get; set; }
     }
 }

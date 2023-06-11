@@ -91,21 +91,7 @@
 		</nav><!-- End Icons Navigation -->
 
 	</header><!-- End Header -->
-	<aside id="sidebar" class="sidebar">
 
-		<ul class="sidebar-nav" id="sidebar-nav">
-			@{
-				if (User.Identity.IsAuthenticated)
-				{
-					<li class="nav-item">
-						<a class="nav-link collapsed" asp-area="store" asp-controller="Home" asp-action="Index"><i class="bi bi-grid"></i>首頁</a>
-					</li>
-				}
-			}
-
-		</ul>
-
-	</aside><!-- End Sidebar-->
 
 	<div>
 		<main role="main" class="pb-3">

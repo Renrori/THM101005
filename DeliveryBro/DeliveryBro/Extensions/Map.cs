@@ -7,23 +7,13 @@ namespace DeliveryBro.Extensions
 {
 	public static class Map
 	{
-		public static MapPoint Location(string address)
+		public static double[] Location(string address)
 		{
 			var location = new GoogleLocationService("AIzaSyDSVv7tpJnSFG82cLsD3wazbDCksKfic_o");
-			return location.GetLatLongFromAddress(address);
+			var Point= location.GetLatLongFromAddress(address);
+			return new double[] { Point.Latitude, Point.Longitude };
 		}
-		public static decimal GetLatitude(string address) 
-		{
-			var point=Location(address);
-			if (point == null) return 0;
-			return Convert.ToDecimal(point.Latitude);
-		}
-		public static decimal GetLongitude(string address)
-		{
-			var point = Location(address);
-			if(point == null) return 0;
-			return Convert.ToDecimal(point.Longitude);
-		}
+		
         public static double GetDistance(LocationViewModel? customer, LocationViewModel? store)
         {
             double earthRadiusKm = 6371; // 地球半徑，單位：公里

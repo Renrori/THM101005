@@ -53,7 +53,7 @@
 							<div class="card-body">
 
 								<div class="pt-4 pb-2">
-									<h5 class="card-title text-center pb-0 fs-4">商家登入</h5>
+									<h5 class="card-title text-center pb-0 fs-4">外送員登入</h5>
 									@*<p class="text-center small">登入您的帳號及密碼</p>*@
 									<hr />
 								</div>
@@ -61,7 +61,7 @@
 								<form class="row g-3 ">
 
 									<div class="col-12">
-										<label for="yourUsername" class="form-label">商家帳號</label>
+										<label for="yourUsername" class="form-label">帳號</label>
 										@*<div class="input-group has-validation">*@
 										@*<span class="input-group-text" id="inputGroupPrepend">@@</span>*@
 										<span v-if="isValidLoginAccount==false" class="text-danger">&emsp;{{errorMsgLoginAccount}}</span>
@@ -70,7 +70,7 @@
 									</div>
 
 									<div class="col-12">
-										<label for="yourPassword" class="form-label">商家密碼</label>
+										<label for="yourPassword" class="form-label">密碼</label>
 										<span v-if="isValidLoginPassword==false" class="text-danger">&emsp;{{errorMsgLoginPassword}}</span>
 										<input type="password" name="Password" class="form-control" v-model="restaurantLoginPassword">
 										@*<div class="invalid-feedback">密碼為必填欄位</div>*@
@@ -160,7 +160,7 @@
 				//驗證帳號密碼
 				addLogin: function () {
 					let _this = this;
-					axios.post(`/api/StoreLogin/isConfirm/StoreLogin`, {
+					axios.post(`/api/DeliverUser/Login`, {
 						account: _this.restaurantLoginAccount,
 						password: _this.restaurantLoginPassword
 					}).then(response => {
@@ -173,7 +173,7 @@
 						else {
 							_this.isValidLoginAccount = true;
 							_this.isValidLoginPassword = true;
-							window.location.href = '../home'
+							window.location.href = '../home/liffpage'
 						}
 					})
 				}

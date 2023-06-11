@@ -107,7 +107,9 @@ namespace DeliveryBro.ApiController
                 CustomerAddressTable userAdd = new CustomerAddressTable
                 {
                     CustomerAddress = address.UserAddress,
-                    CustomerId = customerId
+                    CustomerId = customerId,
+                    Latitude = Convert.ToDecimal(Map.Location(address.UserAddress)[0]),
+                    Longitude= Convert.ToDecimal(Map.Location(address.UserAddress)[1])
                 };
                 _context.CustomerAddressTable.Add(userAdd);
                 await _context.SaveChangesAsync();
@@ -117,6 +119,8 @@ namespace DeliveryBro.ApiController
 
            CustomerAddressTable userAddtar = _context.CustomerAddressTable.FirstOrDefault(x => x.CustomerId == customerId);
             userAddtar.CustomerAddress = address.UserAddress;
+            userAddtar.Latitude = Convert.ToDecimal(Map.Location(address.UserAddress)[0]);
+            userAddtar.Longitude = Convert.ToDecimal(Map.Location(address.UserAddress)[1]);
 
             _context.Entry(userAddtar).State = EntityState.Modified;
             await _context.SaveChangesAsync();
