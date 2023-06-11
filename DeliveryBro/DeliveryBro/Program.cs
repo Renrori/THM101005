@@ -18,6 +18,7 @@ namespace DeliveryBro
     {
         public static void Main(string[] args)
         {
+            var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
             var builder = WebApplication.CreateBuilder(args);
 
             #region DB
@@ -120,9 +121,20 @@ namespace DeliveryBro
             builder.Services.AddTransient<EncryptService>();
             builder.Services.AddTransient<PasswordEncyptService>();
 			builder.Services.AddSingleton<OrderNotificationTask>();
-			#endregion
+            #endregion
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy(MyAllowSpecificOrigins,
+                    policy =>
+                    {
+                        policy.WithOrigins("http://127.0.0.1:5501",
+                                "*")
+                            .AllowAnyHeader()
+                            .AllowAnyMethod();
+                    });
+            });
 
-			var app = builder.Build();
+            var app = builder.Build();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -144,6 +156,7 @@ namespace DeliveryBro
             app.MapHub<OrderHub>("/orderHub");
             app.MapHub<ChatHub>("/chatHub");
 			app.UseRouting();
+            app.UseCors(MyAllowSpecificOrigins);
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>

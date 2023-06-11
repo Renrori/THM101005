@@ -5,283 +5,355 @@
 <html>
 
 <head>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Real-time Map</title>
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-		  integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-	<style>
-		html,
-		body {
-			height: 100vh;
-			margin: 0;
-			padding: 0;
-			position: relative;
-		}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-time Map</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <style>
+        html,
+        body {
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+            position: relative;
+        }
 
-		.navbar {
-			position: fixed;
-			bottom: 0;
-			width: 100%;
-			z-index: 9999;
-			overflow-x: auto;
-			overflow-y: hidden;
-		}
+        .navbar {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            z-index: 9999;
+            overflow-x: auto;
+            overflow-y: hidden;
+        }
 
-		.navbar-nav {
-			white-space: nowrap;
-		}
+        .navbar-nav {
+            white-space: nowrap;
+        }
 
-		#map {
-			position: fixed;
-			height: 100vh;
-		}
+        #map {
+            position: fixed;
+            height: 100vh;
+        }
 
-		.dropdown-menu {
-			max-height: 70vh;
-			overflow-y: auto;
-		}
-	</style>
+        .dropdown-menu {
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+    </style>
 
 </head>
 
 <body>
-	<div id="app">
-		<div id="map"></div>
-		<nav class="fixed-bottom navbar navbar-expand-sm navbar-dark bg-dark">
-			<div class="container-fluid">
-				<a class="navbar-brand" href="#">DeliveryBro</a>
-				<button class="btn btn-success">上線</button>
-				<button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-						data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-						aria-expanded="false" aria-label="Toggle navigation">
-					<span class="navbar-toggler-icon"></span>
-				</button>
-				<div class="collapse navbar-collapse" id="navbarSupportedContent">
-					<template v-if="isOrderPanelOpen">
-						<ul class="navbar-nav me-auto mb-2 mb-lg-0">
-							<li class="nav-item dropdown">
-								<a class="nav-link dropdown-toggle show" href="#" id="order" role="button"
-								   data-bs-toggle="dropdown" aria-expanded="false">
-									等待派送訂單
-								</a>
-								<ul class="dropdown-menu show" aria-labelledby="navbarDropdown">
-									<template v-for="item in orders">
-										<li @@click.stop="orderDetail(item)"
-											class="my-1 dropdown-item d-flex justify-content-between align-items-start">
-											<div class="ms-1 me-auto ">
-												<div class="fw-bold">{{item.restaurantAddress}}</div>
-												{{item.restaurantName}} 
-											</div>
-											<div class="ms-1 me-auto">
-												{{item.orderDate}} 訂購者: {{item.customerName}}
-											</div>
-											<div class="text-end">
-												<div>
-													<span class="badge bg-dark rounded-pill">{{(item.randCdistance*100).toFixed(2)}}KM</span>
-												</div>
-												<div>
-													<span class="badge bg-info">現金</span>
-												</div>
-											</div>
-										<li>
-											<hr class="dropdown-divider">
-										</li>
-									</template>
-								</ul>
-							</li>
-							<li class="nav-item dropdown">
-								<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-								   data-bs-toggle="dropdown" aria-expanded="false">
-									歷史訂單
-								</a>
-								<ul class="dropdown-menu " aria-labelledby="navbarDropdown">
-									<li><a class="dropdown-item" href="#">Action</a></li>
-									<li><a class="dropdown-item" href="#">Action</a></li>
-									<li><a class="dropdown-item" href="#">Action</a></li>
-									<li><a class="dropdown-item" href="#">Action</a></li>
-									<li><a class="dropdown-item" href="#">Action</a></li>
-									<li><a class="dropdown-item" href="#">Action</a></li>
-									<li><a class="dropdown-item" href="#">Action</a></li>
-									<li><a class="dropdown-item" href="#">Action</a></li>
-									<li><a class="dropdown-item" href="#">Action</a></li>
-									<li><a class="dropdown-item" href="#">Action</a></li>
-									<li><a class="dropdown-item" href="#">Action</a></li>
-									<li><a class="dropdown-item" href="#">Action</a></li>
-									<li><a class="dropdown-item" href="#">Action</a></li>
-									<li><a class="dropdown-item" href="#">Action</a></li>
-									<li><a class="dropdown-item" href="#">Action</a></li>
-									<li><a class="dropdown-item" href="#">Action</a></li>
-									<li><a class="dropdown-item" href="#">Action</a></li>
-									<li><a class="dropdown-item" href="#">Another action</a></li>
-									<li>
-										<hr class="dropdown-divider">
-									</li>
-									<li><a class="dropdown-item" href="#">Something else here</a></li>
-								</ul>
-							</li>
+    <div id="app">
+        <div id="map"></div>
+        <nav class="fixed-bottom navbar navbar-expand-sm navbar-dark bg-dark">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">DeliveryBro</a>
+                <button class="btn btn-success">上線</button>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <template v-if="isOrderPanelOpen">
+                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle show" href="#" id="order" role="button"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                    等待派送訂單
+                                </a>
+                                <ul class="dropdown-menu show" aria-labelledby="navbarDropdown">
+                                    <template v-for="item in orders">
+                                        <li @@click.stop="orderDetail(item)"
+                                            class="my-1 dropdown-item d-flex justify-content-between align-items-start">
+                                            <div class="ms-1 me-auto ">
+                                                <div class="fw-bold">{{item.restaurantAddress}}</div>
+                                                <div>餐廳:{{item.restaurantName}} </div>
+                                                <div>{{item.orderDate}}</div>
+                                                <div> 訂購者: {{item.customerName}}</div>
+                                            </div>
+                                            <div class="text-end">
+                                                <div>
+                                                    <span
+                                                        class="badge bg-dark rounded-pill">{{(item.randCdistance*100).toFixed(2)}}KM</span>
+                                                </div>
+                                                <div>
+                                                    <span class="badge bg-info">現金</span>
+                                                </div>
+                                            </div>
+                                        <li>
+                                            <hr class="dropdown-divider">
+                                        </li>
+                                    </template>
+                                </ul>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                    歷史訂單
+                                </a>
+                                <ul class="dropdown-menu " aria-labelledby="navbarDropdown">
+                                    <li><a class="dropdown-item" href="#">Action</a></li>
+                                    <li><a class="dropdown-item" href="#">Action</a></li>
+                                    <li><a class="dropdown-item" href="#">Action</a></li>
+                                    <li><a class="dropdown-item" href="#">Action</a></li>
+                                    <li><a class="dropdown-item" href="#">Action</a></li>
+                                    <li><a class="dropdown-item" href="#">Action</a></li>
+                                    <li><a class="dropdown-item" href="#">Action</a></li>
+                                    <li><a class="dropdown-item" href="#">Action</a></li>
+                                    <li><a class="dropdown-item" href="#">Action</a></li>
+                                    <li><a class="dropdown-item" href="#">Action</a></li>
+                                    <li><a class="dropdown-item" href="#">Action</a></li>
+                                    <li><a class="dropdown-item" href="#">Action</a></li>
+                                    <li><a class="dropdown-item" href="#">Action</a></li>
+                                    <li><a class="dropdown-item" href="#">Action</a></li>
+                                    <li><a class="dropdown-item" href="#">Action</a></li>
+                                    <li><a class="dropdown-item" href="#">Action</a></li>
+                                    <li><a class="dropdown-item" href="#">Action</a></li>
+                                    <li><a class="dropdown-item" href="#">Another action</a></li>
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
+                                    <li><a class="dropdown-item" href="#">Something else here</a></li>
+                                </ul>
+                            </li>
 
 
-						</ul>
-					</template>
-					<template v-else>
-						<div class="card my-3">
+                        </ul>
+                    </template>
+                    <template v-else>
+                        <div class="card my-3">
 
-							<div class="card-body my-4">
-								<i @@click="closeOrderPanel" class="bi bi-x-square-fill "
-								   style="font-size: 2rem; position: absolute; top: 2vh; right: 4vh;"></i>
-								<h5 class="card-title">訂單編號: {{order.orderId}}</h5>
-								<h5>完成時間: {{order.orderDate}}</h5>
-								<h5>顧客名稱: {{order.customerName}}</h5>
-								<hr />
-								<div class="row">
-									<div class="col-12">
-										<div class="row" v-for="detail in order.orderDetails">
-											<div class="col">{{detail.dishName}}</div>
-											<div class="col">$ {{detail.unitPrice}}</div>
-											<div class="col">{{detail.quantity}}</div>
-											<div class="col">$ {{detail.unitPrice*detail.quantity}}</div>
-										</div>
-									</div>
-								</div>
-								<hr />
-								<div class="row">
-									<div class="col">
-										<h5>備註:</h5>
-										<div>{{order.note}}</div>
-									</div>
-								</div>
-								<hr>
-								<div class="row">
-									<div class="col">
-										<div>Total: ${{order.total}}</div>
-									</div>
-								</div>
-								<hr>
-								<div class="row">
-									<div class="col">
-										<button class="btn btn-success w-100">接單</button>
-									</div>
-									<div class="col">
-										<button class="btn btn-danger w-100">取消</button>
-									</div>
-								</div>
-							</div>
-						</div>
-					</template>
-					<form class="d-flex">
-						<input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-						<button class="btn btn-outline-success" type="submit">Search</button>
-					</form>
-				</div>
-			</div>
-		</nav>
+                            <div class="card-body my-4">
+                                <i @@click="closeOrderPanel" class="bi bi-x-square-fill "
+                                    style="font-size: 2rem; position: absolute; top: 2vh; right: 4vh;"></i>
+                                <h5 class="card-title">訂單編號: {{order.orderId}}</h5>
+                                <h5>完成時間: {{order.orderDate}}</h5>
+                                <h5>顧客名稱: {{order.customerName}}</h5>
+                                <h5>顧客地址: {{order.customerAddress}}</h5>
+                                <hr />
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="row" v-for="detail in order.orderDetails">
+                                            <div class="col-5">{{detail.dishName}}</div>
+                                            <div class="col-3">${{detail.unitPrice}}</div>
+                                            <div class="col-1">{{detail.quantity}}</div>
+                                            <div class="col-3">${{detail.unitPrice*detail.quantity}}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr />
+                                <div class="row">
+                                    <div class="col">
+                                        <h5>備註:</h5>
+                                        <div>{{order.note}}</div>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col">
+                                        <div>Total: ${{order.total}}</div>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <template v-if="isAcceptOrder">
+                                        <div class="col">
+                                            <button @@click="finishOrder" class="btn btn-success w-100">完成訂單</button>
+                                        </div>
+                                    </template>
+                                    <template v-else>
+                                        <div class="col">
+                                            <button @@click="acceptOrder" class="btn btn-success w-100">接單</button>
+                                        </div>
+                                        <div class="col">
+                                            <button @@click="closeOrderPanel" class="btn btn-danger w-100">取消</button>
+                                        </div>
+                                    </template>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                    <form class="d-flex">
+                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                        <button class="btn btn-outline-success" type="submit">Search</button>
+                    </form>
+                </div>
+            </div>
+        </nav>
 
-	</div>
+    </div>
 
 </body>
+
 </html>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDSVv7tpJnSFG82cLsD3wazbDCksKfic_o&libraries=places"></script>
+<script
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDSVv7tpJnSFG82cLsD3wazbDCksKfic_o&libraries=places"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
-<script src="~/axios/axios.min.js"></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.js'
+    integrity='sha512-RjvSEaeDqPCfUVQ9kna2/2OqHz/7F04IOl1/66LmQjB/lOeAzwq7LrbTzDbz5cJzlPNJ5qteNtHR56XaJSTNWw=='
+    crossorigin='anonymous'></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-		integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-		crossorigin="anonymous"></script>
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
 <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/versions/2.1.13/sdk.js"></script>
 <script>
-	let app = new Vue({
-		el: "#app",
-		data: {
-			latitude: 0,
-			longitude: 0,
-			liff: {},
-			map: {},
-			isOrderPanelOpen: true,
-			orders: [
-				//    { orderDetails: [{ dishName: "薯條", unitPrice: 100, quantity: 5 }, { dishName: "薯條", unitPrice: 100, quantity: 5 }], customerName: "reds", orderDate: "2023/06/11", orderId: 1, title: "新北市三重區重新路三段182號", desc: "薯條x100", type: "現金", distance: 1.68 },
-				//    { orderDetails: [{ dishName: "薯條", unitPrice: 100, quantity: 5 }, { dishName: "薯條", unitPrice: 100, quantity: 5 }], customerName: "reds", orderDate: "2023/06/11", orderId: 2, title: "台北市中正區林森南路1號", desc: "牛肉麵x100", type: "信用卡", distance: 5 },
-				//    { orderDetails: [{ dishName: "薯條", unitPrice: 100, quantity: 5 }, { dishName: "薯條", unitPrice: 100, quantity: 5 }], customerName: "reds", orderDate: "2023/06/11", orderId: 3, title: "台北市中正區青島東路三段6之182號", desc: "薯條x100", type: "現金", distance: 7.8 },
-			],
-			order: {},
-		},
-		mounted: function () {
-			this.getOrdersData()
-			this.getCurrentGeo();
-			this.init();
-			this.jsSetting();
-			
-		},
-		methods: {
-			init: function () {
-				let self = this;
-				liff.init({
-					liffId: '1661389631-7E56xaox'
-				}).then(function () {
-					self.initGoogleMap();
-				});
-			},
-			initGoogleMap: function () {
-				let self = this;
-				self.map = new google.maps.Map(document.getElementById('map'), {
-					center: { lat: self.latitude, lng: self.longitude },
-					zoom: 14,
-					disableDefaultUI: true,
-					zoomControl: false,
-					mapTypeControl: false
-				});
-				self.map.addListener('click', function (event) {
-					var latitude = event.latLng.lat();
-					var longitude = event.latLng.lng();
-					self.updateLocation(latitude, longitude);
-				});
-			},
-			getCurrentGeo: function () {
-				let self = this;
-				navigator.geolocation.getCurrentPosition(function (position) {
-					self.latitude = position.coords.latitude;
-					self.longitude = position.coords.longitude;
-				}, function (error) { console.log('取得座標失敗:', error); });
-			},
-			getOrdersData: function () {
-				let self = this;
-				axios.get(`/api/DeliverOrders/prepared`).then(res => {
-					self.orders = res.data
-				})
-			},
-			orderDetail: function (item) {
-				let self = this;
-				self.isOrderPanelOpen = false;
-				console.log('orderDetail', this.isOrderPanelOpen);
+    let app = new Vue({
+        el: "#app",
+        data: {
+            selfLatLng: {
+                lat: 25.04396,
+                lng: 121.53440,
+            },
+            liff: {},
+            map: {},
+            isOrderPanelOpen: true,
+            isAcceptOrder: false,
+            firstDraw: true,
+            directionsService: {},
+            currentMaker: {},
+            orders: [
+                //    { orderDetails: [{ dishName: "薯條", unitPrice: 100, quantity: 5 }, { dishName: "薯條", unitPrice: 100, quantity: 5 }], customerName: "reds", orderDate: "2023/06/11", orderId: 1, title: "新北市三重區重新路三段182號", desc: "薯條x100", type: "現金", distance: 1.68 },
+                //    { orderDetails: [{ dishName: "薯條", unitPrice: 100, quantity: 5 }, { dishName: "薯條", unitPrice: 100, quantity: 5 }], customerName: "reds", orderDate: "2023/06/11", orderId: 2, title: "台北市中正區林森南路1號", desc: "牛肉麵x100", type: "信用卡", distance: 5 },
+                //    { orderDetails: [{ dishName: "薯條", unitPrice: 100, quantity: 5 }, { dishName: "薯條", unitPrice: 100, quantity: 5 }], customerName: "reds", orderDate: "2023/06/11", orderId: 3, title: "台北市中正區青島東路三段6之182號", desc: "薯條x100", type: "現金", distance: 7.8 },
+            ],
+            order: {},
+        },
+        mounted: function () {
+            let self = this;
+            self.getOrdersData()
+            self.getCurrentGeo();
+            self.init();
+            self.jsSetting();
+        },
+        methods: {
+            init: function () {
+                let self = this;
+                liff.init({
+                    liffId: '1661389631-7E56xaox'
+                }).then(function () {
+                    self.initGoogleMap();
+                });
+            },
+            initGoogleMap: function () {
+                let self = this;
+                self.map = new google.maps.Map(document.getElementById('map'), {
+                    center: { lat: self.selfLatLng.lat, lng: self.selfLatLng.lng },
+                    zoom: 14,
+                    disableDefaultUI: true,
+                    zoomControl: false,
+                    mapTypeControl: false
+                });
+                self.directionsService = new google.maps.DirectionsService();
+                if (navigator.geolocation) {
+                    navigator.geolocation.watchPosition(
+                        function (position) {
+                            const currentLocation = {
+                                lat: position.coords.latitude,
+                                lng: position.coords.longitude
+                            };
+                            self.map.setCenter(currentLocation);
+                            self.drawCurrentMaker(currentLocation, !self.firstDraw);
+                            self.firstDraw = false;
+                        },
+                        function (error) {
+                            // console.error("取得位置失敗: ", error);
+                        }
+                    );
+                } else {
+                    console.error("瀏覽器不支援地理位置服務");
+                }
+            },
+            getCurrentGeo: function () {
+                let self = this;
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    self.selfLatLng.lat = position.coords.latitude;
+                    self.selfLatLng.lng = position.coords.longitude;
+                }, function (error) { console.log('取得座標失敗:', error); });
+            },
+            getOrdersData: function () {
+                let self = this;
+                // axios.get(`/api/DeliverOrders/prepared`).then(res => {
+                axios.get(`https://localhost:7163/api/DeliverOrders/prepared`).then(res => {
 
-				//self.order.orderId = item.orderId;
-				//self.order.orderDate = item.orderDate;
-				//self.order.customerName = item.customerName;
-				//self.order.orderDetails = item.orderDetails;
-				// self.detail.dishName = item.dishName;
-				// self.detail.unitPrice = item.unitPrice;
-				// self.detail.quantity = item.quantity;
-				// self.detail.subtotal = item.subtotal;
-				// self.order.total = item.total;
-				// self.order.note = item.note;
-			},
-			jsSetting: function () {
-				document.querySelector('.dropdown-menu').addEventListener('click', (e) => e.stopPropagation());
-			},
-			closeOrderPanel: function () {
-				this.isOrderPanelOpen = true;
-			},
-			updateLocation: function (latitude, longitude) {
-				liff.sendMessages([
-					{
-						type: 'text',
-						text: 'Location updated: ' + latitude + ', ' + longitude
-					}
-				]).then(function () {
-					console.log('Location message sent.');
-				}).catch(function (error) {
-					console.error('Failed to send location message:', error);
-				});
-			}
-		}
-	});
+                    self.orders = res.data
+                })
+            },
+            orderDetail: function (item) {
+                let self = this;
+                self.isOrderPanelOpen = false;
+                console.log('orderDetail', this.isOrderPanelOpen);
+                self.order = item;
+            },
+            jsSetting: function () {
+                document.querySelector('.dropdown-menu').addEventListener('click', (e) => e.stopPropagation());
+            },
+            closeOrderPanel: function () {
+                this.isOrderPanelOpen = true;
+            },
+            acceptOrder: function () {
+                let self = this;
+                //api
+
+                //nav收折
+                new bootstrap.Collapse(document.getElementById('navbarSupportedContent'))
+                //切換按鈕
+                self.isAcceptOrder = true;
+                //顯示路徑
+                self.drawDirectionLine(self.selfLatLng, self.order.restaurantLocation, self.order.customerLocation);
+
+            },
+            drawCurrentMaker: function (currentLocation, reset) {
+                let self = this;
+                if (reset) {
+                    self.currentMaker.setMap(null);
+                }
+                self.currentMaker = new google.maps.Marker({
+                    position: currentLocation,
+                    map: self.map,
+                    //icon: "/motorbike-motorbikes.gif",
+                    title: "目前位置"
+                });
+            },
+            drawDirectionLine: function (start, waypoint, end) {
+                let self = this;
+                const request = {
+                    origin: { lat: start.lat, lng: start.lng },
+                    waypoints: [{ location: { lat: waypoint.latitude, lng: waypoint.longitude } }],
+                    destination: { lat: end.latitude, lng: end.longitude },
+                    travelMode: google.maps.TravelMode.DRIVING
+                };
+
+                self.directionsService.route(request, function (response, status) {
+                    if (status === google.maps.DirectionsStatus.OK) {
+                        const directionsRenderer = new google.maps.DirectionsRenderer();
+                        directionsRenderer.setDirections(response);
+                        directionsRenderer.setMap(self.map); // 將路線繪製到地圖上
+                    } else {
+                        console.error("Directions request failed. Status: ", status);
+                    }
+                });
+            },
+            finishOrder: function () {
+                let self = this;
+                self.isAcceptOrder = false;
+                self.isOrderPanelOpen = true;
+            },
+            updateLocation: function (latitude, longitude) {
+                liff.sendMessages([
+                    {
+                        type: 'text',
+                        text: 'Location updated: ' + latitude + ', ' + longitude
+                    }
+                ]).then(function () {
+                    console.log('Location message sent.');
+                }).catch(function (error) {
+                    console.error('Failed to send location message:', error);
+                });
+            }
+        }
+    });
 </script>
