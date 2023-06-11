@@ -1,11 +1,13 @@
 ﻿using DeliveryBro.Areas.store.DTO;
-using DeliveryBro.Areas.store.Hubs;
-using DeliveryBro.Areas.store.SubscribeTableDependency;
+using DeliveryBro.Hubs;
 using DeliveryBro.Extensions;
 using DeliveryBro.Models;
+using DeliveryBro.Services;
+using Hangfire;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using TableDependency.SqlClient;
 
@@ -17,13 +19,12 @@ namespace DeliveryBro.Areas.store.apiControllers
 	public class OrdersController : ControllerBase
 	{
 		private readonly sql8005site4nownetContext _context;
-		private readonly subscribeOrder _subscribeOrder;
-		
+		private readonly OrderNotificationTask _task;
 
-		public OrdersController(sql8005site4nownetContext context, subscribeOrder subscribeOrder)
+		public OrdersController(sql8005site4nownetContext context, OrderNotificationTask task)
 		{
 			_context = context;
-			_subscribeOrder = subscribeOrder;
+			_task = task;
 		}
 
 		[HttpGet]
@@ -34,7 +35,7 @@ namespace DeliveryBro.Areas.store.apiControllers
 				.Where(x => x.RestaurantId == id && x.OrderStatus == "completed").OrderByDescending(x => x).Select(x => new HisOrderDTO
 				{
 					OrderId = x.OrderId,
-					OrderDate = x.OrderDate.ToUniversalTime().ToLocalTime().ToString(),
+					OrderDate = x.OrderDate.ToLocalTime().ToString(),
 					CustomerName = x.Customer.CustomerName,
 					Note = x.Note,
 					OrderDetails = x.OrderDetailsTable.Select(d => new OrderDetailsDTO
@@ -60,7 +61,7 @@ namespace DeliveryBro.Areas.store.apiControllers
 			return query.OrderByDescending(x => x).Select(x => new HisOrderDTO
 			{
 				OrderId = x.OrderId,
-				OrderDate = x.OrderDate.ToUniversalTime().ToLocalTime().ToString(),
+				OrderDate = x.OrderDate.ToLocalTime().ToString(),
 				CustomerName = x.Customer.CustomerName,
 				Note = x.Note,
 				OrderDetails = x.OrderDetailsTable.Select(d => new OrderDetailsDTO
@@ -77,14 +78,17 @@ namespace DeliveryBro.Areas.store.apiControllers
 		[HttpGet("wait")]
 		public IQueryable<HisOrderDTO> WaitingOrder()
 		{
-			_subscribeOrder.Subscribe();
 			var id = User.GetId();
-			return _context.CustomerOrderTable.Include(x => x.OrderDetailsTable)
+			var orderHub = new OrderHub();
+			BackgroundJob.Schedule(() => _task.Notify(), TimeSpan.FromSeconds(30));
+			//BackgroundJob.Schedule(() => NoResponseOrder(), TimeSpan.FromMinutes(1));
+			var query= _context.CustomerOrderTable.Include(x => x.OrderDetailsTable)
 				.Where(x => x.RestaurantId == id && x.OrderStatus == "waiting").Select(x => new HisOrderDTO
 				{
 					OrderId = x.OrderId,
-					OrderDate = x.OrderDate.ToUniversalTime().ToLocalTime().ToString(),
+					OrderDate = x.OrderDate.ToLocalTime().ToString(),
 					CustomerName = x.Customer.CustomerName,
+					CustomerId=x.CustomerId,
 					Note = x.Note,
 					OrderDetails = x.OrderDetailsTable.Select(d => new OrderDetailsDTO
 					{
@@ -96,6 +100,7 @@ namespace DeliveryBro.Areas.store.apiControllers
 					}).ToList(),
 					Total = x.OrderDetailsTable.Sum(x => x.Subtotal)
 				});
+			return query;
 		}
 		[HttpGet("acepted")]
 		public IQueryable<HisOrderDTO> AceptedOrder()
@@ -105,8 +110,8 @@ namespace DeliveryBro.Areas.store.apiControllers
 				.Where(x => x.RestaurantId == id && x.OrderStatus == "acepted").Select(x => new HisOrderDTO
 				{
 					OrderId = x.OrderId,
-					OrderDate = x.OrderDate.ToUniversalTime().ToLocalTime().ToString(),
-					CompletedTime=x.OrderDate.ToUniversalTime().ToLocalTime().AddMinutes((double)x.Restaurant.PrepareTime).ToString(),
+					OrderDate = x.OrderDate.ToLocalTime().ToString(),
+					CompletedTime=x.OrderDate.ToLocalTime().AddMinutes((double)x.Restaurant.PrepareTime).ToString(),
 					CustomerName = x.Customer.CustomerName,
 					Note = x.Note,
 					OrderDetails = x.OrderDetailsTable.Select(d => new OrderDetailsDTO
@@ -160,5 +165,32 @@ namespace DeliveryBro.Areas.store.apiControllers
             return "品項刪除成功";
         }
 
-    }
+		public async Task<NoResponseOrderDTO> NoResponseOrder()
+		{
+			var query = _context.CustomerOrderTable
+				.Where(x => x.OrderDate.AddMinutes(3) > DateTime.Now)
+				.Select(x => new NoResponseOrderDTO
+				{
+					Id = x.OrderId,
+					OrderDate = x.OrderDate.AddMinutes(3),
+				});
+			foreach (var order in query)
+			{
+				var delorder = _context.CustomerOrderTable.FindAsync(order.Id);
+				var deldetail = _context.OrderDetailsTable.Where(x => x.OrderId == order.Id).ToArrayAsync();
+				_context.RemoveRange(deldetail);
+				_context.Remove(deldetail);
+				try
+				{
+					await _context.SaveChangesAsync();
+				}
+				catch (DbUpdateException)
+				{
+					return null;
+				}
+			}
+			return null;
+
+		}
+	}
 }

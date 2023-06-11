@@ -7,9 +7,9 @@
             public int DishPrice { get; set; }
             public string? DishDescription { get; set; }
             public string DishCategory { get; set; }
-		    public byte[]? DishPicture { get; set; }
             public string? DishStatus { get; set; }
             public int? RestaurantId { get; set; }
+            public string? PictureUrl { get; set; }
 
 	}
 }

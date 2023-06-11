@@ -2,7 +2,12 @@
     ViewData["Title"] = "Home Page";
 }
 
-
+@section Styles
+{
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+	<link href="~/css/map.css" rel="stylesheet" />
+    
+}
 @*<---------------旋轉軸--------------->*@
 <div id="carouselExampleDark"
      class="carousel carousel-dark slide"
@@ -89,6 +94,37 @@
     <section class="ftco-section">
         <div class="container">
             <div class="row">
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" ref="button">
+                        {{addressChosen?addressChosen:'請輸入地址'}}
+                    </button>
+                    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="staticBackdropLabel">請輸入/選擇地址</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="pac-card" id="pac-card">
+                                        <div id="pac-container">
+                                            <input id="pac-input" class="form-control" type="text" placeholder="請輸入新地址" v-model="addressChosen" />
+                                        </div>
+                                    </div>
+                                    <div id="map"></div>
+                                   @* <input type="text" class="form-control" id="location" placeholder="請輸入新地址" v-model="addressChosen" />*@
+                                    <br />
+                                    <h4>已儲存的地址</h4>
+                                    <select class="form-select" aria-label="Default select example" v-model="addressChosen">
+                                        <option disabled value="">---請選擇---</option>
+                                        <option v-for="a in address">{{a.userAddress}}</option>
+                                    </select>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" v-bind:disabled="btndisabled">確定</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 <div class="col-md-6 col-lg-4 " v-for="store in storeInfo" :key="storeId">
                     <div class="product">
                         <div class="img-prod">
@@ -115,8 +151,12 @@
 @section Scripts
     {
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-    <script src="https://unpkg.com/vue@3.2.36/dist/vue.global.prod.js"></script>
+    <script src="https://unpkg.com/vue@3.2.36/dist/vue.global.prod.js"></script>  
+    <script src="~/js/mapaddressautocomplete.js"></script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDSVv7tpJnSFG82cLsD3wazbDCksKfic_o&callback=initMap&libraries=places" defer></script>
     <script src="~/axios/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="~/lib\microsoft/signalr/dist/browser/signalr.js"></script>
     <script>
         var baseAddress = "https://localhost:7163/api/HomeApi";
         var vueApp = {
@@ -126,11 +166,39 @@
                     storeInfo: [],
                     storeImageUrl: '',
                     cartItems: [],
+                    address:[],
+                    addressChosen:"請輸入地址",
+                }
+            },
+            watch:{
+                addressChosen(){
+                    if (this.addressChosen != "") this.GetStoreInfo();
+                }
+            },
+            computed:{
+                btndisabled() {
+                    let self = this
+                    if (self.addressChosen == "") return true
+                    localStorage.setItem("addressChosen", this.addressChosen);
+                    return false
                 }
             },
             mounted() {
+                this.SCsignalr = new signalR.HubConnectionBuilder().withUrl("/orderHub").build();
+                this.SCsignalr.start()
+                    .then(() => {
+                        console.log("connection");
+                    })
+                    .catch((err) => {
+                        console.log(err.toString());
+                    });
+                this.SCsignalr.on("orderStatus",this.GetResponseFromStore);
                 this.GetStoreInfo();
                 this.getcartItemsFromCookie();
+                this.getCurrentAddress();
+            },
+            created(){
+                this.addressChosen = localStorage.getItem("addressChosen");
             },
             methods: {
                 GetPictureStore(storeId) {
@@ -142,7 +210,7 @@
                         //    this.StoreId = response.data.StoreId;
                         //    this.StoreName = response.data.StoreName;
                         //})
-                        const response = await axios.get(`api/HomeApi`);
+                        const response = await axios.get(`api/HomeApi/${this.addressChosen}`);
                         const data = response.data;
                         this.storeInfo = data;
                     } catch {
@@ -166,6 +234,24 @@
                 clearcartItems() {
                     this.cartItems = [];
                     document.cookie = 'cartItems=;';
+                },
+                getCurrentAddress(){
+                    let self=this;
+                    axios.get(`/api/HomeApi/start/address`).then(response=>{
+                        self.address=response.data;
+                        if (response.data!="") self.showAddressModal();
+                    })
+                },
+                showAddressModal(){
+                    if(document.cookie.indexOf('modal_shown')>=0) return
+                    else{
+                        this.$refs.button.click();
+                        document.cookie="modal_shown=seen";
+                    }
+                },
+                GetResponseFromStore(orderId,status){
+                    Swal.fire(`訂單編號${orderId}${status}`)
+                    console.log(status)
                 }
             }
         };

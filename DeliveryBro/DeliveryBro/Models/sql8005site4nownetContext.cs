@@ -237,6 +237,8 @@ namespace DeliveryBro.Models
                     .IsRequired()
                     .HasMaxLength(30);
 
+                entity.Property(e => e.PicturePath).HasMaxLength(100);
+
                 entity.Property(e => e.RestaurantId).HasColumnName("RestaurantID");
 
                 entity.HasOne(d => d.Restaurant)
@@ -286,6 +288,8 @@ namespace DeliveryBro.Models
                 entity.Property(e => e.Longitude).HasColumnType("decimal(9, 6)");
 
                 entity.Property(e => e.OpeningHours).HasColumnType("time(0)");
+
+                entity.Property(e => e.PicturePath).HasMaxLength(100);
 
                 entity.Property(e => e.RestaurantAccount)
                     .IsRequired()

@@ -1,5 +1,6 @@
 ﻿using DeliveryBro.Areas.store.DTO;
 using DeliveryBro.Data;
+using DeliveryBro.Extensions;
 using DeliveryBro.Models;
 using DeliveryBro.ViewModels.Home;
 using DeliveryBro.ViewModels.User;
@@ -18,8 +19,9 @@ namespace DeliveryBro.ApiController
 {
     [ApiExplorerSettings(IgnoreApi = true)]
     //[EnableCors("User")]  限制跨域來源
-    //[Authorize]
+    
     [Route("api/[controller]")]
+    [Authorize(Roles = "User", AuthenticationSchemes = "CustomerAuthenticationScheme")]
     [ApiController]
     public class UserApiController : ControllerBase
     {
@@ -63,8 +65,6 @@ namespace DeliveryBro.ApiController
         [HttpPut("{customerId:guid}")]
         public async Task<string> EditUserInfo(Guid customerId, EditUserInfoViewModel eui)
         {
-
-
             //Httpcontext
             CustomersTable userInfo = await _context.CustomersTable.FindAsync(customerId);
 
@@ -92,7 +92,6 @@ namespace DeliveryBro.ApiController
                     throw;
                 }
             }
-
             return "成功";
 
         }
@@ -132,7 +131,7 @@ namespace DeliveryBro.ApiController
             .Where(o => o.CustomerId == customerId && o.OrderStatus == "completed").OrderByDescending(x => x.OrderId).Select(o => new UserOrderViewModel
             {
                 OrderId = o.OrderId,
-                OrderDate = o.OrderDate,
+                OrderDate = o.OrderDate.AddHours(8),
                 CustomerName = o.Customer.CustomerName,
                 Note = o.Note,
                 OrderDetails = o.OrderDetailsTable.Select(d => new UserOrderDetailsViewModel
@@ -149,16 +148,15 @@ namespace DeliveryBro.ApiController
             return orderDetails;
         }
 
-
-
-        [HttpGet("waitorder/{customerId:guid}")]
-        public async Task<IEnumerable<UserOrderViewModel>> GetWaitOrder (Guid customerId)
+        [HttpGet("waitorder")]
+        public  IEnumerable<UserOrderViewModel> GetWaitOrder ()
         {
-            var orderDetails = _context.CustomerOrderTable
-                .Where(o => o.CustomerId == customerId && (o.OrderStatus == "waiting" || o.OrderStatus == "accepted")).Select(o => new UserOrderViewModel
+			var id = User.GetId();
+			var orderDetails = _context.CustomerOrderTable
+                .Where(o => o.CustomerId == id && (o.OrderStatus == "waiting" || o.OrderStatus == "acepted")).OrderByDescending(x => x.OrderId).Select(o => new UserOrderViewModel
                 {
                     OrderId = o.OrderId,
-                    OrderDate = o.OrderDate,
+                    OrderDate = o.OrderDate.AddHours(8),
                     CustomerName = o.Customer.CustomerName,
                     Note = o.Note,
                     OrderDetails = o.OrderDetailsTable.Select(d => new UserOrderDetailsViewModel
@@ -201,18 +199,6 @@ namespace DeliveryBro.ApiController
 
             return Ok("上傳成功");
         }
-        //public async Task<IActionResult> GetCity()
-        //{
-        //    string json = System.IO.File.ReadAllText("Data/CityCountry/CityCountyData.json");
-        //    var data = JsonSerializer.Deserialize<DataModel>(json);
-
-
-        //}
-        //private async Task SetPostUserPic(CustomersTable customers, IFormFile file)
-        //{
-        //    customers.CustomerPhoto = await PostUserPic(file);
-        //}
-
         private bool CustomerExists(Guid customerId)
         {
             return (_context.CustomersTable?.Any(e => e.CustomerId == customerId)).GetValueOrDefault();

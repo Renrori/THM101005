@@ -2,17 +2,38 @@
 	{
 	<link href="~/lib/admin/assets/css/app-creative.css" rel="stylesheet" />
 	<link href="~/lib/admin/assets/vendor/simplebar/simplebar.min.css" rel="stylesheet" />
+	<link href="~/lib/admin/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
 }
+@{
+	ViewData["HideFooter"] = true;
+}
+
+<aside b-y5hjwqsk06 id="sidebar" class="sidebar">
+
+	<ul b-y5hjwqsk06 class="sidebar-nav" id="sidebar-nav">
+
+		<li b-y5hjwqsk06 class="nav-item">
+			<a class="nav-link" asp-controller="User" asp-action="UserHome"><i b-y5hjwqsk06 class="bi bi-grid"></i>Home</a>
+		</li>
+		<li b-y5hjwqsk06 class="nav-item">
+			<a class="nav-link collapsed" asp-controller="User" asp-action="UserHome"><i b-y5hjwqsk06 class="fa-solid fa-store"></i>我的資料</a>
+		</li>
+		<li b-y5hjwqsk06 class="nav-item">
+			<a class="nav-link collapsed" asp-controller="User" asp-action="UserAddress"><i b-y5hjwqsk06 class="fa-solid fa-store"></i>我的地址</a>
+		</li>
+		<li b-y5hjwqsk06 class="nav-item">
+			<a class="nav-link collapsed" asp-controller="User" asp-action="UserOrder"><i b-y5hjwqsk06 class="fa-solid fa-store"></i>我的訂單</a>
+		</li>
+		<li b-y5hjwqsk06 class="nav-item">
+			<a class="nav-link collapsed" asp-controller="User" asp-action="UserOrderHistory"><i b-y5hjwqsk06 class="fa-solid fa-store"></i>歷史訂單</a>
+		</li>
+		<li b-y5hjwqsk06 class="nav-item">
+			<a class="nav-link collapsed" asp-controller="User" asp-action="HelpCenter"><i b-y5hjwqsk06 class="fa-solid fa-circle-info"></i>幫助中心</a>
+		</li>
+	</ul>
+
+</aside><!-- End Sidebar-->
 <main id="main" class="main">
-	<div class="pagetitle">
-		<h1>幫助中心</h1>
-		<nav>
-			<ol class="breadcrumb">
-				<a class="breadcrumb-item" asp-area="store" asp-controller="Home" asp-action="Index">Home</a>
-				<li class="breadcrumb-item active">幫助中心</li>
-			</ol>
-		</nav>
-	</div>
 	<section class="section support" id="app">
 		<div class="row">
 			<div class="col">
@@ -89,7 +110,7 @@
 																	<a href="#" class="btn btn-light"><i class="uil uil-paperclip"></i></a>
 																	<a href="#" class="btn btn-light"> <i class='uil uil-smile'></i> </a>
 																	<div class="d-grid">
-																		<button id="sendMsg" type="submit" class="btn btn-success chat-send" @@click="sendtoAdmin" ><i class='uil uil-message'></i></button>
+																		<button id="sendMsg" type="submit" class="btn btn-success chat-send" @@click="sendtoAdmin"><i class='uil uil-message'></i></button>
 																	</div>
 																</div>
 															</div> <!-- end col -->
@@ -103,7 +124,6 @@
 								</div>
 								<!-- end chat area-->
 								<!-- start user detail -->
-								
 								<!-- end user detail -->
 							</div> <!-- end row-->
 
@@ -133,6 +153,9 @@
 	<script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
 	<script src="~/lib/admin/assets/js/ui/component.chat.js"></script>
 	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+	<script src="~/lib/admin/assets/js/vendor.min.js"></script>
+	<script src="~/lib/admin/assets/vendor/apexcharts/apexcharts.min.js"></script>
+	<script src="~/lib/admin/assets/js/app.min.js"></script>
 	@*<script src="~/js/sendtocaller.js"></script>*@
 	<script>
 		let app = Vue.createApp({
@@ -185,15 +208,15 @@
 						userId: this.thisUser.userId,
 						name: this.thisUser.name,
 						role: this.thisUser.role,
-						read:false
+						read: false
 					}
 					this.displayMessage.push(newmsg);
 					this.message = "";
 				},
-				AdminOn:function(connectionId,userId,name,role){
-					let self=this;
+				AdminOn: function (connectionId, userId, name, role) {
+					let self = this;
 					console.log('adminConnect');
-					var obj={
+					var obj = {
 						connectionId: connectionId,
 						userId: userId,
 						name: name,
@@ -202,51 +225,51 @@
 					self.adminOn.push(obj);
 				},
 				adminConnect: function (adminsJson) {
-					let self=this;
-					var admins=JSON.parse(adminsJson).map(x=>{
-						return{
-						name: x.Name,
-						connectionId: x.ConnectionId,
-						userId: x.UserId,
-						role: x.Role
+					let self = this;
+					var admins = JSON.parse(adminsJson).map(x => {
+						return {
+							name: x.Name,
+							connectionId: x.ConnectionId,
+							userId: x.UserId,
+							role: x.Role
 						}
 					})
-					for(let admin of admins)
+					for (let admin of admins)
 						self.adminOn.push(admin);
 				},
 				adminDisConnect: function (connectionID, guid, name, role) {
-					let self =this;
-					var idx=self.adminOn.findIndex(x=>x.userId==guid)
-					if(idx==-1) return
-					self.adminOn.splice(idx,1);
+					let self = this;
+					var idx = self.adminOn.findIndex(x => x.userId == guid)
+					if (idx == -1) return
+					self.adminOn.splice(idx, 1);
 				},
-				FromAdmin: function (connectionID, guid, name, role, message,read) {
+				FromAdmin: function (connectionID, guid, name, role, message, read) {
 					var newmsg = {
 						connectionId: connectionID,
 						message: message,
 						userId: guid,
-						name:name,
+						name: name,
 						role: role,
-						read:read
+						read: read
 					};
 					this.displayMessage.push(newmsg);
 				},
-				History:function(hisMsgJson){
-					let self =this;
-					var obj=JSON.parse(hisMsgJson)
-					if(obj==null) return;
-					var msg=obj.map(x=>{
-						return{
+				History: function (hisMsgJson) {
+					let self = this;
+					var obj = JSON.parse(hisMsgJson)
+					if (obj == null) return;
+					var msg = obj.map(x => {
+						return {
 							connectionId: x.ConnectionId,
 							message: x.Message,
 							userId: x.Sender.UserId,
 							name: x.Sender.Name,
 							role: x.Sender.Role,
-							read:x.Read
+							read: x.Read
 						}
 					});
-					self.displayMessage=[];
-					for(let m of msg)
+					self.displayMessage = [];
+					for (let m of msg)
 						self.displayMessage.push(m);
 				}
 			}

@@ -28,6 +28,7 @@ namespace DeliveryBro.Models
         public string RestaurantStatus { get; set; }
         public decimal? Latitude { get; set; }
         public decimal? Longitude { get; set; }
+        public string PicturePath { get; set; }
 
         public virtual ICollection<CustomerOrderTable> CustomerOrderTable { get; set; }
         public virtual ICollection<MenuTable> MenuTable { get; set; }

@@ -1,5 +1,4 @@
-﻿using DeliveryBro.Areas.store.Hubs;
-using DeliveryBro.Areas.store.SubscribeTableDependency;
+﻿using DeliveryBro.Hubs;
 using DeliveryBro.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

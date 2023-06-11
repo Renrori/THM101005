@@ -45,17 +45,17 @@
                                         <select name="payType" class="form-control" required>
                                             <option value="" selected>點擊選擇</option>
                                             <option value="CREDIT">信用卡</option>
-                                            <option value="WEBATM">WEBATM</option>
+                                            @*<option value="WEBATM">WEBATM</option>
                                             <option value="VACC">ATM 轉帳</option>
                                             <option value="CVS">超商代碼繳費</option>
-                                            <option value="BARCODE">超商條碼繳費</option>
+                                            <option value="BARCODE">超商條碼繳費</option>*@
                                         </select>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Credit card -->
+                        @*<!-- Credit card -->
                         <div class="accordion-item mb-3">
                             <div class="h5 px-4 py-3 accordion-header d-flex justify-content-between align-items-center">
                                 <div class="form-check w-100 collapsed" data-bs-toggle="collapse" data-bs-target="#collapseCC" aria-expanded="false">
@@ -101,7 +101,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div>*@
                     </div>
                 </div>
                 <!-- Right -->
@@ -109,13 +109,13 @@
                     <div class="card position-sticky top-0">
                         <div class="p-3 bg-light bg-opacity-10">
                             <div class="form-check mb-1 small">
-                                <input class="form-check-input" type="checkbox" value="" id="tnc">
+                                <input class="form-check-input" type="checkbox" value="" id="tnc" required>
                                 <label class="form-check-label" for="tnc">
                                     I agree to the <a href="#">terms and conditions</a>
                                 </label>
                             </div>
                             <div class="form-check mb-3 small">
-                                <input class="form-check-input" type="checkbox" value="" id="subscribe">
+                                <input class="form-check-input" type="checkbox" value="" id="subscribe" required>>
                                 <label class="form-check-label" for="subscribe">
                                     Get emails about product updates and events. If you change your mind, you can unsubscribe at any time. <a href="#">Privacy Policy</a>
                                 </label>

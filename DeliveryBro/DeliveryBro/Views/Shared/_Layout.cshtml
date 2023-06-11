@@ -30,6 +30,7 @@
     <link href="~/store/vendor/simple-datatables/style.css" rel="stylesheet">
 
     <link href="~/store/css/style.css" rel="stylesheet" />
+    @await RenderSectionAsync("Styles", required: false)
 @*    <link rel="stylesheet" href="~/THM101005_TestVR_2_.styles.css" asp-append-version="true" />*@
 </head>
 <style>
@@ -145,8 +146,8 @@
     }
    
     @*Vue*@
-@*    <script src="https://unpkg.com/vue@3.2.36/dist/vue.global.prod.js"></script>
-    <script src="~/axios/axios.min.js"></script>*@
+    @*<script src="https://unpkg.com/vue@3.2.36/dist/vue.global.prod.js"></script>*@
+   @*<script src="~/axios/axios.min.js"></script>*@
     <script src="~/orderlist/orderlist.js"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
@@ -168,6 +169,8 @@
     @*<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>*@
     @*<script src="~/vegefoods-master/js/google-map.js"></script>*@
     <script src="~/vegefoods-master/js/main.js"></script>
+
+    
     @await RenderSectionAsync("Scripts", required: false)
 </body>
-</html>s
+</html>

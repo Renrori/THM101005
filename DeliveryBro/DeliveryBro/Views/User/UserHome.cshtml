@@ -7,7 +7,7 @@
     <ul b-y5hjwqsk06 class="sidebar-nav" id="sidebar-nav">
 
         <li b-y5hjwqsk06 class="nav-item">
-            <a class="nav-link" href="#"><i b-y5hjwqsk06 class="bi bi-grid"></i>Home</a>
+            <a class="nav-link" asp-controller="User" asp-action="UserHome"><i b-y5hjwqsk06 class="bi bi-grid"></i>Home</a>
         </li>
         <li b-y5hjwqsk06 class="nav-item">
             <a class="nav-link collapsed" asp-controller="User" asp-action="UserHome"><i b-y5hjwqsk06 class="fa-solid fa-store"></i>我的資料</a>
@@ -22,7 +22,7 @@
             <a class="nav-link collapsed" asp-controller="User" asp-action="UserOrderHistory"><i b-y5hjwqsk06 class="fa-solid fa-store"></i>歷史訂單</a>
         </li>
         <li b-y5hjwqsk06 class="nav-item">
-            <a class="nav-link collapsed" href="#"><i b-y5hjwqsk06 class="fa-solid fa-circle-info"></i>Support</a>
+            <a class="nav-link collapsed" asp-controller="User" asp-action="HelpCenter"><i b-y5hjwqsk06 class="fa-solid fa-circle-info"></i>幫助中心</a>
         </li>
     </ul>
 
@@ -158,7 +158,7 @@
                     </div>
                 </div>
                 @*測試*@
-                @*  <div>{{ file }}</div>*@
+               @* <div>{{ CustomerInfo }}</div>*@
             </div>
         </div>
     </div>
@@ -172,7 +172,7 @@
     <script src="~/axios/axios.min.js"></script>
     <script>
         var baseAddress = "https://localhost:7163/api/UserApi";
-        var CustomerId = "@User.Claims.FirstOrDefault(c => c.Type == "CustomerId")?.Value";
+        var CustomerId = "@User.Claims.FirstOrDefault(c => c.Type == "Id")?.Value";
         var vueApp = {
             data() {
                 return {
@@ -210,6 +210,7 @@
                     try {
                         axios.put(`${baseAddress}/${CustomerId}`, data).then(Response => {
                             console.log("修改成功");
+                            alert("修改成功")
                             this.isEditing = false;
                         })
                     } catch {

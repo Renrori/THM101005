@@ -1,343 +1,246 @@
-﻿@section Styles{
-	<link href="~/lib/admin/assets/vendor/datatables.net-bs5/css/datatables.bootstrap5.min.css" rel="stylesheet" />
-	<link href="~/lib/admin/assets/vendor/datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css" rel="stylesheet" />
+﻿@{
+	Layout = "_LayoutAdmin";
 }
 
 
-<div class="content-page" style="margin-left:0px;">
+<div class="content-page" id="orderapp">
+
 	<div class="content">
 
 		<!-- Start Content-->
-		<div class="container-fluid" id="app">
-
-			<!-- start page title -->
-			<div class="row">
-				<div class="col-12">
-					<div class="page-title-box">
-						<div class="page-title-right">
-							<ol class="breadcrumb m-0">
-								<li class="breadcrumb-item"><a href="javascript: void(0);">Hyper</a></li>
-								<li class="breadcrumb-item"><a href="javascript: void(0);">eCommerce</a></li>
-								<li class="breadcrumb-item active">Orders</li>
-							</ol>
-						</div>
-						<h4 class="page-title">Orders</h4>
-					</div>
-				</div>
-			</div>
-			<!-- end page title -->
-
-			<div>
-				<select v-model="status">
-					<option selected>請選擇狀態</option>
-					<option>等待中</option>s
-					<option>已接收</option>
-					<option>已完成</option>
-				</select>
-				<label for="bookdate">訂單開始日期：</label>
-				<input type="date" id="startdate" v-model="startdate">
-				<label for="bookdate">訂單結束日期：</label>
-				<input type="date" id="enddate" v-model="enddate">
-
-				<input id="input1" type="text" placeholder="輸入店家名稱" v-model="storename">
-				<button type="button" @@click="searchOrders()">搜尋</button>
-			</div>
-
-
-
-
+		<div class="container-fluid">
 			<div class="row">
 				<div class="col-12">
 					<div class="card">
-						@*<div class="card-body">
-						<div class="row mb-2">
-						<div class="col-xl-8">
-						<form class="row gy-2 gx-2 align-items-center justify-content-xl-start justify-content-between">
-						<div class="col-auto">
-						<label for="inputPassword2" class="visually-hidden">Search</label>
-						<input type="search" class="form-control" id="inputPassword2" placeholder="Search...">
-						</div>
-						<div class="col-auto">
-						<div class="d-flex align-items-center">
-						<label for="status-select" class="me-2">Status</label>
-						<select class="form-select" id="status-select">
-						<option selected="">Choose...</option>
-						<option value="1">Paid</option>
-						<option value="2">Awaiting Authorization</option>
-						<option value="3">Payment failed</option>
-						<option value="4">Cash On Delivery</option>
-						<option value="5">Fulfilled</option>
-						<option value="6">Unfulfilled</option>
-						</select>
-						</div>
-						</div>
-						</form>
-						</div>
-						<div class="col-xl-4">
-						<div class="text-xl-end mt-xl-0 mt-2">
-						<button type="button" class="btn btn-danger mb-2 me-2"><i class="mdi mdi-basket me-1"></i> Add New Order</button>
-						<button type="button" class="btn btn-light mb-2">Export</button>
-						</div>
-						</div><!-- end col-->
-						</div>*@
-
-						@*//////新增table///////*@
-
-
-						<table id="basic-datatable" class="table dt-responsive nowrap w-100">
-							<thead>
-								<tr>
-									<th>#</th>
-									<th>訂單編號</th>
-									<th>訂單狀態</th>
-									<th>訂單日期</th>
-									<th>訂購人</th>
-									<th>餐廳名稱</th>
-									<th>外送員</th>
-									<th>合計金額</th>
-								</tr>
-							</thead>
-
-							<tbody>
-								<tr v-for="order in orderdetails">
-									<td><button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal" @@click="editConfirm(order)">修改</button></td>
-									<td>{{order.orderID}}</td>
-									<td>{{order.orderStatus}}</td>
-									<td>{{order.orderDate}}</td>
-									<td>{{order.customerName}}</td>
-									<td>{{order.restaurantName}}</td>
-									<td>{{order.driverName}}</td>
-									<td>{{order.subtotal}}</td>
-								</tr>
-
-							</tbody>
-						</table>
-
-						<!-- Modal -->
-						<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-							<div class="modal-dialog">
-								<div class="modal-content">
-									<div class="modal-header">
-										<h5 class="modal-title" id="exampleModalLabel">訂單明細</h5>
-										<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+						<div class="card-body">
+							<div class="row mb-2">
+								<div class="col-xl-8">
+									@*<form class="row gy-2 gx-2 align-items-center justify-content-xl-start justify-content-between">
+									<div class="col-auto">
+									<label for="inputPassword2" class="visually-hidden">Search</label>
+									<input type="search" class="form-control" id="inputPassword2" placeholder="Search...">
 									</div>
-									<div class="modal-body">
-										@*//可以用row 分割*@
-										<div>
-											<label>訂單編號:</label>
-											<input type="text" v-model="editorderID">
-										</div>
-
-										<div>
-											<label>訂購人:</label>
-											<input type="text" v-model="editcustomerName">
-										</div>
-										<div>
-											<label>訂單狀態:</label>
-											<input type="text" v-model="editorderStatus">
-										</div>
-
-										<div>
-											<label>餐廳名稱:</label>
-											<input type="text" v-model="editrestaurantName">
-										</div>
-										<div>
-											<label>商品名稱:</label>
-											<input type="text" v-model="editdishName">
-										</div>
-										<div>
-											<label>訂購日期:</label>
-											<input type="text" v-model="editorderDate">
-										</div>
-										<div>
-											<label>價格:</label>
-											<input type="text" v-model="editunitPrice">
-										</div>
-
-										<div>
-											<label>數量:</label>
-											<input type="text" v-model="editquantity">
-										</div>
-										<div>
-											<label>小計:</label>
-											<input type="text" v-model="editsubtotal">
-										</div>
-										<div>
-											<label>折扣:</label>
-											<input type="text" v-model="editdiscount">
-										</div>
-										<div>
-											<label>合計:</label>
-											<input type="text" v-model="editsubtotal">
-										</div>
-
-										<div>
-											<label>外送員:</label>
-											<input type="text" v-model="editdriverName">
-										</div>
-
-										<div>
-											<label>配送地:</label>
-											<input type="text" v-model="editaddress">
-										</div>
-										<div>
-											<label>付款方式:</label>
-											<input type="text" v-model="editpayment">
-										</div>
-										<div>
-											<label>備註:</label>
-											<input type="text" v-model="editnote">
-										</div>
-
+									</form>*@
+								</div>
+								<div class="col-xl-4">
+									<div class="text-xl-end mt-xl-0 mt-2">
+										<button type="button" class="btn btn-danger mb-2 me-2"><i class="mdi mdi-basket me-1"></i> Add New Order</button>
 									</div>
-									<div class="modal-footer">
-										<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close關閉</button>
-										<button type="button" class="btn btn-primary" @@click="updateOrder()">Save changes修改</button>
+								</div><!-- end col-->
+							</div>
+
+							<div class="table-responsive">
+								<table class="table table-centered table-nowrap mb-0">
+									<thead class="table-light">
+										<tr>
+											<th>OrderID</th>
+											<th>OrderDate</th>
+											<th>CustomerAddress</th>
+											<th>AmountAfterDiscount</th>
+											<th>Order Status</th>
+											<th style="width: 125px;">Action</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr v-for="item in order">
+											<td>{{item.orderId}}</td>
+											<td>{{item.orderDate}}</td>
+											<td>{{item.customerAddress}}</td>
+											<td>{{item.amountAfterDiscount}}</td>
+											<td>{{item.orderStatus}}</td>
+											<td>
+												<a href="javascript:void(0);" class="action-icon"> <i class="mdi mdi-eye"></i></a>
+												<a href="javascript:void(0);" class="action-icon" v-on:click="editorder(item.orderId)"> <i class="mdi mdi-square-edit-outline"></i></a>
+												<a href="javascript:void(0);" class="action-icon" v-on:click="deleteConfirm(item)" data-bs-toggle="modal" data-bs-target="#deleteModal"> <i class="mdi mdi-delete"></i></a>
+											</td>
+										</tr>
+
+
+
+									</tbody>
+								</table>
+								<div class="container">
+									<div class="row justify-content-center" style="height:100px;">
+										<div class="col-4 h-100">
+											{{ maxcount }}
+											<nav>
+												<ul class="pagination">
+													<li class="page-item">
+														<a class="page-link" href="javascript: void(0);" aria-label="Previous">
+															<span aria-hidden="true">&laquo;</span>
+														</a>
+													</li>
+
+													<li class="page-item" v-for="n in Math.ceil(maxcount / 10)"><a class="page-link" @@click="nextpage(n)">{{ n }}</a></li>
+
+													<li class="page-item">
+														<a class="page-link" href="javascript: void(0);" aria-label="Next">
+															<span aria-hidden="true">&raquo;</span>
+														</a>
+													</li>
+												</ul>
+											</nav>
+										</div>
 									</div>
 								</div>
 							</div>
-						</div>
+						</div> <!-- end card-body-->
 
-
-					</div>
-				</div> <!-- end card-body-->
-			</div> <!-- end card-->
-		</div> <!-- end col -->
-	</div>
-	<!-- end row -->
-
-</div> <!-- container -->
-</div> <!-- content -->
-<!-- Footer Start -->
-<footer class="footer">
-	<div class="container-fluid">
-		<div class="row">
-			<div class="col-md-6">
-				<script>document.write(new Date().getFullYear())</script>2023 © Hyper - Coderthemes.com
+					</div> <!-- end card-->
+				</div> <!-- end col -->
 			</div>
-			<div class="col-md-6">
-				<div class="text-md-end footer-links d-none d-md-block">
-					<a href="javascript: void(0);">About</a>
-					<a href="javascript: void(0);">Support</a>
-					<a href="javascript: void(0);">Contact Us</a>
+			<!-- end row -->
+
+		</div> <!-- container -->
+
+	</div> <!-- content -->
+	<!-- Footer Start -->
+	<footer class="footer">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-md-6">
+				</div>
+				<div class="col-md-6">
+					<div class="text-md-end footer-links d-none d-md-block">
+						<a href="javascript: void(0);">About</a>
+						<a href="javascript: void(0);">Support</a>
+						<a href="javascript: void(0);">Contact Us</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</footer>
+
+	<!-- end Footer -->
+	<!-- Modal -->
+	<div class="form-group">
+		<div class="modal fade" id="editModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="modalTitleId">編輯</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body">
+						<div class="form-group">
+							<label class="form-label">OrderID</label>
+							<input class="form-control" v-model="orderId" readonly />
+						</div>
+						<div class="form-group">
+							<label class="form-label">OrderDate</label>
+							<input class="form-control" v-model="orderDate" />
+						</div>
+						<div class="form-group">
+							<label class="form-label">CustomerAddress</label>
+							<input class="form-control" v-model="customerAddress" />
+						</div>
+						<div class="form-group">
+							<label class="form-label">AmountAfterDiscount</label>
+							<input class="form-control" v-model="amountAfterDiscount" />
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
+							<button type="button" @@click="" class="btn btn-primary">儲存</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Modal -->
+		<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h1 class="modal-title fs-5" id="exampleModalLabel">刪除ID:{{delInfo.title}}</h1>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body">
+						確定要刪除嗎:{{delInfo.msg.orderID}},價格:{{delInfo.msg.amountAfterDiscount}},
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">不要</button>
+						<button type="button" class="btn btn-primary" @@click="deleteorder(delInfo.title)">要</button>
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-</footer>
-<!-- end Footer -->
 </div>
-@section Scripts
-	{
-	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-	<script src="~/axios/axios.min.js"></script>
-	<script src="~/lib/admin/assets/vendor/datatables.net/js/jquery.datatables.min.js"></script>
-	<script src="~/lib/admin/assets/vendor/datatables.net-bs5/js/datatables.bootstrap5.min.js"></script>
-	<script src="~/lib/admin/assets/vendor/datatables.net-responsive/js/datatables.responsive.min.js"></script>
-	<script src="~/lib/admin/assets/vendor/datatables.net-responsive-bs5/js/responsive.bootstrap5.min.js"></script>
-	<script src="~/lib/admin/assets/js/pages/demo.datatable-init.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-
-
-
-	@*///新增vue///*@
-	<script>
-		var vueOrder = {
-			data() {
-				return {
-					//篩選
-					orderdetails:[],
-					status:"",
-					startdate:"",
-					enddate: "",
-					storename:"",
-
-					//明細
-					editorderID: "",
-					editorderStatus: "",
-					editpayment: "",
-					editquantity: "",
-					editrestaurantName: "",
-					editdriverName: "",
-					editcustomerName: "",
-					editdishName: "",
-					editaddress: "",
-					editnote: "",
-					editsubtotal: "",
-					editorderDate: "",
-					editcouponID: "",//上面沒有
-					editdiscount: "",
-
-					editunitPrice: "",
-
-				};
+<script type="text/javascript">
+	var app = new Vue({
+		el: '#orderapp',
+		data: {
+			maxcount: 0, // 總比數
+			order: [], // 資料暫存
+			nowpage: 1, // 現在的頁數
+			orderId: "",
+			orderDate: "",
+			customerAddress: "",
+			amountAfterDiscount: "",
+			delInfo: {
+				title: "",
+				msg: {
+					orderID: "",
+					amountAfterDiscount: ""
+				}
+			}
+		},
+		mounted: function () {
+			// vue 第一次執行的內容, 只會直行一次
+			let salf = this;
+			axios('/api/OrderManagement/GetOrder/1')
+				.then(function (res) {
+					salf.order = res.data.items; // 回船的orders
+					salf.maxcount = res.data.count; // 總比數
+				});
+			//.catch(function (error) { // 請求失敗
+			//    console.log(error);
+			//});
+		},
+		methods: { // 放置方法的地方
+			// 讀取下一頁 (傳入頁馬)
+			nextpage: function (page) {
+				let salf = this;
+				// 跟後端讀取ORDER
+				axios('/api/OrderManagement/GetOrder/' + page)
+					.then(function (res) {
+						// 讀取完成
+						salf.nowpage = page;
+						salf.order = res.data.items;
+						salf.maxcount = res.data.count;
+					});
 			},
-			created: function () {
+			editorder: function (orderId) {
+				//alert("edit");
+				$("#editModal").modal("show");
 				let _this = this;
-				_this.searchOrders();
+				for (var i = 0; i < _this.order.length; i++) {
+					var item = _this.order[i];
+					if (orderId == item.orderId) {
+						_this.orderId = item.orderId;
+						_this.orderDate = item.orderDate;
+						_this.customerAddress = item.customerAddress;
+						_this.amountAfterDiscount = item.amountAfterDiscount;
+					}
+				}
 			},
-			methods: {
-				searchOrders: function () {
-					console.log(1);
-					let _this = this;
-					axios.post(`/api/orders/GetOrders`, {
-						Status: _this.status,
-						StartDate: _this.startdate,
-						EndDate: _this.enddate,
-						StoreName: _this.storename,
-					}).then(response => {
-
-						_this.orderdetails = response.data.map(x => ({ ...x }));
-						console.log(_this.orderdetails);
-
-					})
-				},
-				editConfirm: function (item) {
-					console.log(item);
-					let _this = this;
-					this.editorderID = item.orderID;
-					this.editorderStatus = item.orderStatus;
-					this.editpayment = item.payment;
-					this.editquantity = item.quantity;
-					this.editrestaurantName = item.restaurantName;
-					this.editdriverName = item.driverName;
-					this.editcustomerName = item.customerName;
-					this.editdishName = item.dishName;
-					this.editaddress = item.address;
-					this.editnote = item.note;
-					this.editsubtotal = item.subtotal;
-
-					this.editorderDate = item.orderDate;
-					this.editcouponID = item.couponID;
-					this.editdiscount = item.discount;
-					this.editunitPrice = item.unitPrice;
-
-
-					//加入修改資料
-
-				},
-				updateOrder: function () {
-					let _this = this;
-					axios.post(`/api/orders/UpdateDetails`, {
-						//這左邊是要給api接到的名稱(DTO裡面的欄位)右邊為要傳進去的值
-						OrderID: _this.editorderID,
-						OrderName: _this.editcustomerName,
-						OrderDate: _this.editorderDate,
-						OrderStatus: _this.editorderStatus,
-						CustomerAddress: _this.editaddress,
-						Note: _this.note,
-					}).then(response => {
-						//Swal.fire({
-						//	title: "提醒",
-						//	text: "確定修改嗎?",
-						//	icon: "warning",
-						//	},
-						//});
-					})
-				},	
+			deleteorder: function (id) {
+				axios.delete('/api/OrderManagement/Delete/' + id).then(res => {
+					if (res.data) {
+						alert("已刪除");
+						this.nextpage(this.nowpage);
+						var idx = this.order.findIndex(x => x.orderID == id);
+						this.order.splice(idx, 1)
+						$("#deleteModal").modal("hide");
+					}
+				})
+			},
+			deleteConfirm: function (item) {
+				this.delInfo.title = item.orderId;
+				this.delInfo.msg.orderID = item.orderId;
+				this.delInfo.msg.amountAfterDiscount = item.amountAfterDiscount;
 			}
 		}
-		var app = Vue.createApp(vueOrder).mount("#app");
-	</script>
-}
+	})
+</script>

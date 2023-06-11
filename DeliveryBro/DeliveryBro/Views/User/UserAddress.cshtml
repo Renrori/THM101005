@@ -7,7 +7,7 @@
     <ul b-y5hjwqsk06 class="sidebar-nav" id="sidebar-nav">
 
         <li b-y5hjwqsk06 class="nav-item">
-            <a class="nav-link" href="#"><i b-y5hjwqsk06 class="bi bi-grid"></i>Home</a>
+            <a class="nav-link" asp-controller="User" asp-action="UserHome"><i b-y5hjwqsk06 class="bi bi-grid"></i>Home</a>
         </li>
         <li b-y5hjwqsk06 class="nav-item">
             <a class="nav-link collapsed" asp-controller="User" asp-action="UserHome"><i b-y5hjwqsk06 class="fa-solid fa-store"></i>我的資料</a>
@@ -22,69 +22,202 @@
             <a class="nav-link collapsed" asp-controller="User" asp-action="UserOrderHistory"><i b-y5hjwqsk06 class="fa-solid fa-store"></i>歷史訂單</a>
         </li>
         <li b-y5hjwqsk06 class="nav-item">
-            <a class="nav-link collapsed" href="#"><i b-y5hjwqsk06 class="fa-solid fa-circle-info"></i>Support</a>
+            <a class="nav-link collapsed" asp-controller="User" asp-action="HelpCenter"><i b-y5hjwqsk06 class="fa-solid fa-circle-info"></i>幫助中心</a>
         </li>
     </ul>
 
 </aside><!-- End Sidebar-->
-<template>
-    <div>
-        <select v-model="selectedCity">
-            <option value="">請選擇縣市</option>
-            <option v-for="city in addressData" :key="city.id" :value="city.name">{{ city.name }}</option>
-        </select>
+<div id="app">
+    <div b-y5hjwqsk06>
+        <div class="container">
+            <div class="row justify-content-end">
+                <div class="col-xl-6">
+                    <form action="#" class="Personal-form">
+                        <div class="pagetitle">
+                            <h1>我的地址</h1>
+                        </div>
+                        <button class="btn btn-primary col-3" v-if="!isEditing" @@click="toggleEdit">修改地址</button>
 
-        <select v-model="selectedDistrict" v-if="selectedCity">
-            <option value="">請選擇區域</option>
-            <option v-for="district in selectedCityDistricts" :key="district.id" :value="district.name">{{ district.name }}</option>
-        </select>
+                        <div v-if="!isEditing">
+                            <div class="row align-items-end">
+                                <div class="w-100"></div>
+                                <div class="col-md-10">
+                                    <div class="form-group">
+                                        <label for="CustomerAddress"><strong>地址</strong></label>
+                                        <div class="d-flex">
+                                            <input type="text" class="form-control" placeholder="CustomerInfo.userAddress" v-model="CustomerInfo.userAddress">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div v-if="isEditing">
+                            <button class="btn btn-outline-primary col-3" @@click="postCustomerAddress">確認修改</button>
+                            <div class="row align-items-end" v-if="isEditing">
+                                <div class="w-100"></div>
+                                <div class="col-md-10">
+                                    <div class="form-group">
+                                        <label for="CustomerAddress"><strong>地址</strong></label>
+                                        <div class="radio">
+                                            <input type="radio" name="optradio" class="mr-2" value="userAddress" v-model="selectedOption1" required> 選擇一
+                                        </div>
+                                        <div class="d-flex">
+                                            <input type="text" class="form-control" placeholder="填寫詳細地址" v-model="userAddress">
+                                        </div>
+                                    </div>
+                                    <br />
+                                    <div class="form-group">
+                                        <div class="radio">
+                                            <input type="radio" name="optradio" class="mr-2" value="AllselectedInput" v-model="selectedOption2" required> 選擇二
+                                        </div>
+                                        <label for="city">縣市：</label>
+                                        <select v-model="selectedCity" @@change="onCityChange">
+                                            <option value="">請選擇</option>
+                                            <option v-for="city in CityCountryInfo" :key="city.CityName" :value="city.CityName">{{ city.CityName }}</option>
+                                        </select>
+
+                                        <label for="area">區域：</label>
+                                        <select v-model="selectedDistrict">
+                                            <option value="">請選擇</option>
+                                            <option v-for="district in filterAddress" :key="district.AreaName" :value="district.AreaName">{{ district.AreaName }}</option>
+                                        </select>
+                                        <div class="d-flex">
+                                            <input type="text" class="form-control" placeholder="填寫詳細地址" v-model="seleteddescribe">
+                                        </div>
+                                        @*  測試*@
+@*                                                                                <div>{{ selectedCity }}</div>
+                                        <div>{{ selectedDistrict }}</div>*@
+                                        @*<div>{{ AllselectedInput }}</div>*@
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="col-lg-3">
+                    <div class="card position-sticky top-0">
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-</template>
+    @*{{CustomerInfo}}*@
+</div>
 
-@section scripts
+@section Scripts
     {
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://unpkg.com/vue@3.2.36/dist/vue.global.prod.js"></script>
     <script src="~/axios/axios.min.js"></script>
     <script>
         var baseAddress = "https://localhost:7163/api/UserApi";
-        var CustomerId = "@User.Claims.FirstOrDefault(c => c.Type == "CustomerId")?.Value";
+        var baseJsonAddress = "https://localhost:7163/Data/CityCountry/CityCountyData.json";
+        var CustomerId = "@User.Claims.FirstOrDefault(c => c.Type == "Id")?.Value";
         var vueApp = {
             data() {
                 return {
+                    isEditing: false,
                     CityCountryInfo: [],
-                    searchResult: null,
-                    searchorderId: "",
+                    CustomerInfo: {},
+                    userAddress: "",
+                    selectedCity: "",
+                    selectedDistrict: "",
+                    seleteddescribe: "",
+                    AllselectedInput: "",
+                    selectedOption1: "",
+                    selectedOption2: ""
                 }
             },
             mounted() {
-                this.getUserOrder();
+                this.getCustomerInfo();
+                //this.postCustomerAddress();
+                this.getAddress();
+                //this.combineValues()
             },
             methods: {
-                async getUserOrder() {
-                    //拿出對應cusId的order
+                toggleEdit() {
+                    this.isEditing = !this.isEditing;
+                },
+                async getCustomerInfo() {
+                    //拿出對應cusId
                     try {
-                        const response = await axios.get(`${baseAddress}/waitorder/${CustomerId}`).then(Response => {
-                            this.CustomerOrderInfo = Response.data;
+                        const response = await axios.get(`${baseAddress}/${CustomerId}`).then(Response => {
+                            this.CustomerInfo = Response.data;
                         })
                     } catch (error) {
                         console.error(error);
                     }
                 },
-                searchOrder(searchorderId) {
-                    const foundOrder = this.CustomerOrderInfo.find(order => order.orderId === searchorderId)
-                    if (foundOrder) {
-                        this.searchResult = foundOrder;
-                        console.log("match")
+                async getAddress() {
+                    try {
+                        await axios.get('../CityCountyData.json')
+                            .then(res => { this.CityCountryInfo = res.data })
+                            .catch(err => {
+                                console.log(err)
+                            })
                     }
-                    else {
-                        this.searchResult = null;
-                        console.log("notmatch")
+                    catch {
+                        console.log("error")
                     }
+                },
+                async postCustomerAddress() {
+                    if (this.selectedOption1) {
+                        const data = {
+                            userAddress: this.userAddress
+                        }
+                        console.log(data)
+                        //拿出對應cusId
+                        try {
+                            axios.post(`${baseAddress}/CheckAdd/${CustomerId}`, data).then(Response => {
+                                console.log("修改成功");
+                                this.isEditing = false;
+                                alert("修改成功");
+                            })
+                        } catch (error) {
+                            console.error(error);
+                        }
+                    }
+                    else if (this.selectedOption2) {
+                        //this.combineValues()
+                        const data = {
+                            userAddress: `${this.selectedCity}${this.selectedDistrict}${this.seleteddescribe}`
+                            //AllselectedInput: this.selectedCity + " " + this.selectedDistrict + " " + this.seleteddescribe
+                        }
+                        console.log(data);
+                        //拿出對應cusId
+                        try {
+                            axios.post(`${baseAddress}/CheckAdd/${CustomerId}`, data).then(Response => {
+                                console.log("修改成功");
+                                this.isEditing = false;
+                                alert("修改成功");
+                            })
+                        } catch (error) {
+                            console.error(error);
+                        }
+                    }
+                },
+                onCityChange() {
+                    this.selectedDistrict = "";
+                },
+                combineValues() {
+                    this.AllselectedInput = this.selectedCity + "" + this.selectedDistrict + "" + this.seleteddescribe;
+                }
+            },
+            computed: {
+                filterAddress() {
+                    if (this.selectedCity) {
+                        var city = this.CityCountryInfo.find(c => c.CityName == this.selectedCity);
+                        if (city) {
+                            return city.AreaList;
+                        }
+                    }
+                    return [];
                 }
             }
         };
         var app = Vue.createApp(vueApp).mount("#app");
     </script>
 
-}
+    }

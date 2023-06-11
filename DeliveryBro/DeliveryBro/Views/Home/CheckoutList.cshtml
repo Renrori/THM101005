@@ -15,41 +15,25 @@
                     <form action="#" class="billing-form">
                         <h3 class="mb-4 billing-heading">取餐人明細</h3>
                         <div class="row align-items-end">
-                            @*						<div class="w-100"></div>
-                            <div class="col-md-12">
-                            <div class="form-group">
-                            <label for="country">State / Country</label>
-                            <div class="select-wrap">
-                            <div class="icon"><span class="ion-ios-arrow-down"></span></div>
-                            <select name="" id="" class="form-control">
-                            <option value="">France</option>
-                            <option value="">Italy</option>
-                            <option value="">Philippines</option>
-                            <option value="">South Korea</option>
-                            <option value="">Hongkong</option>
-                            <option value="">Japan</option>
-                            </select>
-                            </div>
-                            </div>
-                            </div>*@
                             <div class="w-100"></div>
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label for="streetaddress">外送地址</label>
-                                    <input type="text" class="form-control" placeholder="請填寫詳細地址" v-model="CustomerAddress" required>
+                                    <input type="text" class="form-control" placeholder="CustomerAddress" v-model="CustomerAddress" required>
                                 </div>
+                              @*  <div>{{ CustomerAddress }}</div>*@
                             </div>
                             <div class="w-100"></div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="phone">電話</label>
-                                    <input type="text" class="form-control" placeholder="電話填寫" v-model="CustomerPhone" required>
+                                    <input type="text" class="form-control" placeholder="CustomerPhone" v-model="CustomerPhone" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="emailaddress">Email</label>
-                                    <input type="text" class="form-control" placeholder="請用Email格式填寫" v-model="CustomerEmail" required>
+                                    <input type="text" class="form-control" placeholder="CustomerEmail" v-model="CustomerEmail" required>
                                 </div>
                             </div>
                             <div class="w-100"></div>
@@ -155,6 +139,8 @@
     <script src="~/axios/axios.min.js"></script>
     <script>
         var baseAddress = "https://localhost:7163/api/HomeApi";
+        var baseAddressUser = "https://localhost:7163/api/UserApi";
+        var CustomerId = "@User.Claims.FirstOrDefault(c => c.Type == "Id")?.Value";
         var vueApp = {
             data() {
                 return {
@@ -177,6 +163,7 @@
                     OrderDetailViewModels: [],
                     selectedPage: null,
                     selectedNPPage: null,
+                    CustomerInfo: {}
                 };
             },
             mounted() {
@@ -186,8 +173,9 @@
                 this.cartItems = checkoutdata.items;
                 this.totalAmount = checkoutdata.totalAmount;
 
-                this.updateRestaurantId()
-                this.CustomerId = "@User.Claims.FirstOrDefault(c => c.Type == "CustomerId")?.Value";
+                this.updateRestaurantId();
+                this.CustomerId = "@User.Claims.FirstOrDefault(c => c.Type == "Id")?.Value";
+                this.getCustomerInfo();
             },
             methods: {
                 calculateAmount() {
@@ -217,40 +205,9 @@
                     }
                     else if (this.selectedNPPage) {
                         this.submitNPOrder(); //ok
-                        //const PayCreditCardData = {
-                        //    items: this.cartItems,
-                        //    totalAmount: this.totalAmount,
-                        //    CustomerAddress: this.CustomerAddress,
-                        //    CustomerPhone: this.CustomerPhone,
-                        //    CustomerEmail: this.CustomerEmail,
-                        //    CouponID: this.CouponID,
-                        //    note: this.note,
-                        //    ShippingFee: this.ShippingFee,
-                        //    Discount: this.Discount,
-                        //    AmountAfterDiscount: this.AmountAfterDiscount
-                        //};
-                        //const Jsondata = JSON.stringify(PayCreditCardData);
-                        //確認console在f12
-                        //console.log(Jsondata);
-                        //window.location.href = `${this.selectedNPPage}?data=${Jsondata}`;
-
                     }
                 },
                 submitNPOrder() {
-                    const PayCreditCardData = {
-                        items: this.cartItems,
-                        totalAmount: this.totalAmount,
-                        CustomerAddress: this.CustomerAddress,
-                        CustomerPhone: this.CustomerPhone,
-                        CustomerEmail: this.CustomerEmail,
-                        CouponID: this.CouponID,
-                        note: this.note,
-                        ShippingFee: this.ShippingFee,
-                        Discount: this.Discount,
-                        AmountAfterDiscount: this.AmountAfterDiscount
-                    };
-                    const Jsondata = JSON.stringify(PayCreditCardData);
-
                     this.OrderDetailViewModels = this.cartItems.map(item => {
                         return {
                             //RestaurantId: item.storeId,
@@ -293,6 +250,30 @@
                 updateRestaurantId() {
                     // 將找到的相同 RestaurantId 賦值給外部的 restaurantId 變數
                     this.RestaurantId = this.duplicateRestaurantId;
+                },
+                async getCustomerInfo() {
+                    const CustomerId = "@User.Claims.FirstOrDefault(c => c.Type == "Id")?.Value";
+                    //console.log(CustomerId)
+                    //拿出對應cusId
+                    try {
+                        const response = await axios.get(`${baseAddressUser}/${CustomerId}`).then(Response => {
+                            this.CustomerInfo = Response.data;
+                            const userAddress = this.CustomerInfo.userAddress;
+                            const addressString = userAddress.join(", "); 
+                            this.CustomerAddress = addressString;
+
+                            const userEmail = this.CustomerInfo.userEmail;
+                            const EmailString = userEmail;
+                            this.CustomerEmail = EmailString;
+
+                            const userPhone = this.CustomerInfo.userPhone;
+                            const PhoneString = userPhone;
+                            this.CustomerPhone = PhoneString;
+
+                        })
+                    } catch (error) {
+                        console.error(error);
+                    }
                 }
             },
             computed: {

@@ -1,5 +1,4 @@
 ﻿using DeliveryBro.Areas.store.DTO;
-using DeliveryBro.Areas.store.SubscribeTableDependency;
 using DeliveryBro.Extensions;
 using DeliveryBro.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -17,12 +16,10 @@ namespace DeliveryBro.Areas.store.apiControllers
     public class StoreInfoController : ControllerBase
     {
         private readonly sql8005site4nownetContext _context;
-        private readonly subscribeOrder _subscribeOrder;
 
-        public StoreInfoController(sql8005site4nownetContext context,subscribeOrder subscribeOrder)
+        public StoreInfoController(sql8005site4nownetContext context)
         {
             _context = context;
-            _subscribeOrder = subscribeOrder;
         }
 
         // GET: api/RestaurantTables
@@ -129,12 +126,6 @@ namespace DeliveryBro.Areas.store.apiControllers
 		public Object GetDishCount()
 		{
 			var id = User.GetId();
-			//var query = _context.CustomerOrderTable.Where(x => x.RestaurantId == 3 && x.OrderStatus == "completed")
-			//    .GroupBy(x => x.OrderDate.Month).Select(q => new
-			//    {
-			//        Month = q.Key
-			//    });
-
 			var orders = _context.CustomerOrderTable.Include(x => x.OrderDetailsTable)
                 .Where(x => x.RestaurantId == id && x.OrderStatus == "completed").ToList();
 			var query = orders.GroupBy(x => x.OrderDate.Month, (month, order) => new
@@ -230,8 +221,8 @@ namespace DeliveryBro.Areas.store.apiControllers
         public Object GetMointhliyOrders()
         {
 			var id = User.GetId();
-			var query = _context.CustomerOrderTable
-                .Where(x => x.RestaurantId == id && x.OrderDate.Date.ToString() == DateTime.Today.Date.ToString()&&x.OrderStatus=="completed")
+            var query = _context.CustomerOrderTable
+                .Where(x => x.RestaurantId == id && x.OrderDate.Date.ToString() == DateTime.UtcNow.Date.ToString()&&x.OrderStatus=="completed")
                 .GroupBy(x=>x.OrderDate.Date.ToString())
                 .Select(q => new
                 {
