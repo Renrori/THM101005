@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using NetTopologySuite.Index.HPRtree;
 using System.Net;
 
 namespace DeliveryBro.ApiController
@@ -22,6 +23,30 @@ namespace DeliveryBro.ApiController
         public HomeApiController(sql8005site4nownetContext context)
         {
             _context = context;
+        }
+
+        [HttpGet("Store/{id:guid}")]
+        public async Task<IEnumerable<StoreViewModel>> GetIdStore(Guid id)
+        {
+
+            //var groupMenu = await _context.MenuTable
+            //   //.Where(m => !string.IsNullOrEmpty(m.DishName))
+            //   .GroupBy(m => m.RestaurantId == id)
+            //   .Select(g => g.Key)
+            //   .ToListAsync();
+
+
+            var sm = await _context.RestaurantTable
+               .Where(m => m.RestaurantId == id)
+                .Select(s => new StoreViewModel
+                {
+                    StoreId = s.RestaurantId,
+                    StoreName = s.RestaurantName,
+                    StoreAddress = s.RestaurantAddress,
+                    StoreDescription = s.RestaurantDescription,
+                })
+                .ToListAsync();
+            return sm;
         }
 
         [HttpGet("start/address")]
@@ -55,27 +80,27 @@ namespace DeliveryBro.ApiController
                     StoreName = s.RestaurantName,
                     StoreAddress = s.RestaurantAddress,
                     StoreDescription = s.RestaurantDescription,
-                    Location=new LocationViewModel 
-                    { 
-                        Latitude=Convert.ToDouble(s.Latitude),
-                        Longitude=Convert.ToDouble(s.Longitude),
+                    Location = new LocationViewModel
+                    {
+                        Latitude = Convert.ToDouble(s.Latitude),
+                        Longitude = Convert.ToDouble(s.Longitude),
                     }
                 })
                 .ToListAsync();
-            
-            return Distance(address,sm);
+
+            return Distance(address, sm);
         }
         public List<StoreViewModel> Distance(string address, List<StoreViewModel> store)
         {
-            List<StoreViewModel> StoreInRange=new List<StoreViewModel>();
+            List<StoreViewModel> StoreInRange = new List<StoreViewModel>();
             LocationViewModel customer = new LocationViewModel
             {
                 Latitude = Convert.ToDouble(Map.GetLatitude(address)),
                 Longitude = Convert.ToDouble(Map.GetLongitude(address))
             };
-            foreach(var s in store)
+            foreach (var s in store)
             {
-                var range=Map.GetDistance(customer, s.Location);
+                var range = Map.GetDistance(customer, s.Location);
                 if (range <= 3) StoreInRange.Add(s);
             }
             return StoreInRange;
@@ -85,22 +110,22 @@ namespace DeliveryBro.ApiController
         //此功能未成功請勿使用
         [HttpPost("Filter")]
         public async Task<IQueryable<StoreViewModel>> FilterStore(
-            [FromBody]StoreViewModel svm) 
+            [FromBody] StoreViewModel svm)
         {
-            
+
             var groupMenu = await _context.MenuTable
                .GroupBy(m => m.RestaurantId)
                .Select(g => g.Key)
                .ToListAsync();
-            
+
             var sm = _context.RestaurantTable
                 .Where(s => groupMenu.Contains(s.RestaurantId));
 
-                
-            if(svm.StoreName != null) 
+
+            if (svm.StoreName != null)
             {
                 sm = sm.Where(s => s.RestaurantName.Contains(svm.StoreName));
-                    
+
             }
             return sm.Select(s => new StoreViewModel
             {
@@ -108,18 +133,18 @@ namespace DeliveryBro.ApiController
                 StoreName = s.RestaurantName,
                 StoreAddress = s.RestaurantAddress,
                 StoreDescription = s.RestaurantDescription
-            });     
-     }
+            });
+        }
 
 
 
-        
+
         [HttpGet("{id:guid}")]
         // Get:/api/HomeApi/1
         //之後改成傳物件呼叫形式
         public async Task<IEnumerable<MenuViewModel>> GetProduct(Guid id)
         {
-            
+
             var product = await _context.MenuTable.Include(m => m.Restaurant)
                .Where(m => m.Restaurant.RestaurantId == id && m.DishStatus == "ongoing")
                .Select(p => new MenuViewModel
@@ -138,7 +163,7 @@ namespace DeliveryBro.ApiController
 
         [HttpPost("{restaurantId}/Filter")]
         public async Task<IQueryable<MenuViewModel>> FilterStore(
-            [FromBody]MenuViewModel mvm) 
+            [FromBody] MenuViewModel mvm)
         {
             var product = await _context.MenuTable.Include(m => m.RestaurantId)
                 .Where(m => m.Restaurant.RestaurantId == mvm.RestaurantId && m.DishStatus == "ongoing")
@@ -156,7 +181,7 @@ namespace DeliveryBro.ApiController
                     DishPicture = p.DishPicture,
                     DishDescription = p.DishDescription,
                     DishCategory = p.DishCategory
-                }) ;
+                });
             return pd.AsQueryable();
         }
 
@@ -195,7 +220,7 @@ namespace DeliveryBro.ApiController
         //Post:/api/HomeApi/
         public async Task<IActionResult> GetOrder([FromBody] OrderViewModel order)
         {
-            if(order == null)
+            if (order == null)
             {
                 return BadRequest();
             }
@@ -217,7 +242,7 @@ namespace DeliveryBro.ApiController
                 await _context.SaveChangesAsync();
 
                 int orderId = cot.OrderId; //儲存訂單的自動識別ID
-                
+
                 foreach (var od in order.OrderDetailViewModels)
                 {
                     od.OrderId = orderId;
@@ -225,7 +250,7 @@ namespace DeliveryBro.ApiController
                         .Where(m => m.Restaurant.RestaurantId == order.RestaurantId && m.DishStatus == "ongoing")
                         .FirstOrDefault(d => d.DishId == od.DishId); //搜尋對應的資料庫商品
 
-                    if(checkOd == null) 
+                    if (checkOd == null)
                     {
                         return BadRequest("訂單商品已有異動，請重新確認");
                     }
@@ -234,7 +259,7 @@ namespace DeliveryBro.ApiController
                     {
                         OrderId = od.OrderId,
                         DishId = od.DishId,
-                        OrderDate= DateTime.UtcNow.Date,
+                        OrderDate = DateTime.UtcNow.Date,
                         UnitPrice = checkOd.DishPrice,
                         Quantity = od.Quantity,
                         DishName = checkOd.DishName,
@@ -327,5 +352,6 @@ namespace DeliveryBro.ApiController
 
             return Ok(npOrder);
         }
+
     }
 }
