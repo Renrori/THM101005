@@ -49,7 +49,7 @@ namespace DeliveryBro.Areas.admin.Controllers.ApiControllers
 			};
 		}
 		[HttpPut]
-		public async Task<string> PutOrder(int id, [FromBody] OrderDTO oddetailsdto)
+		public async Task<string> PutOrder(int id, [FromBody] OrderEditDTO oddetailsdto)
 		{
 			if (id != oddetailsdto.OrderId)
 			{
@@ -113,26 +113,39 @@ namespace DeliveryBro.Areas.admin.Controllers.ApiControllers
 
 			return "刪除成功!";
 		}
+		[HttpPost]
+		public async Task<string> CreateOrder([FromBody] OrderDTO order)
+		{
+			CustomerOrderTable neworder = new CustomerOrderTable
+			{
+				OrderDate = order.OrderDate,
+				CustomerAddress = order.CustomerAddress,
+				AmountAfterDiscount = order.AmountAfterDiscount,
+				OrderStatus = order.OrderStatus,
+			};
+			_db.CustomerOrderTable.Add(neworder);
+					await _db.SaveChangesAsync();
+					return "新增成功";
+		}
 		private bool OrderExists(int id)
 		{
 			return (_db.CustomerOrderTable?.Any(e => e.OrderId == id)).GetValueOrDefault();
 		}
 
-	//[HttpPost]
-	//	public async Task<string> CreateRooms([FromBody] CreateViewModel room)
-	//	{
-	//		Room NewRoom = new Room
-	//		{
-	//			HotelId = room.HotelId,
-	//			Type = room.Type,
-	//			Price = room.Price,
-	//			MaxGuests = room.MaxGuests,
-	//		};
-	//		NewRoom.RoomImages.AddRange(images);
-	//		_db.Rooms.Add(NewRoom);
-	//		await _db.SaveChangesAsync();
-	//		return "新增成功";
-	//	}
+		//[HttpPost]
+		//	public async Task<string> CreateRooms([FromBody] CreateViewModel room)
+		//	{
+		//		Rooms NewRoom = new Rooms
+		//		{
+		//			HotelId = room.HotelId,
+		//			Type = room.Type,
+		//			Price = room.Price,
+		//			MaxGuests = room.MaxGuests,
+		//		};
+		//		_db.Rooms.Add(NewRoom);
+		//		await _db.SaveChangesAsync();
+		//		return "新增成功";
+		//	}
 
 	}
 }
