@@ -116,5 +116,20 @@ namespace DeliveryBro.Areas.admin.Controllers.ApiControllers
 			return (_db.CustomersTable?.Any(e => e.CustomerAccount == id)).GetValueOrDefault();
 		}
 
+		[HttpPost]
+		public async Task<string> CreateUser([FromBody] UserDTO user)
+		{
+			CustomersTable newuser = new CustomersTable
+			{
+				CustomerAccount = user.CustomerAccount,
+				CustomerName = user.CustomerName,
+				CustomerEmail = user.CustomerEmail,
+				CustomerPhone = user.CustomerPhone,
+				CustomerPassword = user.CustomerPassword,
+			};
+			_db.CustomersTable.Add(newuser);
+			await _db.SaveChangesAsync();
+			return "新增成功";
+		}
 	}
 }

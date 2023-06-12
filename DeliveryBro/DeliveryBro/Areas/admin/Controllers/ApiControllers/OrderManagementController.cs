@@ -122,6 +122,7 @@ namespace DeliveryBro.Areas.admin.Controllers.ApiControllers
 				CustomerAddress = order.CustomerAddress,
 				AmountAfterDiscount = order.AmountAfterDiscount,
 				OrderStatus = order.OrderStatus,
+				Payment = order.Payment,	
 			};
 			_db.CustomerOrderTable.Add(neworder);
 					await _db.SaveChangesAsync();

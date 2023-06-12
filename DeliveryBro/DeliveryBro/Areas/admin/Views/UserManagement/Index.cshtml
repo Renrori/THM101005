@@ -1,7 +1,7 @@
 ﻿@{
 	Layout = "_LayoutAdmin";
 }
-<div class="content-page" id="userapp">
+<div class="content-page" id="userapp" style="padding-left:300px">
 	<div class="content">
 
 		<!-- Start Content-->
@@ -11,7 +11,11 @@
 			<div class="row">
 				<div class="col-12">
 					<div class="page-title-box">
+
 						<h4 class="page-title"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">顧客</font></font></h4>
+					</div>
+					<div class="text-xl-end mt-xl-0 mt-2">
+						<button type="button" class="btn btn-danger mb-2 me-2" v-on:click="add"> <i class="mdi mdi-basket me-1"></i> Add New User</button>
 					</div>
 				</div>
 			</div>
@@ -19,7 +23,7 @@
 
 			<div class="col-sm-12">
 				<table class="table table-centered table-striped dt-responsive nowrap w-100 dataTable no-footer dtr-inline" id="products-datatable" aria-describedby="products-datatable_info" style="width: 1534px;">
-					<thead>
+					<thead class="table-light">
 						<tr>
 							<th tabindex="0" aria-controls="products-datatable" rowspan="1" colspan="1" style="width: 249.8px;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">customerName</font></font></th>
 							<th tabindex="0" aria-controls="products-datatable" rowspan="1" colspan="1" style="width: 181.8px;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">customerAccount</font></font></th>
@@ -38,178 +42,239 @@
 							<td>{{item.state}}</td>
 							<td>{{item.customerAddress}}</td>
 							<td>{{item.customerPhone}}</td>
- 							<td>
+							<td>
 								<a href="javascript:void(0);" class="action-icon"> <i class="mdi mdi-eye"></i></a>
 								<a href="javascript:void(0);" class="action-icon" v-on:click="editorder(item.orderId)"> <i class="mdi mdi-square-edit-outline"></i></a>
 								<a href="javascript:void(0);" class="action-icon" v-on:click="deleteConfirm(item)" data-bs-toggle="modal" data-bs-target="#deleteModal"> <i class="mdi mdi-delete"></i></a>
 							</td>
 						</tr>
 					</tbody>
-					
+
 				</table>
 				<div class="container">
-						<div class="row justify-content-center" style="height:100px;">
-							<div class="col-4 h-100">
-								{{ maxcount }}
-								<nav>
-									<ul class="pagination">
-										<li class="page-item">
-											<a class="page-link" href="javascript: void(0);" aria-label="Previous">
-												<span aria-hidden="true">&laquo;</span>
-											</a>
-										</li>
+					<div class="row justify-content-center" style="height:100px;">
+						<div class="col-4 h-100">
+							{{ maxcount }}
+							<nav>
+								<ul class="pagination">
+									<li class="page-item">
+										<a class="page-link" href="javascript: void(0);" aria-label="Previous">
+											<span aria-hidden="true">&laquo;</span>
+										</a>
+									</li>
 
-										<li class="page-item" v-for="n in Math.ceil(maxcount / 10)"><a class="page-link" @@click="nextpage(n)">{{ n }}</a></li>
+									<li class="page-item" v-for="n in Math.ceil(maxcount / 10)"><a class="page-link" @@click="nextpage(n)">{{ n }}</a></li>
 
-										<li class="page-item">
-											<a class="page-link" href="javascript: void(0);" aria-label="Next">
-												<span aria-hidden="true">&raquo;</span>
-											</a>
-										</li>
-									</ul>
-								</nav>
-							</div>
+									<li class="page-item">
+										<a class="page-link" href="javascript: void(0);" aria-label="Next">
+											<span aria-hidden="true">&raquo;</span>
+										</a>
+									</li>
+								</ul>
+							</nav>
 						</div>
 					</div>
+				</div>
 			</div>
 		</div> <!-- end card-->
 	</div>
 	<!-- end row -->
-<!-- container -->
-<!-- Modal -->
-<div class="form-group">
-	<div class="modal fade" id="editModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
-		<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="modalTitleId">編輯</h5>
-					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+	<!-- container -->
+	<!-- Modal -->
+	@*編輯視窗*@
+	<div class="form-group">
+		<div class="modal fade" id="editModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="modalTitleId">編輯</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body">
+						<div class="form-group">
+							<label class="form-label">CustomerName</label>
+							<input class="form-control" v-model="customerName" readonly />
+						</div>
+						<div class="form-group">
+							<label class="form-label">CustomerAccount</label>
+							<input class="form-control" v-model="customerAccount" />
+						</div>
+						<div class="form-group">
+							<label class="form-label">CustomerEmail</label>
+							<input class="form-control" v-model="customerEmail" />
+						</div>
+						<div class="form-group">
+							<label class="form-label">CustomerPhone</label>
+							<input class="form-control" v-model="customerPhone" />
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
+							<button type="button" @@click="" class="btn btn-primary">儲存</button>
+						</div>
+					</div>
 				</div>
-				<div class="modal-body">
-					<div class="form-group">
-						<label class="form-label">CustomerName</label>
-						<input class="form-control" v-model="customerName" readonly />
+			</div>
+		</div>
+		<!-- Modal -->
+		@*新增視窗*@
+		<div class="form-group">
+			<div class="modal fade" id="createModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+				<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="modalTitleId">編輯</h5>
+							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+						</div>
+						<div class="modal-body">
+							<div class="form-group">
+								<label class="form-label">CustomerName</label>
+								<input class="form-control" v-model="customerName" />
+							</div>
+							<div class="form-group">
+								<label class="form-label">CustomerAccount</label>
+								<input class="form-control" v-model="customerAccount" />
+							</div>
+							<div class="form-group">
+								<label class="form-label">CustomerEmail</label>
+								<input class="form-control" v-model="customerEmail" />
+							</div>
+							<div class="form-group">
+								<label class="form-label">CustomerPhone</label>
+								<input class="form-control" v-model="customerPhone" />
+							</div>
+							<div class="form-group">
+								<label class="form-label">CustomerPassword</label>
+								<input class="form-control" v-model="customerPassword" />
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
+								<button type="button" @@click="createUser" class="btn btn-primary">儲存</button>
+							</div>
+						</div>
 					</div>
-					<div class="form-group">
-						<label class="form-label">CustomerAccount</label>
-						<input class="form-control" v-model="customerAccount" />
+				</div>
+			</div>
+		</div>
+		<!-- Modal -->
+		<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h1 class="modal-title fs-5" id="exampleModalLabel">刪除帳號:{{delInfo.title}}</h1>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 					</div>
-					<div class="form-group">
-						<label class="form-label">CustomerEmail</label>
-						<input class="form-control" v-model="customerEmail" />
-					</div>
-					<div class="form-group">
-						<label class="form-label">CustomerPhone</label>
-						<input class="form-control" v-model="customerPhone" />
+					<div class="modal-body">
+						確定要刪除嗎:{{delInfo.title}}{{delInfo.msg.customerAccount}},價格:{{delInfo.msg.customerName}},
 					</div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
-						<button type="button" @@click="" class="btn btn-primary">儲存</button>
+						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">不要</button>
+						<button type="button" class="btn btn-primary" @@click="deleteorder(delInfo.title)">要</button>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-	<!-- Modal -->
-	<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h1 class="modal-title fs-5" id="exampleModalLabel">刪除帳號:{{delInfo.title}}</h1>
-					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-				</div>
-				<div class="modal-body">
-					確定要刪除嗎:{{delInfo.title}}{{delInfo.msg.customerAccount}},價格:{{delInfo.msg.customerName}},
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">不要</button>
-					<button type="button" class="btn btn-primary" @@click="deleteorder(delInfo.title)">要</button>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
 </div>
 @section Scripts{
-<script type="text/javascript">
-	var app = new Vue({
-		el: '#userapp',
-		data: {
-			maxcount: 0, // 總比數
-			user: [], // 資料暫存
-			nowpage: 1, // 現在的頁數
-			CustomerName: "",
-			CustomerAccount: "",
-			CustomerEmail: "",
-			CustomerPhone: "",
-			delInfo:{
-				title:"",
-				msg: {
-					customerAccount: "",
-					customerName: ""
-				}
-			}
-			
-		},
-		mounted: function () {
-			// vue 第一次執行的內容, 只會直行一次
-			let salf = this;
-			axios('/api/UserManagement/GetUser/1')
-				.then(function (res) {
-					salf.user = res.data.items; // 回船的user
-					salf.maxcount = res.data.count; // 總比數
-				});
-			//.catch(function (error) { // 請求失敗
-			//    console.log(error);
-			//});
-		},
-		methods: { // 放置方法的地方
-			// 讀取下一頁 (傳入頁馬)
-			nextpage: function (page) {
-				let salf = this;
-				// 跟後端讀取ORDER
-				axios('/api/UserManagement/GetUser/' + page)
-					.then(function (res) {
-						// 讀取完成
-						salf.nowpage = page;
-						salf.user = res.data.items;
-						salf.maxcount = res.data.count;
-					});
-			},
-			editorder: function (customerAccount) {
-				alert("edit");
-				$("#editModal").modal("show");
-				let _this = this;
-				for (var i = 0; i < _this.order.length; i++) {
-					var item = _this.order[i];
-					if (customerAccount == item.customerAccount) {
-						_this.customerAccount = item.customerAccount;
-						_this.customerName = item.customerName;
-						_this.customerEmail = item.customerEmail;
-						_this.customerPhone = item.customerPhone;
+	<script type="text/javascript">
+		var app = new Vue({
+			el: '#userapp',
+			data: {
+				maxcount: 0, // 總比數
+				user: [], // 資料暫存
+				nowpage: 1, // 現在的頁數
+				customerName: "",
+				customerAccount: "",
+				customerEmail: "",
+				customerPhone: "",
+				customerPassword:"",
+				delInfo: {
+					title: "",
+					msg: {
+						customerAccount: "",
+						customerName: ""
 					}
 				}
-			},
-			deleteorder: function (id) {
-					axios.delete(`/api/UserManagement/Delete/${id}`).then(res => {
-					if (res.data) {
-						alert("已刪除");
-						this.nextpage(this.nowpage);
-							var idx = this.user.findIndex(x => x.customerAccount == id);
-						this.user.splice(idx, 1)
-						$("#deleteModal").modal("hide");
-					}
-				})
-			},
 
-			deleteConfirm: function (item) {
-				
+			},
+			mounted: function () {
+				// vue 第一次執行的內容, 只會直行一次
+				let salf = this;
+				axios('/api/UserManagement/GetUser/1')
+					.then(function (res) {
+						salf.user = res.data.items; // 回船的user
+						salf.maxcount = res.data.count; // 總比數
+					});
+				//.catch(function (error) { // 請求失敗
+				//    console.log(error);
+				//});
+			},
+			methods: { // 放置方法的地方
+				// 讀取下一頁 (傳入頁馬)
+				nextpage: function (page) {
+					let salf = this;
+					// 跟後端讀取ORDER
+					axios('/api/UserManagement/GetUser/' + page)
+						.then(function (res) {
+							// 讀取完成
+							salf.nowpage = page;
+							salf.user = res.data.items;
+							salf.maxcount = res.data.count;
+						});
+				},
+				add: function () {
+					$("#createModal").modal("show");
+				},
+				createUser: function () {
+					let _this = this;
+					var req = {
+							 CustomerName:_this.customerName,
+						  CustomerAccount:_this.customerAccount,
+							CustomerEmail:_this.customerEmail,
+							CustomerPhone:_this.customerPhone,
+							CustomerPassword:_this.customerPassword,
+					};
+					axios.post('/api/UserManagement/CreateUser', req)
+						.then(res => {
+							alert(res.data);
+							$("#createModal").modal("hide");
+							_this.nextpage();
+						})
+				},
+				editorder: function (customerAccount) {
+					alert("edit");
+					$("#editModal").modal("show");
+					let _this = this;
+					for (var i = 0; i < _this.user.length; i++) {
+						var item = _this.user[i];
+						if (customerAccount == item.customerAccount) {
+							_this.customerAccount = item.customerAccount;
+							_this.customerName = item.customerName;
+							_this.customerEmail = item.customerEmail;
+							_this.customerPhone = item.customerPhone;
+						}
+					}
+				},
+				deleteorder: function (id) {
+					axios.delete(`/api/UserManagement/Delete/${id}`).then(res => {
+						if (res.data) {
+							alert("已刪除");
+							this.nextpage(this.nowpage);
+							var idx = this.user.findIndex(x => x.customerAccount == id);
+							this.user.splice(idx, 1)
+							$("#deleteModal").modal("hide");
+						}
+					})
+				},
+
+				deleteConfirm: function (item) {
+
 					this.delInfo.title = item.customerAccount;
 					this.delInfo.msg.customerAccount = item.customerAccount;
 					this.delInfo.msg.customerName = item.customerName;
-				console.log(this.delInfo.title);
+					console.log(this.delInfo.title);
+				}
 			}
-		}
-	})
-</script>
+		})
+	</script>
 }
