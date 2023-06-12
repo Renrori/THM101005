@@ -84,10 +84,11 @@ namespace DeliveryBro.Areas.admin.Controllers.ApiControllers
 		}
 
 
-		[HttpDelete("{Id:int}")]
-		public async Task<string> Delete(int Id)
-		{
-			var r = await _db.CustomersTable.FindAsync(Id);
+		[HttpDelete("{Id}")]
+		public async Task<string> Delete(string Id)
+		{ 
+			var key= _db.CustomersTable.FirstOrDefault(x=>x.CustomerAccount==Id).CustomerId;
+			var r =await _db.CustomersTable.FindAsync(key);
 			if (r == null)
 			{
 				return "找不到資料";

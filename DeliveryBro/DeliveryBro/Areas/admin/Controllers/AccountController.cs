@@ -66,7 +66,8 @@ namespace DeliveryBro.Areas.admin.Controllers
                 var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
                 await HttpContext.SignOutAsync("StoreAuthenticationScheme");
                 await HttpContext.SignOutAsync("CustomerAuthenticationScheme");
-                await HttpContext.SignInAsync("AdministratorAuthenticationScheme", claimsPrincipal);
+				await HttpContext.SignOutAsync("DeliverAuthenticationScheme");
+				await HttpContext.SignInAsync("AdministratorAuthenticationScheme", claimsPrincipal);
                 //await HttpContext.SignInAsync(
                 //        CookieAuthenticationDefaults.AuthenticationScheme,
                 //        new ClaimsPrincipal(claimsIdentity),

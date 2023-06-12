@@ -51,7 +51,10 @@ namespace DeliveryBro.Areas.store.apiControllers
 				new Claim("Id",user.RestaurantId.ToString())
 
 				};
-			//做憑證
+            //做憑證
+            await HttpContext.SignOutAsync("CustomerAuthenticationScheme");
+            await HttpContext.SignOutAsync("AdministratorAuthenticationScheme");
+			await HttpContext.SignOutAsync("DeliverAuthenticationScheme");
 			var claimsIdentity = new ClaimsIdentity(claims, "StoreAuthenticationScheme");
 			var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
 			await HttpContext.SignInAsync("StoreAuthenticationScheme", claimsPrincipal);

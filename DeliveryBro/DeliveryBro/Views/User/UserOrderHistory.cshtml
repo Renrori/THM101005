@@ -22,7 +22,7 @@
             <a class="nav-link collapsed" asp-controller="User" asp-action="UserOrderHistory"><i b-y5hjwqsk06 class="fa-solid fa-store"></i>歷史訂單</a>
         </li>
         <li b-y5hjwqsk06 class="nav-item">
-            <a class="nav-link collapsed" href="#"><i b-y5hjwqsk06 class="fa-solid fa-circle-info"></i>Support</a>
+            <a class="nav-link collapsed" asp-controller="User" asp-action="HelpCenter"><i b-y5hjwqsk06 class="fa-solid fa-circle-info"></i>幫助中心</a>
         </li>
     </ul>
 
@@ -46,14 +46,14 @@
                                             <div class="row">
                                                 <div class="col-4 ">
                                                     <label>訂單編號&emsp;</label>
-                                                    <div class="row align-items-center">
+                                                   @* <div class="row align-items-center">
                                                         <div class="col-8">
                                                             <input type="text" class="--bs-dark-border-subtle --bs-dark-text-emphasis form-control" placeholder="目前無法使用" v-model="searchorderId" />
                                                         </div>
                                                         <div class="col-4">
                                                             <button class="btn btn-primary" @@click="searchOrder(searchorderId)">搜尋</button>
                                                         </div>
-                                                    </div>
+                                                    </div>*@
                                                 </div>
                                                 @*                                                <div class="col-3 ">
                                                 <label style="text-align:right">訂單完成日期&emsp;</label>
@@ -152,7 +152,7 @@
                 async getUserOrder() {
                     //拿出對應cusId的order
                     try {
-                        const response = await axios.get(`${baseAddress}/${CustomerId}/orderdetails`).then(Response => {
+                        const response = await axios.get(`${baseAddress}/hisorder`).then(Response => {
                             this.CustomerOrderInfo = Response.data;
                         })
                     } catch (error) {

@@ -18,6 +18,7 @@ namespace DeliveryBro
     {
         public static void Main(string[] args)
         {
+            var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
             var builder = WebApplication.CreateBuilder(args);
 
             #region DB
@@ -37,7 +38,7 @@ namespace DeliveryBro
             #region authentication
 
             builder.Services.AddSignalR();
-            builder.Services.AddSwaggerGen();
+            //builder.Services.AddSwaggerGen();
 
             builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
             .AddCookie("CustomerAuthenticationScheme", opt =>
@@ -56,21 +57,28 @@ namespace DeliveryBro
                 opt.Cookie.Name = "customercookie";
                 opt.LoginPath = "/Login/Index"; //登入路徑
                 opt.AccessDeniedPath = "/Login/Logout"; //取消登入路徑
-                opt.ExpireTimeSpan = TimeSpan.FromMinutes(10);
+                opt.ExpireTimeSpan = TimeSpan.FromMinutes(30);
             })
             .AddCookie("StoreAuthenticationScheme", opt =>
             {
                 opt.Cookie.Name = "storecookie";
                 opt.LoginPath = "/store/StoreUser/Login"; //登入路徑
                 opt.AccessDeniedPath = "/store/StoreUser/Logout"; //取消登入路徑
-                opt.ExpireTimeSpan = TimeSpan.FromMinutes(10);
+                opt.ExpireTimeSpan = TimeSpan.FromMinutes(30);
             })
             .AddCookie("AdministratorAuthenticationScheme", opt =>
             {
                 opt.Cookie.Name = "admincookie";
                 opt.LoginPath = "/admin/Account/Login";
                 opt.AccessDeniedPath = "/admin/Account/Logout";
-                opt.ExpireTimeSpan = TimeSpan.FromMinutes(10);
+                opt.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+            })
+            .AddCookie("DeliverAuthenticationScheme",opt=>
+            {
+                opt.Cookie.Name = "delivercookie";
+                opt.LoginPath = "/deliver/Home/Login";
+                opt.AccessDeniedPath = "/deliver/Home/Logut";
+                opt.ExpireTimeSpan= TimeSpan.FromMinutes(30);
             })
             .AddGoogle("Google", googleOptions =>
             {
@@ -92,7 +100,7 @@ namespace DeliveryBro
             {
                 var policybuilder = new AuthorizationPolicyBuilder("CustomerAuthenticationScheme");
                 policybuilder = policybuilder.RequireAuthenticatedUser();
-                option.DefaultPolicy=policybuilder.Build();
+                option.DefaultPolicy = policybuilder.Build();
             });
 
 
@@ -113,23 +121,34 @@ namespace DeliveryBro
             builder.Services.AddTransient<EncryptService>();
             builder.Services.AddTransient<PasswordEncyptService>();
 			builder.Services.AddSingleton<OrderNotificationTask>();
-			#endregion
+            #endregion
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy(MyAllowSpecificOrigins,
+                    policy =>
+                    {
+                        policy.WithOrigins("http://127.0.0.1:5501",
+                                "*")
+                            .AllowAnyHeader()
+                            .AllowAnyMethod();
+                    });
+            });
 
-			var app = builder.Build();
+            var app = builder.Build();
 
-			// Configure the HTTP request pipeline.
-			if (app.Environment.IsDevelopment())
-			{
-				app.UseMigrationsEndPoint();
-                app.UseSwagger();
-                app.UseSwaggerUI();
+            // Configure the HTTP request pipeline.
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseMigrationsEndPoint();
+                //app.UseSwagger();
+                //app.UseSwaggerUI();
             }
-			else
-			{
-				app.UseExceptionHandler("/Home/Error");
-				// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-				app.UseHsts();
-			}
+            else
+            {
+                app.UseExceptionHandler("/Home/Error");
+                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                app.UseHsts();
+            }
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
@@ -137,9 +156,9 @@ namespace DeliveryBro
             app.MapHub<OrderHub>("/orderHub");
             app.MapHub<ChatHub>("/chatHub");
 			app.UseRouting();
+            app.UseCors(MyAllowSpecificOrigins);
             app.UseAuthentication();
             app.UseAuthorization();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
@@ -161,7 +180,7 @@ namespace DeliveryBro
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
 
-            app.MapRazorPages();           
+            app.MapRazorPages();
 
             app.Run();
         }

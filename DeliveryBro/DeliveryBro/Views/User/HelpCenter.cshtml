@@ -1,0 +1,280 @@
+﻿@section Styles
+	{
+	<link href="~/lib/admin/assets/css/app-creative.css" rel="stylesheet" />
+	<link href="~/lib/admin/assets/vendor/simplebar/simplebar.min.css" rel="stylesheet" />
+	<link href="~/lib/admin/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+}
+@{
+	ViewData["HideFooter"] = true;
+}
+
+<aside b-y5hjwqsk06 id="sidebar" class="sidebar">
+
+	<ul b-y5hjwqsk06 class="sidebar-nav" id="sidebar-nav">
+
+		<li b-y5hjwqsk06 class="nav-item">
+			<a class="nav-link" asp-controller="User" asp-action="UserHome"><i b-y5hjwqsk06 class="bi bi-grid"></i>Home</a>
+		</li>
+		<li b-y5hjwqsk06 class="nav-item">
+			<a class="nav-link collapsed" asp-controller="User" asp-action="UserHome"><i b-y5hjwqsk06 class="fa-solid fa-store"></i>我的資料</a>
+		</li>
+		<li b-y5hjwqsk06 class="nav-item">
+			<a class="nav-link collapsed" asp-controller="User" asp-action="UserAddress"><i b-y5hjwqsk06 class="fa-solid fa-store"></i>我的地址</a>
+		</li>
+		<li b-y5hjwqsk06 class="nav-item">
+			<a class="nav-link collapsed" asp-controller="User" asp-action="UserOrder"><i b-y5hjwqsk06 class="fa-solid fa-store"></i>我的訂單</a>
+		</li>
+		<li b-y5hjwqsk06 class="nav-item">
+			<a class="nav-link collapsed" asp-controller="User" asp-action="UserOrderHistory"><i b-y5hjwqsk06 class="fa-solid fa-store"></i>歷史訂單</a>
+		</li>
+		<li b-y5hjwqsk06 class="nav-item">
+			<a class="nav-link collapsed" asp-controller="User" asp-action="HelpCenter"><i b-y5hjwqsk06 class="fa-solid fa-circle-info"></i>幫助中心</a>
+		</li>
+	</ul>
+
+</aside><!-- End Sidebar-->
+<main id="main" class="main">
+	<section class="section support" id="app">
+		<div class="row">
+			<div class="col">
+				<h3>連線 Id: {{thisUser.connectionId}}</h3>
+				<div class="content-page" style="margin-left:0px;">
+					<div class="content">
+						<!-- Start Content-->
+						<div class="container-fluid">
+							<div class="row">
+								<!-- start chat users-->
+								<div class="col-xxl-3 col-xl-6 order-xl-1">
+									<div class="card">
+										<div class="card-body p-0">
+											<div class="tab-content">
+												<div class="row">
+													<div class="col">
+														<div class="card-body py-0 mb-3" data-simplebar style="max-height: 546px">
+															<template v-for="admin in adminOn">
+																<a class="text-body">
+																	<div class="d-flex align-items-start mt-1 p-2">
+																		<div class="w-100 overflow-hidden">
+																			<h5 class="mt-0 mb-0 font-14">
+																				<span class="float-end text-muted font-12">{{admin.role}}</span>
+																				{{admin.name}}
+																			</h5>
+																			<p class="mt-1 mb-0 text-muted font-14">
+																				<span class="w-25 float-end text-end">
+																					<span class="badge badge-danger-lighten">3</span>
+																				</span>
+																				<span class="w-75">{{admin.connectionId}}</span>
+																			</p>
+																		</div>
+																	</div>
+																</a>
+															</template>
+														</div> <!-- end slimscroll-->
+													</div> <!-- End col -->
+												</div> <!-- end users -->
+											</div> <!-- end tab content-->
+										</div> <!-- end card-body-->
+									</div> <!-- end card-->
+								</div>
+								<!-- end chat users-->
+								<!-- chat area -->
+								<div class="col-xxl-6 col-xl-12 order-xl-2">
+									<div class="card">
+										<div class="card-body px-0 pb-0" style="height:580px">
+											<ul id="messageList" class="conversation-list px-3" data-simplebar style="max-height: 554px">
+												<template v-for="msg in displayMessage">
+													<li class="clearfix" v-bind:class="{odd:msg.name==thisUser.name}">
+														<div class="conversation-text">
+															<div class="ctext-wrap">
+																<i>{{msg.name}}</i>
+																<p>{{msg.message}}</p>
+															</div>
+														</div>
+													</li>
+												</template>
+											</ul>
+										</div> <!-- end card-body -->
+										<div class="card-body p-0">
+											<div class="row">
+												<div class="col">
+													<div class="mt-2 bg-light p-3">
+														<div class="row">
+															<div class="col mb-2 mb-sm-0">
+																<input type="text" class="form-control border-0" placeholder="Enter your text" required="" v-model="message">
+																<div class="invalid-feedback">
+																	Please enter your messsage
+																</div>
+															</div>
+															<div class="col-sm-auto">
+																<div class="btn-group">
+																	<a href="#" class="btn btn-light"><i class="uil uil-paperclip"></i></a>
+																	<a href="#" class="btn btn-light"> <i class='uil uil-smile'></i> </a>
+																	<div class="d-grid">
+																		<button id="sendMsg" type="submit" class="btn btn-success chat-send" @@click="sendtoAdmin"><i class='uil uil-message'></i></button>
+																	</div>
+																</div>
+															</div> <!-- end col -->
+														</div> <!-- end row-->
+													</div>
+												</div> <!-- end col-->
+											</div>
+											<!-- end row -->
+										</div>
+									</div> <!-- end card -->
+								</div>
+								<!-- end chat area-->
+								<!-- start user detail -->
+								<!-- end user detail -->
+							</div> <!-- end row-->
+
+						</div> <!-- container -->
+
+					</div> <!-- content -->
+					<!-- Footer Start -->
+					<footer class="footer">
+						<div class="row">
+							<div class="col">
+								<script>document.write(new Date().getFullYear())</script> © Hyper - Coderthemes.com
+							</div>
+						</div>
+					</footer>
+					<!-- end Footer -->
+
+				</div>
+			</div>
+		</div>
+	</section>
+
+</main>
+
+@section Scripts
+	{
+
+	<script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
+	<script src="~/lib/admin/assets/js/ui/component.chat.js"></script>
+	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+	<script src="~/lib/admin/assets/js/vendor.min.js"></script>
+	<script src="~/lib/admin/assets/vendor/apexcharts/apexcharts.min.js"></script>
+	<script src="~/lib/admin/assets/js/app.min.js"></script>
+	@*<script src="~/js/sendtocaller.js"></script>*@
+	<script>
+		let app = Vue.createApp({
+			data() {
+				return {
+					signalr: {},
+					adminOn: [],
+					thisUser: {
+						connectionId: "",
+						userId: "",
+						name: "",
+						role: "",
+					},
+					displayMessage: [],
+					message: "",
+				};
+			},
+			mounted: function () {
+				let _this = this;
+				this.signalr = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
+				this.signalr.start()
+					.then(() => {
+						console.log("connection");
+					})
+					.catch((err) => {
+						console.log(err.toString());
+					});
+				this.signalr.on("AdminOn", this.AdminOn);
+				this.signalr.on("AdminIsOnline", this.adminConnect);
+				this.signalr.on("AdminIsOff", this.adminDisConnect);
+				this.signalr.on("SendSelfId", this.getSelfInfo);
+				this.signalr.on("ToStoreMessage", this.FromAdmin);
+				this.signalr.on("StoreGetHistoryMessage", this.History);
+			},
+			methods: {
+				getSelfInfo: function (id, userId, name, role) {
+					let _this = this;
+					_this.thisUser.connectionId = id;
+					_this.thisUser.userId = userId;
+					_this.thisUser.name = name;
+					_this.thisUser.role = role;
+				},
+				sendtoAdmin: function () {
+					this.signalr.invoke("SendMessagetoAdmin", this.message).catch((err) => {
+						return console.log(err.toString())
+					})
+					var newmsg = {
+						connectionId: this.thisUser.connectionId,
+						message: this.message,
+						userId: this.thisUser.userId,
+						name: this.thisUser.name,
+						role: this.thisUser.role,
+						read: false
+					}
+					this.displayMessage.push(newmsg);
+					this.message = "";
+				},
+				AdminOn: function (connectionId, userId, name, role) {
+					let self = this;
+					console.log('adminConnect');
+					var obj = {
+						connectionId: connectionId,
+						userId: userId,
+						name: name,
+						role: role
+					}
+					self.adminOn.push(obj);
+				},
+				adminConnect: function (adminsJson) {
+					let self = this;
+					var admins = JSON.parse(adminsJson).map(x => {
+						return {
+							name: x.Name,
+							connectionId: x.ConnectionId,
+							userId: x.UserId,
+							role: x.Role
+						}
+					})
+					for (let admin of admins)
+						self.adminOn.push(admin);
+				},
+				adminDisConnect: function (connectionID, guid, name, role) {
+					let self = this;
+					var idx = self.adminOn.findIndex(x => x.userId == guid)
+					if (idx == -1) return
+					self.adminOn.splice(idx, 1);
+				},
+				FromAdmin: function (connectionID, guid, name, role, message, read) {
+					var newmsg = {
+						connectionId: connectionID,
+						message: message,
+						userId: guid,
+						name: name,
+						role: role,
+						read: read
+					};
+					this.displayMessage.push(newmsg);
+				},
+				History: function (hisMsgJson) {
+					let self = this;
+					var obj = JSON.parse(hisMsgJson)
+					if (obj == null) return;
+					var msg = obj.map(x => {
+						return {
+							connectionId: x.ConnectionId,
+							message: x.Message,
+							userId: x.Sender.UserId,
+							name: x.Sender.Name,
+							role: x.Sender.Role,
+							read: x.Read
+						}
+					});
+					self.displayMessage = [];
+					for (let m of msg)
+						self.displayMessage.push(m);
+				}
+			}
+		}).mount("#app")
+
+
+	</script>
+}

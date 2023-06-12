@@ -190,8 +190,8 @@ namespace DeliveryBro.Areas.store.apiControllers
 				RestaurantAddress = model.RestaurantAddress,
 				RestaurantPhone = model.RestaurantPhone,
 				RestaurantEmail = model.RestaurantEmail,
-				Latitude=Map.GetLatitude(model.RestaurantAddress),
-				Longitude=Map.GetLongitude(model.RestaurantAddress),
+				Latitude = Convert.ToDecimal(Map.Location(model.RestaurantAddress)[0]),
+				Longitude= Convert.ToDecimal(Map.Location(model.RestaurantAddress)[1]),
 			}) ;
 			//存入資料庫
 			try

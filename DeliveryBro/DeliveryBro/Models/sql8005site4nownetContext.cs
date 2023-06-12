@@ -87,6 +87,10 @@ namespace DeliveryBro.Models
 
                 entity.Property(e => e.CustomerId).HasColumnName("CustomerID");
 
+                entity.Property(e => e.Latitude).HasColumnType("decimal(9, 6)");
+
+                entity.Property(e => e.Longitude).HasColumnType("decimal(9, 6)");
+
                 entity.HasOne(d => d.Customer)
                     .WithMany(p => p.CustomerAddressTable)
                     .HasForeignKey(d => d.CustomerId)
@@ -205,8 +209,7 @@ namespace DeliveryBro.Models
 
                 entity.Property(e => e.DriverPassword)
                     .IsRequired()
-                    .HasMaxLength(15)
-                    .IsUnicode(false);
+                    .HasMaxLength(128);
 
                 entity.Property(e => e.DriverPhone).HasMaxLength(14);
 
@@ -236,8 +239,6 @@ namespace DeliveryBro.Models
                 entity.Property(e => e.DishStatus)
                     .IsRequired()
                     .HasMaxLength(30);
-
-                entity.Property(e => e.PicturePath).HasMaxLength(100);
 
                 entity.Property(e => e.RestaurantId).HasColumnName("RestaurantID");
 
@@ -288,8 +289,6 @@ namespace DeliveryBro.Models
                 entity.Property(e => e.Longitude).HasColumnType("decimal(9, 6)");
 
                 entity.Property(e => e.OpeningHours).HasColumnType("time(0)");
-
-                entity.Property(e => e.PicturePath).HasMaxLength(100);
 
                 entity.Property(e => e.RestaurantAccount)
                     .IsRequired()

@@ -62,6 +62,7 @@ namespace DeliveryBro.Controllers
 				}, "CustomerAuthenticationScheme"));
 			await HttpContext.SignOutAsync("StoreAuthenticationScheme");
 			await HttpContext.SignOutAsync("AdministratorAuthenticationScheme");
+			await HttpContext.SignOutAsync("DeliverAuthenticationScheme");
 			await HttpContext.SignInAsync("CustomerAuthenticationScheme", claimsPrincipal);
 			if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
 			{

@@ -40,7 +40,7 @@
             <a class="nav-link collapsed" asp-controller="User" asp-action="UserOrderHistory"><i b-y5hjwqsk06 class="fa-solid fa-store"></i>歷史訂單</a>
         </li>
         <li b-y5hjwqsk06 class="nav-item">
-            <a class="nav-link collapsed" href="#"><i b-y5hjwqsk06 class="fa-solid fa-circle-info"></i>Support</a>
+            <a class="nav-link collapsed" asp-controller="User" asp-action="HelpCenter"><i b-y5hjwqsk06 class="fa-solid fa-circle-info"></i>幫助中心</a>
         </li>
     </ul>
 
@@ -64,14 +64,14 @@
                                             <div class="row">
                                                 <div class="col-4 ">
                                                     <label>訂單編號&emsp;</label>
-                                                    <div class="row align-items-center">
+                                                 @*   <div class="row align-items-center">
                                                         <div class="col-8">
                                                             <input type="text" class="--bs-dark-border-subtle --bs-dark-text-emphasis form-control" placeholder="目前無法使用" v-model="searchorderId" />
                                                         </div>
                                                         <div class="col-4">
                                                             <button class="btn btn-primary" @@click="searchOrder(searchorderId)">搜尋</button>
                                                         </div>
-                                                    </div>
+                                                    </div>*@
                                                 </div>
                                                 @*                                                <div class="col-3 ">
                                                 <label style="text-align:right">訂單完成日期&emsp;</label>
@@ -125,7 +125,10 @@
                                         <div class="tab-content pt-2" v-else>
                                             <div class="card" v-for="item in currentPageOrders" :key="item.orderId">
                                                 <div class="card-body">
-                                                    <h5 class="card-title">訂單編號: {{ item.orderId }} </h5>
+                                                    <div class="row">
+                                                        <h5 class="card-title col-8">訂單編號: {{ item.orderId }} </h5>
+                                                        <h5 class="card-title col-4"> 訂單狀態: {{CheckOrderStatus(item.orderStatus)}}</h5>
+                                                </div>
                                                     <h5>下訂時間: {{item.orderDate}}</h5>
                                                     <div class="row">
                                                         <div class="col-10" style="padding-bottom:10px">
@@ -209,6 +212,24 @@
                 this.getUserOrder();
             },
             computed: {
+                CheckOrderStatus(){
+                    return (status)=>{
+                        switch (status) {
+                            case 'waiting':
+                                return '商家確認中';
+                            case 'acepted':
+                                return '商品正在準備';
+                            case 'prepared':
+                                return '等待配送員中';
+                            case 'deliver':
+                                return '配送中';
+
+                            default:
+                                return '訂單異常，請洽管理人員';
+                        }
+                    }
+
+                },
                 totalPages() {
                     // 計算總分頁數
                     return Math.ceil(this.CustomerOrderInfo.length / this.pageSize);

@@ -4,7 +4,7 @@
 		<nav>
 			<ol class="breadcrumb">
 				<a class="breadcrumb-item" asp-area="store" asp-controller="Home" asp-action="Index">Home</a>
-				<li class="breadcrumb-item active">及時訂單</li>
+				<li class="breadcrumb-item active">即時訂單</li>
 			</ol>
 		</nav>
 	</div>
@@ -131,17 +131,24 @@
 				return {
 					waitingOrder: [],
 					aceptedOrder: [],
-					hubConnection: null
+					signalr: {},
+					SCsignalr:{}
 				};
 			},
 			mounted: function () {
 				let _this = this;
+				_this.signalr = new signalR.HubConnectionBuilder().withUrl(`/orderHub`).build();
+				_this.signalr.start().then(() => {
+					console.log('connected');
+				}).catch((err) => {
+					console.error(err.toString());
+				});
+				_this.signalr.on("NewOrder", () => {
+					axios.get(`/api/Orders/wait`).then(response => {
+						_this.waitingOrder = response.data;
+					})
+				});
 				_this.getOrders();
-				_this.createHubConnection();
-			},
-			beforeUnmount: function () {
-				let _this = this;
-				_this.closeHubConnection();
 			},
 			methods: {
 				getOrders: function () {
@@ -161,7 +168,8 @@
 					}
 					axios.put(`/api/Orders/${order.orderId}`, request).then(response => {
 						_this.getOrders();
-					})
+					});
+					_this.signalr.invoke("Infomation", order.customerId, order.orderId, "已被接受，正在處理中!")
 				},
 				deleteOrders: function (order) {
 					let _this = this;
@@ -180,6 +188,7 @@
 								`訂單編號 ${order.orderId} 已拒絕!`,
 								'success'
 							)
+							_this.signalr.invoke("Infomation", order.customerId, order.orderId, "被取消!")
 							axios.delete(`/api/Orders/${order.orderId}`).then(response => {
 								_this.getOrders();
 							});
@@ -190,36 +199,11 @@
 					let _this = this;
 					var request = {
 						OrderId: order.orderId,
-						OrderStatus: "completed"
+						OrderStatus: "prepared"
 					};
 					axios.put(`/api/Orders/${order.orderId}`, request).then(response => {
 						_this.getOrders();
 					})
-				},
-				createHubConnection: function () {
-					let _this = this;
-					_this.hubConnection = new signalR.HubConnectionBuilder().withUrl(`/orderHub`).build();
-					_this.hubConnection.on("NewOrder", () => {
-						axios.get(`/api/Orders/wait`).then(response => {
-							_this.waitingOrder = response.data;
-						})
-					});
-					_this.hubConnection.start().then(() => {
-						console.log('connected');
-					}).catch((err) => {
-						console.error(err.toString());
-					});
-				},
-				closeHubConnection: function () {
-					let _this = this;
-					if (_this.hubConnection) {
-						_this.hubConnection.stop().then(() => {
-							console.log("close");
-							_this.hubConneciton = null;
-						}).catch((err) => {
-							console.error(err.toString());
-						});
-					}
 				}
 			}
 		}
