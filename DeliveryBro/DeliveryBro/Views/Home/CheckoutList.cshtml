@@ -46,7 +46,7 @@
                             <div class="w-100"></div>
                             <div class="col-md-12">
                                 <div class="form-group mt-4">
-                                    <div class="radio">
+                                    <div class="radio" required>
                                         <label class="mr-3"><input type="radio" name="Takeradio" value="in"> 內用 </label>
                                         <label class="mr-3"><input type="radio" name="Takeradio" value="out"> 外帶 </label>
                                         <label class="mr-3"><input type="radio" name="Takeradio" value="ship" @@change="addShippingFee"> 外送 </label>
@@ -278,7 +278,7 @@
             },
             computed: {
                 isValid() {
-                    return this.CustomerAddress && this.CustomerPhone && this.CustomerEmail;
+                    return this.CustomerAddress && this.CustomerPhone && this.CustomerEmail ;
                 },
                 duplicateRestaurantId() {
                     const duplicate = this.cartItems.find((item, index, array) => {

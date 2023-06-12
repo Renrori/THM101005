@@ -2,6 +2,23 @@
     ViewData["HideFooter"] = true;
 }
 
+@section Styles
+    {
+    <style>
+        .custom-pagination .page-link {
+            color: forestgreen;
+            border-color: forestgreen;
+        }
+
+        .custom-pagination .page-item.active .page-link {
+            background-color: forestgreen;
+            border-color: forestgreen;
+            color: white;
+        }
+
+    </style>
+}
+
 
 <aside b-y5hjwqsk06 id="sidebar" class="sidebar">
 
@@ -155,7 +172,7 @@
                     </section>
 
                     <div class="container">
-                        <ul class="pagination justify-content-center">
+                        <ul class="pagination justify-content-center custom-pagination">
                             <li class="page-item" :class="{ 'disabled': currentPage === 1 }"><a class="page-link" href="#" @@click="goToPage(currentPage - 1)"><</a></li>
                             <li class="page-item "
                                 v-for="page in totalPages"
