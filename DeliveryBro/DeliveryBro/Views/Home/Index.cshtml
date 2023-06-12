@@ -3,10 +3,11 @@
 }
 
 @section Styles
-{
+    {
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
-	<link href="~/css/map.css" rel="stylesheet" />
-    
+    <link href="~/css/map.css" rel="stylesheet" />
+    <link href="~/css/map.css" rel="stylesheet" />
+    <script type="module" src="~/js/mapaddressautocomplete.js"></script>
 }
 @*<---------------旋轉軸--------------->*@
 <div id="carouselExampleDark"
@@ -94,6 +95,7 @@
     <section class="ftco-section">
         <div class="container">
             <div class="row">
+                <div class="text py-2 pb-2 px-2 text-center">
                     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" ref="button">
                         {{addressChosen?addressChosen:'請輸入地址'}}
                     </button>
@@ -106,24 +108,55 @@
                                 </div>
                                 <div class="modal-body">
                                     @*<div class="pac-card" id="pac-card">
-                                        <div id="pac-container">
-                                            <input id="pac-input" class="form-control" type="text" placeholder="請輸入新地址" v-model="addressChosen" />
-                                        </div>
+                                    <div id="pac-container">
+                                    <input id="pac-input" class="form-control" type="text" placeholder="請輸入新地址" v-model="addressChosen" />
+                                    </div>
                                     </div>*@
                                     <div id="map"></div>
-                                   @* <input type="text" class="form-control" id="location" placeholder="請輸入新地址" v-model="addressChosen" />*@
+                                    @* <input type="text" class="form-control" id="location" placeholder="請輸入新地址" v-model="addressChosen" />*@
                                     <h4>已儲存的地址</h4>
                                     <select class="form-select" aria-label="Default select example" v-model="addressChosen">
                                         <option disabled selected value="">---請選擇---</option>
-                                        <option v-for="a in address" >{{a.userAddress}}</option>
+                                        <option v-for="a in address">{{a.userAddress}}</option>
                                     </select>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" v-bind:disabled="btndisabled">確定</button>
+
+                                </div>
+                                <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5" id="staticBackdropLabel">請輸入/選擇地址</h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="pac-card" id="pac-card">
+                                                    <div id="pac-container">
+                                                        <input id="pac-input" class="form-control" type="text" placeholder="請輸入新地址" v-model="addressChosen" />
+                                                    </div>
+
+                                                </div>
+                                                <div id="map"></div>
+                                                @* <input type="text" class="form-control" id="location" placeholder="請輸入新地址" v-model="addressChosen" />*@
+                                                <br />
+                                                <h4>已儲存的地址</h4>
+                                                <select class="form-select" aria-label="Default select example" v-model="addressChosen">
+                                                    <option disabled value="">---請選擇---</option>
+                                                    <option v-for="a in address">{{a.userAddress}}</option>
+                                                </select>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" v-bind:disabled="btndisabled">確定</button>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                </div>
                 <div class="col-md-6 col-lg-4 " v-for="store in storeInfo" :key="storeId">
                     <div class="product">
                         <div class="img-prod">
@@ -133,8 +166,8 @@
                         </div>
                         <div class="text py-3 pb-4 px-3 text-center">
                             <h2>{{ store.storeName }}</h2>
-                            <button class="btn btn-outline-info" @@click="RestaurantMenuUrl(store)"><i class="ion-ios-menu"></i></button>
-                            <button class="btn btn-outline-info"><i class="ion-ios-heart"></i></button>
+                            <button class="btn btn-outline-dark" @@click="RestaurantMenuUrl(store)"><i class="ion-ios-menu"></i></button>
+                            <button class="btn btn-outline-dark"><i class="ion-ios-heart"></i></button>
                         </div>
                     </div>
                 </div>
@@ -150,7 +183,7 @@
 @section Scripts
     {
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-    <script src="https://unpkg.com/vue@3.2.36/dist/vue.global.prod.js"></script>  
+    <script src="https://unpkg.com/vue@3.2.36/dist/vue.global.prod.js"></script>
     <script src="~/js/mapaddressautocomplete.js"></script>
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDSVv7tpJnSFG82cLsD3wazbDCksKfic_o&callback=initMap&libraries=places" defer></script>
     <script src="~/axios/axios.min.js"></script>
@@ -165,16 +198,16 @@
                     storeInfo: [],
                     storeImageUrl: '',
                     cartItems: [],
-                    address:[],
-                    addressChosen:"",
+                    address: [],
+                    addressChosen: "",
                 }
             },
-            watch:{
-                addressChosen(){
+            watch: {
+                addressChosen() {
                     if (this.addressChosen != "") this.GetStoreInfo();
                 }
             },
-            computed:{
+            computed: {
                 btndisabled() {
                     let self = this
                     if (self.addressChosen == "") return true
@@ -191,12 +224,12 @@
                     .catch((err) => {
                         console.log(err.toString());
                     });
-                this.SCsignalr.on("orderStatus",this.GetResponseFromStore);
+                this.SCsignalr.on("orderStatus", this.GetResponseFromStore);
                 this.GetStoreInfo();
                 this.getcartItemsFromCookie();
                 this.getCurrentAddress();
             },
-            created(){
+            created() {
                 this.addressChosen = localStorage.getItem("addressChosen");
             },
             methods: {
@@ -234,21 +267,21 @@
                     this.cartItems = [];
                     document.cookie = 'cartItems=;';
                 },
-                getCurrentAddress(){
-                    let self=this;
-                    axios.get(`/api/HomeApi/start/address`).then(response=>{
-                        self.address=response.data;
-                        if (response.data!="") self.showAddressModal();
+                getCurrentAddress() {
+                    let self = this;
+                    axios.get(`/api/HomeApi/start/address`).then(response => {
+                        self.address = response.data;
+                        if (response.data != "") self.showAddressModal();
                     })
                 },
-                showAddressModal(){
-                    if(document.cookie.indexOf('modal_shown')>=0) return
-                    else{
+                showAddressModal() {
+                    if (document.cookie.indexOf('modal_shown') >= 0) return
+                    else {
                         this.$refs.button.click();
-                        document.cookie="modal_shown=seen";
+                        document.cookie = "modal_shown=seen";
                     }
                 },
-                GetResponseFromStore(orderId,status){
+                GetResponseFromStore(orderId, status) {
                     Swal.fire(`訂單編號${orderId}${status}`)
                     console.log(status)
                 }

@@ -1,4 +1,22 @@
-﻿<div id="app">
+﻿@section Styles
+    {
+    <style>
+        .custom-pagination .page-link {
+            color: forestgreen;
+            border-color: forestgreen;
+        }
+
+        .custom-pagination .page-item.active .page-link {
+            background-color: forestgreen;
+            border-color: forestgreen;
+            color: white;
+        }
+
+    </style>
+}
+
+
+<div id="app">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-10 mb-5 text-center">
@@ -65,7 +83,8 @@
                                                     <hr />
                                                     <div class="d-flex justify-content-end">
                                                         <div class="col-6">價格：{{ selectedProduct.dishPrice }}</div>
-                                                        <div class="col-sm-3 px-1 py-1">數量:
+                                                        <div class="col-sm-3 px-1 py-1">
+                                                            數量:
                                                             <input type="number" v-model="selectedProduct.dishCount" min="1" max="10" />
                                                         </div>
                                                     </div>
@@ -86,18 +105,19 @@
         </div>
 
         <div class="container">
-            <ul class="pagination justify-content-center">
+            <ul class="pagination justify-content-center product-category custom-pagination">
                 <li class="page-item" :class="{ 'disabled': currentPage === 1 }"><a class="page-link" href="#" @@click="goToPage(currentPage - 1)"><</a></li>
                 <li class="page-item "
                     v-for="page in totalPages"
                     :key="page"
-                    :class="{ 'active': currentPage === page }"><a class="page-link" href="#" @@click="goToPage(page)">{{page}}</a></li>
+                    :class="{ 'active': currentPage === page, 'text-primary': currentPage !== page }"><a class="page-link" href="#" @@click="goToPage(page)">{{page}}</a></li>
                 <li class="page-item"
                     :class="{'disabled': currentPage === totalPages}">
                     <a class="page-link" href="#" @@click="goToPage(currentPage + 1)">></a>
                 </li>
             </ul>
         </div>
+
 
         <div class="container mt-4">
             <div class="row justify-content-end">
@@ -142,7 +162,7 @@
                     console.log("ok")
                 );
 
-               /* this.restoreCartItemsFromCookie();*/ // 恢復後掛載
+                /* this.restoreCartItemsFromCookie();*/ // 恢復後掛載
             },
             computed: {
                 OrderListUrl() {
@@ -159,7 +179,7 @@
                     const endIndex = startIndex + this.pageSize;
                     return this.productMenu.slice(startIndex, endIndex);
                 },
-             
+
             },
             methods: {
                 viewProduct(Product) {
@@ -209,7 +229,7 @@
                     //})
                 },
                 GetProductPic(pic) {
-                    if(pic == null){
+                    if (pic == null) {
                         return '../image/noimgmed.png';
                     }
                     return `data:image/jpeg;base64,${pic}`
@@ -217,7 +237,7 @@
                 SavecartItemToCookie() {
                     document.cookie = `cartItems=${JSON.stringify(this.cartItems)}; max-age=300`;
                     console.log(document.cookie);
-                }, 
+                },
                 //getCookie(name) {
                 //    const cookieString = document.cookie;
                 //    const cookies = cookieString.split(';');
