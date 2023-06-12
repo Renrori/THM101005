@@ -105,18 +105,17 @@
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                    <div class="pac-card" id="pac-card">
+                                    @*<div class="pac-card" id="pac-card">
                                         <div id="pac-container">
                                             <input id="pac-input" class="form-control" type="text" placeholder="請輸入新地址" v-model="addressChosen" />
                                         </div>
-                                    </div>
+                                    </div>*@
                                     <div id="map"></div>
                                    @* <input type="text" class="form-control" id="location" placeholder="請輸入新地址" v-model="addressChosen" />*@
-                                    <br />
                                     <h4>已儲存的地址</h4>
                                     <select class="form-select" aria-label="Default select example" v-model="addressChosen">
-                                        <option disabled value="">---請選擇---</option>
-                                        <option v-for="a in address">{{a.userAddress}}</option>
+                                        <option disabled selected value="">---請選擇---</option>
+                                        <option v-for="a in address" >{{a.userAddress}}</option>
                                     </select>
                                 </div>
                                 <div class="modal-footer">
@@ -167,7 +166,7 @@
                     storeImageUrl: '',
                     cartItems: [],
                     address:[],
-                    addressChosen:"請輸入地址",
+                    addressChosen:"",
                 }
             },
             watch:{

@@ -32,7 +32,7 @@ namespace DeliveryBro.Areas.store.apiControllers
 		{
 			var id = User.GetId();
 			return _context.CustomerOrderTable.Include(x => x.OrderDetailsTable)
-				.Where(x => x.RestaurantId == id && x.OrderStatus == "completed").OrderByDescending(x => x).Select(x => new HisOrderDTO
+				.Where(x => x.RestaurantId == id && x.OrderStatus == "prepared").OrderByDescending(x => x).Select(x => new HisOrderDTO
 				{
 					OrderId = x.OrderId,
 					OrderDate = x.OrderDate.ToLocalTime().ToString(),
@@ -54,7 +54,7 @@ namespace DeliveryBro.Areas.store.apiControllers
 		{
 			var rid= User.GetId();
 			var query = _context.CustomerOrderTable.Include(x => x.OrderDetailsTable)
-				   .Where(x => x.RestaurantId == rid && x.OrderStatus == "completed");
+				   .Where(x => x.RestaurantId == rid && x.OrderStatus == "prepared");
 			if (startdate.HasValue) query = query.Where(x => x.OrderDate >= startdate);
 			if (enddate.HasValue) query = query.Where(x => x.OrderDate <= enddate);
 			if (id.HasValue) query = query.Where(x => x.OrderId == id);
@@ -105,25 +105,26 @@ namespace DeliveryBro.Areas.store.apiControllers
 		[HttpGet("acepted")]
 		public IQueryable<HisOrderDTO> AceptedOrder()
 		{
-			var id = User.GetId();
-			return _context.CustomerOrderTable.Include(x => x.OrderDetailsTable)
-				.Where(x => x.RestaurantId == id && x.OrderStatus == "acepted").Select(x => new HisOrderDTO
+		var id = User.GetId();
+		return  _context.CustomerOrderTable.Include(x => x.OrderDetailsTable)
+			.Where(x => x.RestaurantId == id && x.OrderStatus == "acepted").Select(x => new HisOrderDTO
+			{
+				OrderId = x.OrderId,
+				OrderDate = x.OrderDate.ToLocalTime().ToString(),
+				CompletedTime=x.OrderDate.ToLocalTime().AddMinutes((double)x.Restaurant.PrepareTime).ToString(),
+				CustomerName = x.Customer.CustomerName,
+				Note = x.Note,
+				OrderDetails = x.OrderDetailsTable.Select(d => new OrderDetailsDTO
 				{
-					OrderId = x.OrderId,
-					OrderDate = x.OrderDate.ToLocalTime().ToString(),
-					CompletedTime=x.OrderDate.ToLocalTime().AddMinutes((double)x.Restaurant.PrepareTime).ToString(),
-					CustomerName = x.Customer.CustomerName,
-					Note = x.Note,
-					OrderDetails = x.OrderDetailsTable.Select(d => new OrderDetailsDTO
-					{
-						DishName = d.DishName,
-						UnitPrice = d.UnitPrice,
-						Quantity = d.Quantity,
-						Discount = d.Discount,
-						Subtotal = d.Subtotal
-					}).ToList(),
-					Total = x.OrderDetailsTable.Sum(x => x.Subtotal)
-				});
+					DishName = d.DishName,
+					UnitPrice = d.UnitPrice,
+					Quantity = d.Quantity,
+					Discount = d.Discount,
+					Subtotal = d.Subtotal
+				}).ToList(),
+				Total = x.OrderDetailsTable.Sum(x => x.Subtotal)
+			});
+			
 		}
 		[HttpPut("{id}")]
 		public async Task<string> OrderStatus(int id, OrderStatusDTO statusDTO)
@@ -192,5 +193,6 @@ namespace DeliveryBro.Areas.store.apiControllers
 			return null;
 
 		}
+
 	}
 }

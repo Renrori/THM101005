@@ -4,7 +4,6 @@ namespace DeliveryBro.Areas.store.DTO
 {
 	public class HisOrderDTO
 	{
-
 			public int OrderId { get; set; }
 			public string OrderDate { get; set; }
 			public string CompletedTime { get; set; }

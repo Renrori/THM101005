@@ -1,0 +1,274 @@
+﻿<style>
+	#btnRegister {
+		background-color: #444444;
+	}
+
+	#btnDemo1 {
+		background-color: #444444;
+	}
+
+	#btnDemo2 {
+		background-color: #444444;
+	}
+</style>
+<main>
+	<div class="container">
+
+		<section class="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
+			<div class="container">
+				<div class="row justify-content-center">
+					<div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
+
+						<div class="d-flex justify-content-center py-4">
+							<a href="index.html" class="logo d-flex align-items-center w-auto">
+								<span class="d-none d-lg-block">NiceAdmin</span>
+							</a>
+						</div><!-- End Logo -->
+
+						<div class="card mb-3" id="app">
+
+							<div class="card-body">
+
+								<div class="row g-3">
+									<div class="pt-4 pb-2">
+										<h5 class="card-title text-center pb-0 fs-4">外送員註冊</h5>
+										<p class="text-center small">輸入詳細資訊以利創建帳戶</p>
+									</div>
+
+									<div class="col-12">
+										<label for="yourName" class="form-label">帳號</label>
+										<span v-if="AccountisValid==false" class="text-danger">&emsp;&emsp;{{AccountM}}</span>
+										<input type="text" name="account" class="form-control" id="account" v-model="account">
+									</div>
+
+									<div class="col-12">
+										<label for="yourPassword" class="form-label">密碼</label>
+										<span v-if="PasswordisValid==false" class="text-danger">&emsp;&emsp;{{PasswordM}}</span>
+										<input type="password" name="password" class="form-control" id="password" v-model="password">
+									</div>
+
+									<div class="col-12">
+										<label for="yourPassword" class="form-label">確認密碼</label>
+										<span v-if="RepasswordisValid==false" class="text-danger">&emsp;&emsp;與密碼不一致</span>
+										<input type="password" name="repassword" class="form-control" id="repassword" v-model="repassword">
+									</div>
+
+									<div class="col-12">
+										<label for="yourUsername" class="form-label">姓名</label>
+										<span v-if="NameisValid==false" class="text-danger">&emsp;&emsp;不可為空</span>
+										<input type="text" name="name" class="form-control" id="name" v-model="name">
+									</div>
+
+									<div class="col-12">
+										<label for="yourPhone" class="form-label">電話</label>
+										<span v-if="PhoneisValid==false" class="text-danger">&emsp;&emsp;{{PhoneM}}</span>
+										<input type="text" name="phone" class="form-control" id="phone" v-model="phone">
+									</div>
+
+									<div class="col-12">
+										<label for="yourEmail" class="form-label">信箱</label>
+										<span v-if="EmailisValid==false" class="text-danger">&emsp;&emsp;{{EmailM}}</span>
+										<input type="email" name="email" class="form-control" id="email" v-model="email">
+									</div>
+
+									<div class="col-12">
+										<button id="btnRegister" class="btn btn-secondary w-100" type="button" v-bind:disabled="checkValid" @@click="register">註冊</button>
+
+									</div>
+									<div>
+										<button id="btnDemo1" type="button" class="btn btn-secondary" @@click="setData()">Demo1</button>
+										<button id="btnDemo2" type="button" class="btn btn-secondary" @@click="setDataError()">Demo2</button>
+									</div>
+									@*<div>
+									<button id="btnDemo2" type="button" class="btn btn-secondary" @@click="setDataError()">Demo2</button>
+									</div>*@
+									@*<div>
+									<a class="btn btn-outline-secondary w-100" href="/store/StoreUser/Register" type="button" @@click="setData()">DEMO</a>
+									</div>*@
+									<div class="col-12">
+										<p class="small mb-0">已經有外送員帳號嗎? <a href="/deliver/Home/Login" style="color:mediumblue">登入</a></p>
+									</div>
+								</div>
+
+							</div>
+						</div>
+
+						<div class="credits">
+							<!-- All the links in the footer should remain intact. -->
+							<!-- You can delete the links only if you purchased the pro version. -->
+							<!-- Licensing information: https://bootstrapmade.com/license/ -->
+							<!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
+							Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+						</div>
+
+					</div>
+				</div>
+			</div>
+
+		</section>
+
+	</div>
+</main><!-- End #main -->
+
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+@section Scripts
+	{
+	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+	<script src="~/axios/axios.min.js"></script>
+	<script>
+	var vueRegister = {
+		data() {
+			return {
+				name: "",
+				account: "",
+				password: "",
+				repassword: "",
+				email: "",
+				phone: "",
+				NameisValid: false,
+				AccountisValid: false,
+				PhoneisValid: false,
+				EmailisValid: false,
+				PasswordisValid: false,
+				RepasswordisValid: false,
+				AccountM: "",
+				PhoneM: "",
+				EmailM: "",
+				PasswordM: ""
+			}
+		},
+		watch: {
+			name() {
+				let _this = this;
+				if (_this.name != "") _this.NameisValid = true;
+			},
+			password() {
+				let _this = this;
+				if (_this.password != "") _this.PasswordIsValid();
+			},
+			repassword() {
+				let _this = this;
+				if (_this.repassword == _this.password && _this.repassword != "") _this.RepasswordisValid = true;
+			},
+			account() {
+				let _this = this;
+				if (_this.account != "") _this.AccountIsExist();
+			},
+			email() {
+				let _this = this;
+				if (_this.email != "") _this.EmailIsExist();
+			},
+			phone() {
+				let _this = this;
+				if (_this.phone != "") _this.PhoneIsExist();
+			}
+		},
+		computed: {
+			checkValid: function () {
+				let _this = this;
+				if (_this.NameisValid == false || _this.AccountisValid == false || _this.PhoneisValid == false ||
+					_this.EmailisValid == false || _this.PasswordisValid == false || _this.RepasswordisValid == false)
+					return true;
+				else return false;
+			}
+		},
+		methods: {
+			register: function () {
+				let _this = this;
+				var request = {
+					Account: _this.account,
+					Name: _this.name,
+					Password: _this.password,
+					Email: _this.email,
+					Phone: _this.phone,
+				};
+				axios.post(`/api/DeliverUser`, request).then(response => {
+					let timerInterval
+					Swal.fire({
+						title: response.data + '!',
+						html: '<b></b>毫秒後跳轉登入畫面',
+						timer: 2000,
+						timerProgressBar: true,
+						didOpen: () => {
+							Swal.showLoading()
+							const b = Swal.getHtmlContainer().querySelector('b')
+							timerInterval = setInterval(() => {
+								b.textContent = Swal.getTimerLeft()
+							}, 100)
+						},
+						willClose: () => {
+							clearInterval(timerInterval)
+						}
+					}).then((result) => {
+						/* Read more about handling dismissals below */
+						if (result.dismiss === Swal.DismissReason.timer) {
+							console.log('I was closed by the timer')
+						}
+						window.location.href = '../Home/Login'
+					})
+				});
+			},
+			AccountIsExist: function () {
+				let _this = this;
+					axios.get(`/api/DeliverUser/isExist/account`, {
+					params: {
+						account: _this.account
+					}
+				}).then(response => {
+					if (response.data == "可以使用") _this.AccountisValid = true;
+					else {
+						_this.AccountisValid = false;
+						_this.AccountM = response.data;
+					}
+				})
+			},
+			EmailIsExist: function () {
+				let _this = this;
+					axios.get(`/api/DeliverUser/isExist/email`, {
+					params: {
+						email: _this.email
+					}
+				}).then(response => {
+					if (response.data == "可以使用") _this.EmailisValid = true;
+					else {
+						_this.EmailisValid = false;
+						_this.EmailM = response.data;
+					}
+				})
+			},
+			PhoneIsExist: function () {
+				let _this = this;
+					axios.get(`/api/DeliverUser/isExist/phone`, {
+					params: {
+						phone: _this.phone
+					}
+				}).then(response => {
+					if (response.data == "可以使用") _this.PhoneisValid = true;
+					else {
+						_this.PhoneisValid = false;
+						_this.PhoneM = response.data;
+					}
+				})
+			},
+			PasswordIsValid: function () {
+				let _this = this;
+					axios.get(`/api/DeliverUser/isExist/password`, {
+					params: {
+						password: _this.password
+					}
+				}).then(response => {
+					if (response.data == "可以使用") _this.PasswordisValid = true;
+					else {
+						_this.PasswordisValid = false;
+						_this.PasswordM = response.data;
+					}
+				})
+			}
+		}
+	}
+		var app = Vue.createApp(vueRegister).mount("#app");
+
+	</script>
+}

@@ -93,10 +93,15 @@ namespace DeliveryBro.ApiController
         public List<StoreViewModel> Distance(string address, List<StoreViewModel> store)
         {
             List<StoreViewModel> StoreInRange = new List<StoreViewModel>();
+            var id = User.GetId();
+            if (id == Guid.Empty) return null;
+            var userAddress = _context.CustomerAddressTable.FirstOrDefault(x => x.CustomerId == id && x.CustomerAddress == address);
+            if (userAddress == null) return null;
+            //List<StoreViewModel> StoreInRange=new List<StoreViewModel>();
             LocationViewModel customer = new LocationViewModel
             {
-                Latitude = Convert.ToDouble(Map.GetLatitude(address)),
-                Longitude = Convert.ToDouble(Map.GetLongitude(address))
+                Latitude = Convert.ToDouble(userAddress.Latitude),
+                Longitude = Convert.ToDouble(userAddress.Longitude)
             };
             foreach (var s in store)
             {

@@ -399,7 +399,7 @@
 										<div class="mt-2 bg-light p-3">
 											<div class="row">
 												<div class="col mb-2 mb-sm-0">
-													<input type="text" class="form-control border-0" placeholder="Enter your text" required id="msgforcaller" v-model="message">
+													<input type="text" class="form-control border-0" placeholder="Enter your text" required id="msgforcaller" v-model="message" @@keyup.enter="sendtoCaller">
 													<div class="invalid-feedback">
 														Please enter your messsage
 													</div>
@@ -579,6 +579,7 @@
 					var idx = self.allMessage.findIndex(x => x.key == self.currentChatUser.userId)
 					self.allMessage[idx].msg.push(newmsg);
 					self.message = "";
+					self.scroll();
 				},
 				getAllUsers: function (allusersJson) {
 					let self = this;
@@ -637,7 +638,7 @@
 					} else {
 						this.allMessage[idx].msg.push(newMsg);
 					}
-
+					this.scroll();
 				},
 				UnReadMessage:function(userIds){
 					let self=this;
@@ -701,6 +702,10 @@
 						self.allMessage[idx].msg = [];
 						self.allMessage[idx].msg = msgs;
 					}
+					
+				},
+				scroll:function(){
+					document.querySelectorAll('.simplebar-content-wrapper')[1].scroll(0, document.querySelectorAll('.simplebar-content-wrapper')[1].scrollHeight)
 				}
 			},
 		}).mount("#app")

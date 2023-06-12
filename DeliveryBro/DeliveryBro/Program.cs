@@ -18,6 +18,7 @@ namespace DeliveryBro
     {
         public static void Main(string[] args)
         {
+            var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
             var builder = WebApplication.CreateBuilder(args);
 
             #region DB
@@ -56,21 +57,28 @@ namespace DeliveryBro
                 opt.Cookie.Name = "customercookie";
                 opt.LoginPath = "/Login/Index"; //登入路徑
                 opt.AccessDeniedPath = "/Login/Logout"; //取消登入路徑
-                opt.ExpireTimeSpan = TimeSpan.FromMinutes(10);
+                opt.ExpireTimeSpan = TimeSpan.FromMinutes(30);
             })
             .AddCookie("StoreAuthenticationScheme", opt =>
             {
                 opt.Cookie.Name = "storecookie";
                 opt.LoginPath = "/store/StoreUser/Login"; //登入路徑
                 opt.AccessDeniedPath = "/store/StoreUser/Logout"; //取消登入路徑
-                opt.ExpireTimeSpan = TimeSpan.FromMinutes(10);
+                opt.ExpireTimeSpan = TimeSpan.FromMinutes(30);
             })
             .AddCookie("AdministratorAuthenticationScheme", opt =>
             {
                 opt.Cookie.Name = "admincookie";
                 opt.LoginPath = "/admin/Account/Login";
                 opt.AccessDeniedPath = "/admin/Account/Logout";
-                opt.ExpireTimeSpan = TimeSpan.FromMinutes(10);
+                opt.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+            })
+            .AddCookie("DeliverAuthenticationScheme",opt=>
+            {
+                opt.Cookie.Name = "delivercookie";
+                opt.LoginPath = "/deliver/Home/Login";
+                opt.AccessDeniedPath = "/deliver/Home/Logut";
+                opt.ExpireTimeSpan= TimeSpan.FromMinutes(30);
             })
             .AddGoogle("Google", googleOptions =>
             {
@@ -113,9 +121,20 @@ namespace DeliveryBro
             builder.Services.AddTransient<EncryptService>();
             builder.Services.AddTransient<PasswordEncyptService>();
 			builder.Services.AddSingleton<OrderNotificationTask>();
-			#endregion
+            #endregion
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy(MyAllowSpecificOrigins,
+                    policy =>
+                    {
+                        policy.WithOrigins("http://127.0.0.1:5501",
+                                "*")
+                            .AllowAnyHeader()
+                            .AllowAnyMethod();
+                    });
+            });
 
-			var app = builder.Build();
+            var app = builder.Build();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -137,9 +156,9 @@ namespace DeliveryBro
             app.MapHub<OrderHub>("/orderHub");
             app.MapHub<ChatHub>("/chatHub");
 			app.UseRouting();
+            app.UseCors(MyAllowSpecificOrigins);
             app.UseAuthentication();
             app.UseAuthorization();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
