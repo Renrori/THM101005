@@ -224,8 +224,6 @@ namespace DeliveryBro.Models
 
                 entity.Property(e => e.DishId).HasColumnName("DishID");
 
-                entity.Property(e => e.CategoryCustomSettingsId).HasColumnName("CategoryCustomSettingsID");
-
                 entity.Property(e => e.DishCategory)
                     .IsRequired()
                     .HasMaxLength(20);
