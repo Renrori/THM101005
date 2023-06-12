@@ -57,28 +57,32 @@ namespace DeliveryBro
                 opt.Cookie.Name = "customercookie";
                 opt.LoginPath = "/Login/Index"; //登入路徑
                 opt.AccessDeniedPath = "/Login/Logout"; //取消登入路徑
-                opt.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+                opt.SlidingExpiration = true;
+                opt.ExpireTimeSpan = TimeSpan.FromMinutes(15);
             })
             .AddCookie("StoreAuthenticationScheme", opt =>
             {
                 opt.Cookie.Name = "storecookie";
                 opt.LoginPath = "/store/StoreUser/Login"; //登入路徑
                 opt.AccessDeniedPath = "/store/StoreUser/Logout"; //取消登入路徑
-                opt.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+				opt.SlidingExpiration = true;
+				opt.ExpireTimeSpan = TimeSpan.FromMinutes(15);
             })
             .AddCookie("AdministratorAuthenticationScheme", opt =>
             {
                 opt.Cookie.Name = "admincookie";
                 opt.LoginPath = "/admin/Account/Login";
                 opt.AccessDeniedPath = "/admin/Account/Logout";
-                opt.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+				opt.SlidingExpiration = true;
+				opt.ExpireTimeSpan = TimeSpan.FromMinutes(15);
             })
             .AddCookie("DeliverAuthenticationScheme",opt=>
             {
                 opt.Cookie.Name = "delivercookie";
                 opt.LoginPath = "/deliver/Home/Login";
-                opt.AccessDeniedPath = "/deliver/Home/Logut";
-                opt.ExpireTimeSpan= TimeSpan.FromMinutes(30);
+                opt.AccessDeniedPath = "/deliver/Home/Logout";
+				opt.SlidingExpiration = true;
+				opt.ExpireTimeSpan= TimeSpan.FromMinutes(15);
             })
             .AddGoogle("Google", googleOptions =>
             {

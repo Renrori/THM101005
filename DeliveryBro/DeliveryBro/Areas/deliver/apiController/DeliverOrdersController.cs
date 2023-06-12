@@ -81,13 +81,11 @@ namespace DeliveryBro.Areas.deliver.apiController
         public IQueryable<HistoryOrderDTO> DeliverOrder()
         {
             var id = User.GetId();
-            var orderHub = new OrderHub();
-            BackgroundJob.Schedule(() => _task.Notify(), TimeSpan.FromSeconds(30));
             var query = _context.CustomerOrderTable
                 .Include(x => x.OrderDetailsTable)
                 .Include(x=>x.Customer)
                 .ThenInclude(x=>x.CustomerAddressTable)
-                .Where(x =>  x.OrderStatus == "deliver").Select(x => new HistoryOrderDTO
+                .Where(x =>  x.OrderStatus == "deliver"&&x.DriverId==id).Select(x => new HistoryOrderDTO
                 {
                     OrderId = x.OrderId,
                     OrderDate = x.OrderDate.ToLocalTime().ToString(),
@@ -129,15 +127,17 @@ namespace DeliveryBro.Areas.deliver.apiController
                     }).ToList(),
                     Total = x.OrderDetailsTable.Sum(x => x.Subtotal)
                 });
-            
+            if(!query.Any()) return null;
             return query;
         }
         [HttpGet("prepared")]
         public IQueryable<HistoryOrderDTO> AceptedOrder()
         {
             var id = User.GetId();
-            return _context.CustomerOrderTable.Include(x => x.OrderDetailsTable)
-                .Where(x=>x.OrderStatus == "prepared").Select(x => new HistoryOrderDTO
+			var orderHub = new OrderHub();
+			BackgroundJob.Schedule(() => _task.Notify(), TimeSpan.FromSeconds(30));
+			return _context.CustomerOrderTable.Include(x => x.OrderDetailsTable)
+                .Where(x=>x.OrderStatus == "prepared"&&x.DriverId==null).Select(x => new HistoryOrderDTO
                 {
 					OrderId = x.OrderId,
 					OrderDate = x.OrderDate.ToLocalTime().ToString(),

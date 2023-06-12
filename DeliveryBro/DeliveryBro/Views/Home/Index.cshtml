@@ -150,9 +150,7 @@
 @section Scripts
     {
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-    <script src="https://unpkg.com/vue@3.2.36/dist/vue.global.prod.js"></script>  
-    <script src="~/js/mapaddressautocomplete.js"></script>
-    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDSVv7tpJnSFG82cLsD3wazbDCksKfic_o&callback=initMap&libraries=places" defer></script>
+    <script src="https://unpkg.com/vue@3.2.36/dist/vue.global.prod.js"></script>
     <script src="~/axios/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="~/lib\microsoft/signalr/dist/browser/signalr.js"></script>
@@ -183,15 +181,6 @@
                 }
             },
             mounted() {
-                this.SCsignalr = new signalR.HubConnectionBuilder().withUrl("/orderHub").build();
-                this.SCsignalr.start()
-                    .then(() => {
-                        console.log("connection");
-                    })
-                    .catch((err) => {
-                        console.log(err.toString());
-                    });
-                this.SCsignalr.on("orderStatus",this.GetResponseFromStore);
                 this.GetStoreInfo();
                 this.getcartItemsFromCookie();
                 this.getCurrentAddress();
@@ -247,10 +236,6 @@
                         this.$refs.button.click();
                         document.cookie="modal_shown=seen";
                     }
-                },
-                GetResponseFromStore(orderId,status){
-                    Swal.fire(`訂單編號${orderId}${status}`)
-                    console.log(status)
                 }
             }
         };

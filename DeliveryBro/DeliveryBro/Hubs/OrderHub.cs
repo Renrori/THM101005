@@ -7,6 +7,7 @@ using System.Collections.Concurrent;
 
 namespace DeliveryBro.Hubs
 {
+    [Authorize(AuthenticationSchemes = "DeliverAuthenticationScheme")]
     [Authorize(AuthenticationSchemes = "CustomerAuthenticationScheme")]
     [Authorize(AuthenticationSchemes = "StoreAuthenticationScheme")]
     public class OrderHub : Hub

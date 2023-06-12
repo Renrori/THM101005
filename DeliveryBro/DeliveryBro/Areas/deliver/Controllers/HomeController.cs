@@ -1,9 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 
 namespace DeliveryBro.Areas.deliver.Controllers
 {
 	[Area("deliver")]
+
 	public class HomeController : Controller
 	{
 		public IActionResult Login()
@@ -14,23 +17,13 @@ namespace DeliveryBro.Areas.deliver.Controllers
 		{
 			return View();
 		}
-		public IActionResult DeliverAceptedOrder()
-		{
-			return View();
-		}
-		public IActionResult DeliverWaitingOrder()
-		{
-			return View();
-		}
+		[HttpPost]
 		public async Task<IActionResult> Logout()
 		{
 			await HttpContext.SignOutAsync("DeliverAuthenticationScheme");
 			return RedirectToAction("Login", "Home");
 		}
-		public IActionResult HistoryOrder()
-		{
-			return View();
-		}
+		[Authorize(Roles = "Deliver", AuthenticationSchemes = "DeliverAuthenticationScheme")]
 		public IActionResult LIFFPage()
 		{
 			return View();

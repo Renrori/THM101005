@@ -5,7 +5,7 @@
     var orderListNavUrl = Url.Action("OrderListNav", "Home");
 }
 
-<ul class="navbar-nav">
+<ul class="navbar-nav" id="app3">
     @if (User.Identity.IsAuthenticated && User.IsInRole("User"))
     {
         <li class="nav-item">
@@ -39,4 +39,35 @@
     var encodedCartItems = encodeURIComponent(cartItems);
     var finalOrderListNavUrl = "@orderListNavUrl" + "?data=" + encodedCartItems;
     document.write('<a class="nav-link" href="' + finalOrderListNavUrl + '"><i class="fa-solid fa-cart-shopping"></i></a>');
+</script>
+<script src="https://unpkg.com/vue@3.2.36/dist/vue.global.prod.js"></script>
+<script src="~/lib\microsoft/signalr/dist/browser/signalr.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    let app3 = Vue.createApp({
+        data() {
+            return {
+                signalr: {}
+            }
+        },
+        mounted: function () {
+            let self = this;
+            self.signalr = new signalR.HubConnectionBuilder().withUrl(`/orderHub`).build();
+            self.signalr.start().then(() => {
+                console.log('connected');
+            }).catch((err) => {
+                console.error(err.toString());
+            });
+            self.signalr.on("orderStatus", self.GetResponseFromStore);
+        },
+        methods: {
+            GetResponseFromStore: function (orderId, status) {
+                Swal.fire({
+                    title:`訂單編號${orderId}`,
+                    text:`${status}`
+                })
+                console.log(status)
+            }
+        }
+    }).mount('#app3')
 </script>

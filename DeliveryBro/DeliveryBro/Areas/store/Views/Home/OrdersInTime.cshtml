@@ -131,8 +131,7 @@
 				return {
 					waitingOrder: [],
 					aceptedOrder: [],
-					signalr: {},
-					SCsignalr:{}
+					signalr: {}
 				};
 			},
 			mounted: function () {
@@ -142,11 +141,6 @@
 					console.log('connected');
 				}).catch((err) => {
 					console.error(err.toString());
-				});
-				_this.signalr.on("NewOrder", () => {
-					axios.get(`/api/Orders/wait`).then(response => {
-						_this.waitingOrder = response.data;
-					})
 				});
 				_this.getOrders();
 			},
@@ -159,6 +153,11 @@
 					axios.get(`/api/Orders/acepted`).then(response => {
 						_this.aceptedOrder = response.data.map(x => ({ ...x }));
 					});
+					setInterval(()=>{
+						axios.get(`/api/Orders/wait`).then(response => {
+							_this.waitingOrder = response.data.map(x => ({ ...x }));
+						});
+					},30000)
 				},
 				acepted: function (order) {
 					let _this = this;

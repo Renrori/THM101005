@@ -127,15 +127,15 @@ namespace DeliveryBro.Areas.store.apiControllers
 		{
 			var id = User.GetId();
 			var orders = _context.CustomerOrderTable.Include(x => x.OrderDetailsTable)
-                .Where(x => x.RestaurantId == id && x.OrderStatus == "completed").ToList();
+                .Where(x => x.RestaurantId == id && (x.OrderStatus != "waiting" || x.OrderStatus != "acepted")).ToList();
 			var query = orders.GroupBy(x => x.OrderDate.Month, (month, order) => new
 			{
 				Month = month.ToString(),
-				Order = order.SelectMany(i => i.OrderDetailsTable).GroupBy(n => n.DishName, (name, number) => new
+				Order = order.SelectMany(i => i.OrderDetailsTable.GroupBy(n => n.DishName).Select(q => new
 				{
-					Name = name,
-					Number = number.Count()
-				}).ToList()
+					Name = q.Key,
+					Number = q.Count()
+				}).ToList())
 
 			}).ToList();
 			var data = query.SelectMany(x => x.Order.Select(o => new
@@ -190,7 +190,7 @@ namespace DeliveryBro.Areas.store.apiControllers
 				IdLocation.Add(menuId[i], i);
             }
             var itemcount = _context.CustomerOrderTable
-                .Where(x => x.RestaurantId == id &&x.OrderStatus=="completed")
+                .Where(x => x.RestaurantId == id && (x.OrderStatus != "waiting" || x.OrderStatus != "acepted"))
                 .Select(x => new
             {
                 itemdetail = x.OrderDetailsTable.Select(i => new
@@ -222,13 +222,13 @@ namespace DeliveryBro.Areas.store.apiControllers
         {
 			var id = User.GetId();
             var query = _context.CustomerOrderTable
-                .Where(x => x.RestaurantId == id && x.OrderDate.Date.ToString() == DateTime.UtcNow.Date.ToString()&&x.OrderStatus=="completed")
+                .Where(x => x.RestaurantId == id && x.OrderDate.Date.ToString() == DateTime.UtcNow.Date.ToString()&& (x.OrderStatus != "waiting" || x.OrderStatus != "acepted"))
                 .GroupBy(x=>x.OrderDate.Date.ToString())
                 .Select(q => new
                 {
                     Date = q.Key,
-                    Orders = _context.CustomerOrderTable.Where(x => x.RestaurantId == id && x.OrderStatus == "completed")
-                            .Count(x=>x.OrderDate.Date.ToString() == DateTime.Today.Date.ToString()),
+                    Orders = _context.CustomerOrderTable.Where(x => x.RestaurantId == id && (x.OrderStatus != "waiting" || x.OrderStatus != "acepted"))
+                            .Count(x=>x.OrderDate.Date.ToString() == DateTime.UtcNow.Date.ToString()),
                     Revenue =q.SelectMany(o=>o.OrderDetailsTable).Sum(o=>o.Subtotal)
                 }) ;
             

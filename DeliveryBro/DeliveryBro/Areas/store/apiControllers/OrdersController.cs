@@ -32,7 +32,7 @@ namespace DeliveryBro.Areas.store.apiControllers
 		{
 			var id = User.GetId();
 			return _context.CustomerOrderTable.Include(x => x.OrderDetailsTable)
-				.Where(x => x.RestaurantId == id && x.OrderStatus == "prepared").OrderByDescending(x => x).Select(x => new HisOrderDTO
+				.Where(x => x.RestaurantId == id && (x.OrderStatus != "waiting" || x.OrderStatus != "acepted")).OrderByDescending(x => x).Select(x => new HisOrderDTO
 				{
 					OrderId = x.OrderId,
 					OrderDate = x.OrderDate.ToLocalTime().ToString(),
@@ -79,9 +79,6 @@ namespace DeliveryBro.Areas.store.apiControllers
 		public IQueryable<HisOrderDTO> WaitingOrder()
 		{
 			var id = User.GetId();
-			var orderHub = new OrderHub();
-			BackgroundJob.Schedule(() => _task.Notify(), TimeSpan.FromSeconds(30));
-			//BackgroundJob.Schedule(() => NoResponseOrder(), TimeSpan.FromMinutes(1));
 			var query= _context.CustomerOrderTable.Include(x => x.OrderDetailsTable)
 				.Where(x => x.RestaurantId == id && x.OrderStatus == "waiting").Select(x => new HisOrderDTO
 				{

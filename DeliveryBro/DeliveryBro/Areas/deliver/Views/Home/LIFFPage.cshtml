@@ -51,7 +51,7 @@
 		<nav class="fixed-bottom navbar navbar-expand-sm navbar-dark bg-dark">
 			<div class="container-fluid">
 				<a class="navbar-brand" href="#">DeliveryBro</a>
-				<button class="btn btn-success">上線</button>
+				<button class="btn btn-success" @@click="logout">上線</button>
 				<button class="navbar-toggler" type="button" data-bs-toggle="collapse"
 						data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
 						aria-expanded="false" aria-label="Toggle navigation">
@@ -60,100 +60,94 @@
 				<div class="collapse navbar-collapse" id="navbarSupportedContent">
 					<template v-if="isOrderPanelOpen">
 						<ul class="navbar-nav me-auto mb-2 mb-lg-0">
-							<li class="nav-item dropdown">
-								<a class="nav-link dropdown-toggle show" href="#" id="order" role="button"
+							<li class="nav-item dropdown" @@click="otherPanel">
+								<a class="nav-link dropdown-toggle" href="#" id="order" role="button"
 								   data-bs-toggle="dropdown" aria-expanded="false">
 									等待派送訂單
 								</a>
-								<template v-if="isAcceptOrder">
-									<ul class="dropdown-menu show" aria-labelledby="navbarDropdown">
-										<template v-for="item in acceptedOrder">
-											<li @@click.stop="orderDetail(item)"
-												class="my-1 dropdown-item d-flex justify-content-between align-items-start">
-												<div class="ms-1 me-auto ">
-													<div class="fw-bold">{{item.restaurantAddress}}</div>
-													<div>餐廳:{{item.restaurantName}} </div>
-													<div>{{item.orderDate}}</div>
-													<div> 訂購者: {{item.customerName}}</div>
+								<ul class="dropdown-menu" aria-labelledby="navbarDropdown" >
+									<template v-for="item in orders">
+										<li @@click.stop="orderDetail(item)"
+											class="my-1 dropdown-item d-flex justify-content-between align-items-start">
+											<div class="ms-1 me-auto ">
+												<div class="fw-bold">{{item.restaurantAddress}}</div>
+												<div>餐廳:{{item.restaurantName}} </div>
+												<div>{{item.orderDate}}</div>
+												<div> 訂購者: {{item.customerName}}</div>
+											</div>
+											<div class="text-end">
+												<div>
+													<span class="badge bg-dark rounded-pill">{{(item.randCdistance*1).toFixed(2)}}KM</span>
 												</div>
-												<div class="text-end">
-													<div>
-														<span class="badge bg-dark rounded-pill">{{(item.randCdistance*1).toFixed(2)}}KM</span>
-													</div>
-													<div>
-														<span class="badge bg-info">現金</span>
-													</div>
+												<div>
+													<span class="badge bg-info">現金</span>
 												</div>
-											<li>
-												<hr class="dropdown-divider">
-											</li>
-										</template>
-									</ul>
-								</template>
-								<template v-else>
-									<ul class="dropdown-menu show" aria-labelledby="navbarDropdown">
-										<template v-for="item in orders">
-											<li @@click.stop="orderDetail(item)"
-												class="my-1 dropdown-item d-flex justify-content-between align-items-start">
-												<div class="ms-1 me-auto ">
-													<div class="fw-bold">{{item.restaurantAddress}}</div>
-													<div>餐廳:{{item.restaurantName}} </div>
-													<div>{{item.orderDate}}</div>
-													<div> 訂購者: {{item.customerName}}</div>
-												</div>
-												<div class="text-end">
-													<div>
-														<span class="badge bg-dark rounded-pill">{{(item.randCdistance*1).toFixed(2)}}KM</span>
-													</div>
-													<div>
-														<span class="badge bg-info">現金</span>
-													</div>
-												</div>
-											<li>
-												<hr class="dropdown-divider">
-											</li>
-										</template>
-									</ul>
-								</template>
+											</div>
+										<li>
+											<hr class="dropdown-divider">
+										</li>
+									</template>
+								</ul>
 							</li>
-							<li class="nav-item dropdown">
+							<li class="nav-item dropdown" @@click="otherPanel">
 								<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
 								   data-bs-toggle="dropdown" aria-expanded="false">
+									派送中訂單
+								</a>
+								<ul class="dropdown-menu" aria-labelledby="navbarDropdown" >
+									<template v-for="item in acceptedOrder">
+										<li @@click.stop="orderDetail(item)"
+											class="my-1 dropdown-item d-flex justify-content-between align-items-start">
+											<div class="ms-1 me-auto ">
+												<div class="fw-bold">{{item.restaurantAddress}}</div>
+												<div>餐廳:{{item.restaurantName}} </div>
+												<div>{{item.orderDate}}</div>
+												<div> 訂購者: {{item.customerName}}</div>
+											</div>
+											<div class="text-end">
+												<div>
+													<span class="badge bg-dark rounded-pill">{{(item.randCdistance*1).toFixed(2)}}KM</span>
+												</div>
+												<div>
+													<span class="badge bg-info">現金</span>
+												</div>
+											</div>
+										<li>
+											<hr class="dropdown-divider">
+										</li>
+									</template>
+								</ul>
+							</li>
+							<li class="nav-item dropdown" @@click="historyPanel">
+								<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+								   data-bs-toggle="dropdown" aria-expanded="false" >
 									歷史訂單
 								</a>
 								<ul class="dropdown-menu " aria-labelledby="navbarDropdown">
-									<li><a class="dropdown-item" href="#">Action</a></li>
-									<li><a class="dropdown-item" href="#">Action</a></li>
-									<li><a class="dropdown-item" href="#">Action</a></li>
-									<li><a class="dropdown-item" href="#">Action</a></li>
-									<li><a class="dropdown-item" href="#">Action</a></li>
-									<li><a class="dropdown-item" href="#">Action</a></li>
-									<li><a class="dropdown-item" href="#">Action</a></li>
-									<li><a class="dropdown-item" href="#">Action</a></li>
-									<li><a class="dropdown-item" href="#">Action</a></li>
-									<li><a class="dropdown-item" href="#">Action</a></li>
-									<li><a class="dropdown-item" href="#">Action</a></li>
-									<li><a class="dropdown-item" href="#">Action</a></li>
-									<li><a class="dropdown-item" href="#">Action</a></li>
-									<li><a class="dropdown-item" href="#">Action</a></li>
-									<li><a class="dropdown-item" href="#">Action</a></li>
-									<li><a class="dropdown-item" href="#">Action</a></li>
-									<li><a class="dropdown-item" href="#">Action</a></li>
-									<li><a class="dropdown-item" href="#">Another action</a></li>
-									<li>
-										<hr class="dropdown-divider">
-									</li>
-									<li><a class="dropdown-item" href="#">Something else here</a></li>
+									<template v-for="item in hisorders">
+										<li @@click.stop="orderDetail(item)"
+											class="my-1 dropdown-item d-flex justify-content-between align-items-start">
+											<div class="ms-1 me-auto ">
+												<div>餐廳:{{item.restaurantName}} </div>
+												<div>{{item.orderDate}}</div>
+												<div> 訂購者: {{item.customerName}}</div>
+											</div>
+											<div class="text-end">
+												<div>
+													<span class="badge bg-info">現金</span>
+												</div>
+											</div>
+										<li>
+											<hr class="dropdown-divider">
+										</li>
+									</template>
 								</ul>
 							</li>
-
-
 						</ul>
 					</template>
 
 					<template v-else>
 						<div class="card my-3">
-
 							<div class="card-body my-4">
 								<i @@click="closeOrderPanel" class="bi bi-x-square-fill "
 								   style="font-size: 2rem; position: absolute; top: 2vh; right: 4vh;"></i>
@@ -187,14 +181,19 @@
 								</div>
 								<hr>
 								<div class="row">
-									<template v-if="isAcceptOrder">
+									<template v-if="isAcceptOrder&&!isHisPanel">
 										<div class="col">
-											<button @@click="finishOrder(order.orderId)" class="btn btn-success w-100">完成訂單</button>
+											<button :disabled="btnValid(order.orderId)" @@click="finishOrder(order.orderId)" class="btn btn-success w-100">完成訂單</button>
+										</div>
+									</template>
+									<template v-else-if="isHisPanel">
+										<div class="col">
+											<button class="btn btn-success w-100">已完成</button>
 										</div>
 									</template>
 									<template v-else>
 										<div class="col">
-											<button @@click="acceptOrder(order.orderId)" class="btn btn-success w-100">接單</button>
+											<button @@click="acceptOrder(order)" class="btn btn-success w-100">接單</button>
 										</div>
 										<div class="col">
 											<button @@click="closeOrderPanel" class="btn btn-danger w-100">取消</button>
@@ -227,6 +226,7 @@
 		crossorigin="anonymous"></script>
 <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/versions/2.1.13/sdk.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="~/lib\microsoft/signalr/dist/browser/signalr.js"></script>
 <script>
 	let app = new Vue({
 		el: "#app",
@@ -248,14 +248,25 @@
 				//    { orderDetails: [{ dishName: "薯條", unitPrice: 100, quantity: 5 }, { dishName: "薯條", unitPrice: 100, quantity: 5 }], customerName: "reds", orderDate: "2023/06/11", orderId: 3, title: "台北市中正區青島東路三段6之182號", desc: "薯條x100", type: "現金", distance: 7.8 },
 			],
 			order: {},
-			acceptedOrder: {}
+			acceptedOrder: [],
+			hisorders:[],
+			isHisPanel:false,
+			signalr:{}
 		},
 		mounted: function () {
 			let self = this;
 			self.getOrdersData()
 			self.getCurrentGeo();
+			self.getAcceptedOrder()
 			self.init();
 			self.jsSetting();
+			self.getHistoryOrder();
+			self.signalr = new signalR.HubConnectionBuilder().withUrl(`/orderHub`).build();
+			self.signalr.start().then(()=>{
+				console.log('connected')
+			}).catch((err)=>{
+				console.error(err.toString())
+			})
 		},
 		methods: {
 			init: function () {
@@ -302,13 +313,27 @@
 					self.selfLatLng.lng = position.coords.longitude;
 				}, function (error) { console.log('取得座標失敗:', error); });
 			},
+			getHistoryOrder:function(){
+				let self=this;
+				axios.get(`/api/DeliverOrders/hisorder`).then(res => {
+					self.hisorders=res.data;
+				})
+				setInterval(()=>{
+					axios.get(`/api/DeliverOrders/hisorder`).then(res => {
+						self.hisorders = res.data;
+					})
+				},600000)
+			},
 			getOrdersData: function () {
 				let self = this;
-				// axios.get(`/api/DeliverOrders/prepared`).then(res => {
-				axios.get(`https://localhost:7163/api/DeliverOrders/prepared`).then(res => {
-
+				axios.get(`/api/DeliverOrders/prepared`).then(res => {
 					self.orders = res.data
 				})
+				setInterval(()=>{
+					axios.get(`/api/DeliverOrders/prepared`).then(res => {
+						self.orders = res.data
+					})
+				},30000)
 			},
 			orderDetail: function (item) {
 				let self = this;
@@ -319,28 +344,48 @@
 			jsSetting: function () {
 				document.querySelector('.dropdown-menu').addEventListener('click', (e) => e.stopPropagation());
 			},
+			historyPanel:function(){
+				let self=this;
+				self.isHisPanel=true;
+			},
+			otherPanel:function(){
+				let self=this;
+				self.isHisPanel=false;
+			},
 			closeOrderPanel: function () {
 				this.isOrderPanelOpen = true;
 			},
-			acceptOrder: function (id) {
+			getAcceptedOrder:function(){
+				let self = this;
+				axios.get(`/api/DeliverOrders/deliver`).then(res=>{
+					self.acceptedOrder=res.data;
+					if(res.data!=""){
+						self.isAcceptOrder = true;
+						self.drawDirectionLine(self.selfLatLng, res.data[0].restaurantLocation,res.data[0].customerLocation);
+						}
+					})
+			},
+			acceptOrder: function (order) {
 				let self = this;
 				var request = {
-					OrderId: id,
+					OrderId: order.orderId,
 					Status: 'deliver'
 				}
 				//api
-				axios.put(`/api/DeliverOrders/${id}`, request).then(res => {
+				axios.put(`/api/DeliverOrders/${order.orderId}`, request).then(res => {
 					Swal.fire(`${res.data}`)
+					self.getAcceptedOrder();
 				})
-				var idx = self.orders.findIndex(x => x.orderId == id)
-				self.acceptedOrder = self.orders[idx]
+				var idx=self.orders.findIndex(x=>x.orderId==order.orderId)
+				self.signalr.invoke("Infomation", self.orders[idx].customerId, order.orderId, "外送員正在前往取餐")
+				self.orders.splice(idx,1)
 				//nav收折
 				new bootstrap.Collapse(document.getElementById('navbarSupportedContent'))
 				//切換按鈕
-				self.isAcceptOrder = true;
+				//self.isAcceptOrder = true;
 				//顯示路徑
-				self.drawDirectionLine(self.selfLatLng, self.order.restaurantLocation, self.order.customerLocation);
-
+				//self.drawDirectionLine(self.selfLatLng, order.restaurantLocation, order.customerLocation);
+				
 			},
 			drawCurrentMaker: function (currentLocation, reset) {
 				let self = this;
@@ -377,14 +422,16 @@
 				let self = this;
 				self.isAcceptOrder = false;
 				self.isOrderPanelOpen = true;
-				self.acceptedOrder = [];
+				self.init();
 				var request = {
 					OrderId: id,
 					Status: 'completed'
 				}
 				axios.put(`/api/DeliverOrders/${id}`, request).then(res => {
-					Swal.fire(`${res.data}`)
+					Swal.fire(`已送達，完成訂單!`)
 				})
+				self.signalr.invoke("Infomation", self.acceptedOrder[0].customerId, id, "外送員已到達指定地址")
+				self.acceptedOrder = [];
 			},
 			updateLocation: function (latitude, longitude) {
 				liff.sendMessages([
@@ -397,6 +444,29 @@
 				}).catch(function (error) {
 					console.error('Failed to send location message:', error);
 				});
+			},
+			btnValid:function(id)
+			{
+				let self=this;
+				if (id != self.acceptedOrder[0].orderId) return true
+				return false
+			},
+			logout:function(){
+				Swal.fire({
+					title: 'Are you sure?',
+					text: "確定要登出嗎?",
+					icon: 'warning',
+					showCancelButton: true,
+					confirmButtonColor: '#3085d6',
+					cancelButtonColor: '#d33',
+					confirmButtonText: '登出',
+					cancelButtonText: '取消'
+				}).then((result) => {
+					if (result.isConfirmed) {
+						axios.post(`/deliver/Home/Logout`)
+						window.location.href = '/deliver/Home/Login';
+					}
+				})
 			}
 		}
 	});
