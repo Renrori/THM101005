@@ -32,6 +32,7 @@ namespace DeliveryBro.Areas.deliver.apiController
 			var id = User.GetId();
 			return _context.CustomerOrderTable.Include(x=>x.Restaurant)
                 .Where(x => x.OrderStatus == "completed" && x.DriverId == id)
+                .OrderByDescending(x=>x.OrderId)
 				.Select(x => new HistoryOrderDTO
 				{
 					OrderId = x.OrderId,
