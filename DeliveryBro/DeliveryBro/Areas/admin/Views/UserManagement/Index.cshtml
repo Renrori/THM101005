@@ -9,7 +9,6 @@
 
 			<!-- start page title -->
 			<div class="row">
-				<div class="col-12">
 					<div class="page-title-box">
 
 						<h4 class="page-title"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">顧客</font></font></h4>
@@ -239,6 +238,23 @@
 							alert(res.data);
 							$("#createModal").modal("hide");
 							_this.nextpage();
+						})
+				},
+				update: function () {
+					let _this = this;
+					var req = {
+						CustomerName: _this.customerName,
+						CustomerAccount: _this.customerAccount,
+						CustomerEmail: _this.customerEmail,
+						CustomerPhone: _this.customerPhone,
+						CustomerPassword: _this.customerPassword,
+						
+					};
+					axios.put(`/api/OrderManagement/PutOrder?ID=${_this.orderId}`, req)
+						.then(res => {
+							alert(res.data);
+							$("#editModal").modal("hide");
+
 						})
 				},
 				editorder: function (customerAccount) {

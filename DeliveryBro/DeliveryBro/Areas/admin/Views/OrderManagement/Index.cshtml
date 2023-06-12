@@ -298,7 +298,8 @@
 					CustomerAddress:_this.customerAddress,
 					AmountAfterDiscount: _this.amountAfterDiscount,
 				};
-				axios.put(`/api/OrderManagement/PutOrder/`+ _this.orderId , req).then(res => {
+				axios.put(`/api/OrderManagement/PutOrder?ID=${_this.orderId}` , req)
+				.then(res => {
 					alert(res.data);
 					$("#editModal").modal("hide");
 
