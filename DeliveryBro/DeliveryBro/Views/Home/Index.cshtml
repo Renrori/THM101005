@@ -6,15 +6,8 @@
     {
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
     <link href="~/css/map.css" rel="stylesheet" />
-    <script type="module" src="~/js/mapaddressautocomplete.js"></script>
-
-    <style>
-        .button-container {
-            margin-bottom: 20px;
-        }
-    </style>
     <link href="~/css/map.css" rel="stylesheet" />
-
+    <script type="module" src="~/js/mapaddressautocomplete.js"></script>
 }
 @*<---------------旋轉軸--------------->*@
 <div id="carouselExampleDark"
@@ -103,51 +96,47 @@
         <div class="container">
             <div class="row">
                 <div class="text py-2 pb-2 px-2 text-center">
-                    <div class="button-container">
-                        <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#staticBackdrop" ref="button">
-                            @*{{addressChosen?addressChosen:'請輸入地址'}}*@
-                            搜尋店家位址
-                        </button>
-                    </div>
-                </div>
-                <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h1 class="modal-title fs-5" id="staticBackdropLabel">請輸入/選擇地址</h1>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <div class="pac-card" id="pac-card">
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" ref="button">
+                        {{addressChosen?addressChosen:'請輸入地址'}}
+                    </button>
+                    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="staticBackdropLabel">請輸入/選擇地址</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    @*<div class="pac-card" id="pac-card">
                                     <div id="pac-container">
-                                        <input id="pac-input" class="form-control" type="text" placeholder="請輸入新地址" v-model="addressChosen" />
+                                    <input id="pac-input" class="form-control" type="text" placeholder="請輸入新地址" v-model="addressChosen" />
                                     </div>
-                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" ref="button">
-                                        {{addressChosen?addressChosen:'請輸入地址'}}
-                                    </button>
-                                    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                                        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h1 class="modal-title fs-5" id="staticBackdropLabel">請輸入/選擇地址</h1>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    @*<div class="pac-card" id="pac-card">
+                                    </div>*@
+                                    <div id="map"></div>
+                                    @* <input type="text" class="form-control" id="location" placeholder="請輸入新地址" v-model="addressChosen" />*@
+                                    <h4>已儲存的地址</h4>
+                                    <select class="form-select" aria-label="Default select example" v-model="addressChosen">
+                                        <option disabled selected value="">---請選擇---</option>
+                                        <option v-for="a in address">{{a.userAddress}}</option>
+                                    </select>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" v-bind:disabled="btndisabled">確定</button>
+
+                                </div>
+                                <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5" id="staticBackdropLabel">請輸入/選擇地址</h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="pac-card" id="pac-card">
                                                     <div id="pac-container">
-                                                    <input id="pac-input" class="form-control" type="text" placeholder="請輸入新地址" v-model="addressChosen" />
+                                                        <input id="pac-input" class="form-control" type="text" placeholder="請輸入新地址" v-model="addressChosen" />
                                                     </div>
-                                                    </div>*@
-                                                    <div id="map"></div>
-                                                    @* <input type="text" class="form-control" id="location" placeholder="請輸入新地址" v-model="addressChosen" />*@
-                                                    <h4>已儲存的地址</h4>
-                                                    <select class="form-select" aria-label="Default select example" v-model="addressChosen">
-                                                        <option disabled selected value="">---請選擇---</option>
-                                                        <option v-for="a in address">{{a.userAddress}}</option>
-                                                    </select>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" v-bind:disabled="btndisabled">確定</button>
+
                                                 </div>
                                                 <div id="map"></div>
                                                 @* <input type="text" class="form-control" id="location" placeholder="請輸入新地址" v-model="addressChosen" />*@
@@ -164,21 +153,21 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-6 col-lg-4 " v-for="store in storeInfo" :key="storeId">
-                                    <div class="product">
-                                        <div class="img-prod">
-                                            <div class="row justify-content-center">
-                                                <img :src="GetPictureStore(store.storeId)" width="340" height="340" alt="商家暫無圖片" />
-                                            </div>
-                                        </div>
-                                        <div class="text py-3 pb-4 px-3 text-center">
-                                            <h2>{{ store.storeName }}</h2>
-                                            <button class="btn btn-outline-dark" @@click="RestaurantMenuUrl(store)"><i class="ion-ios-menu"></i></button>
-                                            <button class="btn btn-outline-dark"><i class="ion-ios-heart"></i></button>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4 " v-for="store in storeInfo" :key="storeId">
+                    <div class="product">
+                        <div class="img-prod">
+                            <div class="row justify-content-center">
+                                <img :src="GetPictureStore(store.storeId)" width="340" height="340" alt="商家暫無圖片" />
+                            </div>
+                        </div>
+                        <div class="text py-3 pb-4 px-3 text-center">
+                            <h2>{{ store.storeName }}</h2>
+                            <button class="btn btn-outline-dark" @@click="RestaurantMenuUrl(store)"><i class="ion-ios-menu"></i></button>
+                            <button class="btn btn-outline-dark"><i class="ion-ios-heart"></i></button>
                         </div>
                     </div>
                 </div>
@@ -216,7 +205,6 @@
             watch: {
                 addressChosen() {
                     if (this.addressChosen != "") this.GetStoreInfo();
-                    //else if (this.addressChosen == "") this.GetAllStoreInfo();
                 }
             },
             computed: {
@@ -240,7 +228,6 @@
                 this.GetStoreInfo();
                 this.getcartItemsFromCookie();
                 this.getCurrentAddress();
-                //this.GetAllStoreInfo();
             },
             created() {
                 this.addressChosen = localStorage.getItem("addressChosen");
@@ -256,19 +243,6 @@
                         //    this.StoreName = response.data.StoreName;
                         //})
                         const response = await axios.get(`api/HomeApi/${this.addressChosen}`);
-                        const data = response.data;
-                        this.storeInfo = data;
-                    } catch {
-                        console.log("error");
-                    }
-                },
-                async GetAllStoreInfo() {
-                    try {
-                        //axios.get(`Home/GetStore`).then(response => {
-                        //    this.StoreId = response.data.StoreId;
-                        //    this.StoreName = response.data.StoreName;
-                        //})
-                        const response = await axios.get(`api/HomeApi/Store/${storeId}`);
                         const data = response.data;
                         this.storeInfo = data;
                     } catch {
