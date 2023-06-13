@@ -134,7 +134,7 @@ namespace DeliveryBro.Areas.store.apiControllers
 				Order = order.SelectMany(i => i.OrderDetailsTable.GroupBy(n => n.DishName).Select(q => new
 				{
 					Name = q.Key,
-					Number = q.Count()
+					Number = q.Sum(i=>i.Quantity)
 				}).ToList())
 
 			}).ToList();
