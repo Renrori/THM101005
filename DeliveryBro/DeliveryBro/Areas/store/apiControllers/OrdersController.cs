@@ -54,7 +54,7 @@ namespace DeliveryBro.Areas.store.apiControllers
 		{
 			var rid= User.GetId();
 			var query = _context.CustomerOrderTable.Include(x => x.OrderDetailsTable)
-				   .Where(x => x.RestaurantId == rid && x.OrderStatus == "prepared");
+				   .Where(x => x.RestaurantId == rid && (x.OrderStatus != "waiting" || x.OrderStatus != "acepted"));
 			if (startdate.HasValue) query = query.Where(x => x.OrderDate >= startdate);
 			if (enddate.HasValue) query = query.Where(x => x.OrderDate <= enddate);
 			if (id.HasValue) query = query.Where(x => x.OrderId == id);
