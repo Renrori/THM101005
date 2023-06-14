@@ -203,10 +203,6 @@
 							</div>
 						</div>
 					</template>
-					<form class="d-flex">
-						<input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-						<button class="btn btn-outline-success" type="submit">Search</button>
-					</form>
 				</div>
 			</div>
 		</nav>
@@ -318,11 +314,6 @@
 				axios.get(`/api/DeliverOrders/hisorder`).then(res => {
 					self.hisorders=res.data;
 				})
-				setInterval(()=>{
-					axios.get(`/api/DeliverOrders/hisorder`).then(res => {
-						self.hisorders = res.data;
-					})
-				},600000)
 			},
 			getOrdersData: function () {
 				let self = this;
@@ -429,6 +420,7 @@
 				}
 				axios.put(`/api/DeliverOrders/${id}`, request).then(res => {
 					Swal.fire(`已送達，完成訂單!`)
+					self.getHistoryOrder();
 				})
 				self.signalr.invoke("Infomation", self.acceptedOrder[0].customerId, id, "外送員已到達指定地址")
 				self.acceptedOrder = [];

@@ -106,7 +106,7 @@ namespace DeliveryBro.ApiController
             foreach (var s in store)
             {
                 var range = Map.GetDistance(customer, s.Location);
-                if (range <= 3) StoreInRange.Add(s);
+                if (range <= 5) StoreInRange.Add(s);
             }
             return StoreInRange;
         }
