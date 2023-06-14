@@ -210,7 +210,8 @@
                     try {
                         axios.put(`${baseAddress}/${CustomerId}`, data).then(Response => {
                             console.log("修改成功");
-                            alert("修改成功")
+                            alert("修改成功");
+                            location.reload();
                             this.isEditing = false;
                         })
                     } catch {
@@ -242,6 +243,7 @@
                         .then(response => {
                             // 處理上傳成功的回應
                             console.log('上傳成功');
+                            location.reload();
                         })
                         .catch(error => {
                             // 處理上傳失敗的錯誤

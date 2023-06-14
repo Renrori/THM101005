@@ -3,7 +3,7 @@
 }
 
 
-<div class="content-page" id="orderapp">
+<div class="content-page" id="orderapp" style="padding-left:300px">
 
 	<div class="content">
 
@@ -24,7 +24,7 @@
 								</div>
 								<div class="col-xl-4">
 									<div class="text-xl-end mt-xl-0 mt-2">
-										<button type="button" class="btn btn-danger mb-2 me-2"><i class="mdi mdi-basket me-1"></i> Add New Order</button>
+										<button type="button" class="btn btn-danger mb-2 me-2" v-on:click="add"> <i class="mdi mdi-basket me-1"></i> Add New Order</button>
 									</div>
 								</div><!-- end col-->
 							</div>
@@ -113,6 +113,50 @@
 
 	<!-- end Footer -->
 	<!-- Modal -->
+	@*新增視窗*@
+	<div class="form-group">
+		<div class="modal fade" id="createModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="modalTitleId">新增</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body">
+						@*<div class="form-group">
+							<label class="form-label">OrderID</label>
+							<input class="form-control" v-model="orderId" readonly />
+						</div>*@
+						<div class="form-group">
+							<label class="form-label">OrderDate</label>
+							<input class="form-control" v-model="orderDate" />
+						</div>
+						<div class="form-group">
+							<label class="form-label">CustomerAddress</label>
+							<input class="form-control" v-model="customerAddress" />
+						</div>
+						<div class="form-group">
+							<label class="form-label">AmountAfterDiscount</label>
+							<input class="form-control" v-model="amountAfterDiscount" />
+						</div>
+						<div class="form-group">
+							<label class="form-label">payment</label>
+							<input class="form-control" v-model="payment" />
+						</div>
+						<div class="form-group">
+							<label class="form-label">orderStatus</label>
+							<input class="form-control" v-model="orderStatus" />
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
+							<button type="button" @@click="createOrder" class="btn btn-primary">新增</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Modal -->
 	<div class="form-group">
 		<div class="modal fade" id="editModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
 			<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm" role="document">
@@ -140,7 +184,7 @@
 						</div>
 						<div class="modal-footer">
 							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
-							<button type="button" @@click="" class="btn btn-primary">儲存</button>
+							<button type="button" @@click="update" class="btn btn-primary">儲存</button>
 						</div>
 					</div>
 				</div>
@@ -176,8 +220,10 @@
 			nowpage: 1, // 現在的頁數
 			orderId: "",
 			orderDate: "",
+			payment:"",
 			customerAddress: "",
 			amountAfterDiscount: "",
+			orderStatus:"",
 			delInfo: {
 				title: "",
 				msg: {
@@ -225,6 +271,40 @@
 					}
 				}
 			},
+			add:function(){
+				$("#createModal").modal("show");
+			},
+			createOrder:function(){
+				let _this = this;
+				var req = {
+					OrderDate: _this.orderDate,
+					CustomerAddress: _this.customerAddress,
+					AmountAfterDiscount: _this.amountAfterDiscount,
+					OrderStatus:_this.orderStatus,
+					Payment:_this.payment,
+				};
+				axios.post('/api/OrderManagement/CreateOrder',req)
+				.then(res=>{
+					alert (res.data);
+						$("#createModal").modal("hide");
+						_this.nextpage();
+				})
+			},
+			update:function(){
+				let _this=this;
+				var req = {
+					OrderId:_this.orderId,
+					OrderDate:_this.orderDate,
+					CustomerAddress:_this.customerAddress,
+					AmountAfterDiscount: _this.amountAfterDiscount,
+				};
+				axios.put(`/api/OrderManagement/PutOrder?ID=${_this.orderId}` , req)
+				.then(res => {
+					alert(res.data);
+					$("#editModal").modal("hide");
+
+				})
+			},
 			deleteorder: function (id) {
 				axios.delete('/api/OrderManagement/Delete/' + id).then(res => {
 					if (res.data) {
@@ -241,6 +321,7 @@
 				this.delInfo.msg.orderID = item.orderId;
 				this.delInfo.msg.amountAfterDiscount = item.amountAfterDiscount;
 			}
+			
 		}
 	})
 </script>
