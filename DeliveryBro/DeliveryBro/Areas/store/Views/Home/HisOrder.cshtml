@@ -17,16 +17,16 @@
                             <!-- Bordered Tabs -->
                             <div class="container-fluid">
                                 <div class="row">
-                                    <div class="col-4 ">
+                                    <div class="col-12 col-lg-4 my-2">
                                         <label>訂單編號&emsp;</label>
-                                        <input type="text" class="--bs-dark-border-subtle --bs-dark-text-emphasis" v-model="orderId" />
+                                        <input type="text" class="--bs-dark-border-subtle --bs-dark-text-emphasis form-control" v-model="orderId" />
                                     </div>
-                                    <div class="col-3 ">
-                                        <label style="text-align:right">訂單完成日期&emsp;</label>
-                                        <input type="date" v-model="startdate" />
-                                    </div>
-                                    <div class="col-2 ">
-                                        <input type="date" v-model="enddate" />
+                                    <div class="col-12 col-lg-4 my-2">
+                                        <div class="row">
+                                            <label class="col-12 col-md-4">訂單完成日期&emsp;</label>
+                                            <input class="col-6 col-md-4 form-control" type="date" v-model="startdate" />
+                                            <input class="col-6 col-md-4 form-control" type="date" v-model="enddate" />
+                                        </div>
                                     </div>
                                 </div>
                             </div>
