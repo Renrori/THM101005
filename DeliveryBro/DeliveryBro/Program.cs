@@ -27,7 +27,7 @@ namespace DeliveryBro
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(connectionString));
 
-            var DeliveryBroconnectionString = builder.Configuration.GetConnectionString("DeliveryBro") ?? throw new InvalidOperationException("Connection string 'DeliveryBro' not found.");
+            var DeliveryBroconnectionString = builder.Configuration.GetConnectionString("Azure") ?? throw new InvalidOperationException("Connection string 'DeliveryBro' not found.");
             builder.Services.AddDbContext<sql8005site4nownetContext>(options =>
                 options.UseSqlServer(DeliveryBroconnectionString));
 

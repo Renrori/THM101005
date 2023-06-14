@@ -138,8 +138,8 @@
     <script src="https://unpkg.com/vue@3.2.36/dist/vue.global.prod.js"></script>
     <script src="~/axios/axios.min.js"></script>
     <script>
-        var baseAddress = "https://localhost:7163/api/HomeApi";
-        var baseAddressUser = "https://localhost:7163/api/UserApi";
+        var baseAddress = "/api/HomeApi";
+        var baseAddressUser = "/api/UserApi";
         var CustomerId = "@User.Claims.FirstOrDefault(c => c.Type == "Id")?.Value";
         var vueApp = {
             data() {
