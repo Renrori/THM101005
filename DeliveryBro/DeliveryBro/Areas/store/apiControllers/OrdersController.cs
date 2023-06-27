@@ -32,7 +32,7 @@ namespace DeliveryBro.Areas.store.apiControllers
 		{
 			var id = User.GetId();
 			return _context.CustomerOrderTable.Include(x => x.OrderDetailsTable)
-				.Where(x => x.RestaurantId == id && x.OrderStatus != "waiting" && x.OrderStatus != "acepted").OrderByDescending(x => x).Select(x => new HisOrderDTO
+				.Where(x => x.RestaurantId == id && x.OrderStatus != "waiting" && x.OrderStatus != "acepted"&&x.OrderStatus!="refused").OrderByDescending(x => x).Select(x => new HisOrderDTO
 				{
 					OrderId = x.OrderId,
 					OrderDate = x.OrderDate.ToLocalTime().ToString(),
@@ -54,7 +54,7 @@ namespace DeliveryBro.Areas.store.apiControllers
 		{
 			var rid= User.GetId();
 			var query = _context.CustomerOrderTable.Include(x => x.OrderDetailsTable)
-				   .Where(x => x.RestaurantId == rid && (x.OrderStatus != "waiting" || x.OrderStatus != "acepted"));
+				   .Where(x => x.RestaurantId == rid && x.OrderStatus != "waiting" && x.OrderStatus != "acepted" && x.OrderStatus != "refused");
 			if (startdate.HasValue) query = query.Where(x => x.OrderDate >= startdate);
 			if (enddate.HasValue) query = query.Where(x => x.OrderDate <= enddate);
 			if (id.HasValue) query = query.Where(x => x.OrderId == id);
